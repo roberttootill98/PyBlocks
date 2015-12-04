@@ -215,9 +215,9 @@ Blockly.Css.CONTENT = [
 
   '.blocklyText {',
     'cursor: default;',
-    'fill: #fff;',
-    'font-family: sans-serif;',
-    'font-size: 11pt;',
+    'fill: #000;',
+    'font-family: monospace;',
+    'font-size: 13pt;',
   '}',
 
   '.blocklyNonEditableText>text {',
