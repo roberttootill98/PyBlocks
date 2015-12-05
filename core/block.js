@@ -588,7 +588,6 @@ Blockly.Block.prototype.setTooltip = function(newTip) {
   this.tooltip = newTip;
 };
 
-
 Blockly.Block.PY_COLOURS = {}
 Blockly.Block.PY_COLOURS['notype'] = 100
 Blockly.Block.PY_COLOURS['int'] = 100
@@ -601,26 +600,25 @@ Blockly.Block.PY_COLOURS['bool'] = 250
  * @return {number} HSV hue value.
  */
 Blockly.Block.prototype.getColour = function() {
-  return this.colourHue_;
+  if (this.outputConnection) {
+    console.log(this.outputConnection.check_);
+    return Blockly.Block.PY_COLOURS[this.outputConnection.check_[0]];
+  }
+  else {
+    return Blockly.Block.PY_COLOURS['notype'];
+  }
 };
 
 /**
  * Change the colour of a block.
  * @param {number} colourHue HSV hue value.
  */
-/**
- * Get the colour of a block.
- * @return {number} HSV hue value.
- */
-Blockly.Block.prototype.getColour = function() {
-  if (this.outputConnection) {
-    console.log(this.outputConnection.check_);
-    return Blockly.Block.PY_COLOURS[this.outputConnection.check_[0]];
+Blockly.Block.prototype.setColour = function(colourHue) {
+  this.colourHue_ = colourHue;
+  if (this.rendered) {
+    this.updateColour();
   }
-  //return this.colourHue_;
-  return 0;//Blockly.Block.PY_COLOURS['notype'];
 };
-
 
 /**
  * Returns the named field from a block.
