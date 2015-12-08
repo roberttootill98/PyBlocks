@@ -132,7 +132,7 @@ Blockly.Css.setCursor = function(cursor) {
  */
 Blockly.Css.CONTENT = [
   '.blocklySvg {',
-    'background-color: #fff;',
+    'background-color: #aaa;',
     'outline: none;',
     'overflow: hidden;',  /* IE overflows by default. */
   '}',
@@ -174,15 +174,29 @@ Blockly.Css.CONTENT = [
 
   '.blocklyHighlightedConnectionPath {',
     'fill: none;',
-    'stroke: #fc3;',
     'stroke-width: 4px;',
   '}',
 
-  '.blocklyPathLight {',
-    'fill: none;',
+
+/* HACK */
+  '.blocklyPath {',
+    //'fill-rule: nonzero;',
+    'stroke: #bbbbbb;',
     'stroke-linecap: round;',
     'stroke-width: 1;',
   '}',
+
+  '.blocklyPathDark {',
+      'display: none;',
+   '}',
+
+ '.blocklyPathLight {',
+    'fill: #dddddd;',
+    'stroke: #bbbbbb;',
+    'stroke-width: 1;',
+  '}',
+
+  /* END HACK */
 
   '.blocklySelected>.blocklyPath {',
     'stroke: #fc3;',
