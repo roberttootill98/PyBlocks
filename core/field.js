@@ -112,7 +112,7 @@ Blockly.Field.prototype.init = function(block) {
        'ry': 4,
        'x': -Blockly.BlockSvg.SEP_SPACE_X / 2,
        'y': 0,
-       'height': 16}, this.fieldGroup_, this.sourceBlock_.workspace);
+       'height':/*16*/ 0}, this.fieldGroup_, this.sourceBlock_.workspace);
   /** @type {!Element} */
   this.textElement_ = Blockly.createSvgElement('text',
       {'class': 'blocklyText', 'y': this.size_.height - 12.5},

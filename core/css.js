@@ -132,7 +132,7 @@ Blockly.Css.setCursor = function(cursor) {
  */
 Blockly.Css.CONTENT = [
   '.blocklySvg {',
-    'background-color: #aaa;',
+    'background-color: #fff;',
     'outline: none;',
     'overflow: hidden;',  /* IE overflows by default. */
   '}',
@@ -180,14 +180,15 @@ Blockly.Css.CONTENT = [
 
 /* HACK */
   '.blocklyPath {',
-    //'fill-rule: nonzero;',
     'stroke: #bbbbbb;',
-    'stroke-linecap: round;',
+    //'stroke-linecap: round;',
     'stroke-width: 1;',
   '}',
 
   '.blocklyPathDark {',
-      'display: none;',
+    //'stroke: #bbbbb;',
+    //'stroke-width: 2;',
+    'display: none;',
    '}',
 
  '.blocklyPathLight {',
@@ -200,12 +201,12 @@ Blockly.Css.CONTENT = [
 
   '.blocklySelected>.blocklyPath {',
     'stroke: #fc3;',
-    'stroke-width: 3px;',
+    'stroke-width: 2px;',
   '}',
 
-  '.blocklySelected>.blocklyPathLight {',
-    'display: none;',
-  '}',
+  //'.blocklySelected>.blocklyPathLight {',
+//    'display: none;',
+ // '}',
 
   '.blocklyDragging>.blocklyPath,',
   '.blocklyDragging>.blocklyPathLight {',
@@ -232,7 +233,7 @@ Blockly.Css.CONTENT = [
     'fill: #000;',
     'font-family: monospace;',
     'font-size: 13pt;',
-  '}',
+   '}',
 
   '.blocklyNonEditableText>text {',
     'pointer-events: none;',
