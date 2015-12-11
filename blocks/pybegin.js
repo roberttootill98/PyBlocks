@@ -51,6 +51,18 @@ Blockly.Blocks['python_string'] = {
   }
 };
 
+Blockly.Blocks['python_string_www'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField(new Blockly.FieldTextInput("Wg\"wTpwW"), "PYTHON_STR");
+    this.setInputsInline(true);
+    this.setOutput(true, "str");
+    this.setColour(120);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+
 Blockly.Blocks['python_int'] = {
   init: function() {
     this.appendDummyInput()
@@ -94,17 +106,34 @@ Blockly.Blocks['python_while'] = {
   }
 };
 
+Blockly.Blocks['python_wwww'] = {
+  init: function() {
+    this.appendValueInput("NAME")
+        .setAlign(Blockly.ALIGN_RIGHT)
+        .appendField("WWW");
+    this.appendDummyInput()
+        .appendField("W");
+    this.appendStatementInput("NAME");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
+    this.setColour(210);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+
 Blockly.Blocks['python_for'] = {
   init: function() {
     this.appendDummyInput()
         .appendField("for ");
-    this.appendDummyInput()
-        .appendField("");
     this.appendValueInput("NAME")
         .setCheck(["String", "Array"])
         .setAlign(Blockly.ALIGN_RIGHT)
         .appendField(new Blockly.FieldVariable("item"), "NAME")
         .appendField(" in ");
+    this.appendDummyInput()
+        .appendField(":");
     this.appendStatementInput("NAME");
     this.setInputsInline(true);
     this.setPreviousStatement(true);

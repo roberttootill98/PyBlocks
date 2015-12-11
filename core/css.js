@@ -180,21 +180,23 @@ Blockly.Css.CONTENT = [
 
 /* HACK */
   '.blocklyPath {',
-    'stroke: #bbbbbb;',
-    //'stroke-linecap: round;',
+    'stroke: #aaaaaa;',
+    'stroke-linecap: round;',
     'stroke-width: 1;',
+    //'display: none;',
   '}',
 
   '.blocklyPathDark {',
-    //'stroke: #bbbbb;',
+    'stroke: #0000000;',
     //'stroke-width: 2;',
     'display: none;',
    '}',
 
  '.blocklyPathLight {',
-    'fill: #dddddd;',
-    'stroke: #bbbbbb;',
+   'fill: #dddddd;',
+    'stroke: #aaaaaa;',
     'stroke-width: 1;',
+//    'display: none;',
   '}',
 
   /* END HACK */
@@ -232,7 +234,7 @@ Blockly.Css.CONTENT = [
     'cursor: default;',
     'fill: #000;',
     'font-family: monospace;',
-    'font-size: 13pt;',
+    'font-size: 15pt;',
    '}',
 
   '.blocklyNonEditableText>text {',
