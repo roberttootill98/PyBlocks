@@ -31,7 +31,7 @@ goog.require('Blockly.Blocks');
 Blockly.Blocks['python_intvar'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField(new Blockly.FieldVariable("item"), "PYTHON_INT_VAR");
+        .appendField(new Blockly.FieldVariable("item"), "NAME");
     this.setOutput(true, "int");
     this.setColour(65);
     this.setTooltip('');
@@ -42,7 +42,7 @@ Blockly.Blocks['python_intvar'] = {
 Blockly.Blocks['python_string'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField(new Blockly.FieldTextInput("\" \""), "PYTHON_STR");
+        .appendField(new Blockly.FieldTextInput("\" \""), "VALUE");
     this.setInputsInline(true);
     this.setOutput(true, "str");
     this.setColour(120);
@@ -54,7 +54,7 @@ Blockly.Blocks['python_string'] = {
 Blockly.Blocks['python_string_www'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField(new Blockly.FieldTextInput("Wg\"wTpwW"), "PYTHON_STR");
+        .appendField(new Blockly.FieldTextInput("Wg\"wTpwW"), "NAME");
     this.setInputsInline(true);
     this.setOutput(true, "str");
     this.setColour(120);
@@ -66,7 +66,7 @@ Blockly.Blocks['python_string_www'] = {
 Blockly.Blocks['python_int'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField(new Blockly.FieldTextInput("42"), "PYTHON_INT");
+        .appendField(new Blockly.FieldTextInput("42"), "VALUE");
     this.setInputsInline(true);
     this.setOutput(true, "int");
     this.setColour(120);
@@ -75,12 +75,25 @@ Blockly.Blocks['python_int'] = {
   }
 };
 
+Blockly.Blocks['python_float'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField(new Blockly.FieldTextInput("3.14"), "VALUE");
+    this.setInputsInline(true);
+    this.setOutput(true, "float");
+    this.setColour(120);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+
 Blockly.Blocks['python_equals'] = {
   init: function() {
-    this.appendValueInput("NAME")
+    this.appendValueInput("LHS")
         .setCheck(null);
-    this.appendValueInput("NAME")
-        .appendField(" == ");
+    this.appendValueInput("RHS")
+        .appendField(" == ")
+        .setCheck(null);
     this.setInputsInline(true);
     this.setOutput(true, "bool");
     this.setColour(232);
@@ -89,14 +102,30 @@ Blockly.Blocks['python_equals'] = {
   }
 };
 
+Blockly.Blocks['python_divide'] = {
+  init: function() {
+    this.appendValueInput("LHS")
+        .setCheck(["int", "float"]);
+    this.appendValueInput("RHS")
+        .appendField(" / ")
+        .setCheck(["int", "float"]);
+    this.setInputsInline(true);
+    this.setOutput(true, "float");
+    this.setColour(232);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+
 Blockly.Blocks['python_while'] = {
   init: function() {
-    this.appendValueInput("NAME")
+    this.appendValueInput("CONDITION")
         .setAlign(Blockly.ALIGN_RIGHT)
-        .appendField("while ");
+        .appendField("while ")
+        .setCheck(["bool"]);
     this.appendDummyInput()
         .appendField(":");
-    this.appendStatementInput("NAME");
+    this.appendStatementInput("BODY");
     this.setInputsInline(true);
     this.setPreviousStatement(true);
     this.setNextStatement(true);
@@ -127,14 +156,15 @@ Blockly.Blocks['python_for'] = {
   init: function() {
     this.appendDummyInput()
         .appendField("for ");
-    this.appendValueInput("NAME")
-        .setCheck(["String", "Array"])
+    this.appendValueInput("LOOPVAR")
+        .setCheck(["str"])
         .setAlign(Blockly.ALIGN_RIGHT)
-        .appendField(new Blockly.FieldVariable("item"), "NAME")
-        .appendField(" in ");
+        .appendField(new Blockly.FieldVariable("item"), "SEQUENCE")
+        .appendField(" in ")
+        .setCheck(["str"]);
     this.appendDummyInput()
         .appendField(":");
-    this.appendStatementInput("NAME");
+    this.appendStatementInput("BODY");
     this.setInputsInline(true);
     this.setPreviousStatement(true);
     this.setNextStatement(true);
@@ -146,16 +176,16 @@ Blockly.Blocks['python_for'] = {
 
 Blockly.Blocks['python_pow'] = {
   init: function() {
-    this.appendValueInput("NAME")
-        .setCheck("Number")
+    this.appendValueInput("ARG2")
+        .setCheck(["int"])
         .appendField("pow(");
-    this.appendValueInput("NAME")
-        .setCheck("Number")
+    this.appendValueInput("ARG2")
+        .setCheck(["int"])
         .appendField(", ");
     this.appendDummyInput()
         .appendField(")");
     this.setInputsInline(true);
-    this.setOutput(true, "float");
+    this.setOutput(true, "int");
     this.setColour(120);
     this.setTooltip('');
     this.setHelpUrl('http://www.example.com/');
@@ -164,13 +194,13 @@ Blockly.Blocks['python_pow'] = {
 
 Blockly.Blocks['python_abs'] = {
   init: function() {
-    this.appendValueInput("NAME")
-        .setCheck("Number")
+    this.appendValueInput("ARG")
+        .setCheck(["int"])
         .appendField("abs(");
     this.appendDummyInput()
         .appendField(")");
     this.setInputsInline(true);
-    this.setOutput(true, "float");
+    this.setOutput(true, "int");
     this.setColour(120);
     this.setTooltip('');
     this.setHelpUrl('http://www.example.com/');
@@ -179,11 +209,11 @@ Blockly.Blocks['python_abs'] = {
 
 Blockly.Blocks['python_print'] = {
   init: function() {
-    this.appendValueInput("NAME")
-        .setCheck("Number")
+    this.appendValueInput("ARG1")
+        .setCheck(null)
         .appendField("print(");
-    this.appendValueInput("NAME")
-        .setCheck("Number")
+    this.appendValueInput("ARG2")
+        .setCheck(null)
         .appendField(", ");
     this.appendDummyInput()
         .appendField(")");
@@ -196,12 +226,28 @@ Blockly.Blocks['python_print'] = {
   }
 };
 
-Blockly.Blocks['python_assign'] = {
+Blockly.Blocks['python_assign_int'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField(new Blockly.FieldVariable("item"), "NAME");
-    this.appendValueInput("NAME")
-        .setCheck("Number")
+        .appendField(new Blockly.FieldVariable("item"), "LHS");
+    this.appendValueInput("RHS")
+        .setCheck(["int"])
+        .appendField(" = ");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
+    this.setColour(120);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+
+Blockly.Blocks['python_assign_float'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField(new Blockly.FieldVariable("item"), "LHS");
+    this.appendValueInput("RHS")
+        .setCheck(["float"])
         .appendField(" = ");
     this.setInputsInline(true);
     this.setPreviousStatement(true);

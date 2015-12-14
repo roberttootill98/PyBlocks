@@ -1331,8 +1331,11 @@ Blockly.BlockSvg.prototype.updateColour = function() {
     // Disabled blocks don't have colour.
     return;
   }
-  var hexColour = Blockly.makeColour(this.getColour());
-  var rgb = goog.color.hexToRgb(hexColour);
+  //var hexColour = Blockly.makeColour(this.getColour());
+  //var rgb = goog.color.hexToRgb(hexColour);
+  var rgb = this.getColour();
+  var hexColour = goog.color.rgbArrayToHex(rgb);
+  console.log(rgb);
   if (this.isShadow()) {
     rgb = goog.color.lighten(rgb, 0.6);
     hexColour = goog.color.rgbArrayToHex(rgb);

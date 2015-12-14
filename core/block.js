@@ -588,12 +588,21 @@ Blockly.Block.prototype.setTooltip = function(newTip) {
   this.tooltip = newTip;
 };
 
+/*
 Blockly.Block.PY_COLOURS = {}
-Blockly.Block.PY_COLOURS['notype'] = 100
-Blockly.Block.PY_COLOURS['int'] = 100
-Blockly.Block.PY_COLOURS['float'] = 150
-Blockly.Block.PY_COLOURS['str'] = 200
-Blockly.Block.PY_COLOURS['bool'] = 250
+Blockly.Block.PY_COLOURS['notype'] = 50
+Blockly.Block.PY_COLOURS['int'] = 60
+Blockly.Block.PY_COLOURS['float'] = 0
+Blockly.Block.PY_COLOURS['str'] = 120
+Blockly.Block.PY_COLOURS['bool'] = 210
+*/
+
+Blockly.Block.PY_COLOURS = {}
+Blockly.Block.PY_COLOURS['notype'] = [145, 163, 145] //"#666666"
+Blockly.Block.PY_COLOURS['int'] = [255, 255, 70] //!#ff7f00"
+Blockly.Block.PY_COLOURS['float'] = [255, 25, 25] //"#ff0000"
+Blockly.Block.PY_COLOURS['str'] = [0, 204, 51] //"#00cc00"
+Blockly.Block.PY_COLOURS['bool'] = [0, 128, 255] //"#4c66ff"
 
 /**
  * Get the colour of a block.

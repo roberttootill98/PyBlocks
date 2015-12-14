@@ -180,7 +180,7 @@ Blockly.Css.CONTENT = [
 
 /* HACK */
   '.blocklyPath {',
-    'stroke: #aaaaaa;',
+    'stroke: #eeeeee;',
     'stroke-linecap: round;',
     'stroke-width: 1;',
     //'display: none;',
@@ -194,7 +194,7 @@ Blockly.Css.CONTENT = [
 
  '.blocklyPathLight {',
    'fill: #dddddd;',
-    'stroke: #aaaaaa;',
+    'stroke: #eeeeee;',
     'stroke-width: 1;',
 //    'display: none;',
   '}',
