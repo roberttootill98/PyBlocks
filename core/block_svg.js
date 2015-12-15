@@ -894,13 +894,8 @@ Blockly.BlockSvg.STMT_ARGS_PADDING_TOP = 3;
  * Vertical padding around inline elements.
  * @const
  */
-Blockly.BlockSvg.INLINE_PADDING_BOTTOM = 10;
+Blockly.BlockSvg.INLINE_PADDING_BOTTOM = 8;
 
-/**
- * Minimum height of a statement block.
- * @const
- */
-Blockly.BlockSvg.MIN_STMT_BLOCK_Y = 24;
 
 /**
  * Minimum height of a block.
@@ -911,6 +906,17 @@ Blockly.BlockSvg.MIN_BLOCK_Y = 24;
  * Height of horizontal puzzle tab.
  * @const
  */
+
+ /**
+  * Minimum height of a statement block.
+  * @const
+  */
+ Blockly.BlockSvg.MIN_STMT_BLOCK_Y =
+    Blockly.BlockSvg.STMT_ARGS_PADDING_TOP +
+    Blockly.BlockSvg.MIN_BLOCK_Y +
+    2 * Blockly.BlockSvg.INLINE_PADDING_BOTTOM;
+
+
 Blockly.BlockSvg.TAB_HEIGHT = 0;
 /**
  * Width of horizontal puzzle tab.
@@ -1335,7 +1341,7 @@ Blockly.BlockSvg.prototype.updateColour = function() {
   //var rgb = goog.color.hexToRgb(hexColour);
   var rgb = this.getColour();
   var hexColour = goog.color.rgbArrayToHex(rgb);
-  console.log(rgb);
+  //console.log(rgb);
   if (this.isShadow()) {
     rgb = goog.color.lighten(rgb, 0.6);
     hexColour = goog.color.rgbArrayToHex(rgb);
@@ -1689,6 +1695,13 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
     }
     row.push(input);
 
+    // HACK check
+    if (!this.outputConnection) {
+      console.log("1 row thickness",inputRows[0].height );
+    }
+    else {
+        console.log("2 expression row thickness",inputRows[0].height );
+    }
     // Compute minimum input size.
     input.renderHeight = Blockly.BlockSvg.MIN_BLOCK_Y;
     // The width is currently only needed for inline value inputs.
@@ -1707,16 +1720,17 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
       input.renderWidth = bBox.width;
     }
     // Blocks have a one pixel shadow that should sometimes overhang.
-    if (!isInline && i == inputList.length - 1) {
+    /*if (!isInline && i == inputList.length - 1) {
       // Last value input should overhang.
       input.renderHeight--;
     } else if (!isInline && input.type == Blockly.INPUT_VALUE &&
         inputList[i + 1] && inputList[i + 1].type == Blockly.NEXT_STATEMENT) {
       // Value input above statement input should overhang.
       input.renderHeight--;
-    }
-
+  }*/
+    //console.log(row.height, input.renderHeight);
     row.height = Math.max(row.height, input.renderHeight);
+    //console.log(row.height);
     input.fieldWidth = 0;
     if (inputRows.length == 1) {
       // The first row gets shifted to accommodate any icons.
@@ -1760,11 +1774,39 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
         if (input.type == Blockly.INPUT_VALUE) {
           row.height += //Blockly.BlockSvg.INLINE_PADDING_TOP +
                         Blockly.BlockSvg.INLINE_PADDING_BOTTOM;
+         // console.log("thicker");
           row.thicker = true;
           break;
         }
       }
     }
+
+  }
+
+  // HACK to make row of statements at least minumum thickness
+  if (!this.outputConnection) {
+    if (inputRows[0].height < Blockly.BlockSvg.MIN_STMT_BLOCK_Y) {
+        inputRows[0].height = Blockly.BlockSvg.MIN_STMT_BLOCK_Y;
+    }
+    else {
+        var shortfall = (inputRows[0].height - Blockly.BlockSvg.MIN_STMT_BLOCK_Y) %
+                          Blockly.BlockSvg.INLINE_PADDING_BOTTOM;
+        console.log("shortfall0 =", shortfall)
+        inputRows[0].height += Blockly.BlockSvg.INLINE_PADDING_BOTTOM - shortfall;
+    }
+
+    if (inputRows.length == 2) {
+        console.log("while loop with row 1", inputRows[1].height);
+        if (inputRows[1].height > Blockly.BlockSvg.MIN_STMT_BLOCK_Y) {
+            inputRows[1].height -= 4; // notch height
+        }
+
+    }
+
+    console.log("2 statement row thickness",inputRows[0].height );
+  }
+  else {
+      console.log("2 expression row thickness",inputRows[0].height );
   }
 
   // Compute the statement edge.
@@ -1914,6 +1956,9 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, highlightSteps,
     inlineSteps, highlightInlineSteps, connectionsXY, inputRows, iconWidth) {
   var cursorX;
   var cursorY = 0;
+  if (!this.outputConnection) {
+    console.log("statement cursor first", cursorY);
+  }
   var connectionX, connectionY;
   for (var y = 0, row; row = inputRows[y]; y++) {
     cursorX = Blockly.BlockSvg.SEP_SPACE_X;
@@ -2073,11 +2118,17 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, highlightSteps,
       }
       this.renderFields_(input.fieldRow, fieldX, fieldY);
       cursorX = inputRows.statementEdge + Blockly.BlockSvg.NOTCH_WIDTH;
-      var dropHeight = Math.max(row.height, Blockly.BlockSvg.MIN_STMT_BLOCK_Y);
+
+      //var dropHeight = 0;//Blockly.BlockSvg.MIN_STMT_BLOCK_Y;
+      if (row.height < Blockly.BlockSvg.MIN_STMT_BLOCK_Y) {
+          row.height = Blockly.BlockSvg.MIN_STMT_BLOCK_Y;
+      }
+      //else row.height = 86;
       steps.push('H', cursorX-0.5);
       steps.push(Blockly.BlockSvg.INNER_TOP_LEFT_CORNER);
       //steps.push('h', 0.5);
-      steps.push('v', dropHeight - 2 * Blockly.BlockSvg.CORNER_RADIUS);
+      //steps.push('v', dropHeight - 2 * Blockly.BlockSvg.CORNER_RADIUS);
+      steps.push('v', row.height - 2 * Blockly.BlockSvg.CORNER_RADIUS);
       steps.push(Blockly.BlockSvg.INNER_BOTTOM_LEFT_CORNER);
       // MJP removed
       //steps.push('H', inputRows.rightEdge);
@@ -2104,7 +2155,7 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, highlightSteps,
         // If the final input is a statement stack, add a small row underneath.
         // Consecutive statement stacks are also separated by a small divider.
         //steps.push('v', Blockly.BlockSvg.SEP_SPACE_Y);
-        ;//cursorY += Blockly.BlockSvg.SEP_SPACE_Y;
+        //cursorY += Blockly.BlockSvg.SEP_SPACE_Y;
       }
     }
     cursorY += row.height;
@@ -2112,6 +2163,10 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, highlightSteps,
   if (!inputRows.length) {
     cursorY = Blockly.BlockSvg.MIN_BLOCK_Y;
     steps.push('V', cursorY);
+  }
+  //console.log("cy", cursorY)
+  if (!this.outputConnection) {
+    console.log("statement cursor finally", cursorY);
   }
   return cursorY;
 };

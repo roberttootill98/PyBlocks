@@ -233,6 +233,8 @@ Blockly.Blocks['python_assign_int'] = {
     this.appendValueInput("RHS")
         .setCheck(["int"])
         .appendField(" = ");
+    this.appendDummyInput()
+        .appendField(" ");
     this.setInputsInline(true);
     this.setPreviousStatement(true);
     this.setNextStatement(true);
@@ -249,6 +251,8 @@ Blockly.Blocks['python_assign_float'] = {
     this.appendValueInput("RHS")
         .setCheck(["float"])
         .appendField(" = ");
+    this.appendDummyInput()
+        .appendField(" ");
     this.setInputsInline(true);
     this.setPreviousStatement(true);
     this.setNextStatement(true);
