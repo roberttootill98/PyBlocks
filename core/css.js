@@ -132,7 +132,7 @@ Blockly.Css.setCursor = function(cursor) {
  */
 Blockly.Css.CONTENT = [
   '.blocklySvg {',
-    'background-color: #fff;',
+    'background-color: #444444;',
     'outline: none;',
     'overflow: hidden;',  /* IE overflows by default. */
   '}',
@@ -179,7 +179,7 @@ Blockly.Css.CONTENT = [
 
 
 /* HACK */
-  '.blocklyPath {',
+  '.blocklyBlockPath {',
     'stroke: #eeeeee;',
     'stroke-linecap: round;',
     'stroke-width: 1;',
@@ -187,12 +187,20 @@ Blockly.Css.CONTENT = [
   '}',
 
   '.blocklyPathDark {',
-    'stroke: #0000000;',
+    'fill: none;',
+    //'stroke: #0000000;',
     //'stroke-width: 2;',
-    'display: none;',
+    //'display: none;',
    '}',
 
- '.blocklyPathLight {',
+  //'.blocklySelected.blocklyDragging>.blocklyPathDark {',
+   '.blocklyDragging>.blocklyPathDark {',
+     'fill: #101010;',
+     'opacity: .6;',
+   '}',
+
+
+ '.blocklyHolePath {',
    'fill: #dddddd;',
     'stroke: #eeeeee;',
     'stroke-width: 1;',
@@ -201,31 +209,28 @@ Blockly.Css.CONTENT = [
 
   /* END HACK */
 
-  '.blocklySelected>.blocklyPath {',
-    'stroke: #fc3;',
-    'stroke-width: 2px;',
-  '}',
+ // '.blocklySelected>.blocklyBlockPath {',
+//    'stroke: #fc3;',
+//    'stroke-width: 2px;',
+ // '}',
 
-  //'.blocklySelected>.blocklyPathLight {',
+  //'.blocklySelected>.blocklyHolePath {',
 //    'display: none;',
  // '}',
 
-  '.blocklyDragging>.blocklyPath,',
-  '.blocklyDragging>.blocklyPathLight {',
+  /*'.blocklyDragging>.blocklyBlockPath,',
+  '.blocklyDragging>.blocklyHolePath {',
     'fill-opacity: .8;',
     'stroke-opacity: .8;',
   '}',
+*/
 
-  '.blocklyDragging>.blocklyPathDark {',
-    'display: none;',
-  '}',
-
-  '.blocklyDisabled>.blocklyPath {',
+  '.blocklyDisabled>.blocklyBlockPath {',
     'fill-opacity: .5;',
     'stroke-opacity: .5;',
   '}',
 
-  '.blocklyDisabled>.blocklyPathLight,',
+  '.blocklyDisabled>.blocklyHolePath,',
   '.blocklyDisabled>.blocklyPathDark {',
     'display: none;',
   '}',
@@ -325,7 +330,7 @@ Blockly.Css.CONTENT = [
   '}',
 
   '.blocklyFlyoutBackground {',
-    'fill: #ddd;',
+    'fill: #181818;',
     'fill-opacity: .8;',
   '}',
 

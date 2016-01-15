@@ -45,16 +45,16 @@ Blockly.BlockSvg = function() {
   this.svgGroup_ = Blockly.createSvgElement('g', {}, null);
   /** @type {SVGElement} */
   this.svgPathDark_ = Blockly.createSvgElement('path',
-      {'class': 'blocklyPathDark', 'transform': 'translate(1,1)'},
+      {'class': 'blocklyPathDark', 'transform': 'translate(4,4)'},
       this.svgGroup_);
   /** @type {SVGElement} */
-  this.svgPath_ = Blockly.createSvgElement('path', {'class': 'blocklyPath'},
+  this.svgBlockPath_ = Blockly.createSvgElement('path', {'class': 'blocklyBlockPath'},
       this.svgGroup_);
   /** @type {SVGElement} */
-  this.svgPathLight_ = Blockly.createSvgElement('path',
-      {'class': 'blocklyPathLight'}, this.svgGroup_);
-  this.svgPath_.tooltip = this;
-  Blockly.Tooltip.bindMouseEvents(this.svgPath_);
+  this.svgHolePath_ = Blockly.createSvgElement('path',
+      {'class': 'blocklyHolePath'}, this.svgGroup_);
+  this.svgBlockPath_.tooltip = this;
+  Blockly.Tooltip.bindMouseEvents(this.svgBlockPath_);
 };
 goog.inherits(Blockly.BlockSvg, Blockly.Block);
 
@@ -709,9 +709,10 @@ Blockly.BlockSvg.prototype.setDragging_ = function(adding) {
   } else {
     this.removeDragging();
   }
-  // Recurse through all blocks attached under this one.
+  // Recurse through all statement blocks attached under this one.
   for (var i = 0; i < this.childBlocks_.length; i++) {
-    this.childBlocks_[i].setDragging_(adding);
+    if (!this.childBlocks_[i].outputConnection)
+       this.childBlocks_[i].setDragging_(adding);
   }
 };
 
@@ -1151,9 +1152,9 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate,
   goog.dom.removeNode(this.svgGroup_);
   // Sever JavaScript to DOM connections.
   this.svgGroup_ = null;
-  this.svgPath_ = null;
-  this.svgPathLight_ = null;
-  this.svgPathDark_ = null;
+  this.svgBlockPath_ = null;
+  this.svgHolePath_ = null;
+ // this.svgPathDark_ = null;
   Blockly.Field.stopCache();
 };
 
@@ -1345,18 +1346,18 @@ Blockly.BlockSvg.prototype.updateColour = function() {
   if (this.isShadow()) {
     rgb = goog.color.lighten(rgb, 0.6);
     hexColour = goog.color.rgbArrayToHex(rgb);
-    this.svgPathLight_.style.display = 'none';
+    this.svgHolePath_.style.display = 'none';
     //this.svgPathDark_.setAttribute('fill', hexColour);
   } else {
-    this.svgPathLight_.style.display = '';
+    this.svgHolePath_.style.display = '';
     var hexLight = goog.color.rgbArrayToHex(goog.color.lighten(rgb, 0.3));
     var hexDark = goog.color.rgbArrayToHex(goog.color.darken(rgb, 0.2));
-    //this.svgPathLight_.setAttribute('stroke', hexLight);
-    //this.svgPathLight_.setAttribute('stroke', hexColour);
-    this.svgPathLight_.setAttribute('fill', hexLight);
-    //this.svgPathDark_.setAttribute('fill', hexDark);
+    //this.svgHolePath_.setAttribute('stroke', hexLight);
+    //this.svgHolePath_.setAttribute('stroke', hexColour);
+    this.svgHolePath_.setAttribute('fill', hexLight);
+    this.svgPathDark_.setAttribute('fill', hexDark);
   }
-  this.svgPath_.setAttribute('fill', hexColour);
+  this.svgBlockPath_.setAttribute('fill', hexColour);
 
   var icons = this.getIcons();
   for (var i = 0; i < icons.length; i++) {
@@ -1381,7 +1382,7 @@ Blockly.BlockSvg.prototype.updateDisabled = function() {
     if (!hasClass) {
       Blockly.addClass_(/** @type {!Element} */ (this.svgGroup_),
                         'blocklyDisabled');
-      this.svgPath_.setAttribute('fill',
+      this.svgBlockPath_.setAttribute('fill',
           'url(#' + this.workspace.options.disabledPatternId + ')');
     }
   } else {
@@ -1890,10 +1891,10 @@ Blockly.BlockSvg.prototype.renderDraw_ = function(iconWidth, inputRows) {
   this.renderDrawLeft_(steps, highlightSteps, connectionsXY, cursorY);
 
   var pathString = steps.join(' ') + '\n' + inlineSteps.join(' ');
-  this.svgPath_.setAttribute('d', pathString);
+  this.svgBlockPath_.setAttribute('d', pathString);
   this.svgPathDark_.setAttribute('d', pathString);
-  pathString = /*highlightSteps.join(' ') + '\n' + */ highlightInlineSteps.join(' ');
-  this.svgPathLight_.setAttribute('d', pathString);
+  pathString = highlightInlineSteps.join(' ');
+  this.svgHolePath_.setAttribute('d', pathString);
 };
 
 /**

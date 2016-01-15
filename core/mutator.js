@@ -181,7 +181,7 @@ Blockly.Mutator.prototype.setVisible = function(visible) {
   if (visible) {
     // Create the bubble.
     this.bubble_ = new Blockly.Bubble(this.block_.workspace,
-        this.createEditor_(), this.block_.svgPath_,
+        this.createEditor_(), this.block_.svgBlockPath_,
         this.iconX_, this.iconY_, null, null);
     var thisObj = this;
     this.workspace_.flyout_.init(this.workspace_);
