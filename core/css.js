@@ -174,9 +174,10 @@ Blockly.Css.CONTENT = [
 
   '.blocklyHighlightedConnectionPath {',
     'fill: none;',
+    'stroke: #fff;',
     'stroke-width: 4px;',
+    'stroke-linejoin: round;',
   '}',
-
 
 /* HACK */
   '.blocklyBlockPath {',

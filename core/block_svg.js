@@ -53,6 +53,7 @@ Blockly.BlockSvg = function() {
   /** @type {SVGElement} */
   this.svgHolePath_ = Blockly.createSvgElement('path',
       {'class': 'blocklyHolePath'}, this.svgGroup_);
+
   this.svgBlockPath_.tooltip = this;
   Blockly.Tooltip.bindMouseEvents(this.svgBlockPath_);
 };
@@ -230,10 +231,12 @@ Blockly.BlockSvg.terminateDrag_ = function() {
  */
 Blockly.BlockSvg.prototype.setParent = function(newParent) {
   var svgRoot = this.getSvgRoot();
+  console.log("ROOT " + svgRoot);
   if (this.parentBlock_ && svgRoot) {
     // Move this block up the DOM.  Keep track of x/y translations.
     var xy = this.getRelativeToSurfaceXY();
     this.workspace.getCanvas().appendChild(svgRoot);
+    //this.workspace.getCanvas().insertBefore(svgRoot, newParent.firstChild);
     svgRoot.setAttribute('transform', 'translate(' + xy.x + ',' + xy.y + ')');
   }
 
@@ -490,6 +493,25 @@ Blockly.BlockSvg.prototype.onMouseUp_ = function(e) {
     if (Blockly.selected && Blockly.highlightedConnection_) {
       // Connect two blocks together.
       Blockly.localConnection_.connect(Blockly.highlightedConnection_);
+
+      console.log("THIS Y" + this_);
+
+      /*
+      var parent = this_.previousConnection.;
+      console.log(this_);
+      if (parent) {
+          console.log("Added block has a parent");
+      }
+      else {
+          console.log("Added block doesn't have a parent");
+      }
+*/
+
+
+
+     //console.log("THIS.NEXT " + this_.nextConnection.targetBlock);
+
+
       if (this_.rendered) {
         // Trigger a connection animation.
         // Determine which connection is inferior (lower in the source stack).
@@ -780,6 +802,8 @@ Blockly.BlockSvg.prototype.onMouseMove_ = function(e) {
       var radiusConnection = Blockly.SNAP_RADIUS;
       for (var i = 0; i < myConnections.length; i++) {
         var myConnection = myConnections[i];
+        console.log("MyConnection " + i + " = ", myConnection.x_, myConnection.y_);
+        console.log("Connection type " + myConnection.type)
         var neighbour = myConnection.closest(radiusConnection, dx, dy);
         if (neighbour.connection) {
           closestConnection = neighbour.connection;
@@ -799,6 +823,7 @@ Blockly.BlockSvg.prototype.onMouseMove_ = function(e) {
       if (closestConnection &&
           closestConnection != Blockly.highlightedConnection_) {
         closestConnection.highlight();
+        console.log("Highlighting")
         Blockly.highlightedConnection_ = closestConnection;
         Blockly.localConnection_ = localConnection;
       }
@@ -1697,12 +1722,12 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
     row.push(input);
 
     // HACK check
-    if (!this.outputConnection) {
+    /*if (!this.outputConnection) {
       console.log("1 row thickness",inputRows[0].height );
     }
     else {
         console.log("2 expression row thickness",inputRows[0].height );
-    }
+    }*/
     // Compute minimum input size.
     input.renderHeight = Blockly.BlockSvg.MIN_BLOCK_Y;
     // The width is currently only needed for inline value inputs.
@@ -1804,11 +1829,11 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
 
     }
 
-    console.log("2 statement row thickness",inputRows[0].height );
+    //console.log("2 statement row thickness",inputRows[0].height );
   }
-  else {
-      console.log("2 expression row thickness",inputRows[0].height );
-  }
+  //else {
+    //  console.log("2 expression row thickness",inputRows[0].height );
+  //}
 
   // Compute the statement edge.
   // This is the width of a block where statements are nested.

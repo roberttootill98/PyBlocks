@@ -255,6 +255,7 @@ Blockly.Connection.prototype.connect = function(otherConnection) {
   if (childBlock.rendered) {
     childBlock.updateDisabled();
   }
+
   if (parentBlock.rendered && childBlock.rendered) {
     if (this.type == Blockly.NEXT_STATEMENT ||
         this.type == Blockly.PREVIOUS_STATEMENT) {
@@ -433,14 +434,12 @@ Blockly.Connection.prototype.highlight = function() {
   if (this.type == Blockly.INPUT_VALUE || this.type == Blockly.OUTPUT_VALUE) {
     var tabWidth = this.sourceBlock_.RTL ? -Blockly.BlockSvg.TAB_WIDTH :
         Blockly.BlockSvg.TAB_WIDTH;
-    steps = 'm 0,0 v 5 c 0,10 ' + -tabWidth + ',-8 ' + -tabWidth + ',7.5 s ' +
-            tabWidth + ',-2.5 ' + tabWidth + ',7.5 v 5';
+    var width = Blockly.BlockSvg.SLOT_WIDTH + 12;
+    var height = Blockly.BlockSvg.MIN_BLOCK_Y + 12;
+    steps = 'm -5,-6 h ' + width + 'v ' + height +
+        ' h -' + width + ' z';
   } else {
-    if (this.sourceBlock_.RTL) {
-      steps = 'm 20,0 h -5 ' + Blockly.BlockSvg.NOTCH_PATH_RIGHT + ' h -5';
-    } else {
-      steps = 'm -20,0 h 5 ' + Blockly.BlockSvg.NOTCH_PATH_LEFT + ' h 5';
-    }
+    steps = 'm -20,0 h 5 ' + Blockly.BlockSvg.NOTCH_PATH_LEFT + ' h 5';
   }
   var xy = this.sourceBlock_.getRelativeToSurfaceXY();
   var x = this.x_ - xy.x;
@@ -558,6 +557,10 @@ Blockly.Connection.prototype.closest = function(maxLimit, dx, dy) {
     if (connection.type == Blockly.INPUT_VALUE && connection.targetConnection)
       return true;
 
+    /* MJP HACK - don't consider output connections at all */
+    //if (connection.type == Blockly.OUTPUT_VALUE)
+    //    return true;
+
     // Do type checking.
     if (!thisConnection.checkType_(connection)) {
       return true;
@@ -575,7 +578,29 @@ Blockly.Connection.prototype.closest = function(maxLimit, dx, dy) {
     // Only connections within the maxLimit radius.
     var dx = currentX - connection.x_;
     var dy = currentY - connection.y_;
+
+
     var r = Math.sqrt(dx * dx + dy * dy);
+    //console.log("first r " + r);
+
+    /* HACK MJP- revisit when type indicators are added
+    if (connection.type == Blockly.INPUT_VALUE) {
+        console.log("currentX " + currentX);
+        console.log("halfBW " + sourceBlock.width / 2);
+        console.log("connectX " + connection.x_);
+        console.log("halfHole " + Blockly.BlockSvg.SLOT_WIDTH / 2);
+        var blockMidX = currentX + sourceBlock.width / 2;
+        var slotMidX = connection.x_ + Blockly.BlockSvg.SLOT_WIDTH / 2;
+        dx = blockMidX - slotMidX;
+        console.log("blockMidX = " + blockMidX);
+        console.log("slotMidX = " + slotMidX);
+        console.log("dx = " + dx);
+        r = Math.sqrt(dx * dx + dy * dy);
+        console.log("r " + r);
+        console.log("-------------------")
+    }
+      END HACK */
+
     if (r <= maxLimit) {
       closestConnection = connection;
       maxLimit = r;
