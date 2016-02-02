@@ -231,12 +231,10 @@ Blockly.BlockSvg.terminateDrag_ = function() {
  */
 Blockly.BlockSvg.prototype.setParent = function(newParent) {
   var svgRoot = this.getSvgRoot();
-  console.log("ROOT " + svgRoot);
   if (this.parentBlock_ && svgRoot) {
     // Move this block up the DOM.  Keep track of x/y translations.
     var xy = this.getRelativeToSurfaceXY();
     this.workspace.getCanvas().appendChild(svgRoot);
-    //this.workspace.getCanvas().insertBefore(svgRoot, newParent.firstChild);
     svgRoot.setAttribute('transform', 'translate(' + xy.x + ',' + xy.y + ')');
   }
 
@@ -494,23 +492,29 @@ Blockly.BlockSvg.prototype.onMouseUp_ = function(e) {
       // Connect two blocks together.
       Blockly.localConnection_.connect(Blockly.highlightedConnection_);
 
-      console.log("THIS Y" + this_);
-
-      /*
-      var parent = this_.previousConnection.;
-      console.log(this_);
-      if (parent) {
-          console.log("Added block has a parent");
+      // If this is a statement nested in another block which has a next
+      // statement, reorder the DOM to prevent nested blocks casting an
+      // incorrect shadow over the next statement block
+      if (!this_.outputConnection) {
+          var previousConnection = this_.previousConnection;
+          var connectionX = previousConnection.x_;
+          var previousBlock = previousConnection.targetBlock();
+          while (previousBlock) {
+              var currentBlock = previousBlock;
+              previousConnection = currentBlock.previousConnection;
+              if (previousConnection.x_ != connectionX) {
+                // this_ is nested in currentBlock
+                var nextBlock = currentBlock.nextConnection.targetBlock();
+                if (nextBlock) {
+                    var currentRoot = currentBlock.getSvgRoot();
+                    var nextBlockRoot = nextBlock.getSvgRoot();
+                    currentRoot.appendChild(nextBlockRoot);
+                }
+                break;
+              }
+              previousBlock = previousConnection.targetBlock();
+          }
       }
-      else {
-          console.log("Added block doesn't have a parent");
-      }
-*/
-
-
-
-     //console.log("THIS.NEXT " + this_.nextConnection.targetBlock);
-
 
       if (this_.rendered) {
         // Trigger a connection animation.
