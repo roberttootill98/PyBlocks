@@ -108,6 +108,8 @@ Blockly.Block.prototype.fill = function(workspace, prototypeName) {
   this.inputList = [];
   /** @type {boolean|undefined} */
   this.inputsInline = undefined;
+/** type {!Array<!Array<string>} */
+  this.typeVecs = [];
   /** @type {boolean} */
   this.rendered = false;
   /** @type {boolean} */
@@ -588,32 +590,18 @@ Blockly.Block.prototype.setTooltip = function(newTip) {
   this.tooltip = newTip;
 };
 
-/*
-Blockly.Block.PY_COLOURS = {}
-Blockly.Block.PY_COLOURS['notype'] = 50
-Blockly.Block.PY_COLOURS['int'] = 60
-Blockly.Block.PY_COLOURS['float'] = 0
-Blockly.Block.PY_COLOURS['str'] = 120
-Blockly.Block.PY_COLOURS['bool'] = 210
-*/
-
-Blockly.Block.PY_COLOURS = {}
-//Blockly.Block.PY_COLOURS['notype'] = [145, 163, 145] //"#666666"
-//Blockly.Block.PY_COLOURS['notype'] = [210,180,140]
-Blockly.Block.PY_COLOURS['notype'] = [139, 125, 107]
-Blockly.Block.PY_COLOURS['int'] = [255, 255, 70] //!#ff7f00"
-Blockly.Block.PY_COLOURS['float'] = [255, 25, 25] //"#ff0000"
-Blockly.Block.PY_COLOURS['str'] = [0, 204, 51] //"#00cc00"
-Blockly.Block.PY_COLOURS['bool'] = [0, 128, 255] //"#4c66ff"
-
 /**
  * Get the colour of a block.
  * @return {number} HSV hue value.
  */
+ 
 Blockly.Block.prototype.getColour = function() {
   if (this.outputConnection) {
-    console.log(this.outputConnection.check_);
-    return Blockly.Block.PY_COLOURS[this.outputConnection.check_[0]];
+    //console.log("COLOUR " + this.outputConnection.check_);
+    //return Blockly.Block.PY_COLOURS[this.outputConnection.check_[0]];
+    console.log("Block Type: ");
+    console.log(this.getOutputTypes());
+    return Blockly.Block.PY_COLOURS[this.getOutputTypes()[0]];
   }
   else {
     return Blockly.Block.PY_COLOURS['notype'];
@@ -790,6 +778,14 @@ Blockly.Block.prototype.setInputsInline = function(newBoolean) {
     this.bumpNeighbours_();
     this.workspace.fireChangeEvent();
   }
+};
+
+/**
+ * Set the Python type-vecs for this block.
+ * @param {!Array{<!Array<string>>} typeVecs the new type-vecs.
+ */
+Blockly.Block.prototype.setTypeVecs = function(typeVecs) {
+  this.typeVecs = typeVecs;
 };
 
 /**
@@ -1286,4 +1282,38 @@ Blockly.Block.prototype.getRelativeToSurfaceXY = function() {
  */
 Blockly.Block.prototype.moveBy = function(dx, dy) {
   this.xy_.translate(dx, dy);
+};
+
+/*
+Blockly.Block.PY_COLOURS = {}
+Blockly.Block.PY_COLOURS['notype'] = 50
+Blockly.Block.PY_COLOURS['int'] = 60
+Blockly.Block.PY_COLOURS['float'] = 0
+Blockly.Block.PY_COLOURS['str'] = 120
+Blockly.Block.PY_COLOURS['bool'] = 210
+*/
+
+Blockly.Block.PY_COLOURS = {};
+//Blockly.Block.PY_COLOURS['notype'] = [145, 163, 145] //"#666666"
+//Blockly.Block.PY_COLOURS['notype'] = [210,180,140]
+Blockly.Block.PY_COLOURS['notype'] = [139, 125, 107];
+Blockly.Block.PY_COLOURS['int'] = [255, 255, 70];  //!#ff7f00"
+Blockly.Block.PY_COLOURS['float'] = [255, 25, 25];  //"#ff0000"
+Blockly.Block.PY_COLOURS['str'] = [0, 204, 51];  //"#00cc00"
+Blockly.Block.PY_COLOURS['bool'] = [0, 128, 255];  //"#4c66ff"
+
+Blockly.Block.prototype.getParameterTypes = function(index) {
+  var paramTypes = [];
+  var typeVecs = this.typeVecs;
+  for (var i=0; i < typeVecs.length; i++) {
+    var outputType = typeVecs[i].slice(index)[0];
+    if (paramTypes.indexOf(outputType) == -1) {
+        paramTypes.push(outputType);
+    }
+  }
+  return paramTypes;
+};
+
+Blockly.Block.prototype.getOutputTypes = function() {
+  return this.getParameterTypes(-1);
 };

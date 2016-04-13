@@ -281,6 +281,8 @@ Blockly.WorkspaceSvg.prototype.addZoomControls_ = function(bottom) {
 Blockly.WorkspaceSvg.prototype.addFlyout_ = function() {
   var workspaceOptions = {
     disabledPatternId: this.options.disabledPatternId,
+    multiTypeGradientId: this.options.multiTypeGradientId,
+    twoTypePatternId: this.options.twoTypePatternId,
     parentWorkspace: this,
     RTL: this.RTL
   };

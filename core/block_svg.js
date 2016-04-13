@@ -355,7 +355,7 @@ Blockly.BlockSvg.prototype.setCollapsed = function(collapsed) {
   var COLLAPSED_INPUT_NAME = '_TEMP_COLLAPSED_INPUT';
   if (collapsed) {
     var icons = this.getIcons();
-    for (var i = 0; i < icons.length; i++) {
+    for (i = 0; i < icons.length; i++) {
       icons[i].setVisible(false);
     }
     var text = this.toString(Blockly.COLLAPSE_CHARS);
@@ -815,6 +815,8 @@ Blockly.BlockSvg.prototype.onMouseMove_ = function(e) {
           radiusConnection = neighbour.radius;
         }
       }
+      console.log("Block");
+      console.log(this_);
 
       // Remove connection highlighting if needed.
       if (Blockly.highlightedConnection_ &&
@@ -1369,24 +1371,31 @@ Blockly.BlockSvg.prototype.updateColour = function() {
   }
   //var hexColour = Blockly.makeColour(this.getColour());
   //var rgb = goog.color.hexToRgb(hexColour);
-  var rgb = this.getColour();
-  var hexColour = goog.color.rgbArrayToHex(rgb);
+
+  var outputTypes = this.getOutputTypes();
+  if (outputTypes.length == 1 && outputTypes[0] == "any") {
+    //this.svgBlockPath_.setAttribute('fill', "url(#MultiTypePattern)");
+    this.svgBlockPath_.setAttribute('fill', 'url(#' + this.workspace.options.multiTypeGradientId + ')');
+  }
+  else {
+    var rgb = this.getColour();
+    var hexColour = goog.color.rgbArrayToHex(rgb);
+      this.svgBlockPath_.setAttribute('fill', hexColour);
+    }
   //console.log(rgb);
-  if (this.isShadow()) {
-    rgb = goog.color.lighten(rgb, 0.6);
-    hexColour = goog.color.rgbArrayToHex(rgb);
-    this.svgHolePath_.style.display = 'none';
+  //if (this.isShadow()) {
+//    rgb = goog.color.lighten(rgb, 0.6);
+//    hexColour = goog.color.rgbArrayToHex(rgb);
+//    this.svgHolePath_.style.display = 'none';
     //this.svgPathDark_.setAttribute('fill', hexColour);
-  } else {
-    this.svgHolePath_.style.display = '';
-    var hexLight = goog.color.rgbArrayToHex(goog.color.lighten(rgb, 0.3));
-    var hexDark = goog.color.rgbArrayToHex(goog.color.darken(rgb, 0.2));
+//  } else {
+    //this.svgHolePath_.style.display = '';
+    //var hexLight = goog.color.rgbArrayToHex(goog.color.lighten(rgb, 0.3));
+    //var hexDark = goog.color.rgbArrayToHex(goog.color.darken(rgb, 0.2));
     //this.svgHolePath_.setAttribute('stroke', hexLight);
     //this.svgHolePath_.setAttribute('stroke', hexColour);
-    this.svgHolePath_.setAttribute('fill', hexLight);
-    this.svgPathDark_.setAttribute('fill', hexDark);
-  }
-  this.svgBlockPath_.setAttribute('fill', hexColour);
+    //this.svgHolePath_.setAttribute('fill', hexLight);
+    //this.svgPathDark_.setAttribute('fill', hexDark);
 
   var icons = this.getIcons();
   for (var i = 0; i < icons.length; i++) {
@@ -1905,59 +1914,59 @@ Blockly.BlockSvg.prototype.renderDraw_ = function(iconWidth, inputRows) {
 
   // Assemble the block's path.
   var steps = [];
-  var inlineSteps = [];
+  //var inlineSteps = [];
   // The highlighting applies to edges facing the upper-left corner.
   // Since highlighting is a two-pixel wide border, it would normally overhang
   // the edge of the block by a pixel. So undersize all measurements by a pixel.
-  var highlightSteps = [];
-  var highlightInlineSteps = [];
+  var holeSteps = [];
+  var indicatorSteps = [];
 
-  this.renderDrawTop_(steps, highlightSteps, connectionsXY,
+  this.renderDrawTop_(steps, holeSteps, connectionsXY,
       inputRows.rightEdge);
-  var cursorY = this.renderDrawRight_(steps, highlightSteps, inlineSteps,
-      highlightInlineSteps, connectionsXY, inputRows, iconWidth);
-  this.renderDrawBottom_(steps, highlightSteps, connectionsXY, cursorY);
-  this.renderDrawLeft_(steps, highlightSteps, connectionsXY, cursorY);
+  var cursorY = this.renderDrawRight_(steps, holeSteps,
+      indicatorSteps, connectionsXY, inputRows, iconWidth);
+  this.renderDrawBottom_(steps, holeSteps, connectionsXY, cursorY);
+  this.renderDrawLeft_(steps, holeSteps, connectionsXY, cursorY);
 
-  var pathString = steps.join(' ') + '\n' + inlineSteps.join(' ');
+  var pathString = steps.join(' '); // + '\n' + inlineSteps.join(' ');
   this.svgBlockPath_.setAttribute('d', pathString);
   this.svgPathDark_.setAttribute('d', pathString);
-  pathString = highlightInlineSteps.join(' ');
+  pathString = indicatorSteps.join(' ');
   this.svgHolePath_.setAttribute('d', pathString);
 };
 
 /**
  * Render the top edge of the block.
  * @param {!Array.<string>} steps Path of block outline.
- * @param {!Array.<string>} highlightSteps Path of block highlights.
+ * @param {!Array.<string>} holeSteps Path of block highlights.
  * @param {!Object} connectionsXY Location of block.
  * @param {number} rightEdge Minimum width of block.
  * @private
  */
 Blockly.BlockSvg.prototype.renderDrawTop_ =
-    function(steps, highlightSteps, connectionsXY, rightEdge) {
+    function(steps, holeSteps, connectionsXY, rightEdge) {
   // Position the cursor at the top-left starting point.
   if (this.squareTopLeftCorner_) {
     steps.push('m 0,0');
-    //highlightSteps.push('m 0.5,0.5');
+    //holeSteps.push('m 0.5,0.5');
     if (this.startHat_) {
       steps.push(Blockly.BlockSvg.START_HAT_PATH);
-      //highlightSteps.push(Blockly.BlockSvg.START_HAT_HIGHLIGHT_LTR);
+      //holeSteps.push(Blockly.BlockSvg.START_HAT_HIGHLIGHT_LTR);
     }
   } else {
     steps.push(Blockly.BlockSvg.TOP_LEFT_CORNER_START);
-    //highlightSteps.push(Blockly.BlockSvg.TOP_LEFT_CORNER_START_HIGHLIGHT_LTR);
+    //holeSteps.push(Blockly.BlockSvg.TOP_LEFT_CORNER_START_HIGHLIGHT_LTR);
     // Top-left rounded corner.
     steps.push(Blockly.BlockSvg.TOP_LEFT_CORNER);
-    //highlightSteps.push(Blockly.BlockSvg.TOP_LEFT_CORNER_HIGHLIGHT);
+    //holeSteps.push(Blockly.BlockSvg.TOP_LEFT_CORNER_HIGHLIGHT);
   }
 
   // Top edge.
   if (this.previousConnection) {
     steps.push('H', Blockly.BlockSvg.NOTCH_WIDTH - 15);
-    //highlightSteps.push('H', Blockly.BlockSvg.NOTCH_WIDTH - 15);
+    //holeSteps.push('H', Blockly.BlockSvg.NOTCH_WIDTH - 15);
     steps.push(Blockly.BlockSvg.NOTCH_PATH_LEFT);
-    //highlightSteps.push(Blockly.BlockSvg.NOTCH_PATH_LEFT_HIGHLIGHT);
+    //holeSteps.push(Blockly.BlockSvg.NOTCH_PATH_LEFT_HIGHLIGHT);
     // Create previous block connection.
     var connectionX = connectionsXY.x + (Blockly.BlockSvg.NOTCH_WIDTH);
     var connectionY = connectionsXY.y;
@@ -1965,16 +1974,15 @@ Blockly.BlockSvg.prototype.renderDrawTop_ =
     // This connection will be tightened when the parent renders.
   }
   steps.push('H', rightEdge);
-  //highlightSteps.push('H', rightEdge - 0.5);
+  //holeSteps.push('H', rightEdge - 0.5);
   this.width = rightEdge;
 };
 
 /**
  * Render the right edge of the block.
  * @param {!Array.<string>} steps Path of block outline.
- * @param {!Array.<string>} highlightSteps Path of block highlights.
- * @param {!Array.<string>} inlineSteps Inline block outlines.
- * @param {!Array.<string>} highlightInlineSteps Inline block highlights.
+ * @param {!Array.<string>} holeSteps Path of block highlights.
+ * @param {!Array.<string>} indicatorSteps Inline block highlights.
  * @param {!Object} connectionsXY Location of block.
  * @param {!Array.<!Array.<!Object>>} inputRows 2D array of objects, each
  *     containing position information.
@@ -1982,8 +1990,8 @@ Blockly.BlockSvg.prototype.renderDrawTop_ =
  * @return {number} Height of block.
  * @private
  */
-Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, highlightSteps,
-    inlineSteps, highlightInlineSteps, connectionsXY, inputRows, iconWidth) {
+Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, holeSteps,
+    indicatorSteps, connectionsXY, inputRows, iconWidth) {
   var cursorX;
   var cursorY = 0;
   if (!this.outputConnection) {
@@ -1995,7 +2003,7 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, highlightSteps,
     if (y == 0) {
       cursorX += iconWidth;
     }
-    //highlightSteps.push('M', (inputRows.rightEdge - 0.5) + ',' +
+    //holeSteps.push('M', (inputRows.rightEdge - 0.5) + ',' +
     //    (cursorY + 0.5));
     if (this.isCollapsed()) {
       // Jagged right edge.
@@ -2004,7 +2012,7 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, highlightSteps,
       var fieldY = cursorY;
       this.renderFields_(input.fieldRow, fieldX, fieldY);
       steps.push(Blockly.BlockSvg.JAGGED_TEETH);
-      //highlightSteps.push('h 8');
+      //holeSteps.push('h 8');
       var remainder = row.height - Blockly.BlockSvg.JAGGED_TEETH_HEIGHT;
       steps.push('v', remainder);
       this.width += Blockly.BlockSvg.JAGGED_TEETH_WIDTH;
@@ -2036,23 +2044,23 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, highlightSteps,
 
 
           // Highlight right edge, bottom.
-          highlightInlineSteps.push('M',
+          indicatorSteps.push('M',
               (cursorX - Blockly.BlockSvg.SEP_SPACE_X) + ',' +
               (cursorY /*Blockly.BlockSvg.INLINE_PADDING_TOP + */));
 
           if (!this.outputConnection) {
-                  highlightInlineSteps.push('m', 0, Blockly.BlockSvg.STMT_ARGS_PADDING_TOP);
+                  indicatorSteps.push('m', 0, Blockly.BlockSvg.STMT_ARGS_PADDING_TOP);
 
           }
 
 
-          highlightInlineSteps.push('v', input.renderHeight);//  + 1);
-          highlightInlineSteps.push('h', /*Blockly.BlockSvg.TAB_WIDTH*/ - 0 -
+          indicatorSteps.push('v', input.renderHeight);//  + 1);
+          indicatorSteps.push('h', /*Blockly.BlockSvg.TAB_WIDTH*/ - 0 -
                                            input.renderWidth);
 
         // HACK
-          highlightInlineSteps.push('v', - input.renderHeight);// - 1);
-          highlightInlineSteps.push('z');
+          indicatorSteps.push('v', - input.renderHeight);// - 1);
+          indicatorSteps.push('z');
         // ENDHACK
 
           // Create inline input connection.
@@ -2077,7 +2085,7 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, highlightSteps,
       cursorX = Math.max(cursorX, inputRows.rightEdge);
       this.width = Math.max(this.width, cursorX);
       steps.push('H', cursorX);
-      //highlightSteps.push('H', cursorX - 0.5);
+      //holeSteps.push('H', cursorX - 0.5);
       steps.push('v', row.height);
     } else if (row.type == Blockly.INPUT_VALUE) {
       // External input.
@@ -2163,13 +2171,13 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, highlightSteps,
       // MJP removed
       //steps.push('H', inputRows.rightEdge);
 
-     /*highlightSteps.push('M',
+     /*holeSteps.push('M',
           (cursorX - Blockly.BlockSvg.NOTCH_WIDTH +
            Blockly.BlockSvg.DISTANCE_45_OUTSIDE) + ',' +
           (cursorY + row.height - Blockly.BlockSvg.DISTANCE_45_OUTSIDE));
-      highlightSteps.push(
+      holeSteps.push(
           Blockly.BlockSvg.INNER_BOTTOM_LEFT_CORNER_HIGHLIGHT_LTR);
-      highlightSteps.push('H', inputRows.rightEdge - 0.5);*/
+      holeSteps.push('H', inputRows.rightEdge - 0.5);*/
 
       // Create statement connection.
       connectionX = connectionsXY.x + cursorX - 0.5;
@@ -2204,13 +2212,13 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, highlightSteps,
 /**
  * Render the bottom edge of the block.
  * @param {!Array.<string>} steps Path of block outline.
- * @param {!Array.<string>} highlightSteps Path of block highlights.
+ * @param {!Array.<string>} holeSteps Path of block highlights.
  * @param {!Object} connectionsXY Location of block.
  * @param {number} cursorY Height of block.
  * @private
  */
 Blockly.BlockSvg.prototype.renderDrawBottom_ =
-    function(steps, highlightSteps, connectionsXY, cursorY) {
+    function(steps, holeSteps, connectionsXY, cursorY) {
   this.height = cursorY
   if (this.nextConnection) {
     steps.push('H', (Blockly.BlockSvg.NOTCH_WIDTH + 0.0) +
@@ -2226,31 +2234,31 @@ Blockly.BlockSvg.prototype.renderDrawBottom_ =
   }
 
   steps.push('H 0');
-  //highlightSteps.push('M', '0.5,' + (cursorY - 0.5));
+  //holeSteps.push('M', '0.5,' + (cursorY - 0.5));
 };
 
 /**
  * Render the left edge of the block.
  * @param {!Array.<string>} steps Path of block outline.
- * @param {!Array.<string>} highlightSteps Path of block highlights.
+ * @param {!Array.<string>} holeSteps Path of block highlights.
  * @param {!Object} connectionsXY Location of block.
  * @param {number} cursorY Height of block.
  * @private
  */
 Blockly.BlockSvg.prototype.renderDrawLeft_ =
-    function(steps, highlightSteps, connectionsXY, cursorY) {
+    function(steps, holeSteps, connectionsXY, cursorY) {
   if (this.outputConnection) {
     // Create output connection.
     this.outputConnection.moveTo(connectionsXY.x-1, connectionsXY.y); // ?
-    //highlightSteps.push('V', 0.5);
+    //holeSteps.push('V', 0.5);
   } else {
     if (this.squareTopLeftCorner_) {
       // Statement block in a stack.
-      ;//highlightSteps.push('V', 0.5);
+      ;//holeSteps.push('V', 0.5);
   } else {
-     ;// highlightSteps.push('V', Blockly.BlockSvg.CORNER_RADIUS);
+     ;// holeSteps.push('V', Blockly.BlockSvg.CORNER_RADIUS);
     }
   }
-  //highlightSteps.push('z')
+  //holeSteps.push('z')
   steps.push('z');
 };
