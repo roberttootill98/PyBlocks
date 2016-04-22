@@ -594,7 +594,7 @@ Blockly.Block.prototype.setTooltip = function(newTip) {
  * Get the colour of a block.
  * @return {number} HSV hue value.
  */
- 
+
 Blockly.Block.prototype.getColour = function() {
   if (this.outputConnection) {
     //console.log("COLOUR " + this.outputConnection.check_);
@@ -1302,18 +1302,34 @@ Blockly.Block.PY_COLOURS['float'] = [255, 25, 25];  //"#ff0000"
 Blockly.Block.PY_COLOURS['str'] = [0, 204, 51];  //"#00cc00"
 Blockly.Block.PY_COLOURS['bool'] = [0, 128, 255];  //"#4c66ff"
 
-Blockly.Block.prototype.getParameterTypes = function(index) {
+Blockly.Block.prototype.getParameterTypes = function(index, kind) {
   var paramTypes = [];
   var typeVecs = this.typeVecs;
   for (var i=0; i < typeVecs.length; i++) {
+    var found = false;
     var outputType = typeVecs[i].slice(index)[0];
-    if (paramTypes.indexOf(outputType) == -1) {
+    if (kind == "list" && outputType[0] == "*") {
+      outputType = outputType.slice(1);
+      found = true;
+    }
+    else if (kind == "basic" && outputType[0] != "*") {
+      found = true;
+    }
+    else if (!kind) {
+      found = true;
+    }
+    if (found && paramTypes.indexOf(outputType) == -1) {
         paramTypes.push(outputType);
     }
   }
   return paramTypes;
 };
 
-Blockly.Block.prototype.getOutputTypes = function() {
-  return this.getParameterTypes(-1);
+Blockly.Block.prototype.getOutputTypes = function(kind) {
+  return this.getParameterTypes(-1, kind);
+};
+
+Blockly.Block.prototype.outputsAList = function() {
+  var outputTypes = this.getOutputTypes();
+  return outputTypes[0][0] == "*";
 };

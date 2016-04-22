@@ -372,7 +372,7 @@ Blockly.createDom_ = function(container, options) {
        'patternUnits': 'userSpaceOnUse',
        'width': 10, 'height': 10}, defs);
   Blockly.createSvgElement('rect',
-      {'x': 0, 'y': 0, 'width': 5, 'height': 5, 'fill': '#f00'}, twoTypePattern);
+      {'x': 0, 'y': 0, 'width': 5, 'height': 5}, twoTypePattern);
   Blockly.createSvgElement('rect',
       {'x': 5, 'y' :0, 'width': 5, 'height': 5, 'fill': '#0f0'}, twoTypePattern);
   Blockly.createSvgElement('rect',
@@ -380,6 +380,47 @@ Blockly.createDom_ = function(container, options) {
   Blockly.createSvgElement('rect',
       {'x': 0, 'y' :5, 'width': 5, 'height': 5, 'fill': '#0f0'}, twoTypePattern);
   options.twoTypePatternId = twoTypePattern.id;
+
+  /*
+    <linearGradient id="TwoTypeGradient"  x1="0" x2="0.25" y1="0.0" y2="0.13" spreadMethod="reflect">
+      <stop stop-color="#FF0" offset="0.0"/>
+      <stop stop-color="#FF0" offset="0.33"/>
+      <stop stop-color="#F00" offset="0.67"/>
+      <stop stop-color="#F00" offset="1.0"/>
+    </linearGradient>
+  */
+  var twoTypeGradient = Blockly.createSvgElement('linearGradient',
+      {'id': 'blocklyTwoTypeGradient' + rnd,
+       'x1': 0, 'x2': 0.25, 'y1': 0.0, 'y2': 0.13}, defs);
+  Blockly.createSvgElement('stop',
+      {'offset': 0}, twoTypeGradient);
+  Blockly.createSvgElement('stop',
+      {'offset': 0.333}, twoTypeGradient);
+  Blockly.createSvgElement('stop',
+      {'offset': 0.667}, twoTypeGradient);
+  Blockly.createSvgElement('stop',
+      {'offset': 1.0}, twoTypeGradient);
+  // stop-color attributes to be set in updateColour
+  options.twoTypeGradientId = twoTypeGradient.id;
+
+  var multi2TypeGradient = Blockly.createSvgElement('linearGradient',
+      {'id': 'blocklyMulti2TypeGradient' + rnd,
+       'x1': 0, 'x2': 0.9, 'y1': 0.2, 'y2': 1}, defs);
+  Blockly.createSvgElement('stop',
+      {'stop-color': '#f0f', 'offset': 0}, multi2TypeGradient);
+  Blockly.createSvgElement('stop',
+      {'stop-color': '#00f', 'offset': 0.1667}, multi2TypeGradient);
+  Blockly.createSvgElement('stop',
+      {'stop-color': '#0ff', 'offset': 0.3333}, multi2TypeGradient);
+  Blockly.createSvgElement('stop',
+      {'stop-color': '#0f0', 'offset': 0.5}, multi2TypeGradient);
+  Blockly.createSvgElement('stop',
+      {'stop-color': '#ff0', 'offset': 0.6667}, multi2TypeGradient);
+  Blockly.createSvgElement('stop',
+      {'stop-color': '#f00', 'offset': 0.8333}, multi2TypeGradient);
+  Blockly.createSvgElement('stop',
+      {'stop-color': '#f0f', 'offset': 1}, multi2TypeGradient);
+  options.multi2TypeGradientId = multi2TypeGradient.id;
 
   options.svg = svg;
   return svg;

@@ -102,9 +102,9 @@ Blockly.Blocks['python_equals'] = {
     this.setInputsInline(true);
     this.setTypeVecs([
       ["any", "any", "bool"],
-      ["any*", "any", "bool"],
-      ["any", "any*", "bool"],
-      ["any*", "any*", "bool"]
+      ["*any", "any", "bool"],
+      ["any", "*any", "bool"],
+      ["*any", "*any", "bool"]
     ]);
     this.setOutput(true, "bool");
     this.setColour(232);
@@ -112,6 +112,28 @@ Blockly.Blocks['python_equals'] = {
     this.setHelpUrl('http://www.example.com/');
   }
 };
+
+Blockly.Blocks['python_plus'] = {
+  init: function() {
+    this.appendValueInput("LHS")
+        .setCheck(null);
+    this.appendValueInput("RHS")
+        .appendField(" + ")
+        .setCheck(null);
+    this.setInputsInline(true);
+    this.setTypeVecs([
+      ["int", "int", "int"],
+      ["float", "int", "float"],
+      ["int", "float", "float"],
+      ["float", "float", "float"]
+    ]);
+    this.setOutput(true, "bool");
+    this.setColour(232);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+
 
 Blockly.Blocks['python_divide'] = {
   init: function() {
@@ -185,7 +207,7 @@ Blockly.Blocks['python_for'] = {
         .appendField(":");
     this.appendStatementInput("BODY");
     this.setInputsInline(true);
-    this.setTypeVecs([["any*", "none"], ["str", "none"]]);
+    this.setTypeVecs([["*any", "none"], ["str", "none"]]);
     this.setPreviousStatement(true);
     this.setNextStatement(true);
     this.setColour(210);
@@ -230,7 +252,25 @@ Blockly.Blocks['python_list_index'] = {
         .appendField("]");
     this.setInputsInline(true);
     this.setTypeVecs([
-      ["any*", "int", "any"],
+      ["*any", "int", "any"],
+    ]);
+    this.setOutput(true, "int");
+    this.setColour(120);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+
+Blockly.Blocks['python_list_const'] = {
+  init: function() {
+    this.appendValueInput("ARG2")
+        .setCheck(["int"])
+        .appendField("[");
+    this.appendDummyInput()
+        .appendField("]");
+    this.setInputsInline(true);
+    this.setTypeVecs([
+      ["any", "*any"],
     ]);
     this.setOutput(true, "int");
     this.setColour(120);
@@ -271,7 +311,7 @@ Blockly.Blocks['python_print'] = {
     this.setInputsInline(true);
     this.setTypeVecs([
       ["any", "none"],
-      ["any*", "none"]
+      ["*any", "none"]
     ]);
     this.setPreviousStatement(true);
     this.setNextStatement(true);

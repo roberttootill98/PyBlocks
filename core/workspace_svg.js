@@ -282,6 +282,7 @@ Blockly.WorkspaceSvg.prototype.addFlyout_ = function() {
   var workspaceOptions = {
     disabledPatternId: this.options.disabledPatternId,
     multiTypeGradientId: this.options.multiTypeGradientId,
+    twoTypeGradientId: this.options.twoTypeGradientId,
     twoTypePatternId: this.options.twoTypePatternId,
     parentWorkspace: this,
     RTL: this.RTL

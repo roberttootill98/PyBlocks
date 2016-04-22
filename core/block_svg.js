@@ -1,3 +1,5 @@
+/* jshint -W084 */
+
 /**
  * @license
  * Visual Blocks Editor
@@ -50,6 +52,14 @@ Blockly.BlockSvg = function() {
   /** @type {SVGElement} */
   this.svgBlockPath_ = Blockly.createSvgElement('path', {'class': 'blocklyBlockPath'},
       this.svgGroup_);
+
+  /** @type {Array<!SVGElement>} */
+  this.svgListRects = new Array(3);
+  for (var i=0; i<3; i++) {
+    this.svgListRects[i] = Blockly.createSvgElement('rect',
+        {}, this.svgGroup_);
+  }
+
   /** @type {SVGElement} */
   this.svgHolePath_ = Blockly.createSvgElement('path',
       {'class': 'blocklyHolePath'}, this.svgGroup_);
@@ -1184,6 +1194,7 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate,
   // Sever JavaScript to DOM connections.
   this.svgGroup_ = null;
   this.svgBlockPath_ = null;
+  this.svgListRects = null;
   this.svgHolePath_ = null;
  // this.svgPathDark_ = null;
   Blockly.Field.stopCache();
@@ -1372,16 +1383,44 @@ Blockly.BlockSvg.prototype.updateColour = function() {
   //var hexColour = Blockly.makeColour(this.getColour());
   //var rgb = goog.color.hexToRgb(hexColour);
 
-  var outputTypes = this.getOutputTypes();
-  if (outputTypes.length == 1 && outputTypes[0] == "any") {
-    //this.svgBlockPath_.setAttribute('fill', "url(#MultiTypePattern)");
-    this.svgBlockPath_.setAttribute('fill', 'url(#' + this.workspace.options.multiTypeGradientId + ')');
+  if (this.outputConnection) {
+    var fillText;
+    if (this.outputsAList()) {
+      this.svgBlockPath_.setAttribute('fill', "white");
+      var listTypes = this.getOutputTypes("list");
+      if (listTypes[0] == "any") {
+        fillText = 'url(#' + this.workspace.options.multiTypeGradientId + ')';
+      }
+      else if (listTypes.length == 1) {
+        fillText = goog.color.rgbArrayToHex(
+            Blockly.Block.PY_COLOURS[listTypes[0]]);
+      }
+      else { // should be list of int/float
+        fillText = 'url(#' + this.workspace.options.twoTypeGradientId + ')';
+      }
+      for (var i=0; i<3; i++) {
+        this.svgListRects[i].setAttribute('fill', fillText);
+      }
+    }
+    else {
+      var outputTypes = this.getOutputTypes();
+      if (outputTypes[0] == "any") {
+        fillText = 'url(#' + this.workspace.options.multiTypeGradientId + ')';
+      }
+      else if (outputTypes.length == 2) { // should be list of int/float
+        fillText = 'url(#' + this.workspace.options.multiTypeGradientId + ')';
+      }
+      else { // should be just one type
+        fillText = goog.color.rgbArrayToHex(
+            Blockly.Block.PY_COLOURS[outputTypes[0]]);
+      }
+      this.svgBlockPath_.setAttribute('fill', fillText);
+    }
   }
   else {
-    var rgb = this.getColour();
-    var hexColour = goog.color.rgbArrayToHex(rgb);
-      this.svgBlockPath_.setAttribute('fill', hexColour);
-    }
+    this.svgBlockPath_.setAttribute('fill',
+       goog.color.rgbArrayToHex(Blockly.Block.PY_COLOURS['notype']));
+  }
   //console.log(rgb);
   //if (this.isShadow()) {
 //    rgb = goog.color.lighten(rgb, 0.6);
@@ -1933,6 +1972,22 @@ Blockly.BlockSvg.prototype.renderDraw_ = function(iconWidth, inputRows) {
   this.svgPathDark_.setAttribute('d', pathString);
   pathString = indicatorSteps.join(' ');
   this.svgHolePath_.setAttribute('d', pathString);
+
+  console.log("TEST");
+  console.log(this.outputConnection);
+  if (this.outputConnection)
+    console.log(this.outputsAList());
+  if (this.outputConnection && this.outputsAList()) {
+    var tempListRectWidth = 0.23 * (this.width - 1);
+    var tempListGapWidth = (this.width - 1 - tempListRectWidth * 3) / 2;
+    for (var i=0; i<3; i++) {
+      this.svgListRects[i].setAttribute('x',
+          0.5 + i * (tempListRectWidth + tempListGapWidth));
+      this.svgListRects[i].setAttribute('y', 0.5);
+      this.svgListRects[i].setAttribute('width', tempListRectWidth);
+      this.svgListRects[i].setAttribute('height', this.height-1);
+    }
+  }
 };
 
 /**
