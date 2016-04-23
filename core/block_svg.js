@@ -1389,7 +1389,7 @@ Blockly.BlockSvg.prototype.updateColour = function() {
       this.svgBlockPath_.setAttribute('fill', "white");
       var listTypes = this.getOutputTypes("list");
       if (listTypes[0] == "any") {
-        fillText = 'url(#' + this.workspace.options.multiTypeGradientId + ')';
+        fillText = 'url(#' + this.workspace.options.multiTypePatternLargeId + ')';
       }
       else if (listTypes.length == 1) {
         fillText = goog.color.rgbArrayToHex(
@@ -1405,10 +1405,10 @@ Blockly.BlockSvg.prototype.updateColour = function() {
     else {
       var outputTypes = this.getOutputTypes();
       if (outputTypes[0] == "any") {
-        fillText = 'url(#' + this.workspace.options.multiTypeGradientId + ')';
+        fillText = 'url(#' + this.workspace.options.multiTypePatternLargeId + ')';
       }
       else if (outputTypes.length == 2) { // should be list of int/float
-        fillText = 'url(#' + this.workspace.options.multiTypeGradientId + ')';
+        fillText = 'url(#' + this.workspace.options.multiTypePatternLargeId + ')';
       }
       else { // should be just one type
         fillText = goog.color.rgbArrayToHex(

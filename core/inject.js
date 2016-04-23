@@ -330,34 +330,36 @@ Blockly.createDom_ = function(container, options) {
   options.gridPattern = gridPattern;
 
   /*
-    <linearGradient id="MultiTypeGradient"  x1="0" x2="0.9" y1="0.2" y2="1" >
-      <stop stop-color="#F0F" offset="0"/>
-      <stop stop-color="#00F" offset="0.1667"/>
-      <stop stop-color="#0FF" offset="0.3333"/>
-      <stop stop-color="#0F0" offset="0.5"/>
-      <stop stop-color="#FF0" offset="0.6667"/>
-      <stop stop-color="#F00" offset="0.8333"/>
-      <stop stop-color="#F0F" offset="1"/>
-    </linearGradient>
+...
   */
   var multiTypeGradient = Blockly.createSvgElement('linearGradient',
       {'id': 'blocklyMultiTypeGradient' + rnd,
-       'x1': 0, 'x2': 0.9, 'y1': 0.2, 'y2': 1}, defs);
-  Blockly.createSvgElement('stop',
-      {'stop-color': '#f0f', 'offset': 0}, multiTypeGradient);
-  Blockly.createSvgElement('stop',
-      {'stop-color': '#00f', 'offset': 0.1667}, multiTypeGradient);
-  Blockly.createSvgElement('stop',
-      {'stop-color': '#0ff', 'offset': 0.3333}, multiTypeGradient);
-  Blockly.createSvgElement('stop',
-      {'stop-color': '#0f0', 'offset': 0.5}, multiTypeGradient);
-  Blockly.createSvgElement('stop',
-      {'stop-color': '#ff0', 'offset': 0.6667}, multiTypeGradient);
-  Blockly.createSvgElement('stop',
-      {'stop-color': '#f00', 'offset': 0.8333}, multiTypeGradient);
-  Blockly.createSvgElement('stop',
-      {'stop-color': '#f0f', 'offset': 1}, multiTypeGradient);
+       'x1': 1, 'x2': 0.5, 'y1': 0, 'y2': 0.5,
+       'spreadMethod': 'repeat'}, defs);
+  var offsets = [0, 0.06, 0.26, 0.34, 0.46, 0.54, 0.66, 0.74, 0.86, 0.95, 1.0];
+  var colours = ["#FF1919","#FF29FF", "#FF29FF", "#00CC33","#FFFF46",
+      "#FF1919"];
+  for (var i in colours) {
+    Blockly.createSvgElement('stop',
+        {'stop-color': colours[i], 'offset': offsets[2*i]}, multiTypeGradient);
+    Blockly.createSvgElement('stop',
+        {'stop-color': colours[i], 'offset': offsets[2*i+1]}, multiTypeGradient);
+  }
   options.multiTypeGradientId = multiTypeGradient.id;
+
+  /*
+  <pattern id="MultiTypePatternLarge" x="0" y="0" width="90" height="90" patternUnits="userSpaceOnUse">
+    <rect x="0" y="0" width="90" height="90" fill="url(#MultiTypeGradient)" />
+  </pattern>
+  */
+  var multiTypePatternLarge = Blockly.createSvgElement('multiTypePatternLarge',
+      {'id': 'blocklyMultiTypePatternLarge' + rnd,
+        'x': 0, 'y': 0, 'width': 90, 'height': 90}, defs);
+  Blockly.createSvgElement('rect',
+          {'x': 0, 'y': 0, 'width': 90, 'height': 90,
+          'fill': 'url(#blocklyMultiTypeGradient' +  rnd + ')'},
+          multiTypePatternLarge);
+  options.multiTypePatternLargeId = multiTypePatternLarge.id;
 
   /*
     <pattern id="TwoTypePattern" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse">
