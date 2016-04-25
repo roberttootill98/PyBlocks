@@ -598,13 +598,13 @@ Blockly.Block.prototype.setTooltip = function(newTip) {
 Blockly.Block.prototype.getColour = function() {
   if (this.outputConnection) {
     //console.log("COLOUR " + this.outputConnection.check_);
-    //return Blockly.Block.PY_COLOURS[this.outputConnection.check_[0]];
+    //return Blockly.Block.COLOUR[this.outputConnection.check_[0]];
     console.log("Block Type: ");
     console.log(this.getOutputTypes());
-    return Blockly.Block.PY_COLOURS[this.getOutputTypes()[0]];
+    return Blockly.Python.COLOUR[this.getOutputTypes()[0]];
   }
   else {
-    return Blockly.Block.PY_COLOURS['notype'];
+    return Blockly.Python.COLOUR['notype'];
   }
 };
 
@@ -1283,13 +1283,6 @@ Blockly.Block.prototype.getRelativeToSurfaceXY = function() {
 Blockly.Block.prototype.moveBy = function(dx, dy) {
   this.xy_.translate(dx, dy);
 };
-
-Blockly.Block.PY_COLOURS = {};
-Blockly.Block.PY_COLOURS['notype'] = [139, 125, 107];
-Blockly.Block.PY_COLOURS['int'] = [255, 255, 70];  //!#ff7f00"
-Blockly.Block.PY_COLOURS['float'] = [255, 25, 25];  //"#ff0000"
-Blockly.Block.PY_COLOURS['str'] = [0, 204, 51];  //"#00cc00"
-Blockly.Block.PY_COLOURS['bool'] = [0, 128, 255];  //"#4c66ff"
 
 Blockly.Block.prototype.getParameterTypes = function(index, kind) {
   var paramTypes = [];

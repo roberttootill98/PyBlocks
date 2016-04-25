@@ -337,13 +337,15 @@ Blockly.createDom_ = function(container, options) {
        'x1': 1, 'x2': 0.5, 'y1': 0, 'y2': 0.5,
        'spreadMethod': 'repeat'}, defs);
   var offsets = [0, 0.06, 0.14, 0.26, 0.34, 0.46, 0.54, 0.66, 0.74, 0.86, 0.94, 1.0];
-  var colours = ["#FF1919","#FF29FF", "#0080FF", "#00CC33","#FFFF46",
-      "#FF1919"];
+  var colours = ['float', 'range', 'bool', 'str', 'int', 'float'];
   for (var i in colours) {
     Blockly.createSvgElement('stop',
-        {'stop-color': colours[i], 'offset': offsets[2*i]}, multiTypeGradient);
+        {'stop-color': Blockly.Python.COLOUR[colours[i]],
+        'offset': offsets[2*i]},
+        multiTypeGradient);
     Blockly.createSvgElement('stop',
-        {'stop-color': colours[i], 'offset': offsets[2*i+1]}, multiTypeGradient);
+        {'stop-color': Blockly.Python.COLOUR[colours[i]],
+        'offset': offsets[2*i+1]}, multiTypeGradient);
   }
   options.multiTypeGradientId = multiTypeGradient.id;
 
@@ -370,12 +372,14 @@ Blockly.createDom_ = function(container, options) {
        'x1': 1, 'x2': 0, 'y1': 0, 'y2': 1,
        'spreadMethod': 'repeat'}, defs);
   offsets = [0, 0.083, 0.167, 0.333, 0.416, 0.583, 0.667, 0.833, 0.917, 1];
-  colours = ["#FF1919", "#FFFF46", "#FF1919", "#FFFF46", "#FF1919"];
+  colours = ['float', 'int', 'float', 'int', 'float'];
   for (i in colours) {
     Blockly.createSvgElement('stop',
-        {'stop-color': colours[i], 'offset': offsets[2*i]}, numericalTypeGradient);
+        {'stop-color': Blockly.Python.COLOUR[colours[i]],
+        'offset': offsets[2*i]}, numericalTypeGradient);
     Blockly.createSvgElement('stop',
-        {'stop-color': colours[i], 'offset': offsets[2*i+1]}, numericalTypeGradient);
+        {'stop-color': Blockly.Python.COLOUR[colours[i]],
+         'offset': offsets[2*i+1]}, numericalTypeGradient);
   }
   options.numericalTypeGradientId = numericalTypeGradient.id;
 

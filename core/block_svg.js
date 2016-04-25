@@ -26,8 +26,10 @@
  */
 'use strict';
 
+
 goog.provide('Blockly.BlockSvg');
 
+goog.require('Blockly.Python');
 goog.require('Blockly.Block');
 goog.require('Blockly.ContextMenu');
 goog.require('goog.Timer');
@@ -1392,8 +1394,7 @@ Blockly.BlockSvg.prototype.updateColour = function() {
         fillText = 'url(#' + this.workspace.options.multiTypePatternLargeId + ')';
       }
       else if (listTypes.length == 1) {
-        fillText = goog.color.rgbArrayToHex(
-            Blockly.Block.PY_COLOURS[listTypes[0]]);
+        fillText = Blockly.Python.COLOUR[listTypes[0]];
       }
       else { // should be list of int/float
         fillText = 'url(#' + this.workspace.options.numericalTypePatternLargeId + ')';
@@ -1408,20 +1409,18 @@ Blockly.BlockSvg.prototype.updateColour = function() {
         fillText = 'url(#' + this.workspace.options.multiTypePatternLargeId + ')';
       }
       else if (outputTypes.length == 2) { // should be list of int/float
-        console.log("NUMERICAL");
         fillText = 'url(#' + this.workspace.options.numericalTypePatternLargeId + ')';
-        console.log(fillText);
       }
       else { // should be just one type
-        fillText = goog.color.rgbArrayToHex(
-            Blockly.Block.PY_COLOURS[outputTypes[0]]);
+        fillText = Blockly.Python.COLOUR[outputTypes[0]];
       }
       this.svgBlockPath_.setAttribute('fill', fillText);
     }
   }
   else {
     this.svgBlockPath_.setAttribute('fill',
-       goog.color.rgbArrayToHex(Blockly.Block.PY_COLOURS['notype']));
+       Blockly.Python.COLOUR['notype']);
+       //goog.color.rgbArrayToHex(Blockly.Python.COLOUR['notype']));
   }
   //console.log(rgb);
   //if (this.isShadow()) {
