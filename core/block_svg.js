@@ -1396,7 +1396,7 @@ Blockly.BlockSvg.prototype.updateColour = function() {
             Blockly.Block.PY_COLOURS[listTypes[0]]);
       }
       else { // should be list of int/float
-        fillText = 'url(#' + this.workspace.options.twoTypeGradientId + ')';
+        fillText = 'url(#' + this.workspace.options.numericalTypePatternLargeId + ')';
       }
       for (var i=0; i<3; i++) {
         this.svgListRects[i].setAttribute('fill', fillText);
@@ -1408,7 +1408,9 @@ Blockly.BlockSvg.prototype.updateColour = function() {
         fillText = 'url(#' + this.workspace.options.multiTypePatternLargeId + ')';
       }
       else if (outputTypes.length == 2) { // should be list of int/float
-        fillText = 'url(#' + this.workspace.options.multiTypePatternLargeId + ')';
+        console.log("NUMERICAL");
+        fillText = 'url(#' + this.workspace.options.numericalTypePatternLargeId + ')';
+        console.log(fillText);
       }
       else { // should be just one type
         fillText = goog.color.rgbArrayToHex(
@@ -1973,19 +1975,16 @@ Blockly.BlockSvg.prototype.renderDraw_ = function(iconWidth, inputRows) {
   pathString = indicatorSteps.join(' ');
   this.svgHolePath_.setAttribute('d', pathString);
 
-  console.log("TEST");
-  console.log(this.outputConnection);
-  if (this.outputConnection)
-    console.log(this.outputsAList());
   if (this.outputConnection && this.outputsAList()) {
     var tempListRectWidth = 0.23 * (this.width - 1);
     var tempListGapWidth = (this.width - 1 - tempListRectWidth * 3) / 2;
     for (var i=0; i<3; i++) {
-      this.svgListRects[i].setAttribute('x',
-          0.5 + i * (tempListRectWidth + tempListGapWidth));
+      this.svgListRects[i].setAttribute('x',0);
       this.svgListRects[i].setAttribute('y', 0.5);
       this.svgListRects[i].setAttribute('width', tempListRectWidth);
       this.svgListRects[i].setAttribute('height', this.height-1);
+      this.svgListRects[i].setAttribute('transform', 'translate('+
+         (0.5 + i * (tempListRectWidth + tempListGapWidth)).toString() + ',0)');
     }
   }
 };

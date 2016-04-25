@@ -116,9 +116,9 @@ Blockly.Toolbox.prototype.init = function() {
   var workspaceOptions = {
     disabledPatternId: workspace.options.disabledPatternId,
     multiTypeGradientId: this.options.multiTypeGradientId,
-    twoTypeGradientId: this.options.twoTypeGradientId,
-    twoTypePatternId: this.options.twoTypePatternId,
     multiTypePatternLargeId: this.options.multiTypePatternLargeId,
+    numericalTypeGradientId: this.options.numericalTypeGradientId,
+    numericalTypePatternLargeId: this.options.numericalTypePatternLargeId,
     parentWorkspace: workspace,
     RTL: workspace.RTL,
     svg: workspace.options.svg

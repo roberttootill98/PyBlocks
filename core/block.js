@@ -1284,18 +1284,7 @@ Blockly.Block.prototype.moveBy = function(dx, dy) {
   this.xy_.translate(dx, dy);
 };
 
-/*
-Blockly.Block.PY_COLOURS = {}
-Blockly.Block.PY_COLOURS['notype'] = 50
-Blockly.Block.PY_COLOURS['int'] = 60
-Blockly.Block.PY_COLOURS['float'] = 0
-Blockly.Block.PY_COLOURS['str'] = 120
-Blockly.Block.PY_COLOURS['bool'] = 210
-*/
-
 Blockly.Block.PY_COLOURS = {};
-//Blockly.Block.PY_COLOURS['notype'] = [145, 163, 145] //"#666666"
-//Blockly.Block.PY_COLOURS['notype'] = [210,180,140]
 Blockly.Block.PY_COLOURS['notype'] = [139, 125, 107];
 Blockly.Block.PY_COLOURS['int'] = [255, 255, 70];  //!#ff7f00"
 Blockly.Block.PY_COLOURS['float'] = [255, 25, 25];  //"#ff0000"
