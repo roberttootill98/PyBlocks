@@ -53,6 +53,12 @@ Blockly.Input = function(type, name, block, connection) {
   this.connection = connection;
   /** @type {!Array.<!Blockly.Field>} */
   this.fieldRow = [];
+
+  // MJP
+  this.svgGroup_ = Blockly.createSvgElement('g', {}, block.svgGroup_);
+  this.indicator = Blockly.createSvgElement('rect',
+      {'x': 5, 'y': 5, 'width': 50, 'height': 50, 'fill': 'green'}, this.svgGroup_);
+
 };
 
 /**

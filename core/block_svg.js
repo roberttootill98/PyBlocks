@@ -62,6 +62,8 @@ Blockly.BlockSvg = function() {
         {}, this.svgGroup_);
   }
 
+  //console.log("CREATING BLOCK SVG");
+
   /** @type {SVGElement} */
   this.svgHolePath_ = Blockly.createSvgElement('path',
       {'class': 'blocklyHolePath'}, this.svgGroup_);
