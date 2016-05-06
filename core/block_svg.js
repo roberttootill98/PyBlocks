@@ -993,7 +993,7 @@ Blockly.BlockSvg.INDICATOR_GAP_Y = 3;
 * Gap between type indicators.
 * @const
 */
-Blockly.BlockSvg.INDICATOR_GAP_X = 8;
+Blockly.BlockSvg.INDICATOR_GAP_X = 10;
 
 
 Blockly.BlockSvg.DOUBLE_SLOT_WIDTH =
@@ -1439,7 +1439,7 @@ Blockly.BlockSvg.prototype.updateColour = function() {
     var fillText;
     if (this.outputsAList()) {
       this.svgBlockPath_.setAttribute('fill', "white");
-      var listTypes = this.getOutputTypes("list");
+      var listTypes = this.getOutputTypes().list;
       if (listTypes[0] == "any") {
         fillText = 'url(#' + this.workspace.options.multiTypePatternLargeId + ')';
       }
@@ -1454,7 +1454,7 @@ Blockly.BlockSvg.prototype.updateColour = function() {
       }
     }
     else {
-      var outputTypes = this.getOutputTypes();
+      var outputTypes = this.getOutputTypes().basic;
       if (outputTypes[0] == "any") {
         fillText = 'url(#' + this.workspace.options.multiTypePatternLargeId + ')';
       }
@@ -1476,7 +1476,7 @@ Blockly.BlockSvg.prototype.updateColour = function() {
   var fillText;
   for (var i = 0, indicatorPair; indicatorPair = this.indicators[i]; i++) {
     console.log("Colouring basic indicator " + i);
-    var basicTypes = this.getParameterTypes(i, 'basic');
+    var basicTypes = this.getParameterTypes(i).basic;
     if (indicatorPair.basic) {
       if (basicTypes[0] == "any") {
         fillText = 'url(#' + this.workspace.options.multiTypePatternLargeId + ')';
@@ -1859,8 +1859,8 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
     input.renderHeight = Blockly.BlockSvg.MIN_BLOCK_Y;
     // The width is currently only needed for inline value inputs.
     if (isInline && input.type == Blockly.INPUT_VALUE) {
-      if (this.getParameterTypes(i, "basic").length > 0 &&
-          this.getParameterTypes(i, "list").length > 0) {
+      var kinds = this.getParameterKinds(i);
+      if (kinds.basic && kinds.list) {
         input.renderWidth = Blockly.BlockSvg.DOUBLE_SLOT_WIDTH;
       }
       else {
@@ -2215,12 +2215,9 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, holeSteps,
 
 
           if (!input.connection.targetConnection) {
-            var params = {
-              'basic': this.getParameterTypes(x, 'basic').length > 0,
-              'list': this.getParameterTypes(x, 'list').length > 0
-            };
-            console.log(params);
 
+            var params = this.getParameterKinds(x);
+            console.log(params);
 
             var indicatorX = cursorX;
             if (params.basic && params.list) {
@@ -2242,26 +2239,39 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, holeSteps,
               'basic': null,
               'list': null
             };
-            for (var kind in params) {
-              if (params[kind]) {
-                // Draw type indicator
-                var indicator = Blockly.createSvgElement('rect',{});
-                indicator.setAttribute('x', indicatorX);
-                indicator.setAttribute('y', indicatorY);
-                indicator.setAttribute('width',
-                    Blockly.BlockSvg.INDICATOR_WIDTH);
-                indicator.setAttribute('height',
-                    Blockly.BlockSvg.INDICATOR_HEIGHT);
-                if (kind == "basic")
-                  indicator.setAttribute('fill', 'red');
-                else {
-                  indicator.setAttribute('fill', 'blue');
-                }
-                indicatorPair[kind] = indicator;
-                indicatorX += Blockly.BlockSvg.INDICATOR_WIDTH +
-                    Blockly.BlockSvg.INDICATOR_GAP_X;
-              }
+            // Draw basic type indicator
+            if (params.basic) {
+              var indicator = Blockly.createSvgElement('rect',{});
+              indicator.setAttribute('x', indicatorX);
+              indicator.setAttribute('y', indicatorY);
+              indicator.setAttribute('width',
+                  Blockly.BlockSvg.INDICATOR_WIDTH);
+              indicator.setAttribute('height',
+                  Blockly.BlockSvg.INDICATOR_HEIGHT);
+              indicatorPair.basic = indicator;
+              indicatorX += Blockly.BlockSvg.INDICATOR_WIDTH +
+                  Blockly.BlockSvg.INDICATOR_GAP_X;
             }
+
+            // draw list type indicator
+            if (params.list) {
+              var group = Blockly.createSvgElement('g',{});
+              var tempListRectWidth = 0.23 *
+                  (Blockly.BlockSvg.INDICATOR_WIDTH - 1);
+              var tempListGapWidth = (Blockly.BlockSvg.INDICATOR_WIDTH - 1 -
+                  tempListRectWidth * 3) / 2;
+              for (var i=0; i<3; i++) {
+                var stripe = Blockly.createSvgElement('rect',{}, group);
+                stripe.setAttribute('x', indicatorX);
+                stripe.setAttribute('y', indicatorY);
+                stripe.setAttribute('width', tempListRectWidth);
+                stripe.setAttribute('height', Blockly.BlockSvg.INDICATOR_HEIGHT);
+                stripe.setAttribute('transform', 'translate('+
+                   (0.5 + i * (tempListRectWidth + tempListGapWidth)).toString() + ',0)');
+              }
+              indicatorPair.list = group;
+            }
+
             this.indicators.push(indicatorPair);
           }
 

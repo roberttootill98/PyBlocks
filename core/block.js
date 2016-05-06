@@ -1284,6 +1284,33 @@ Blockly.Block.prototype.moveBy = function(dx, dy) {
   this.xy_.translate(dx, dy);
 };
 
+
+Blockly.Block.prototype.getParameterTypes = function(index) {
+  var paramTypes = {'basic': [], 'list': []};
+  var typeVecs = this.typeVecs;
+  for (var i=0; i < typeVecs.length; i++) {
+    var type = typeVecs[i].slice(index)[0];
+    var kind = 'basic';
+    if (type[0] == "*") {
+      type = type.slice(1);
+      kind = 'list';
+    }
+    if (paramTypes[kind].indexOf(type) == -1) {
+      paramTypes[kind].push(type);
+    }
+  }
+  return paramTypes;
+};
+
+Blockly.Block.prototype.getParameterKinds = function(index) {
+   var types = this.getParameterTypes(index);
+   return {
+     'basic': types.basic.length > 0,
+     'list': types.list.length > 0
+   };
+};
+
+/*
 Blockly.Block.prototype.getParameterTypes = function(index, kind) {
   var paramTypes = [];
   var typeVecs = this.typeVecs;
@@ -1306,6 +1333,7 @@ Blockly.Block.prototype.getParameterTypes = function(index, kind) {
   }
   return paramTypes;
 };
+*/
 
 Blockly.Block.prototype.getOutputTypes = function(kind) {
   return this.getParameterTypes(-1, kind);
@@ -1313,5 +1341,5 @@ Blockly.Block.prototype.getOutputTypes = function(kind) {
 
 Blockly.Block.prototype.outputsAList = function() {
   var outputTypes = this.getOutputTypes();
-  return outputTypes[0][0] == "*";
+  return (outputTypes.list.length > 0);
 };
