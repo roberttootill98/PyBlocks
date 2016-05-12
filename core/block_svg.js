@@ -824,19 +824,20 @@ Blockly.BlockSvg.prototype.onMouseMove_ = function(e) {
       var closestConnection = null;
       var localConnection = null;
       var radiusConnection = Blockly.SNAP_RADIUS;
+      var connectionInput = -1;
       for (var i = 0; i < myConnections.length; i++) {
         var myConnection = myConnections[i];
         console.log("MyConnection " + i + " = ", myConnection.x_, myConnection.y_);
         console.log("Connection type " + myConnection.type)
         var neighbour = myConnection.closest(radiusConnection, dx, dy);
-        if (neighbour.connection) {
+        if (neighbour.connection &&
+            neighbour.connection.type !=  Blockly.OUTPUT_VALUE) {
           closestConnection = neighbour.connection;
+          connectionInput = i;
           localConnection = myConnection;
           radiusConnection = neighbour.radius;
         }
       }
-      console.log("Block");
-      console.log(this_);
 
       // Remove connection highlighting if needed.
       if (Blockly.highlightedConnection_ &&
@@ -848,8 +849,22 @@ Blockly.BlockSvg.prototype.onMouseMove_ = function(e) {
       // Add connection highlighting if needed.
       if (closestConnection &&
           closestConnection != Blockly.highlightedConnection_) {
-        closestConnection.highlight();
-        console.log("Highlighting")
+
+        // TODO: improve this. Shouldn't need to search and blocks' lh sides
+        // shouldn't be used for search
+        if (closestConnection.type == Blockly.INPUT_VALUE) {
+          var sourceBlock = closestConnection.sourceBlock_;
+          for (var j=0, input; input=sourceBlock.inputList[j]; j++) {
+            if (input.connection == closestConnection) {
+              var inputWidth = input.renderWidth;
+              closestConnection.highlight(inputWidth);
+            }
+          }
+        }
+        else {
+          closestConnection.highlight();
+        }
+
         Blockly.highlightedConnection_ = closestConnection;
         Blockly.localConnection_ = localConnection;
       }
@@ -981,7 +996,7 @@ Blockly.BlockSvg.INDICATOR_HEIGHT = 15;
 * Width of type indicator.
 * @const
 */
-Blockly.BlockSvg.INDICATOR_WIDTH = 25;
+Blockly.BlockSvg.INDICATOR_WIDTH = 30;
 
 /**
 * Gap underneath type indicator.
@@ -1435,8 +1450,8 @@ Blockly.BlockSvg.prototype.updateColour = function() {
   //var hexColour = Blockly.makeColour(this.getColour());
   //var rgb = goog.color.hexToRgb(hexColour);
 
+  var fillText;
   if (this.outputConnection) {
-    var fillText;
     if (this.outputsAList()) {
       this.svgBlockPath_.setAttribute('fill', "white");
       var listTypes = this.getOutputTypes().list;
@@ -1473,13 +1488,11 @@ Blockly.BlockSvg.prototype.updateColour = function() {
        //goog.color.rgbArrayToHex(Blockly.Python.COLOUR['notype']));
   }
 
-  var fillText;
   for (var i = 0, indicatorPair; indicatorPair = this.indicators[i]; i++) {
-    console.log("Colouring basic indicator " + i);
     var basicTypes = this.getParameterTypes(i).basic;
     if (indicatorPair.basic) {
       if (basicTypes[0] == "any") {
-        fillText = 'url(#' + this.workspace.options.multiTypePatternLargeId + ')';
+        fillText = 'url(#' + this.workspace.options.multiTypePatternLarge2Id + ')';
       }
       else if (basicTypes.length == 2) { // should be list of int/float
         fillText = 'url(#' + this.workspace.options.numericalTypePatternLargeId + ')';
@@ -1489,7 +1502,16 @@ Blockly.BlockSvg.prototype.updateColour = function() {
       }
       indicatorPair.basic.setAttribute('fill', fillText);
     }
-   //  indicator.setAttribute('fill', 'blue');
+    if (indicatorPair.list) {
+     var pListTypes = this.getParameterTypes(i).list;
+     if (pListTypes[0] == "any") {
+       fillText = 'url(#' + this.workspace.options.multiTypePatternLarge2Id + ')';
+     }
+      for (var j=1; j<4; j++) {
+       var rect = indicatorPair.list[j];
+       rect.setAttribute('fill', fillText);
+     }
+   }
  }
 
 
@@ -2063,17 +2085,20 @@ Blockly.BlockSvg.prototype.renderDraw_ = function(iconWidth, inputRows) {
       this.svgIndicatorGroup.removeChild(this.svgIndicatorGroup.lastChild);
   }
   for (var i=0, indicator; indicator=this.indicators[i]; i++) {
-    console.log("Adding indicator " + i);
-    for (var kind in indicator) {
-      if (indicator[kind]) {
-        console.log("for kind " + kind);
-        this.svgIndicatorGroup.appendChild(indicator[kind]);
+    if (indicator.basic) {
+      console.log("Basic indicator " + i);
+      this.svgIndicatorGroup.appendChild(indicator.basic);
+    }
+    if (indicator.list) {
+      for (var j=0, stripe; stripe=indicator.list[j]; j++) {
+        console.log("List indicator stripe" + j);
+         this.svgIndicatorGroup.appendChild(stripe);
       }
     }
   }
 
   if (this.outputConnection && this.outputsAList()) {
-    var tempListRectWidth = 0.23 * (this.width - 1);
+    var tempListRectWidth = 0.24 * (this.width - 1);
     var tempListGapWidth = (this.width - 1 - tempListRectWidth * 3) / 2;
     for (var i=0; i<3; i++) {
       this.svgListRects[i].setAttribute('x',0);
@@ -2240,14 +2265,22 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, holeSteps,
               'list': null
             };
             // Draw basic type indicator
-            if (params.basic) {
+
+            var createBasicIndicator = function(x, y) {
               var indicator = Blockly.createSvgElement('rect',{});
-              indicator.setAttribute('x', indicatorX);
-              indicator.setAttribute('y', indicatorY);
+              indicator.setAttribute('transform',
+                  'translate(' + indicatorX + ',' + indicatorY + ')');
+              indicator.setAttribute('x', 0);
+              indicator.setAttribute('y', 0);
               indicator.setAttribute('width',
                   Blockly.BlockSvg.INDICATOR_WIDTH);
               indicator.setAttribute('height',
                   Blockly.BlockSvg.INDICATOR_HEIGHT);
+              return indicator;
+            };
+
+            if (params.basic) {
+              var indicator = createBasicIndicator(indicatorX, indicatorY);
               indicatorPair.basic = indicator;
               indicatorX += Blockly.BlockSvg.INDICATOR_WIDTH +
                   Blockly.BlockSvg.INDICATOR_GAP_X;
@@ -2255,23 +2288,31 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, holeSteps,
 
             // draw list type indicator
             if (params.list) {
-              var group = Blockly.createSvgElement('g',{});
-              var tempListRectWidth = 0.23 *
-                  (Blockly.BlockSvg.INDICATOR_WIDTH - 1);
-              var tempListGapWidth = (Blockly.BlockSvg.INDICATOR_WIDTH - 1 -
+              var background = createBasicIndicator(indicatorX, indicatorY);
+              background.setAttribute('fill', 'white');
+              indicatorPair.list = [background];
+              //var group = Blockly.createSvgElement('g',{});
+              var tempListRectWidth = 0.24 *
+                  (Blockly.BlockSvg.INDICATOR_WIDTH);
+              var tempListGapWidth = (Blockly.BlockSvg.INDICATOR_WIDTH -
                   tempListRectWidth * 3) / 2;
               for (var i=0; i<3; i++) {
-                var stripe = Blockly.createSvgElement('rect',{}, group);
-                stripe.setAttribute('x', indicatorX);
-                stripe.setAttribute('y', indicatorY);
+                var stripe = Blockly.createSvgElement('rect',{},
+                  this.svgGroup_);
+                //stripe.setAttribute('x', i * (tempListRectWidth + tempListGapWidth));
+                stripe.setAttribute('x', 0);
+                stripe.setAttribute('y', 0);
                 stripe.setAttribute('width', tempListRectWidth);
                 stripe.setAttribute('height', Blockly.BlockSvg.INDICATOR_HEIGHT);
                 stripe.setAttribute('transform', 'translate('+
-                   (0.5 + i * (tempListRectWidth + tempListGapWidth)).toString() + ',0)');
+                    (indicatorX + i * (tempListRectWidth + tempListGapWidth))
+                       + ', '  + indicatorY + ')');
+                //stripe.setAttribute('transform', 'translate('+
+                //    (0.5 + indicatorX) + ', '  + indicatorY + ')');
+                indicatorPair.list.push(stripe);
               }
-              indicatorPair.list = group;
+              //indicatorPair.list = ;
             }
-
             this.indicators.push(indicatorPair);
           }
 

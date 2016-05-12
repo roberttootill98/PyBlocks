@@ -356,13 +356,48 @@ Blockly.createDom_ = function(container, options) {
   */
   var multiTypePatternLarge = Blockly.createSvgElement('pattern',
       {'id': 'blocklyMultiTypePatternLarge' + rnd,
-        'x': 0, 'y': 0, 'width': 30, 'height': 30,
+        'x': 0, 'y': 0, 'width': 38, 'height': 38,
         'patternUnits': 'userSpaceOnUse'}, defs);
   Blockly.createSvgElement('rect',
-          {'x': 0, 'y': 0, 'width': 30, 'height': 30,
+          {'x': 0, 'y': 0, 'width': 38, 'height': 38,
           'fill': 'url(#blocklyMultiTypeGradient' +  rnd + ')'},
           multiTypePatternLarge);
   options.multiTypePatternLargeId = multiTypePatternLarge.id;
+
+  /*
+...
+  */
+  var multiTypeGradient2 = Blockly.createSvgElement('linearGradient',
+      {'id': 'blocklyMultiTypeGradient2' + rnd,
+       'x1': 1, 'x2': 0.5, 'y1': 0, 'y2': 0.5,
+       'spreadMethod': 'repeat'}, defs);
+  offsets = [0, 0.06, 0.14, 0.26, 0.34, 0.46, 0.54, 0.66, 0.74, 0.86, 0.94, 1.0];
+  colours = ['str', 'int', 'float', 'range', 'bool', 'str'];
+  for (i in colours) {
+    Blockly.createSvgElement('stop',
+        {'stop-color': Blockly.Python.COLOUR[colours[i]],
+        'offset': offsets[2*i]},
+        multiTypeGradient);
+    Blockly.createSvgElement('stop',
+        {'stop-color': Blockly.Python.COLOUR[colours[i]],
+        'offset': offsets[2*i+1]}, multiTypeGradient2);
+  }
+  options.multiTypeGradient2Id = multiTypeGradient2.id;
+
+  /*
+  <pattern id="MultiTypePatternLarge" x="0" y="0" width="90" height="90" patternUnits="userSpaceOnUse">
+    <rect x="0" y="0" width="90" height="90" fill="url(#MultiTypeGradient)" />
+  </pattern>
+  */
+  var multiTypePatternLarge2 = Blockly.createSvgElement('pattern',
+      {'id': 'blocklyMultiTypePatternLarge2' + rnd,
+        'x': 0, 'y': 0, 'width': 20, 'height': 20,
+        'patternUnits': 'userSpaceOnUse'}, defs);
+  Blockly.createSvgElement('rect',
+          {'x': 0, 'y': 0, 'width': 20, 'height': 20,
+          'fill': 'url(#blocklyMultiTypeGradient2' +  rnd + ')'},
+          multiTypePatternLarge2);
+  options.multiTypePatternLarge2Id = multiTypePatternLarge2.id;
 
   /*
 ...

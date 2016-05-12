@@ -429,12 +429,12 @@ Blockly.Connection.prototype.moveBy = function(dx, dy) {
 /**
  * Add highlighting around this connection.
  */
-Blockly.Connection.prototype.highlight = function() {
+Blockly.Connection.prototype.highlight = function(inputWidth) {
   var steps;
   if (this.type == Blockly.INPUT_VALUE || this.type == Blockly.OUTPUT_VALUE) {
     var tabWidth = this.sourceBlock_.RTL ? -Blockly.BlockSvg.TAB_WIDTH :
         Blockly.BlockSvg.TAB_WIDTH;
-    var width = Blockly.BlockSvg.SLOT_WIDTH + 12;
+    var width = inputWidth + 12;
     var height = Blockly.BlockSvg.MIN_BLOCK_Y + 12;
     steps = 'm -5,-6 h ' + width + 'v ' + height +
         ' h -' + width + ' z';
