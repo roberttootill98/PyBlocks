@@ -51,6 +51,13 @@ Blockly.Connection = function(source, type) {
 };
 
 /**
+ * This connection's input position in source block if INPUT_VALUE, -1 otherwise
+ * @type {number}
+ * @private
+ */
+Blockly.Connection.prototype.inputNumber = -1;
+
+/**
  * Connection this connection connects to.  Null if not connected.
  * @type {Blockly.Connection}
  */
@@ -112,6 +119,11 @@ Blockly.Connection.prototype.dbOpposite_ = null;
  * @private
  */
 Blockly.Connection.prototype.hidden_ = null;
+
+
+Blockly.Connection.prototype.setInputNumber = function(inputNumber) {
+  this.inputNumber_ = inputNumber;
+};
 
 /**
  * Sever all links to this connection (not including from the source object).
@@ -629,16 +641,35 @@ Blockly.Connection.prototype.checkType_ = function(otherConnection) {
       !otherConnection.sourceBlock_.isMovable()) {
     return false;
   }
+
+  if (this.type == Blockly.INPUT_VALUE) {
+    console.log("This is the input");
+  }
+  else if (this.type == Blockly.OUTPUT_VALUE) {
+    console.log("This is the output");
+  }
+  else {
+    console.log("This is a different type");
+  }
+
   if (!this.check_ || !otherConnection.check_) {
+    console.log("TYC promiscuous enough!");
     // One or both sides are promiscuous enough that anything will fit.
     return true;
   }
+
+
   // Find any intersection in the check lists.
   for (var i = 0; i < this.check_.length; i++) {
     if (otherConnection.check_.indexOf(this.check_[i]) != -1) {
+      console.log("TYC Type overlap!");
       return true;
     }
   }
+
+  console.log("TYC No intersection!");
+
+
   // No intersection.
   return false;
 };

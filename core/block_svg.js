@@ -1489,13 +1489,20 @@ Blockly.BlockSvg.prototype.updateColour = function() {
   }
 
   for (var i = 0, indicatorPair; indicatorPair = this.indicators[i]; i++) {
-    var basicTypes = this.getParameterTypes(i).basic;
     if (indicatorPair.basic) {
+      var basicTypes = this.getParameterTypes(i).basic;
       if (basicTypes[0] == "any") {
         fillText = 'url(#' + this.workspace.options.multiTypePatternLarge2Id + ')';
       }
-      else if (basicTypes.length == 2) { // should be list of int/float
-        fillText = 'url(#' + this.workspace.options.numericalTypePatternLargeId + ')';
+      else if (basicTypes.length == 2) {
+        if (basicTypes.indexOf('int') > -1) {
+          // should be list of int/float
+          fillText = 'url(#' + this.workspace.options.numericalTypePatternSmallId + ')';
+        }
+        else {
+          // should sequence
+          fillText = 'url(#' + this.workspace.options.sequenceTypePatternSmallId + ')';
+        }
       }
       else {
         fillText = Blockly.Python.COLOUR[basicTypes[0]];
@@ -1507,7 +1514,14 @@ Blockly.BlockSvg.prototype.updateColour = function() {
      if (pListTypes[0] == "any") {
        fillText = 'url(#' + this.workspace.options.multiTypePatternLarge2Id + ')';
      }
-      for (var j=1; j<4; j++) {
+     else if (pListTypes.length == 2) {
+       fillText = 'url(#' + this.workspace.options.numericalTypePatternSmallId + ')';
+     }
+     else {
+       // should be just one type
+      fillText = Blockly.Python.COLOUR[pListTypes[0]];
+     }
+     for (var j=1; j<4; j++) {
        var rect = indicatorPair.list[j];
        rect.setAttribute('fill', fillText);
      }
@@ -1847,6 +1861,7 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
   var hasDummy = false;
   var lastType = undefined;
   var isInline = this.getInputsInline() && !this.isCollapsed();
+  var slotNumber = -1;
   for (var i = 0, input; input = inputList[i]; i++) {
     if (!input.isVisible()) {
       continue;
@@ -1881,7 +1896,8 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
     input.renderHeight = Blockly.BlockSvg.MIN_BLOCK_Y;
     // The width is currently only needed for inline value inputs.
     if (isInline && input.type == Blockly.INPUT_VALUE) {
-      var kinds = this.getParameterKinds(i);
+      slotNumber++;
+      var kinds = this.getParameterKinds(slotNumber);
       if (kinds.basic && kinds.list) {
         input.renderWidth = Blockly.BlockSvg.DOUBLE_SLOT_WIDTH;
       }
@@ -2195,6 +2211,7 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, holeSteps,
       this.width += Blockly.BlockSvg.JAGGED_TEETH_WIDTH;
     } else if (row.type == Blockly.BlockSvg.INLINE) {
       // Inline inputs.
+      var slotNumber = -1;
       for (var x = 0, input; input = row[x]; x++) {
         var fieldX = cursorX;
         var fieldY = cursorY;
@@ -2208,6 +2225,7 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, holeSteps,
           cursorX += input.renderWidth + Blockly.BlockSvg.SEP_SPACE_X;
         }
         if (input.type == Blockly.INPUT_VALUE) {
+          slotNumber++;
         //   inlineSteps.push('M', (cursorX - Blockly.BlockSvg.SEP_SPACE_X) +
         //                    ',' + (cursorY + Blockly.BlockSvg.INLINE_PADDING_TOP));
         //   inlineSteps.push('h', /*Blockly.BlockSvg.TAB_WIDTH*/ - 0 -
@@ -2241,7 +2259,7 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, holeSteps,
 
           if (!input.connection.targetConnection) {
 
-            var params = this.getParameterKinds(x);
+            var params = this.getParameterKinds(slotNumber);
             console.log(params);
 
             var indicatorX = cursorX;

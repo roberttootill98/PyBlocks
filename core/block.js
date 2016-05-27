@@ -894,10 +894,13 @@ Blockly.Block.prototype.toString = function(opt_maxLength) {
  * Shortcut for appending a value input row.
  * @param {string} name Language-neutral identifier which may used to find this
  *     input again.  Should be unique to this block.
+ * @param {inputNumber} the index of this input in the block.
  * @return {!Blockly.Input} The input object created.
  */
-Blockly.Block.prototype.appendValueInput = function(name) {
-  return this.appendInput_(Blockly.INPUT_VALUE, name);
+Blockly.Block.prototype.appendValueInput = function(name, inputNumber) {
+  var input = this.appendInput_(Blockly.INPUT_VALUE, name);
+  input.connection.setInputNumber(inputNumber);
+  return input;
 };
 
 /**
@@ -1014,6 +1017,7 @@ Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign) {
   };
   // Populate block with inputs and fields.
   var fieldStack = [];
+  var inputValueConnections = 0;
   for (var i = 0; i < elements.length; i++) {
     var element = elements[i];
     if (typeof element == 'string') {
@@ -1025,7 +1029,9 @@ Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign) {
         var altRepeat = false;
         switch (element['type']) {
           case 'input_value':
-            input = this.appendValueInput(element['name']);
+            input = this.appendValueInput(element['name'],
+                inputValueConnections);
+            inputValueConnections++;
             break;
           case 'input_statement':
             input = this.appendStatementInput(element['name']);

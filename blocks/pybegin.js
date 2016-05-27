@@ -28,6 +28,50 @@ goog.provide('Blockly.Blocks.python');
 
 goog.require('Blockly.Blocks');
 
+Blockly.Blocks['python_assign_float_list'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField(new Blockly.FieldVariable("item"), "LHS");
+    this.appendValueInput("RHS")
+        .setCheck(["float"])
+        .appendField(" = ");
+    this.appendDummyInput()
+        .appendField(" ");
+    this.setTypeVecs([
+      ["*float", "none"]
+    ]);
+    this.setInputsInline(true);
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
+    this.setColour(120);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+
+Blockly.Blocks['python_assign_num_list'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField(new Blockly.FieldVariable("item"), "LHS");
+    this.appendValueInput("RHS")
+        .setCheck(["float"])
+        .appendField(" = ");
+    this.appendDummyInput()
+        .appendField(" ");
+    this.setTypeVecs([
+      ["*int", "none"], ["*float", "none"]
+    ]);
+    this.setInputsInline(true);
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
+    this.setColour(120);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+
+
+
 Blockly.Blocks['python_intvar'] = {
   init: function() {
     this.appendDummyInput()
@@ -207,7 +251,7 @@ Blockly.Blocks['python_for'] = {
         .appendField(":");
     this.appendStatementInput("BODY");
     this.setInputsInline(true);
-    this.setTypeVecs([["*any", "none"], ["str", "none"]]);
+    this.setTypeVecs([["*any", "none"], ["range", "none"], ["str", "none"]]);
     this.setPreviousStatement(true);
     this.setNextStatement(true);
     this.setColour(210);
@@ -303,9 +347,6 @@ Blockly.Blocks['python_print'] = {
     this.appendValueInput("ARG1")
         .setCheck(null)
         .appendField("print(");
-    this.appendValueInput("ARG2")
-        .setCheck(null)
-        .appendField(", ");
     this.appendDummyInput()
         .appendField(")");
     this.setInputsInline(true);

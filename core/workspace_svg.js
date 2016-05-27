@@ -281,12 +281,14 @@ Blockly.WorkspaceSvg.prototype.addZoomControls_ = function(bottom) {
 Blockly.WorkspaceSvg.prototype.addFlyout_ = function() {
   var workspaceOptions = {
     disabledPatternId: this.options.disabledPatternId,
-    multiTypeGradientId: this.options.multiTypeGradientId,
+  //  multiTypeGradientId: this.options.multiTypeGradientId,
     multiTypePatternLargeId: this.options.multiTypePatternLargeId,
     multiTypePatternLarge2Id: this.options.multiTypePatternLarge2Id,
-    numericalTypeGradient2Id: this.options.numericalTypeGradient2Id,
-    numericalTypeGradientId: this.options.numericalTypeGradientId,
+  //  numericalTypeGradient2Id: this.options.numericalTypeGradient2Id,
+    //numericalTypeGradientId: this.options.numericalTypeGradientId,
     numericalTypePatternLargeId: this.options.numericalTypePatternLargeId,
+    numericalTypePatternSmallId: this.options.numericalTypePatternSmallId,
+    sequenceTypePatternSmallId: this.options.sequenceTypePatternSmallId,
     parentWorkspace: this,
     RTL: this.RTL
   };
