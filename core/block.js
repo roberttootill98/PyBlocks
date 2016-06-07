@@ -108,7 +108,9 @@ Blockly.Block.prototype.fill = function(workspace, prototypeName) {
   this.inputList = [];
   /** @type {boolean|undefined} */
   this.inputsInline = undefined;
-/** type {!Array<!Array<string>} */
+  /** @type {number} */
+  this.numParameters = 0;
+  /** type {!Array<!Array<string>} */
   this.typeVecs = [];
   /** @type {boolean} */
   this.rendered = false;
@@ -352,6 +354,26 @@ Blockly.Block.prototype.bumpNeighbours_ = function() {
 Blockly.Block.prototype.getParent = function() {
   // Look at the DOM to see if we are nested in another block.
   return this.parentBlock_;
+};
+
+/**
+ * Return this blocks outermost ancestor following only slot
+ * input connections (not previous statement connections); return
+ * this block if it has no parent.
+ * @return {Blockly.Block} The outermost block that contains the
+ * current block.
+ */
+Blockly.Block.prototype.getTopLevel = function() {
+  if (!this.outputConnection) {
+    return this;
+  }
+  var parent = this.getParent();
+  if (!parent) {
+    return this;
+  }
+  else {
+    return parent.getTopLevel();
+  }
 };
 
 /**
@@ -894,12 +916,12 @@ Blockly.Block.prototype.toString = function(opt_maxLength) {
  * Shortcut for appending a value input row.
  * @param {string} name Language-neutral identifier which may used to find this
  *     input again.  Should be unique to this block.
- * @param {inputNumber} the index of this input in the block.
  * @return {!Blockly.Input} The input object created.
  */
-Blockly.Block.prototype.appendValueInput = function(name, inputNumber) {
+Blockly.Block.prototype.appendValueInput = function(name) {
   var input = this.appendInput_(Blockly.INPUT_VALUE, name);
-  input.connection.setInputNumber(inputNumber);
+  input.connection.setInputNumber(this.numParameters);
+  this.numParameters++;
   return input;
 };
 
@@ -1017,7 +1039,6 @@ Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign) {
   };
   // Populate block with inputs and fields.
   var fieldStack = [];
-  var inputValueConnections = 0;
   for (var i = 0; i < elements.length; i++) {
     var element = elements[i];
     if (typeof element == 'string') {
@@ -1029,9 +1050,7 @@ Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign) {
         var altRepeat = false;
         switch (element['type']) {
           case 'input_value':
-            input = this.appendValueInput(element['name'],
-                inputValueConnections);
-            inputValueConnections++;
+            input = this.appendValueInput(element['name']);
             break;
           case 'input_statement':
             input = this.appendStatementInput(element['name']);
@@ -1291,7 +1310,7 @@ Blockly.Block.prototype.moveBy = function(dx, dy) {
 };
 
 
-Blockly.Block.prototype.getParameterTypes = function(index) {
+Blockly.Block.prototype.getInputTypesByKind = function(index) {
   var paramTypes = {'basic': [], 'list': []};
   var typeVecs = this.typeVecs;
   for (var i=0; i < typeVecs.length; i++) {
@@ -1308,12 +1327,26 @@ Blockly.Block.prototype.getParameterTypes = function(index) {
   return paramTypes;
 };
 
-Blockly.Block.prototype.getParameterKinds = function(index) {
-   var types = this.getParameterTypes(index);
+Blockly.Block.prototype.getInputKinds = function(index) {
+   var types = this.getInputTypesByKind(index);
    return {
      'basic': types.basic.length > 0,
      'list': types.list.length > 0
    };
+};
+
+
+Blockly.
+Block.prototype.getInputTypes = function(index) {
+  var paramTypes = [];
+  var typeVecs = this.typeVecs;
+  for (var i=0; i < typeVecs.length; i++) {
+    var outputType = typeVecs[i].slice(index)[0];
+    if (paramTypes.indexOf(outputType) == -1) {
+        paramTypes.push(outputType);
+    }
+  }
+  return paramTypes;
 };
 
 /*
@@ -1341,11 +1374,79 @@ Blockly.Block.prototype.getParameterTypes = function(index, kind) {
 };
 */
 
-Blockly.Block.prototype.getOutputTypes = function(kind) {
-  return this.getParameterTypes(-1, kind);
+/*Blockly.Block.prototype.getOutputTypes = function(kind) {
+  return this.getInputTypesByKind(-1, kind);
+};*/
+
+Blockly.Block.prototype.getOutputTypes = function() {
+  return this.getInputTypes(-1);
+};
+
+Blockly.Block.prototype.getOutputTypesByKind = function() {
+  return this.getInputTypesByKind(-1);
 };
 
 Blockly.Block.prototype.outputsAList = function() {
-  var outputTypes = this.getOutputTypes();
+  var outputTypes = this.getInputTypesByKind(-1);
   return (outputTypes.list.length > 0);
+};
+
+
+
+/**
+ * Is it legal to drop this block into an empty hole with type indicators
+ * given by holeTypes?
+ * @param {!Array<string} holeTypes types indicated in hole.
+ * @return {bool} true if the drop is legal, false otherwise.
+ */
+Blockly.Block.prototype.legalDrop = function(holeTypes) {
+  var includesListType = function(types) {
+    for (var i=0; i<types.length; i++) {
+      if (types[i][0] == "*") {
+        return true;
+      }
+    }
+    return false;
+  };
+  // do types include at least one non-list type?
+  var includesBasicType = function(types) {
+    for (var i=0; i<types.length; i++) {
+      if (types[i][0] != "*") {
+        return true;
+      }
+    }
+    return false;
+  };
+  // do types include a grey basic type?
+  var includesGreyBasic = function(types) {
+    console.log("IGB: ", types);
+    return (types.indexOf("any") != -1 ||
+           types.indexOf("matching") != -1);
+  };
+  // do types include a grey list type?
+  var includesGreyList = function(types) {
+    return (types.indexOf("any*") != -1 ||
+           types.indexOf("matching*") != -1);
+  };
+  if (includesGreyBasic(holeTypes) && !this.outputsAList()) {
+    return true;
+  }
+  if (includesGreyList(holeTypes) && this.outputsAList()) {
+    return true;
+  }
+  var outputTypes = this.getOutputTypes();
+  console.log("OTS: ", this.type, outputTypes);
+  if (includesGreyBasic(outputTypes) && includesBasicType(holeTypes)) {
+    return true;
+  }
+  if (includesGreyList(outputTypes) && includesListType(holeTypes)) {
+    return true;
+  }
+  for (var i=0; i<outputTypes.length; i++) {
+    var elem = outputTypes[i];
+    if (holeTypes.indexOf(elem) != -1) {
+       return true;
+    }
+  }
+  return false;
 };

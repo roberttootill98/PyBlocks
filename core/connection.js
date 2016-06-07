@@ -55,7 +55,7 @@ Blockly.Connection = function(source, type) {
  * @type {number}
  * @private
  */
-Blockly.Connection.prototype.inputNumber = -1;
+Blockly.Connection.prototype.inputNumber_ = -1;
 
 /**
  * Connection this connection connects to.  Null if not connected.
@@ -123,6 +123,7 @@ Blockly.Connection.prototype.hidden_ = null;
 
 Blockly.Connection.prototype.setInputNumber = function(inputNumber) {
   this.inputNumber_ = inputNumber;
+  console.log("Set input number " + inputNumber);
 };
 
 /**
@@ -630,6 +631,12 @@ Blockly.Connection.prototype.closest = function(maxLimit, dx, dy) {
  * @private
  */
 Blockly.Connection.prototype.checkType_ = function(otherConnection) {
+
+  // MJP Reject connections on same block
+  if (this.sourceBlock_ == otherConnection.sourceBlock_) {
+    return false;
+  }
+
   // Don't split a connection where both sides are immovable.
   var thisTargetBlock = this.targetBlock();
   if (thisTargetBlock && !thisTargetBlock.isMovable() &&
@@ -642,30 +649,48 @@ Blockly.Connection.prototype.checkType_ = function(otherConnection) {
     return false;
   }
 
-  if (this.type == Blockly.INPUT_VALUE) {
-    console.log("This is the input");
-  }
-  else if (this.type == Blockly.OUTPUT_VALUE) {
-    console.log("This is the output");
-  }
-  else {
-    console.log("This is a different type");
+  // MJP: change to use OPPOSITE_TYPE
+  console.log("CONNX type:" + this.type);
+  console.log("CONNX type:" + otherConnection.type);
+
+  if (this.type == Blockly.NEXT_STATEMENT &&
+      otherConnection.type == Blockly.PREVIOUS_STATEMENT) {
+    return true;
   }
 
-  if (!this.check_ || !otherConnection.check_) {
-    console.log("TYC promiscuous enough!");
-    // One or both sides are promiscuous enough that anything will fit.
+  if (this.type == Blockly.PREVIOUS_STATEMENT &&
+      otherConnection.type == Blockly.NEXT_STATEMENT) {
     return true;
+  }
+
+  //if (!this.check_ || !otherConnection.check_) {
+//    console.log("TYC promiscuous enough!");
+//    // One or both sides are promiscuous enough that anything will fit.
+//    return true;
+//  }
+
+  // Need to check kinds of block
+  var thisBlock = this.sourceBlock_;
+  var inputNumber = otherConnection.inputNumber_;
+  var holeTypes = otherConnection.sourceBlock_.getInputTypes(inputNumber);
+  console.log("CONNX Hole types for input number : ", inputNumber, ": ", holeTypes);
+
+  if (this.type == Blockly.OUTPUT_VALUE &&
+      otherConnection.type == Blockly.INPUT_VALUE) {
+      if (thisBlock.legalDrop(holeTypes)) {
+        console.log("CONN Legal drop");
+        return true;
+      }
   }
 
 
   // Find any intersection in the check lists.
-  for (var i = 0; i < this.check_.length; i++) {
-    if (otherConnection.check_.indexOf(this.check_[i]) != -1) {
-      console.log("TYC Type overlap!");
-      return true;
-    }
-  }
+//  for (var i = 0; i < this.check_.length; i++) {
+//    if (otherConnection.check_.indexOf(this.check_[i]) != -1) {
+//      console.log("TYC Type overlap!");
+//      return true;
+//    }
+//  }
 
   console.log("TYC No intersection!");
 

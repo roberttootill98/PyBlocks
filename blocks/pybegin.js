@@ -211,7 +211,6 @@ Blockly.Blocks['python_while'] = {
     this.appendStatementInput("BODY");
     this.setInputsInline(true);
     this.setTypeVecs([["bool", "none"]]);
-
     this.setPreviousStatement(true);
     this.setNextStatement(true);
     this.setColour(210);

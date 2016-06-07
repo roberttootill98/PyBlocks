@@ -535,6 +535,9 @@ Blockly.BlockSvg.prototype.onMouseUp_ = function(e) {
               previousBlock = previousConnection.targetBlock();
           }
       }
+      else { // this is an expression
+        console.log("DROPPED, top level: ", this_.getTopLevel().type);
+      }
 
       if (this_.rendered) {
         // Trigger a connection animation.
@@ -1454,7 +1457,7 @@ Blockly.BlockSvg.prototype.updateColour = function() {
   if (this.outputConnection) {
     if (this.outputsAList()) {
       this.svgBlockPath_.setAttribute('fill', "white");
-      var listTypes = this.getOutputTypes().list;
+      var listTypes = this.getOutputTypesByKind().list;
       if (listTypes[0] == "any") {
         fillText = 'url(#' + this.workspace.options.multiTypePatternLargeId + ')';
       }
@@ -1469,7 +1472,7 @@ Blockly.BlockSvg.prototype.updateColour = function() {
       }
     }
     else {
-      var outputTypes = this.getOutputTypes().basic;
+      var outputTypes = this.getOutputTypesByKind().basic;
       if (outputTypes[0] == "any") {
         fillText = 'url(#' + this.workspace.options.multiTypePatternLargeId + ')';
       }
@@ -1490,7 +1493,7 @@ Blockly.BlockSvg.prototype.updateColour = function() {
 
   for (var i = 0, indicatorPair; indicatorPair = this.indicators[i]; i++) {
     if (indicatorPair.basic) {
-      var basicTypes = this.getParameterTypes(i).basic;
+      var basicTypes = this.getInputTypesByKind(i).basic;
       if (basicTypes[0] == "any") {
         fillText = 'url(#' + this.workspace.options.multiTypePatternLarge2Id + ')';
       }
@@ -1510,7 +1513,7 @@ Blockly.BlockSvg.prototype.updateColour = function() {
       indicatorPair.basic.setAttribute('fill', fillText);
     }
     if (indicatorPair.list) {
-     var pListTypes = this.getParameterTypes(i).list;
+     var pListTypes = this.getInputTypesByKind(i).list;
      if (pListTypes[0] == "any") {
        fillText = 'url(#' + this.workspace.options.multiTypePatternLarge2Id + ')';
      }
@@ -1897,7 +1900,7 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
     // The width is currently only needed for inline value inputs.
     if (isInline && input.type == Blockly.INPUT_VALUE) {
       slotNumber++;
-      var kinds = this.getParameterKinds(slotNumber);
+      var kinds = this.getInputKinds(slotNumber);
       if (kinds.basic && kinds.list) {
         input.renderWidth = Blockly.BlockSvg.DOUBLE_SLOT_WIDTH;
       }
@@ -2259,7 +2262,7 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, holeSteps,
 
           if (!input.connection.targetConnection) {
 
-            var params = this.getParameterKinds(slotNumber);
+            var params = this.getInputKinds(slotNumber);
             console.log(params);
 
             var indicatorX = cursorX;
@@ -2467,6 +2470,7 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, holeSteps,
         //cursorY += Blockly.BlockSvg.SEP_SPACE_Y;
       }
     }
+
     cursorY += row.height;
   }
   if (!inputRows.length) {
