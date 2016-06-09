@@ -536,7 +536,15 @@ Blockly.BlockSvg.prototype.onMouseUp_ = function(e) {
           }
       }
       else { // this is an expression
-        console.log("DROPPED, top level: ", this_.getTopLevel().type);
+        var topLevel = this_.getTopLevel();
+        console.log("DROPPED, top level: ", topLevel.type);
+        topLevel.restoreFullTypes();
+        console.log("UCOL 1: ", topLevel.typeVecs);
+        topLevel.unifyUp();
+        console.log("UCOL 2: ", topLevel.typeVecs);
+        topLevel.unifyDown();
+        console.log("UCOL 3: ", topLevel.typeVecs);
+        topLevel.updateColourDown();
       }
 
       if (this_.rendered) {
@@ -1443,6 +1451,18 @@ Blockly.BlockSvg.disconnectUiStop_.pid = 0;
 Blockly.BlockSvg.disconnectUiStop_.group = null;
 
 /**
+ * Update the colour of a block and its expression children
+ */
+Blockly.BlockSvg.prototype.updateColourDown = function() {
+  this.updateColour();
+  for (var i=0, child; child=this.childBlocks_[i]; i++) {
+    if (child && child.outputConnection) {
+      child.updateColourDown();
+    }
+  }
+};
+
+/**
  * Change the colour of a block.
  */
 Blockly.BlockSvg.prototype.updateColour = function() {
@@ -1452,6 +1472,8 @@ Blockly.BlockSvg.prototype.updateColour = function() {
   }
   //var hexColour = Blockly.makeColour(this.getColour());
   //var rgb = goog.color.hexToRgb(hexColour);
+
+  console.log("UCOL: ", this.type, this.typeVecs);
 
   var fillText;
   if (this.outputConnection) {
@@ -1492,8 +1514,10 @@ Blockly.BlockSvg.prototype.updateColour = function() {
   }
 
   for (var i = 0, indicatorPair; indicatorPair = this.indicators[i]; i++) {
+
     if (indicatorPair.basic) {
       var basicTypes = this.getInputTypesByKind(i).basic;
+      console.log("UCOL position ", i, basicTypes);
       if (basicTypes[0] == "any") {
         fillText = 'url(#' + this.workspace.options.multiTypePatternLarge2Id + ')';
       }

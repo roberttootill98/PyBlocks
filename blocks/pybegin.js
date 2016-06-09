@@ -272,9 +272,8 @@ Blockly.Blocks['python_pow'] = {
     this.setInputsInline(true);
     this.setTypeVecs([
       ["int", "int", "int"],
-      ["int", "int", "float"],
-      ["float", "int", "float"],
       ["int", "float", "float"],
+      ["float", "int", "float"],
       ["float", "float", "float"]
     ]);
     this.setOutput(true, "int");

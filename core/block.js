@@ -111,6 +111,8 @@ Blockly.Block.prototype.fill = function(workspace, prototypeName) {
   /** @type {number} */
   this.numParameters = 0;
   /** type {!Array<!Array<string>} */
+  this.fullTypeVecs = [];
+  /** type {!Array<!Array<string>} */
   this.typeVecs = [];
   /** @type {boolean} */
   this.rendered = false;
@@ -375,6 +377,7 @@ Blockly.Block.prototype.getTopLevel = function() {
     return parent.getTopLevel();
   }
 };
+
 
 /**
  * Return the parent block that surrounds the current block, or null if this
@@ -807,7 +810,30 @@ Blockly.Block.prototype.setInputsInline = function(newBoolean) {
  * @param {!Array{<!Array<string>>} typeVecs the new type-vecs.
  */
 Blockly.Block.prototype.setTypeVecs = function(typeVecs) {
-  this.typeVecs = typeVecs;
+  var numTypes = typeVecs.length;
+  this.fullTypeVecs = new Array(numTypes);
+  this.typeVecs = new Array(numTypes);
+  for (var i=0; i<numTypes; i++) {
+    this.fullTypeVecs[i] = typeVecs[i].slice(0);
+  }
+  var numParams = typeVecs[0].length - 1;
+  this.holes = new Array(numParams);
+  this.restoreFullTypes();
+};
+
+/**
+ * Restores the block's type-vecs to, as for a new singleton block.
+ */
+Blockly.Block.prototype.restoreFullTypes = function() {
+  this.typeVecs = Array(this.fullTypeVecs.length);
+  for (var i=0; i<this.fullTypeVecs.length; i++) {
+    this.typeVecs[i] = this.fullTypeVecs[i].slice(0);
+  }
+  for (i=0; i<this.holes.length; i++) {
+    if (this.holes[i]) {
+      this.holes[i].restoreFullTypes();
+    }
+  }
 };
 
 /**
@@ -1449,4 +1475,114 @@ Blockly.Block.prototype.legalDrop = function(holeTypes) {
     }
   }
   return false;
+};
+
+Blockly.Block.prototype.unifyUp = function() {
+  for (var i=0, child; child=this.childBlocks_[i]; i++) {
+    var position = child.outputConnection.targetConnection.inputNumber_;
+    console.log("UNIFY UP", position, child.type);
+    child.unifyUp();
+    this.unify(child, position, -1);
+  }
+};
+
+Blockly.Block.prototype.unifyDown = function() {
+  for (var i=0, child; child=this.childBlocks_[i]; i++) {
+    var position = child.outputConnection.targetConnection.inputNumber_;
+    console.log("UNIFY DOWN ", position, child.type);
+    child.unify(this, -1, position);
+    child.unifyDown();
+  }
+};
+
+/**
+ * Unifies (restricts) the type-vecs of this block to make them all compatible
+ * with the type-vecs of a parent or child block.
+ * @param {!Block} other the other block.
+ * @param {number} selfPos the hole of the other (parent) block in which this
+ * block is, or -1 if this block is the parent.
+ * @param {number} otherPos the hole of this (parent) block in which the other
+ * block is, or -1 if this block is the child.
+ */
+Blockly.Block.prototype.unify = function(other, selfPos, otherPos) {
+  // return a type-vec like typeVec but with all occurences of
+  // "matched" ( *matched") replaced by newType (*newType)
+  var subsMatched = function(typeVec, newType) {
+    var newTypeVec = Array(typeVec.length);
+    for (var i=0; i<typeVec.length; i++) {
+      if (typeVec[i] == "matched") {
+        newTypeVec[i] = newType;
+      }
+      else if (typeVec[i] == "*matched") {
+        newTypeVec[i] = "*" + newType;
+      }
+      else {
+        newTypeVec[i] = typeVec[i];
+      }
+    }
+    return newTypeVec;
+  };
+  // does typeVecs include typeVec?
+  var typesInclude = function(typeVecs, typeVec) {
+    for (var i=0; i<typeVecs.length; i++) {
+      var currentType = typeVecs[i];
+      var matched = true;
+      var j = 0;
+      while (matched && j < typeVec.length) {
+        if (currentType[j] != typeVecs[j])
+          matched = false;
+        j++;
+      }
+      if (matched) {
+        return true;
+      }
+    }
+    return false;
+  };
+
+  console.log("UNIFY typeVecs at start: ", this.typeVecs);
+  var newTypeVecs = [];
+  for (var i=0; i<this.typeVecs.length; i++) {
+    var thisTypeVec = this.typeVecs[i];
+    console.log("UNIFY considering thisTypeVec: ", thisTypeVec);
+    var thisType = thisTypeVec.slice(selfPos)[0];
+    console.log("UNIFY Considering thisType at position",
+                selfPos, ": ", thisType);
+    for (var j=0; j<other.typeVecs.length; j++) {
+      var otherTypeVec = other.typeVecs[j];
+      var otherType = otherTypeVec.slice(otherPos)[0];
+      console.log("UNIFY considering otherType at position",
+                     otherPos, ": ", otherType);
+      if (thisType == otherType ||
+         (otherType == "any" && !this.outputsAList())  ||
+         (otherType == "matching" && !this.outputsAList()) ||
+         (otherType == "any*" && this.outputsAList()) ||
+         (otherType == "matching*" && this.outputsAList())) {
+        if (!typesInclude(newTypeVecs, thisTypeVec)) {
+          console.log("UNIFY mathc - keeping: ", thisTypeVec);
+          newTypeVecs.push(thisTypeVec);
+        }
+      }
+      else if (thisType == "matching" && !other.outputsAList()) {
+        var renamed = subsMatched(thisTypeVec, otherType);
+        if (!typesInclude(newTypeVecs, renamed)) {
+          newTypeVecs.push(renamed);
+        }
+      }
+      else if (thisType == "matching*" && other.outputsAList()) {
+        var renamedList = subsMatched(thisTypeVec, otherType.slice(1));
+        if (!typesInclude(newTypeVecs, renamedList)) {
+          newTypeVecs.push(renamedList);
+        }
+      }
+      else if ((thisType == "any" && !other.outputsAList()) ||
+               (thisType == "any*" && other.outputsAList())) {
+        if (!typesInclude(newTypeVecs, thisTypeVec)) {
+          newTypeVecs.push(thisTypeVec);
+        }
+      }
+    }
+  }
+  this.typeVecs = newTypeVecs;
+  console.log("UNIFY typeVecs at end: ", this.typeVecs);
 };
