@@ -1451,8 +1451,8 @@ Blockly.Block.prototype.legalDrop = function(holeTypes) {
   };
   // do types include a grey list type?
   var includesGreyList = function(types) {
-    return (types.indexOf("any*") != -1 ||
-           types.indexOf("matching*") != -1);
+    return (types.indexOf("*any") != -1 ||
+           types.indexOf("*matching") != -1);
   };
   if (includesGreyBasic(holeTypes) && !this.outputsAList()) {
     return true;
@@ -1510,10 +1510,10 @@ Blockly.Block.prototype.unify = function(other, selfPos, otherPos) {
   var subsMatched = function(typeVec, newType) {
     var newTypeVec = Array(typeVec.length);
     for (var i=0; i<typeVec.length; i++) {
-      if (typeVec[i] == "matched") {
+      if (typeVec[i] == "matching") {
         newTypeVec[i] = newType;
       }
-      else if (typeVec[i] == "*matched") {
+      else if (typeVec[i] == "*matching") {
         newTypeVec[i] = "*" + newType;
       }
       else {
@@ -1556,8 +1556,8 @@ Blockly.Block.prototype.unify = function(other, selfPos, otherPos) {
       if (thisType == otherType ||
          (otherType == "any" && !this.outputsAList())  ||
          (otherType == "matching" && !this.outputsAList()) ||
-         (otherType == "any*" && this.outputsAList()) ||
-         (otherType == "matching*" && this.outputsAList())) {
+         (otherType == "*any" && this.outputsAList()) ||
+         (otherType == "*matching" && this.outputsAList())) {
         if (!typesInclude(newTypeVecs, thisTypeVec)) {
           console.log("UNIFY mathc - keeping: ", thisTypeVec);
           newTypeVecs.push(thisTypeVec);
@@ -1569,14 +1569,14 @@ Blockly.Block.prototype.unify = function(other, selfPos, otherPos) {
           newTypeVecs.push(renamed);
         }
       }
-      else if (thisType == "matching*" && other.outputsAList()) {
+      else if (thisType == "*matching" && other.outputsAList()) {
         var renamedList = subsMatched(thisTypeVec, otherType.slice(1));
         if (!typesInclude(newTypeVecs, renamedList)) {
           newTypeVecs.push(renamedList);
         }
       }
       else if ((thisType == "any" && !other.outputsAList()) ||
-               (thisType == "any*" && other.outputsAList())) {
+               (thisType == "*any" && other.outputsAList())) {
         if (!typesInclude(newTypeVecs, thisTypeVec)) {
           newTypeVecs.push(thisTypeVec);
         }

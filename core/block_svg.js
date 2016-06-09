@@ -1484,7 +1484,7 @@ Blockly.BlockSvg.prototype.updateColour = function() {
     if (this.outputsAList()) {
       this.svgBlockPath_.setAttribute('fill', "white");
       var listTypes = this.getOutputTypesByKind().list;
-      if (listTypes[0] == "any") {
+      if (listTypes[0] == "any" || listTypes[0] == "matching") {
         fillText = 'url(#' + this.workspace.options.multiTypePatternLargeId + ')';
       }
       else if (listTypes.length == 1) {
@@ -1499,7 +1499,7 @@ Blockly.BlockSvg.prototype.updateColour = function() {
     }
     else {
       var outputTypes = this.getOutputTypesByKind().basic;
-      if (outputTypes[0] == "any") {
+      if (outputTypes[0] == "any" || outputTypes[0] == "matching") {
         fillText = 'url(#' + this.workspace.options.multiTypePatternLargeId + ')';
       }
       else if (outputTypes.length == 2) { // should be list of int/float
@@ -1523,7 +1523,7 @@ Blockly.BlockSvg.prototype.updateColour = function() {
     if (indicatorPair.basic) {
       var basicTypes = this.getInputTypesByKind(emptySlotNumber).basic;
       console.log("UCOL position ", emptySlotNumber, basicTypes);
-      if (basicTypes[0] == "any") {
+      if (basicTypes[0] == "any" || basicTypes[0] == "matching") {
         fillText = 'url(#' + this.workspace.options.multiTypePatternLarge2Id + ')';
       }
       else if (basicTypes.length == 2) {
@@ -1543,7 +1543,7 @@ Blockly.BlockSvg.prototype.updateColour = function() {
     }
     if (indicatorPair.list) {
      var pListTypes = this.getInputTypesByKind(emptySlotNumber).list;
-     if (pListTypes[0] == "any") {
+     if (pListTypes[0] == "any" || pListTypes[0] == "matching") {
        fillText = 'url(#' + this.workspace.options.multiTypePatternLarge2Id + ')';
      }
      else if (pListTypes.length == 2) {
