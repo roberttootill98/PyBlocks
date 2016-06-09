@@ -333,6 +333,14 @@ Blockly.Connection.prototype.disconnect = function() {
     childBlock = this.sourceBlock_;
     parentConnection = otherConnection;
   }
+  // MJP HACK
+  if (parentBlock.outputConnection) {
+    parentBlock.reType();
+  }
+  if (childBlock.outputConnection) {
+    childBlock.reType();
+  }
+
   var shadow = parentConnection.getShadowDom();
   if (parentBlock.workspace && !childBlock.isShadow() && shadow) {
     // Respawn the shadow block.

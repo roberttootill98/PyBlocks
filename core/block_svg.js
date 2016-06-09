@@ -72,7 +72,7 @@ Blockly.BlockSvg = function() {
       {'class': 'blocklyHolePath'}, this.svgGroup_);
 
   this.svgIndicatorGroup = Blockly.createSvgElement('g', {}, this.svgGroup_);
-  this.indicators = [];
+  this.indicators = {};
 
   this.svgBlockPath_.tooltip = this;
   Blockly.Tooltip.bindMouseEvents(this.svgBlockPath_);
@@ -536,15 +536,7 @@ Blockly.BlockSvg.prototype.onMouseUp_ = function(e) {
           }
       }
       else { // this is an expression
-        var topLevel = this_.getTopLevel();
-        console.log("DROPPED, top level: ", topLevel.type);
-        topLevel.restoreFullTypes();
-        console.log("UCOL 1: ", topLevel.typeVecs);
-        topLevel.unifyUp();
-        console.log("UCOL 2: ", topLevel.typeVecs);
-        topLevel.unifyDown();
-        console.log("UCOL 3: ", topLevel.typeVecs);
-        topLevel.updateColourDown();
+        this_.reType();
       }
 
       if (this_.rendered) {
@@ -580,6 +572,18 @@ Blockly.BlockSvg.prototype.onMouseUp_ = function(e) {
     }
     Blockly.Css.setCursor(Blockly.Css.Cursor.OPEN);
   });
+};
+
+Blockly.Block.prototype.reType = function() {
+  var topLevel = this.getTopLevel();
+  console.log("DROPPED, top level: ", topLevel.type);
+  topLevel.restoreFullTypes();
+  console.log("UCOL 1: ", topLevel.typeVecs);
+  topLevel.unifyUp();
+  console.log("UCOL 2: ", topLevel.typeVecs);
+  topLevel.unifyDown();
+  console.log("UCOL 3: ", topLevel.typeVecs);
+  topLevel.updateColourDown();
 };
 
 /**
@@ -1273,7 +1277,7 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate,
   this.svgHolePath_ = null;
   this.svgHoleGroup = null;
   this.svgIndicatorGroup = null;
-  this.indicators = [];
+  this.indicators = {};
  //this.svgPathDark_ = null;
   Blockly.Field.stopCache();
 };
@@ -1513,11 +1517,12 @@ Blockly.BlockSvg.prototype.updateColour = function() {
        //goog.color.rgbArrayToHex(Blockly.Python.COLOUR['notype']));
   }
 
-  for (var i = 0, indicatorPair; indicatorPair = this.indicators[i]; i++) {
-
+  //for (var i = 0, indicatorPair; indicatorPair = this.indicators[i]; i++) {
+  for (var emptySlotNumber in this.indicators) {
+    var indicatorPair = this.indicators[emptySlotNumber];
     if (indicatorPair.basic) {
-      var basicTypes = this.getInputTypesByKind(i).basic;
-      console.log("UCOL position ", i, basicTypes);
+      var basicTypes = this.getInputTypesByKind(emptySlotNumber).basic;
+      console.log("UCOL position ", emptySlotNumber, basicTypes);
       if (basicTypes[0] == "any") {
         fillText = 'url(#' + this.workspace.options.multiTypePatternLarge2Id + ')';
       }
@@ -1537,7 +1542,7 @@ Blockly.BlockSvg.prototype.updateColour = function() {
       indicatorPair.basic.setAttribute('fill', fillText);
     }
     if (indicatorPair.list) {
-     var pListTypes = this.getInputTypesByKind(i).list;
+     var pListTypes = this.getInputTypesByKind(emptySlotNumber).list;
      if (pListTypes[0] == "any") {
        fillText = 'url(#' + this.workspace.options.multiTypePatternLarge2Id + ')';
      }
@@ -2104,7 +2109,7 @@ Blockly.BlockSvg.prototype.renderDraw_ = function(iconWidth, inputRows) {
   // Since highlighting is a two-pixel wide border, it would normally overhang
   // the edge of the block by a pixel. So undersize all measurements by a pixel.
   var holeSteps = [];
-  this.indicators = [];
+  this.indicators = {};
 
 
   // DUMMY VAR - DELETE
@@ -2127,13 +2132,15 @@ Blockly.BlockSvg.prototype.renderDraw_ = function(iconWidth, inputRows) {
   while (this.svgIndicatorGroup.lastChild) {
       this.svgIndicatorGroup.removeChild(this.svgIndicatorGroup.lastChild);
   }
-  for (var i=0, indicator; indicator=this.indicators[i]; i++) {
-    if (indicator.basic) {
-      console.log("Basic indicator " + i);
-      this.svgIndicatorGroup.appendChild(indicator.basic);
+  //for (var i=0, indicator; indicator=this.indicators[i]; i++) {
+  for (var emptySlotNumber in this.indicators) {
+    var indicatorPair = this.indicators[emptySlotNumber];
+    if (indicatorPair.basic) {
+      console.log("Basic indicator " + emptySlotNumber);
+      this.svgIndicatorGroup.appendChild(indicatorPair.basic);
     }
-    if (indicator.list) {
-      for (var j=0, stripe; stripe=indicator.list[j]; j++) {
+    if (indicatorPair.list) {
+      for (var j=0, stripe; stripe=indicatorPair.list[j]; j++) {
         console.log("List indicator stripe" + j);
          this.svgIndicatorGroup.appendChild(stripe);
       }
@@ -2358,7 +2365,8 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, holeSteps,
               }
               //indicatorPair.list = ;
             }
-            this.indicators.push(indicatorPair);
+            //this.indicators.push(indicatorPair);
+            this.indicators[slotNumber] = indicatorPair;
           }
 
           // Create inline input connection.
