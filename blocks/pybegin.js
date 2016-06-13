@@ -282,7 +282,7 @@ Blockly.Blocks['python_list_const'] = {
         .appendField("]");
     this.setInputsInline(true);
     this.setTypeVecs([
-      ["any", "*any"],
+      ["matching", "*matching"],
     ]);
     this.setOutput(true, "int");
     this.setColour(120);

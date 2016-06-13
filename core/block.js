@@ -1524,19 +1524,27 @@ Blockly.Block.prototype.unify = function(other, selfPos, otherPos) {
   };
   // does typeVecs include typeVec?
   var typesInclude = function(typeVecs, typeVec) {
+    console.log("TYPESINC " + " checking if ", JSON.stringify(typeVecs),
+        "includes ", JSON.stringify(typeVec));
     for (var i=0; i<typeVecs.length; i++) {
       var currentType = typeVecs[i];
+      console.log("TYPESINC i", i, " currentType ", currentType);
       var matched = true;
       var j = 0;
       while (matched && j < typeVec.length) {
-        if (currentType[j] != typeVecs[j])
+        console.log("TYPESINC j", j, " currentType[j] ", currentType[j]);
+        if (currentType[j] != typeVec[j]) {
+          console.log("TYPESINC not matched");
           matched = false;
+        }
         j++;
       }
       if (matched) {
+        console.log("TYPESINC true");
         return true;
       }
     }
+    console.log("TYPESINC false");
     return false;
   };
 
@@ -1559,7 +1567,7 @@ Blockly.Block.prototype.unify = function(other, selfPos, otherPos) {
          (otherType == "*any" && this.outputsAList()) ||
          (otherType == "*matching" && this.outputsAList())) {
         if (!typesInclude(newTypeVecs, thisTypeVec)) {
-          console.log("UNIFY mathc - keeping: ", thisTypeVec);
+          console.log("UNIFY matching - keeping: ", thisTypeVec);
           newTypeVecs.push(thisTypeVec);
         }
       }
@@ -1584,5 +1592,6 @@ Blockly.Block.prototype.unify = function(other, selfPos, otherPos) {
     }
   }
   this.typeVecs = newTypeVecs;
-  console.log("UNIFY typeVecs at end: ", this.typeVecs);
+  console.log("UNIFY " +  this.type + " typeVecs at end: ",
+      JSON.stringify(this.typeVecs));
 };
