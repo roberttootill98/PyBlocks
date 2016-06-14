@@ -576,7 +576,7 @@ Blockly.BlockSvg.prototype.onMouseUp_ = function(e) {
 
 Blockly.Block.prototype.reType = function() {
   var topLevel = this.getTopLevel();
-  console.log("DROPPED, top level: ", topLevel.type);
+  console.log("RETYPE, top level: ", topLevel.type);
   topLevel.restoreFullTypes();
   console.log("UCOL 1: ", topLevel.typeVecs);
   topLevel.unifyUp();

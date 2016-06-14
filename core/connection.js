@@ -334,11 +334,13 @@ Blockly.Connection.prototype.disconnect = function() {
     parentConnection = otherConnection;
   }
   // MJP HACK
-  if (parentBlock.outputConnection) {
+  console.log("DISC p" + parentBlock.type + " c " + childBlock.type);
+  //if (parentBlock.outputConnection) {
+
+  //}
+  if (childBlock.outputConnection) {
     console.log("DISC " + parentBlock.type);
     parentBlock.reType();
-  }
-  if (childBlock.outputConnection) {
     console.log("DISC " + childBlock.type);
     childBlock.reType();
   }

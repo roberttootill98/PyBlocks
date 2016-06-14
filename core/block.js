@@ -829,11 +829,18 @@ Blockly.Block.prototype.restoreFullTypes = function() {
   for (var i=0; i<this.fullTypeVecs.length; i++) {
     this.typeVecs[i] = this.fullTypeVecs[i].slice(0);
   }
-  for (i=0; i<this.holes.length; i++) {
-    if (this.holes[i]) {
-      this.holes[i].restoreFullTypes();
+  for (var i=0, child; child=this.childBlocks_[i]; i++) {
+    if (child.outputConnection) {
+      child.restoreFullTypes();
     }
   }
+
+
+//  for (i=0; i<this.holes.length; i++) {
+//    if (this.holes[i]) {
+//      this.holes[i].restoreFullTypes();
+//    }
+ //}
 };
 
 /**
@@ -1500,26 +1507,31 @@ Blockly.Block.prototype.unifyDown = function() {
  * with the type-vecs of a parent or child block.
  * @param {!Block} other the other block.
  * @param {number} selfPos the hole of the other (parent) block in which this
- * block is, or -1 if this block is the parent.
+ * block is, or -1 if this block is the parent.XXXXXXXXXXXXX OTHER!!!!
  * @param {number} otherPos the hole of this (parent) block in which the other
- * block is, or -1 if this block is the child.
+ * block is, or -1 if this block is the child.XXXXXXXXXXXXXXX OTHER!!!!
  */
 Blockly.Block.prototype.unify = function(other, selfPos, otherPos) {
   // return a type-vec like typeVec but with all occurences of
   // "matched" ( *matched") replaced by newType (*newType)
   var subsMatched = function(typeVec, newType) {
+    console.log("RENAME: ",  JSON.stringify(typeVec), " with ", newType);
+  //  if (newType = "any") {
+  //    return typeVec;
+  //  }
     var newTypeVec = Array(typeVec.length);
     for (var i=0; i<typeVec.length; i++) {
       if (typeVec[i] == "matching") {
-        newTypeVec[i] = newType;
+        newTypeVec[i] = newType; // == "any" ? "matching" : newType;
       }
       else if (typeVec[i] == "*matching") {
-        newTypeVec[i] = "*" + newType;
+        newTypeVec[i] = "*" + newType; // == "*any" ? "*matching" : "*" + newType;
       }
       else {
         newTypeVec[i] = typeVec[i];
       }
     }
+    console.log("RENAME: ",  JSON.stringify(newTypeVec));
     return newTypeVec;
   };
   // does typeVecs include typeVec?
@@ -1562,30 +1574,33 @@ Blockly.Block.prototype.unify = function(other, selfPos, otherPos) {
       console.log("UNIFY considering otherType at position",
                      otherPos, ": ", otherType);
       if (thisType == otherType ||
-         (otherType == "any" && !this.outputsAList())  ||
-         (otherType == "matching" && !this.outputsAList()) ||
-         (otherType == "*any" && this.outputsAList()) ||
-         (otherType == "*matching" && this.outputsAList())) {
+         (otherType == "any" && thisType[0] != "*")  ||
+         (otherType == "matching" && thisType[0] != "*") ||
+         (otherType == "*any" && thisType[0] == "*") ||
+         (otherType == "*matching" && thisType[0] == "*")) {
         if (!typesInclude(newTypeVecs, thisTypeVec)) {
-          console.log("UNIFY matching - keeping: ", thisTypeVec);
+          console.log("UNIFY matching 1 - keeping: ", thisTypeVec);
           newTypeVecs.push(thisTypeVec);
         }
       }
-      else if (thisType == "matching" && !other.outputsAList()) {
+      else if (thisType == "matching" && otherType[0] != "*") {
         var renamed = subsMatched(thisTypeVec, otherType);
         if (!typesInclude(newTypeVecs, renamed)) {
+          console.log("UNIFY matching 2 - renamed: ", renamed);
           newTypeVecs.push(renamed);
         }
       }
-      else if (thisType == "*matching" && other.outputsAList()) {
+      else if (thisType == "*matching" && otherType[0] == "*") {
         var renamedList = subsMatched(thisTypeVec, otherType.slice(1));
         if (!typesInclude(newTypeVecs, renamedList)) {
+          console.log("UNIFY matching 3 - renamed: ", renamedList);
           newTypeVecs.push(renamedList);
         }
       }
-      else if ((thisType == "any" && !other.outputsAList()) ||
-               (thisType == "*any" && other.outputsAList())) {
+      else if ((thisType == "any" && otherType[0] != "*") ||
+               (thisType == "*any" && otherType[0] == "*")) {
         if (!typesInclude(newTypeVecs, thisTypeVec)) {
+          console.log("UNIFY matching 4 - keeping: ", thisTypeVec);
           newTypeVecs.push(thisTypeVec);
         }
       }
