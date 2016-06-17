@@ -115,12 +115,13 @@ Blockly.Toolbox.prototype.init = function() {
       });
   var workspaceOptions = {
     disabledPatternId: workspace.options.disabledPatternId,
-    //multiTypeGradientId: this.options.multiTypeGradientId,
-    //multiTypePatternLargeId: this.options.multiTypePatternLargeId,
-    //multiTypeGradient2Id: this.options.multiTypeGradient2Id,
-    //multiTypePatternLarge2Id: this.options.multiTypePatternLarge2Id,
-    //numericalTypeGradientId: this.options.numericalTypeGradientId,
-  //  numericalTypePatternLargeId: this.options.numericalTypePatternLargeId,
+    multiTypePatternLargeId: workspace.options.multiTypePatternLargeId,
+    multiTypePatternSmallId: workspace.options.multiTypePatternSmallId,
+    numericalTypePatternLargeId: workspace.options.numericalTypePatternLargeId,
+    floatintTypePatternId: workspace.options.floatintTypePatternId,
+    floatstrTypePatternId: workspace.options.floatstrTypePatternId,
+    intstrTypePatternId: workspace.options.intstrTypePatternId,
+    rangestrTypePatternId: workspace.options.rangestrTypePatternId,
     parentWorkspace: workspace,
     RTL: workspace.RTL,
     svg: workspace.options.svg

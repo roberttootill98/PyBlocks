@@ -281,14 +281,18 @@ Blockly.WorkspaceSvg.prototype.addZoomControls_ = function(bottom) {
 Blockly.WorkspaceSvg.prototype.addFlyout_ = function() {
   var workspaceOptions = {
     disabledPatternId: this.options.disabledPatternId,
-  //  multiTypeGradientId: this.options.multiTypeGradientId,
+
     multiTypePatternLargeId: this.options.multiTypePatternLargeId,
-    multiTypePatternLarge2Id: this.options.multiTypePatternLarge2Id,
-  //  numericalTypeGradient2Id: this.options.numericalTypeGradient2Id,
-    //numericalTypeGradientId: this.options.numericalTypeGradientId,
+    multiTypePatternSmallId: this.options.multiTypePatternSmallId,
     numericalTypePatternLargeId: this.options.numericalTypePatternLargeId,
-    numericalTypePatternSmallId: this.options.numericalTypePatternSmallId,
-    sequenceTypePatternSmallId: this.options.sequenceTypePatternSmallId,
+    floatintTypePatternId: this.options.floatintTypePatternId,
+    floatstrTypePatternId: this.options.floatstrTypePatternId,
+    intstrTypePatternId: this.options.intstrTypePatternId,
+    rangestrTypePatternId: this.options.rangestrTypePatternId,
+    //  multiTypeGradientId: this.options.multiTypeGradientId,
+    //  numericalTypeGradient2Id: this.options.numericalTypeGradient2Id,
+      //numericalTypeGradientId: this.options.numericalTypeGradientId,
+
     parentWorkspace: this,
     RTL: this.RTL
   };

@@ -46,6 +46,42 @@ Blockly.Blocks['python_equals'] = {
   }
 };
 
+Blockly.Blocks['python_not_equals'] = {
+  init: function() {
+    this.appendValueInput("LHS");
+    this.appendValueInput("RHS")
+        .appendField(" != ") ;
+    this.setInputsInline(true);
+    this.setTypeVecs([
+      ["any", "any", "bool"],
+      ["*any", "any", "bool"],
+      ["any", "*any", "bool"],
+      ["*any", "*any", "bool"]
+    ]);
+    this.setOutput(true);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+
+Blockly.Blocks['python_is'] = {
+  init: function() {
+    this.appendValueInput("LHS");
+    this.appendValueInput("RHS")
+        .appendField(" is ") ;
+    this.setInputsInline(true);
+    this.setTypeVecs([
+      ["any", "any", "bool"],
+      ["*any", "any", "bool"],
+      ["any", "*any", "bool"],
+      ["*any", "*any", "bool"]
+    ]);
+    this.setOutput(true);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+
 Blockly.Blocks['python_less_than'] = {
   init: function() {
     this.appendValueInput("LHS");

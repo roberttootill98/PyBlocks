@@ -389,15 +389,37 @@ Blockly.createDom_ = function(container, options) {
     <rect x="0" y="0" width="90" height="90" fill="url(#MultiTypeGradient)" />
   </pattern>
   */
-  var multiTypePatternLarge2 = Blockly.createSvgElement('pattern',
-      {'id': 'blocklyMultiTypePatternLarge2' + rnd,
+
+  var multiTypePatternSmall = Blockly.createSvgElement('pattern',
+      {'id': 'blocklymultiTypePatternSmall' + rnd,
         'x': 0, 'y': 0, 'width': 20, 'height': 20,
         'patternUnits': 'userSpaceOnUse'}, defs);
   Blockly.createSvgElement('rect',
           {'x': 0, 'y': 0, 'width': 20, 'height': 20,
           'fill': 'url(#blocklyMultiTypeGradient2' +  rnd + ')'},
-          multiTypePatternLarge2);
-  options.multiTypePatternLarge2Id = multiTypePatternLarge2.id;
+          multiTypePatternSmall);
+  options.multiTypePatternSmallId = multiTypePatternSmall.id;
+
+
+  var createTwoTypeGradient = function(type1, type2) {
+    var name = type1 + type2 + "TypeGradient";
+    var gradient = Blockly.createSvgElement('linearGradient',
+        {'id': name + rnd,
+         'x1': 1, 'x2': 0, 'y1': 0, 'y2': 1,
+         'spreadMethod': 'repeat'}, defs);
+    var offsets = [0, 0.083, 0.167, 0.333, 0.416, 0.583, 0.667, 0.833, 0.917, 1];
+    var colours = [type1, type2, type1, type2, type1];
+    for (i in colours) {
+      console.log("CREATE: offset ", offsets[2*i], "colour", Blockly.Python.COLOUR[colours[i]] );
+      Blockly.createSvgElement('stop',
+          {'stop-color': Blockly.Python.COLOUR[colours[i]],
+          'offset': offsets[2*i]}, gradient);
+      Blockly.createSvgElement('stop',
+          {'stop-color': Blockly.Python.COLOUR[colours[i]],
+           'offset': offsets[2*i+1]}, gradient);
+    }
+    options[name + "Id"] = gradient.id;
+  };
 
   /*
 ...
@@ -416,7 +438,34 @@ Blockly.createDom_ = function(container, options) {
         {'stop-color': Blockly.Python.COLOUR[colours[i]],
          'offset': offsets[2*i+1]}, numericalTypeGradient);
   }
-  options.numericalTypeGradientId = numericalTypeGradient.id;
+
+  createTwoTypeGradient("float", "int");
+  createTwoTypeGradient("float", "str");
+  createTwoTypeGradient("range", "str");
+  createTwoTypeGradient("int", "str");
+
+  var createTwoTypePattern = function(type1, type2) {
+    var name = type1 + type2 + "TypePattern";
+    var pattern = Blockly.createSvgElement('pattern',
+        {'id': name + rnd,
+          'x': 0, 'y': 0, 'width': 10, 'height': 10,
+          'patternUnits': 'userSpaceOnUse'}, defs);
+    Blockly.createSvgElement('rect',
+            {'x': 0, 'y': 0, 'width': 10, 'height': 10,
+            'fill': 'url(#' + type1 + type2 + 'TypeGradient' +  rnd + ')'},
+            pattern);
+    options[name + "Id"] = pattern.id;
+ };
+
+  createTwoTypePattern("float", "int");
+  createTwoTypePattern("float", "str");
+  createTwoTypePattern("range", "str");
+  createTwoTypePattern("int", "str");
+
+
+
+  //options.numericalTypeGradientId = numericalTypeGradient.id;
+  console.log("CREATED: ", options);
 
   var numericalTypePatternLarge = Blockly.createSvgElement('pattern',
       {'id': 'blocklyNumericalTypePatternLarge' + rnd,
@@ -428,6 +477,7 @@ Blockly.createDom_ = function(container, options) {
           numericalTypePatternLarge);
   options.numericalTypePatternLargeId = numericalTypePatternLarge.id;
 
+/*
   var numericalTypePatternSmall = Blockly.createSvgElement('pattern',
       {'id': 'blocklyNumericalTypePatternSmall' + rnd,
         'x': 0, 'y': 0, 'width': 10, 'height': 10,
@@ -436,14 +486,14 @@ Blockly.createDom_ = function(container, options) {
           {'x': 0, 'y': 0, 'width': 10, 'height': 10,
           'fill': 'url(#blocklyNumericalTypeGradient' +  rnd + ')'},
           numericalTypePatternSmall);
-  options.numericalTypePatternSmallId = numericalTypePatternSmall.id;
+  options.numericalTypePatternSmallId = numericalTypePatternSmall.id;*/
 
-  var sequenceTypeGradient = Blockly.createSvgElement('linearGradient',
+  /*var sequenceTypeGradient = Blockly.createSvgElement('linearGradient',
       {'id': 'blocklySequenceTypeGradient' + rnd,
        'x1': 1, 'x2': 0, 'y1': 0, 'y2': 1,
        'spreadMethod': 'repeat'}, defs);
   offsets = [0, 0.083, 0.167, 0.333, 0.416, 0.583, 0.667, 0.833, 0.917, 1];
-  colours = ['range', 'str', 'range', 'str', 'range'];
+  var colours = ['range', 'str', 'range', 'str', 'range'];
   for (i in colours) {
     Blockly.createSvgElement('stop',
         {'stop-color': Blockly.Python.COLOUR[colours[i]],
@@ -455,15 +505,15 @@ Blockly.createDom_ = function(container, options) {
   options.sequenceTypeGradientId = sequenceTypeGradient.id;
 
 
-  var sequenceTypePatternSmall = Blockly.createSvgElement('pattern',
-      {'id': 'blocklySequenceTypePatternSmall' + rnd,
+  var strRangePatternSmall = Blockly.createSvgElement('pattern',
+      {'id': 'blocklystrRangePatternSmall' + rnd,
         'x': 0, 'y': 0, 'width': 10, 'height': 10,
         'patternUnits': 'userSpaceOnUse'}, defs);
   Blockly.createSvgElement('rect',
           {'x': 0, 'y': 0, 'width': 10, 'height': 10,
           'fill': 'url(#blocklySequenceTypeGradient' +  rnd + ')'},
-          sequenceTypePatternSmall);
-  options.sequenceTypePatternSmallId = sequenceTypePatternSmall.id;
+          strRangePatternSmall);
+  options.strRangePatternSmallId = strRangePatternSmall.id;*/
 
   options.svg = svg;
   return svg;

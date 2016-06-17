@@ -62,6 +62,108 @@ Blockly.Blocks['python_list_const'] = {
   }
 };
 
+Blockly.Blocks['python_list_concat'] = {
+  init: function() {
+    this.appendValueInput("LHS");
+    this.appendValueInput("RHS")
+        .appendField(" + ");
+    this.setInputsInline(true);
+    this.setTypeVecs([["*matching", "*matching", "*matching"]]);
+    this.setOutput(true);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+
+Blockly.Blocks['python_list_repeat'] = {
+  init: function() {
+    this.appendValueInput("LHS");
+    this.appendValueInput("RHS")
+        .appendField(" * ");
+    this.setInputsInline(true);
+    this.setTypeVecs([
+      ["*matching", "int", "*matching"],
+      ["int", "*matching", "*matching"],
+    ]);
+    this.setOutput(true);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+
+Blockly.Blocks['python_list_slice12'] = {
+  init: function() {
+    this.appendValueInput("ARG1");
+    this.appendValueInput("ARG2")
+        .appendField("[");
+    this.appendValueInput("ARG3")
+        .appendField(":");
+    this.appendDummyInput()
+        .appendField("]");
+    this.setInputsInline(true);
+    this.setTypeVecs([
+      ["*matching", "int", "int", "*matching"],
+    ]);
+    this.setOutput(true);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+
+Blockly.Blocks['python_list_slice1'] = {
+  init: function() {
+    this.appendValueInput("ARG1");
+    this.appendValueInput("ARG2")
+        .appendField("[");
+    this.appendDummyInput()
+        .appendField(":");
+    this.appendDummyInput()
+        .appendField("]");
+    this.setInputsInline(true);
+    this.setTypeVecs([
+      ["*matching", "int", "*matching"],
+    ]);
+    this.setOutput(true);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+
+Blockly.Blocks['python_list_slice2'] = {
+  init: function() {
+    this.appendValueInput("ARG1");
+    this.appendDummyInput()
+        .appendField("[");
+    this.appendValueInput("ARG3")
+        .appendField(":");
+    this.appendDummyInput()
+        .appendField("]");
+    this.setInputsInline(true);
+    this.setTypeVecs([
+      ["*matching", "int", "*matching"],
+    ]);
+    this.setOutput(true);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+
+Blockly.Blocks['python_list_len'] = {
+  init: function() {
+    this.appendValueInput("ARG")
+        .appendField("len(");
+    this.appendDummyInput()
+        .appendField(")");
+    this.setInputsInline(true);
+    this.setTypeVecs([
+      ["*any", "int"]
+    ]);
+    this.setOutput(true);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+
 Blockly.Blocks['python_list_in'] = {
   init: function() {
     this.appendValueInput("LHS");
@@ -70,6 +172,208 @@ Blockly.Blocks['python_list_in'] = {
     this.setInputsInline(true);
     this.setTypeVecs([
       ["matching", "*matching", "bool"]
+    ]);
+    this.setOutput(true);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+
+Blockly.Blocks['python_list_min'] = {
+  init: function() {
+    this.appendValueInput("ARG")
+        .appendField("min(");
+    this.appendDummyInput()
+        .appendField(")");
+    this.setInputsInline(true);
+    this.setTypeVecs([
+      ["*matching", "matching"]
+    ]);
+    this.setOutput(true);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+
+Blockly.Blocks['python_list_max'] = {
+  init: function() {
+    this.appendValueInput("ARG")
+        .appendField("max(");
+    this.appendDummyInput()
+        .appendField(")");
+    this.setInputsInline(true);
+    this.setTypeVecs([
+      ["*matching", "matching"]
+    ]);
+    this.setOutput(true);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+
+Blockly.Blocks['python_sorted'] = {
+  init: function() {
+    this.appendValueInput("ARG")
+        .appendField("sorted(");
+    this.appendDummyInput()
+        .appendField(")");
+    this.setInputsInline(true);
+    this.setTypeVecs([
+      ["*matching", "*matching"]
+    ]);
+    this.setOutput(true);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+
+Blockly.Blocks['python_append'] = {
+  init: function() {
+    this.appendValueInput("ARG1");
+    this.appendValueInput("ARG2")
+        .appendField(".append(");
+    this.appendDummyInput()
+        .appendField(")");
+    this.setInputsInline(true);
+    this.setTypeVecs([
+      ["*matching", "matching", "none"]
+    ]);
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+
+Blockly.Blocks['python_extend'] = {
+  init: function() {
+    this.appendValueInput("ARG1");
+    this.appendValueInput("ARG2")
+        .appendField(".extend(");
+    this.appendDummyInput()
+        .appendField(")");
+    this.setInputsInline(true);
+    this.setTypeVecs([
+      ["*matching", "*matching", "none"]
+    ]);
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+
+Blockly.Blocks['python_insert'] = {
+  init: function() {
+    this.appendValueInput("ARG1");
+    this.appendValueInput("ARG2")
+        .appendField(".insert(");
+    this.appendValueInput("ARG3")
+        .appendField(", ");
+    this.appendDummyInput()
+        .appendField(")");
+    this.setInputsInline(true);
+    this.setTypeVecs([
+      ["*matching", "matching", "int", "none"]
+    ]);
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+
+Blockly.Blocks['python_pop'] = {
+  init: function() {
+    this.appendValueInput("ARG1");
+    this.appendDummyInput()
+        .appendField(".pop()");
+    this.setInputsInline(true);
+    this.setTypeVecs([
+      ["*matching", "matching"]
+    ]);
+    this.setOutput(true);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+
+Blockly.Blocks['python_pop_statement'] = {
+  init: function() {
+    this.appendValueInput("ARG1");
+    this.appendDummyInput()
+        .appendField(".pop()");
+    this.setInputsInline(true);
+    this.setTypeVecs([
+      ["*any", "none"]
+    ]);
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+
+Blockly.Blocks['python_remove'] = {
+  init: function() {
+    this.appendValueInput("ARG1");
+    this.appendValueInput("ARG2")
+        .appendField(".remove(");
+    this.appendDummyInput()
+        .appendField(")");
+    this.setInputsInline(true);
+    this.setTypeVecs([
+      ["*matching", "matching", "none"]
+    ]);
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+
+Blockly.Blocks['python_reverse'] = {
+  init: function() {
+    this.appendValueInput("ARG1");
+    this.appendDummyInput()
+        .appendField(".reverse()");
+    this.setInputsInline(true);
+    this.setTypeVecs([
+      ["*any", "none"]
+    ]);
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+
+Blockly.Blocks['python_sort'] = {
+  init: function() {
+    this.appendValueInput("ARG1");
+    this.appendDummyInput()
+        .appendField(".sort()");
+    this.setInputsInline(true);
+    this.setTypeVecs([
+      ["*any", "none"]
+    ]);
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+
+Blockly.Blocks['python_list_index_method'] = {
+  init: function() {
+    this.appendValueInput("ARG1");
+    this.appendValueInput("ARG2")
+        .appendField(".index(");
+    this.appendDummyInput()
+        .appendField(")");
+    this.setInputsInline(true);
+    this.setTypeVecs([
+      ["*matching", "matching", "int"]
     ]);
     this.setOutput(true);
     this.setTooltip('');

@@ -78,3 +78,69 @@ Blockly.Blocks['python_str'] = {
     this.setHelpUrl('http://www.example.com/');
   }
 };
+
+Blockly.Blocks['python_bool'] = {
+  init: function() {
+    this.appendValueInput("ARG")
+        .appendField("bool(");
+    this.appendDummyInput()
+        .appendField(")");
+    this.setInputsInline(true);
+    this.setTypeVecs([
+      ["any", "bool"],
+      ["*any", "bool"]
+    ]);
+    this.setOutput(true);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+
+Blockly.Blocks['python_chr'] = {
+  init: function() {
+    this.appendValueInput("ARG")
+        .appendField("chr(");
+    this.appendDummyInput()
+        .appendField(")");
+    this.setInputsInline(true);
+    this.setTypeVecs([
+      ["int", "str"]
+    ]);
+    this.setOutput(true);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+
+Blockly.Blocks['python_ord'] = {
+  init: function() {
+    this.appendValueInput("ARG")
+        .appendField("ord(");
+    this.appendDummyInput()
+        .appendField(")");
+    this.setInputsInline(true);
+    this.setTypeVecs([
+      ["str", "int"]
+    ]);
+    this.setOutput(true);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+
+Blockly.Blocks['python_type'] = {
+  init: function() {
+    this.appendValueInput("ARG")
+        .appendField("type(");
+    this.appendDummyInput()
+        .appendField(")");
+    this.setInputsInline(true);
+    this.setTypeVecs([
+      ["any", "str"],
+      ["*any", "str"]
+    ]);
+    this.setOutput(true);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};

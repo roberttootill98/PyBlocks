@@ -142,12 +142,10 @@ Blockly.Blocks['python_pow_op'] = {
   }
 };
 
-//Whitespace needs fixing when used with brackets
 Blockly.Blocks['python_unary_minus'] = {
   init: function() {
-    this.appendValueInput("LHS");
-    this.appendValueInput("RHS")
-        .appendField(" -");
+    this.appendValueInput("ARG")
+        .appendField("-");
     this.setInputsInline(true);
     this.setTypeVecs([
       ["int", "int"],
@@ -208,6 +206,61 @@ Blockly.Blocks['python_pow'] = {
       ["float", "int", "float"],
       ["int", "float", "float"],
       ["float", "float", "float"]
+    ]);
+    this.setOutput(true);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+
+Blockly.Blocks['python_numeric_min'] = {
+  init: function() {
+    this.appendValueInput("ARG1")
+        .appendField("min(");
+    this.appendValueInput("ARG2")
+        .appendField(", ");
+    this.appendDummyInput()
+        .appendField(")");
+    this.setInputsInline(true);
+    this.setTypeVecs([
+      ["int", "int", "int"],
+      ["float", "float", "float"]
+    ]);
+    this.setOutput(true);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+
+Blockly.Blocks['python_numeric_max'] = {
+  init: function() {
+    this.appendValueInput("ARG1")
+        .appendField("max(");
+    this.appendValueInput("ARG2")
+        .appendField(", ");
+    this.appendDummyInput()
+        .appendField(")");
+    this.setInputsInline(true);
+    this.setTypeVecs([
+      ["int", "int", "int"],
+      ["float", "float", "float"]
+    ]);
+    this.setOutput(true);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+
+Blockly.Blocks['python_sum'] = {
+  init: function() {
+    this.appendValueInput("ARG")
+        .appendField("sum(");
+    this.appendDummyInput()
+        .appendField(")");
+    this.setInputsInline(true);
+    this.setTypeVecs([
+      ["*int", "int"],
+      ["*float", "float"]
     ]);
     this.setOutput(true);
     this.setTooltip('');
