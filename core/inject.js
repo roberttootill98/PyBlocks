@@ -33,6 +33,7 @@ goog.require('goog.ui.Component');
 goog.require('goog.userAgent');
 
 
+
 /**
  * Inject a Blockly editor into the specified container element (usually a div).
  * @param {!Element|string} container Containing element or its ID.

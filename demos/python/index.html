@@ -2,8 +2,12 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Blockly Demo: Resizable Blockly (Part 2)</title>
+  <title>PythonBlocks Demo</title>
+
   <script src="../../blockly_uncompressed.js"></script>
+  <script src="../../python_compressed.js"></script>
+  <script src="../../blocks_compressed.js"></script>
+  <script src="pycode.js" type="text/javascript"></script>
   <script src="../../msg/js/en.js"></script>
   <script src="../../blocks/pynumeric.js"></script>
   <script src="../../blocks/pystrings.js"></script>
@@ -14,6 +18,22 @@
   <script src="../../blocks/pyio.js"></script>
   <script src="../../blocks/pycontrol.js"></script>
   <script src="../../blocks/pyvars.js"></script>
+  <script src="../../core/python.js"></script>
+  <script src="../../generators/python/pybooleans.js"></script>
+  <script src="../../generators/python/pycomparisons.js"></script>
+  <script src="../../generators/python/pycontrol.js"></script>
+  <script src="../../generators/python/pyconversions.js"></script>
+  <script src="../../generators/python/pyio.js"></script>
+  <script src="../../generators/python/pylists.js"></script>
+  <script src="../../generators/python/pynumeric.js"></script>
+  <script src="../../generators/python/pystrings.js"></script>
+  <script src="../../generators/python/pyvars.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js" type="text/javascript"></script>
+  <script src="http://www.skulpt.org/static/skulpt.min.js" type="text/javascript"></script>
+  <script src="http://www.skulpt.org/static/skulpt-stdlib.js" type="text/javascript"></script>
+  <script src="skulpt.js" type="text/javascript"></script>
+
+
   <style>
     html, body {
       height: 100%;
@@ -35,18 +55,42 @@
     #blocklyArea {
       height: 99%;
     }
+    .codearea {
+        background-color:#000;
+        color:#fff;
+        font-family:'Oxygen Mono', Consolas, 'Liberation Mono', 'DejaVu Sans Mono', monospace;
+        font-size:14px;
+        overflow:auto
+    }
   </style>
 </head>
 <body>
   <table>
-    <tr>
+  <!--  <tr>
       <td>
         <h1>PythonBlocks</h1>
 
        </td>
-    </tr>
+    </tr> -->
     <tr>
       <td id="blocklyArea">
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <textarea id="yourcode" cols="20" rows="7"></textarea>
+        <textarea id="output" class="codearea" rows="9" cols="85" readonly="true">PyBlocks Interpreter
+
+</textarea>
+        <button type="button" onclick="runit()">Run manual</button>
+        <button type="button" onclick="runfull()">Run full</button>
+        <button type="button" disabled onclick="runblock()">Run block (disabled)</button>
+        <button type="button" onclick="clr()">Clear console</button>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <textarea id="pycode" class="codearea" rows="12" cols="100" readonly="true"></textarea>
       </td>
     </tr>
   </table>
@@ -54,25 +98,25 @@
   <div id="blocklyDiv" style="position: absolute"></div>
 
   <xml id="toolbox" style="display: none">
-    <category name="Test">
+  <!--  <category name="Test">
       <block type="python_for"></block>
       <block type="python_assign_float_list"></block>
       <block type="python_while"></block>
       <block type="python_int"></block>
       <block type="python_float_const"></block>
       <block type="python_string_const"></block>
-      <block type="python_intvar"></block>
+      <block type="python_intvar2"></block>
       <block type="python_equals"></block>
       <block type="python_pow"></block>
       <block type="python_abs"></block>
       <block type="python_plus"></block>
       <block type="python_divide"></block>
-      <block type="python_assign_intvar"></block>
+      <block type="python_assign_intvar2"></block>
       <block type="python_assign_floatvar"></block>
       <block type="python_print"></block>
       <block type="python_list_index"></block>
       <block type="python_list_const"></block>
-    </category>
+    </category> -->
     <category name="Numeric">
       <block type="python_int_const"></block>
       <block type="python_float_const"></block>
@@ -131,7 +175,6 @@
       <block type="python_less_than_or_equal"></block>
       <block type="python_greater_than"></block>
       <block type="python_greater_than_or_equal"></block>
-      <block type="python_less_than"></block>
     </category>
     <category name="Booleans">
       <block type="python_true"></block>
@@ -141,7 +184,10 @@
       <block type="python_not"></block>
     </category>
     <category name="Lists">
+      <block type="python_list_empty"></block>
       <block type="python_list_const"></block>
+      <block type="python_list_const2"></block>
+      <block type="python_list_const3"></block>
       <block type="python_list_concat"></block>
       <block type="python_list_repeat"></block>
       <block type="python_list_index"></block>
@@ -168,6 +214,7 @@
     <category name="Input/Output">
       <block type="python_input"></block>
       <block type="python_print"></block>
+      <block type="python_print2"></block>
     </category>
     <category name="Control">
       <block type="python_if"></block>
@@ -178,39 +225,54 @@
       <block type="python_range3"></block>
     </category>
     <category name="Variables">
-      <block type="python_intvar"></block>
-      <block type="python_assign_intvar"></block>
       <block type="python_floatvar"></block>
       <block type="python_assign_floatvar"></block>
+      <block type="python_floatvar2"></block>
+      <block type="python_assign_floatvar2"></block>
+      <block type="python_intvar2"></block>
+      <block type="python_assign_intvar2"></block>
+    </category>
+    <category name=" List Variables">
+      <block type="python_float_list"></block>
       <block type="python_assign_float_list"></block>
       <block type="python_assign_float_list_index"></block>
-      <block type="python_float_list_append"></block>
     </category>
   </xml>
   <script>
-    var blocklyArea = document.getElementById('blocklyArea');
-    var blocklyDiv = document.getElementById('blocklyDiv');
-    var workspace = Blockly.inject(blocklyDiv,
-        {media: '../../media/',
-         toolbox: document.getElementById('toolbox')});
-    var onresize = function(e) {
-      // Compute the absolute coordinates and dimensions of blocklyArea.
-      var element = blocklyArea;
-      var x = 0;
-      var y = 0;
-      do {
-        x += element.offsetLeft;
-        y += element.offsetTop;
-        element = element.offsetParent;
-      } while (element);
-      // Position blocklyDiv over blocklyArea.
-      blocklyDiv.style.left = x + 'px';
-      blocklyDiv.style.top = y + 'px';
-      blocklyDiv.style.width = blocklyArea.offsetWidth + 'px';
-      blocklyDiv.style.height = blocklyArea.offsetHeight + 'px';
-    };
-    window.addEventListener('resize', onresize, false);
-    onresize();
+  var blocklyArea = document.getElementById('blocklyArea');
+  var blocklyDiv = document.getElementById('blocklyDiv');
+  var workspace = Blockly.inject(blocklyDiv,
+      {media: '../../media/',
+       toolbox: document.getElementById('toolbox')});
+  var onresize = function(e) {
+    // Compute the absolute coordinates and dimensions of blocklyArea.
+    var element = blocklyArea;
+    var x = 0;
+    var y = 0;
+    do {
+      x += element.offsetLeft;
+      y += element.offsetTop;
+      element = element.offsetParent;
+    } while (element);
+    // Position blocklyDiv over blocklyArea.
+    blocklyDiv.style.left = x + 'px';
+    blocklyDiv.style.top = y + 'px';
+    blocklyDiv.style.width = blocklyArea.offsetWidth + 'px';
+    blocklyDiv.style.height = blocklyArea.offsetHeight + 'px';
+  };
+  window.addEventListener('resize', onresize, false);
+  onresize();
+
+  function generateCode(event) {
+    var content = document.getElementById('pycode');
+
+      code = Blockly.Python.workspaceToCode(workspace);
+      content.textContent = code;
+  };
+
+  workspace.addChangeListener(generateCode);
   </script>
+
+
 </body>
 </html>

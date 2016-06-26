@@ -24,7 +24,6 @@
  */
 'use strict';
 
-goog.provide('Blockly.Python');
 
 Blockly.Python.COLOUR = {};
 Blockly.Python.COLOUR['notype'] = '#8B7D6B';

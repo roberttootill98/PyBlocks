@@ -24,14 +24,76 @@
  */
 'use strict';
 
-goog.provide('Blockly.Blocks.python');
+goog.provide('Blockly.Blocks.pyvars');
 
 goog.require('Blockly.Blocks');
 
-Blockly.Blocks['python_intvar'] = {
+Blockly.Blocks['python_floatvar'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField(new Blockly.FieldVariable("myint"), "NAME");
+        .appendField(new Blockly.FieldVariable("euros"), "NAME");
+    this.setOutput(true);
+    this.setTypeVecs([["float"]]);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+
+Blockly.Blocks['python_assign_floatvar'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField(new Blockly.FieldVariable("euros"), "LHS");
+    this.appendValueInput("RHS")
+        .setCheck(["float"])
+        .appendField(" = ");
+    this.appendDummyInput()
+        .appendField(" ");
+    this.setInputsInline(true);
+    this.setTypeVecs([
+      ["float", "none"]
+    ]);
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+
+Blockly.Blocks['python_floatvar2'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField(new Blockly.FieldVariable("pounds"), "NAME");
+    this.setOutput(true);
+    this.setTypeVecs([["float"]]);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+
+Blockly.Blocks['python_assign_floatvar2'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField(new Blockly.FieldVariable("pounds"), "LHS");
+    this.appendValueInput("RHS")
+        .setCheck(["float"])
+        .appendField(" = ");
+    this.appendDummyInput()
+        .appendField(" ");
+    this.setTypeVecs([
+      ["float", "none"]
+    ]);
+    this.setInputsInline(true);
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+
+Blockly.Blocks['python_intvar2'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField(new Blockly.FieldVariable("day"), "NAME");
     this.setOutput(true);
     this.setTypeVecs([["int"]]);
     this.setTooltip('');
@@ -39,10 +101,10 @@ Blockly.Blocks['python_intvar'] = {
   }
 };
 
-Blockly.Blocks['python_assign_intvar'] = {
+Blockly.Blocks['python_assign_intvar2'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField(new Blockly.FieldVariable("myint"), "LHS");
+        .appendField(new Blockly.FieldVariable("day"), "LHS");
     this.appendValueInput("RHS")
         .setCheck(["int"])
         .appendField(" = ");
@@ -59,32 +121,12 @@ Blockly.Blocks['python_assign_intvar'] = {
   }
 };
 
-Blockly.Blocks['python_floatvar'] = {
+Blockly.Blocks['python_float_list'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField(new Blockly.FieldVariable("myfloat"), "NAME");
+        .appendField(new Blockly.FieldVariable("rainfall"), "NAME");
     this.setOutput(true);
-    this.setTypeVecs([["float"]]);
-    this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
-  }
-};
-
-Blockly.Blocks['python_assign_floatvar'] = {
-  init: function() {
-    this.appendDummyInput()
-        .appendField(new Blockly.FieldVariable("myfloat"), "LHS");
-    this.appendValueInput("RHS")
-        .setCheck(["float"])
-        .appendField(" = ");
-    this.appendDummyInput()
-        .appendField(" ");
-    this.setTypeVecs([
-      ["float", "none"]
-    ]);
-    this.setInputsInline(true);
-    this.setPreviousStatement(true);
-    this.setNextStatement(true);
+    this.setTypeVecs([["*float"]]);
     this.setTooltip('');
     this.setHelpUrl('http://www.example.com/');
   }

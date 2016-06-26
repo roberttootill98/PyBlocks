@@ -28,6 +28,11 @@ goog.provide('Blockly.Python.texts');
 
 goog.require('Blockly.Python');
 
+Blockly.Python['python_string_const'] = function(block) {
+  // Text value.
+  var code = Blockly.Python.quote_(block.getFieldValue('VALUE'));
+  return [code, Blockly.Python.ORDER_ATOMIC];
+};
 
 Blockly.Python['text'] = function(block) {
   // Text value.

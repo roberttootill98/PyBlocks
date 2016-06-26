@@ -1486,19 +1486,24 @@ Blockly.Block.prototype.legalDrop = function(holeTypes) {
 
 Blockly.Block.prototype.unifyUp = function() {
   for (var i=0, child; child=this.childBlocks_[i]; i++) {
-    var position = child.outputConnection.targetConnection.inputNumber_;
-    console.log("UNIFY UP", position, child.type);
-    child.unifyUp();
-    this.unify(child, position, -1);
+    if (child.outputConnection) {
+      console.log("UNIFY child type: " + child.type);
+      var position = child.outputConnection.targetConnection.inputNumber_;
+      console.log("UNIFY UP", position, child.type);
+      child.unifyUp();
+      this.unify(child, position, -1);
+    }
   }
 };
 
 Blockly.Block.prototype.unifyDown = function() {
   for (var i=0, child; child=this.childBlocks_[i]; i++) {
-    var position = child.outputConnection.targetConnection.inputNumber_;
-    console.log("UNIFY DOWN ", position, child.type);
-    child.unify(this, -1, position);
-    child.unifyDown();
+    if (child.outputConnection) {
+      var position = child.outputConnection.targetConnection.inputNumber_;
+      console.log("UNIFY DOWN ", position, child.type);
+      child.unify(this, -1, position);
+      child.unifyDown();
+    }
   }
 };
 

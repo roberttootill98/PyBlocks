@@ -131,7 +131,7 @@ Blockly.Blocks['python_string_slice2'] = {
     this.appendValueInput("ARG1");
     this.appendDummyInput()
         .appendField("[");
-    this.appendValueInput("ARG3")
+    this.appendValueInput("ARG2")
         .appendField(":");
     this.appendDummyInput()
         .appendField("]");

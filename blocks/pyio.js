@@ -57,7 +57,28 @@ Blockly.Blocks['python_print'] = {
     ]);
     this.setPreviousStatement(true);
     this.setNextStatement(true);
-    this.setColour(120);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+
+Blockly.Blocks['python_print2'] = {
+  init: function() {
+    this.appendValueInput("ARG1")
+        .appendField("print(");
+    this.appendValueInput("ARG2")
+        .appendField(", ");
+    this.appendDummyInput()
+        .appendField(")");
+    this.setInputsInline(true);
+    this.setTypeVecs([
+      ["any", "any", "none"],
+      ["*any", "any", "none"],
+      ["any", "*any", "none"],
+      ["*any", "*any", "none"]
+    ]);
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
     this.setTooltip('');
     this.setHelpUrl('http://www.example.com/');
   }
