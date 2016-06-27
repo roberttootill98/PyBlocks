@@ -10,9 +10,9 @@ function builtinRead(x) {
   return Sk.builtinFiles["files"][x];
 }
 
-function runit() {
- var prog = document.getElementById("yourcode").value;
- var mypre = document.getElementById("output");
+function runit(codearea, output) {
+ var prog = document.getElementById(codearea).value;
+ var mypre = document.getElementById(output);
 
  Sk.pre = "output";
  Sk.configure({output:outf, read:builtinRead});

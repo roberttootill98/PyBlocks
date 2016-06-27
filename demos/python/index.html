@@ -78,11 +78,11 @@
     </tr>
     <tr>
       <td>
-        <textarea id="yourcode" cols="20" rows="7"></textarea>
+        <textarea id="codearea" cols="20" rows="7"></textarea>
         <textarea id="output" class="codearea" rows="9" cols="85" readonly="true">PyBlocks Interpreter
 
 </textarea>
-        <button type="button" onclick="runit()">Run manual</button>
+        <button type="button" onclick="runit('codearea', 'output')">Run manual</button>
         <button type="button" onclick="runfull()">Run full</button>
         <button type="button" disabled onclick="runblock()">Run block (disabled)</button>
         <button type="button" onclick="clr()">Clear console</button>
