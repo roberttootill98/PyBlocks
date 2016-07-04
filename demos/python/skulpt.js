@@ -48,6 +48,10 @@ function runfull() {
  });
 }
 
+function copyToClipboard() {
+  window.prompt("Press CTRL + C to copy the code to clipboard", document.getElementById("pycode").textContent);
+}
+
 /*function runblock() {
  var prog = document["content_python"].text;
  var mypre = document.getElementById("output");

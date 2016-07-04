@@ -4,8 +4,6 @@
   <meta charset="utf-8">
   <title>PythonBlocks Demo</title>
 
-  <link rel="stylesheet" type="text/css" href="style.css">
-
   <script src="../../blockly_uncompressed.js"></script>
   <script src="../../python_compressed.js"></script>
   <script src="../../blocks_compressed.js"></script>
@@ -35,66 +33,71 @@
   <script src="http://www.skulpt.org/static/skulpt-stdlib.js" type="text/javascript"></script>
   <script src="skulpt.js" type="text/javascript"></script>
 
+
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+    }
+    body {
+      background-color: #fff;
+      font-family: sans-serif;
+      overflow: hidden;
+    }
+    h1 {
+      font-weight: normal;
+      font-size: 140%;
+    }
+    table {
+      height: 100%;
+      width: 100%;
+    }
+    #blocklyArea {
+      height: 99%;
+    }
+    .codearea {
+        background-color:#000;
+        color:#fff;
+        font-family:'Oxygen Mono', Consolas, 'Liberation Mono', 'DejaVu Sans Mono', monospace;
+        font-size:14px;
+        overflow:auto
+    }
+  </style>
 </head>
 <body>
-
   <table>
-    <tr>
+  <!--  <tr>
       <td>
-      <span class="left">
-      <h1>PythonBlocks</h1>
-    </span>
+        <h1>PythonBlocks</h1>
 
-      <span class="right">
-      <button type="button" class="fancybuttons">Help</button>
-      <button type="button" class="fancybuttons">Sample programs</button>
-      <button type="button" class="fancybuttons">Save</button>
-      <button type="button" class="fancybuttons">Load</button>
-      <button type="button" class="fancybuttons" onclick="copyToClipboard()">Copy code to clipboard</button>
-    </right>
-
-      </td>
-    </tr>
-
+       </td>
+    </tr> -->
     <tr>
       <td id="blocklyArea">
       </td>
     </tr>
     <tr>
       <td>
-        <table>
-          <tr>
-            <td>
-              <span class="left">
-                      <button type="button" class="fancybuttons" onclick="runfull()">Run full</button>
-                      <button type="button" class="fancybuttons" onclick="clr()">Clear console</button>
-                    </span>
-
-
-
-</td>
-<td>
-  <textarea id="codearea" cols="20" rows="7" hidden="true"></textarea>
-  <span class="left">
-  <textarea id="output" class="codearea" rows="9" cols="85" readonly="true">PyBlocks Interpreter
+        <textarea id="codearea" cols="20" rows="7"></textarea>
+        <textarea id="output" class="codearea" rows="9" cols="85" readonly="true">PyBlocks Interpreter
 
 </textarea>
-    </td>
-    </span>
-      <tr>
-    </table>
+        <button type="button" onclick="runit('codearea', 'output')">Run manual</button>
+        <button type="button" onclick="runfull()">Run full</button>
+        <button type="button" disabled onclick="runblock()">Run block (disabled)</button>
+        <button type="button" onclick="clr()">Clear console</button>
       </td>
     </tr>
     <tr>
       <td>
-        <textarea id="pycode" class="codearea" rows="12" cols="100" readonly="true" hidden="true"></textarea>
+        <textarea id="pycode" class="codearea" rows="12" cols="100" readonly="true"></textarea>
       </td>
     </tr>
   </table>
 
-  <div id="blocklyDiv"></div>
+  <div id="blocklyDiv" style="position: absolute"></div>
 
-  <xml id="toolbox">
+  <xml id="toolbox" style="display: none">
   <!--  <category name="Test">
       <block type="python_for"></block>
       <block type="python_assign_float_list"></block>
