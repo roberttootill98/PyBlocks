@@ -36,11 +36,11 @@ Blockly.Python['python_input'] = function(block) {
 
 Blockly.Python['python_print'] = function(block) {
   var code = Blockly.Python.valueToCode(block, 'ARG', Blockly.Python.ORDER_NONE);
-  return ['print(' + code + ')', Blockly.Python.ORDER_ATOMIC];
+  return 'print(' + code + ')';
 };
 
 Blockly.Python['python_print2'] = function(block) {
   var block1 = Blockly.Python.valueToCode(block, 'ARG1', Blockly.Python.ORDER_NONE);
   var block2 = Blockly.Python.valueToCode(block, 'ARG2', Blockly.Python.ORDER_NONE);
-  return ['print(' + block1 + ', ' + block2 + ')', Blockly.Python.ORDER_ATOMIC];
+  return 'print(' + block1 + ', ' + block2 + ')';
 };

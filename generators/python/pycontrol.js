@@ -24,14 +24,48 @@
  */
 'use strict';
 
-goog.provide('Blockly.Blocks.pycontrol');
+goog.provide('Blockly.Python.pycontrol');
 
-goog.require('Blockly.Blocks');
+goog.require('Blockly.Python');
 
 Blockly.Python['python_if'] = function(block) {
-  var condition = Blockly.Python.valueToCode(block, 'CONDITION', Blockly.Python.ORDER_NONE || 'False');
+  var condition = Blockly.Python.valueToCode(block, 'CONDITION', Blockly.Python.ORDER_NONE);
   var branch = Blockly.Python.statementToCode(block, 'BODY') || Blockly.Python.PASS;
   var code = 'if ' + condition + ':\n' + branch;
 
   return code;
+};
+
+Blockly.Python['python_while'] = function(block) {
+  var condition = Blockly.Python.valueToCode(block, 'CONDITION', Blockly.Python.ORDER_NONE);
+  var branch = Blockly.Python.statementToCode(block, 'BODY') || Blockly.Python.PASS;
+  var code = 'while ' + condition + ':\n' + branch;
+
+  return code;
+};
+
+Blockly.Python['python_for'] = function(block) {
+  var condition = Blockly.Python.valueToCode(block, 'CONDITION', Blockly.Python.ORDER_NONE);
+  var branch = Blockly.Python.statementToCode(block, 'BODY') || Blockly.Python.PASS;
+  var code = 'for ' + condition + ':\n' + branch;
+
+  return code;
+};
+
+Blockly.Python['python_range1'] = function(block) {
+  var block1 = Blockly.Python.valueToCode(block, 'ARG', Blockly.Python.ORDER_NONE);
+
+};
+
+Blockly.Python['python_range2'] = function(block) {
+  var block1 = Blockly.Python.valueToCode(block, 'ARG1', Blockly.Python.ORDER_NONE);
+  var block2 = Blockly.Python.valueToCode(block, 'ARG2', Blockly.Python.ORDER_NONE);
+  return ['range(' + block1 + ', ' + block2 +  ')', Blockly.Python.ORDER_ATOMIC];
+};
+
+Blockly.Python['python_range3'] = function(block) {
+  var block1 = Blockly.Python.valueToCode(block, 'ARG1', Blockly.Python.ORDER_NONE);
+  var block2 = Blockly.Python.valueToCode(block, 'ARG2', Blockly.Python.ORDER_NONE);
+  var block3 = Blockly.Python.valueToCode(block, 'ARG3', Blockly.Python.ORDER_NONE);
+  return ['range(' + block1 + ', ' + block2 + ', ' + block3 + ')', Blockly.Python.ORDER_ATOMIC];
 };

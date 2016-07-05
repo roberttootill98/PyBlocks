@@ -132,14 +132,14 @@ Blockly.Python['python_append'] = function(block) {
   var block1 = Blockly.Python.valueToCode(block, 'ARG1', Blockly.Python.ORDER_NONE);
   var block2 = Blockly.Python.valueToCode(block, 'ARG2', Blockly.Python.ORDER_NONE);
 
-  return [block1 + '.append(' + block2 + ')', Blockly.Python.ORDER_ATOMIC];
+  return block1 + '.append(' + block2 + ')';
 };
 
 Blockly.Python['python_extend'] = function(block) {
   var block1 = Blockly.Python.valueToCode(block, 'ARG1', Blockly.Python.ORDER_NONE);
   var block2 = Blockly.Python.valueToCode(block, 'ARG2', Blockly.Python.ORDER_NONE);
 
-  return [block1 + '.extend(' + block2 + ')', Blockly.Python.ORDER_ATOMIC];
+  return block1 + '.extend(' + block2 + ')';
 };
 
 Blockly.Python['python_insert'] = function(block) {
@@ -147,7 +147,7 @@ Blockly.Python['python_insert'] = function(block) {
   var block2 = Blockly.Python.valueToCode(block, 'ARG2', Blockly.Python.ORDER_NONE);
   var block3 = Blockly.Python.valueToCode(block, 'ARG3', Blockly.Python.ORDER_NONE);
 
-  return [block1 + '.insert(' + block2 + ', ' + block3 + ')', Blockly.Python.ORDER_ATOMIC];
+  return block1 + '.insert(' + block2 + ', ' + block3 + ')';
 };
 
 Blockly.Python['python_pop'] = function(block) {
@@ -159,26 +159,26 @@ Blockly.Python['python_pop'] = function(block) {
 Blockly.Python['python_pop_statement'] = function(block) {
   var code = Blockly.Python.valueToCode(block, 'ARG', Blockly.Python.ORDER_NONE);
 
-  return [code + '.pop()', Blockly.Python.ORDER_ATOMIC];
+  return code + '.pop()';
 };
 
 Blockly.Python['python_remove'] = function(block) {
   var block1 = Blockly.Python.valueToCode(block, 'ARG1', Blockly.Python.ORDER_NONE);
   var block2 = Blockly.Python.valueToCode(block, 'ARG2', Blockly.Python.ORDER_NONE);
 
-  return [block1 + '.remove(' + block2 + ')', Blockly.Python.ORDER_ATOMIC];
+  return block1 + '.remove(' + block2 + ')';
 };
 
 Blockly.Python['python_reverse'] = function(block) {
   var code = Blockly.Python.valueToCode(block, 'ARG', Blockly.Python.ORDER_NONE);
 
-  return [code + '.reverse()', Blockly.Python.ORDER_ATOMIC];
+  return code + '.reverse()';
 };
 
 Blockly.Python['python_sort'] = function(block) {
   var code = Blockly.Python.valueToCode(block, 'ARG', Blockly.Python.ORDER_NONE);
 
-  return [code + '.sort()', Blockly.Python.ORDER_ATOMIC];
+  return code + '.sort()';
 };
 
 Blockly.Python['python_list_index_method'] = function(block) {
