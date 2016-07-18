@@ -10,7 +10,7 @@ body {
 h1 {
   display: inline-block;
   font-weight: normal;
-  font-size: 140%;
+  font-size: 118%;
   text-shadow: 3px 2px 2px rgba(150, 150, 150, 1);
 }
 table {
@@ -23,7 +23,7 @@ table {
 
 .codearea {
     border-radius: 12px;
-    margin-left: 8px;
+    margin-left: 12px;
     margin-right: 8px;
     margin-top: 8px;
     margin-bottom: 8px;
@@ -31,7 +31,7 @@ table {
     color:#fff;
     font-family:'Oxygen Mono', Consolas, 'Liberation Mono', 'DejaVu Sans Mono', monospace;
     font-size:14px;
-    overflow:auto;
+    overflow: auto;
     resize: none;
 }
 
@@ -47,7 +47,7 @@ table {
   -moz-box-shadow: 1px 2px 5px #666666;
   box-shadow: 1px 2px 5px #666666;
   color: #3d3b3d;
-  font-size: 18px;
+  font-size: 16px;
   background: #ffffff;
   padding: 10px 20px 10px 20px;
   text-decoration: none;
@@ -73,6 +73,12 @@ table {
 .left{
     float:left;
     margin-left: 16px;
+}
+
+.top{
+    float:top;
+    vertical-align:top;
+    margin-top: 16px;
 }
 
 .centre {

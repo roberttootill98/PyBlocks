@@ -59,32 +59,15 @@
     <tr>
       <td id="blocklyArea">
       </td>
-    </tr>
-    <tr>
-      <td>
-        <table>
-          <tr>
-            <td>
-              <span class="left">
-                      <button type="button" class="fancybuttons" onclick="runfull()">Run full</button>
-                      <button type="button" class="fancybuttons" onclick="clr()">Clear console</button>
-                    </span>
-  </td>
-  <td>
-  <textarea id="codearea" cols="20" rows="7" hidden="true"></textarea>
-  <span class="left">
-  <textarea id="output" class="codearea" rows="9" cols="85" readonly="true">PyBlocks Interpreter
 
-</textarea>
-    </td>
-    </span>
-      <tr>
-    </table>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <textarea id="pycode" class="codearea" rows="12" cols="100" readonly="true" hidden="true"></textarea>
+      <td style="vertical-align:top;text-align:center">
+        <textarea id="output" class="codearea" rows="15" cols="75" readonly="true">PyBlocks Interpreter
+
+      </textarea>
+      <button type="button" class="fancybuttons" onclick="runfull()">Run full</button>
+      <button type="button" class="fancybuttons" onclick="clr()">Clear console</button>
+      <textarea id="codearea" cols="20" rows="7" hidden="true"></textarea>
+      <textarea id="pycode" class="codearea" rows="12" cols="100" readonly="true" hidden="true"></textarea>
       </td>
     </tr>
   </table>
