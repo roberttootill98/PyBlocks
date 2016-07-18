@@ -1,0 +1,102 @@
+html, body {
+  height: 100%;
+  margin: 0;
+}
+body {
+  background-color: #fff;
+  font-family: sans-serif;
+  overflow: hidden;
+}
+h1 {
+  display: inline-block;
+  font-weight: normal;
+  font-size: 118%;
+  text-shadow: 3px 2px 2px rgba(150, 150, 150, 1);
+}
+table {
+  height: 100%;
+  width: 100%;
+}
+#blocklyArea {
+  height: 99%;
+}
+
+.codearea {
+    border-radius: 12px;
+    margin-left: 12px;
+    margin-right: 8px;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    background-color:#000;
+    color:#fff;
+    font-family:'Oxygen Mono', Consolas, 'Liberation Mono', 'DejaVu Sans Mono', monospace;
+    font-size:14px;
+    overflow: auto;
+    resize: none;
+}
+
+.codearea:focus {
+    outline:0 !important;
+}
+
+.fancybuttons {
+  -webkit-border-radius: 32;
+  -moz-border-radius: 32;
+  border-radius: 32px;
+  -webkit-box-shadow: 1px 2px 5px #666666;
+  -moz-box-shadow: 1px 2px 5px #666666;
+  box-shadow: 1px 2px 5px #666666;
+  color: #3d3b3d;
+  font-size: 16px;
+  background: #ffffff;
+  padding: 10px 20px 10px 20px;
+  text-decoration: none;
+  border: solid #1f628d 0px;
+}
+
+.fancybuttons:hover {
+  -webkit-box-shadow: 1px 2px 11px #666666;
+  -moz-box-shadow: 1px 2px 11px #666666;
+  box-shadow: 1px 2px 11px #666666;
+}
+
+.fancybuttons:focus {
+    outline:0 !important;
+}
+
+.right{
+    float:right;
+    margin-right: 16px;
+    margin-top: 5px;
+}
+
+.left{
+    float:left;
+    margin-left: 16px;
+}
+
+.top{
+    float:top;
+    vertical-align:top;
+    margin-top: 16px;
+}
+
+.centre {
+    display: table;
+    margin: 0 auto;
+}
+
+#output {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#blocklyDiv {
+  border-radius: 15px;
+  position: absolute;
+}
+
+#toolbox {
+  border-radius: 15px;
+}
