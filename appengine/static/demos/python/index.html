@@ -259,6 +259,10 @@
   };
 
   workspace.addChangeListener(generateCode);
+
+  if ('BlocklyStorage' in window && window.location.hash.length > 1) {
+    BlocklyStorage.retrieveXml(window.location.hash.substring(1));
+  }
   </script>
 
 
