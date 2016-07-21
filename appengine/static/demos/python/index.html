@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-  <meta charset="utf-8">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
   <title>PythonBlocks Demo</title>
   <script src="/storage.js"></script>
   <link rel="stylesheet" type="text/css" href="style.css">
@@ -9,6 +9,7 @@
   <script src="../../blockly_uncompressed.js"></script>
   <script src="../../python_compressed.js"></script>
   <script src="../../blocks_compressed.js"></script>
+  <script src="../../core/python.js"></script>
   <script src="pycode.js" type="text/javascript"></script>
   <script src="../../msg/js/en.js"></script>
   <script src="../../blocks/pynumeric.js"></script>
@@ -20,7 +21,6 @@
   <script src="../../blocks/pyio.js"></script>
   <script src="../../blocks/pycontrol.js"></script>
   <script src="../../blocks/pyvars.js"></script>
-  <script src="../../core/python.js"></script>
   <script src="../../generators/python/pybooleans.js"></script>
   <script src="../../generators/python/pycomparisons.js"></script>
   <script src="../../generators/python/pycontrol.js"></script>
@@ -30,11 +30,147 @@
   <script src="../../generators/python/pynumeric.js"></script>
   <script src="../../generators/python/pystrings.js"></script>
   <script src="../../generators/python/pyvars.js"></script>
-  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js" type="text/javascript"></script>
-  <script src="http://www.skulpt.org/static/skulpt.min.js" type="text/javascript"></script>
-  <script src="http://www.skulpt.org/static/skulpt-stdlib.js" type="text/javascript"></script>
+  <script src="jquery.min.js" type="text/javascript"></script>
+  <script src="skulpt.min.js" type="text/javascript"></script>
+  <script src="skulpt-stdlib.js" type="text/javascript"></script>
   <script src="skulpt.js" type="text/javascript"></script>
 
+
+  <script type="text/javascript">
+
+   // The Browser API key obtained from the Google Developers Console.
+   // Replace with your own Browser API key, or your own key.
+   var developerKey = 'AIzaSyBIJVAC6TKBZmMwIFeOUjWPyIC_YfUWk-I';
+
+   // The Client ID obtained from the Google Developers Console. Replace with your own Client ID.
+   var clientId = "600830548447-tjkqh0qmskmjc8v1l3mrknn2k14ok2r4.apps.googleusercontent.com"
+
+   // Replace with your own App ID. (Its the first number in your Client ID)
+   var appId = "600830548447";
+
+   // Hack - unify these
+   var scope = ['https://www.googleapis.com/auth/drive'];
+   var scopes = 'https://www.googleapis.com/auth/drive';
+
+   var pickerApiLoaded = false;
+   var oauthToken;
+   var useProxy = false;
+   var metaData = false;
+   // Use the Google API Loader script to load the google.picker script.
+   function loadPicker() {
+     gapi.load('auth', {'callback': onAuthApiLoad});
+     gapi.load('picker', {'callback': onPickerApiLoad});
+   }
+
+   function onAuthApiLoad() {
+     window.gapi.auth.authorize(
+         {
+           'client_id': clientId,
+           'scope': scope,
+           'immediate': false
+         },
+         handleAuthResult);
+   }
+
+   function onPickerApiLoad() {
+     pickerApiLoaded = true;
+   }
+
+   function handleAuthResult(authResult) {
+     if (authResult && !authResult.error) {
+       oauthToken = authResult.access_token;
+     }
+   }
+
+   // Create and render a Picker object for searching images.
+   function createPicker() {
+     if (pickerApiLoaded && oauthToken) {
+       var view = new google.picker.View(google.picker.ViewId.DOCS);
+       view.setMimeTypes("text/plain,text/html");
+       var picker = new google.picker.PickerBuilder()
+           .enableFeature(google.picker.Feature.NAV_HIDDEN)
+           .setAppId(appId)
+           .setOAuthToken(oauthToken)
+           .addView(view)
+           .addView(new google.picker.DocsUploadView())
+           .setDeveloperKey(developerKey)
+           .setCallback(pickerCallback)
+           .build();
+       picker.setVisible(true);
+     }
+   }
+
+   function saveBlocks() {
+     BlocklyStorage.link();
+     // Hack - fix later
+     setTimeout(function() { saveDocument(); }, 350);
+   }
+
+// Retrieved from Internet and customised, give credit and reference
+// http://dannyruijters.nl/webtex/googledrive.html
+
+   function saveDocument() {
+
+   			var content = window.location.href;
+   			var method = 'POST';
+   			var mimeType = 'text/plain';
+   			var path = '/upload/drive/v2/files/';
+   			var params = {'uploadType': 'multipart'};
+
+   			if (metaData && 'id' in metaData)
+   			{
+   				//update existing file
+   				method = 'PUT';
+   				mimeType = metaData.mimeType;
+   				path += metaData.id;
+   				params = {'uploadType': 'multipart', 'fileId': metaData.id};
+   			}
+   			else
+   			{
+   				var fileName = prompt("Please enter the file name","filename.tex");
+   				if (fileName == null) return;
+   				metaData = {
+                       'title': fileName,
+                       'mimeType': mimeType,
+                       'description': 'tex document'
+                   };
+   			}
+
+   			var boundary = '-------314159265358979323846';
+   			var delimiter = "\r\n--" + boundary + "\r\n";
+   			var multipartRequestBody =
+   				delimiter +
+   				'Content-Type: application/json\r\n\r\n' +
+   				JSON.stringify(metaData) +
+   				delimiter +
+   				'Content-Type: ' + mimeType + '\r\n' +
+   				'Content-Length: ' + content.length + '\r\n' +
+   				'\r\n' +
+   				content +
+   				'\r\n--' + boundary + '--';
+
+   			gapi.client.request({
+   				'path': path,
+   				'method': method,
+   				'params': params,
+   				'headers': { 'Content-Type': 'multipart/mixed; boundary="' + boundary + '"' },
+   				'body': multipartRequestBody}
+   			).execute(function(newmeta) {
+   				metaData = newmeta;});
+          // Hack - fix later
+          setTimeout(function() { location.reload(); }, 3000);
+           }
+
+   // A simple callback implementation.
+   function pickerCallback(data) {
+     if (data.action == google.picker.Action.PICKED) {
+       var fileId = data.docs[0].id;
+
+       alert('The user selected: ' + fileId);
+     }
+   }
+   </script>
+<script type="text/javascript" src="https://apis.google.com/js/client.js"></script>
 </head>
 <body>
 
@@ -44,24 +180,14 @@
       <span class="left">
       <h1>PythonBlocks</h1>
     </span>
-    <script>
-      if ('BlocklyStorage' in window) {
-        BlocklyStorage.HTTPREQUEST_ERROR = 'There was a problem with the request.\n';
-        BlocklyStorage.LINK_ALERT = 'Share your blocks with this link:\n\n%1';
-        BlocklyStorage.HASH_ERROR = 'Sorry, "%1" doesn\'t correspond with any saved Blockly file.';
-        BlocklyStorage.XML_ERROR = 'Could not load your saved file.\n'+
-            'Perhaps it was created with a different version of Blockly?';
-      } else {
-        document.write('<p id="sorry">Sorry, cloud storage is not available.  This demo must be hosted on App Engine.</p>');
-      }
-    </script>
+
       <span class="right">
       <button type="button" class="fancybuttons">Help</button>
       <button type="button" class="fancybuttons">Sample programs</button>
-      <button type="button" class="fancybuttons">Save</button>
-      <button type="button" class="fancybuttons">Load</button>
-      <button type="button" class="fancybuttons" onclick="copyToClipboard()">Copy code to clipboard</button>
-      <button type="button" class="fancybuttons" onclick="BlocklyStorage.link()">Save Blocks</button>
+      <button type="button" class="fancybuttons" onclick="saveBlocks();">Save</button>
+      <button type="button" class="fancybuttons" onclick="createPicker();">Load</button>
+      <button type="button" class="fancybuttons" onclick="copyToClipboard()">Copy</button>
+      <button type="button" class="fancybuttons" onclick="window.location.href='index.html'">Reset</button>
     </right>
 
       </td>
@@ -226,6 +352,23 @@
       <block type="python_assign_float_list_index"></block>
     </category>
   </xml>
+
+<!-- Blockly storage code -->
+<script>
+  if ('BlocklyStorage' in window) {
+    BlocklyStorage.HTTPREQUEST_ERROR = 'There was a problem with the request.\n';
+    BlocklyStorage.LINK_ALERT = 'Share your blocks with this link:\n\n%1';
+    BlocklyStorage.HASH_ERROR = 'Sorry, "%1" doesn\'t correspond with any saved Blockly file.';
+    BlocklyStorage.XML_ERROR = 'Could not load your saved file.\n'+
+        'Perhaps it was created with a different version of Blockly?';
+  } else {
+    document.write('<p id="sorry">Sorry, cloud storage is not available.  This demo must be hosted on App Engine.</p>');
+  }
+
+</script>
+
+<!-- Blockly code -->
+
   <script>
   var blocklyArea = document.getElementById('blocklyArea');
   var blocklyDiv = document.getElementById('blocklyDiv');
@@ -265,6 +408,8 @@
   }
   </script>
 
+<!-- Google Drive code -->
 
+<script type="text/javascript" src="https://apis.google.com/js/api.js?onload=loadPicker"></script>
 </body>
 </html>

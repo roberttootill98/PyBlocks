@@ -24,7 +24,6 @@
  */
 'use strict';
 
-
 Blockly.Python.COLOUR = {};
 Blockly.Python.COLOUR['notype'] = '#8B7D6B';
 Blockly.Python.COLOUR['int'] = '#dfdf20';   //yellow
