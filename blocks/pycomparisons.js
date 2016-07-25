@@ -30,9 +30,14 @@ goog.require('Blockly.Blocks');
 
 Blockly.Blocks['python_equals'] = {
   init: function() {
+    this.appendDummyInput()
+        .appendField("", "LPAR");
     this.appendValueInput("LHS");
     this.appendValueInput("RHS")
-        .appendField(" == ") ;
+        .appendField(" == ");
+    this.appendDummyInput()
+        .appendField("", "RPAR");
+    this.setOperator(6);
     this.setInputsInline(true);
     this.setTypeVecs([
       ["any", "any", "bool"],
@@ -48,9 +53,14 @@ Blockly.Blocks['python_equals'] = {
 
 Blockly.Blocks['python_not_equals'] = {
   init: function() {
+    this.appendDummyInput()
+        .appendField("", "LPAR");
     this.appendValueInput("LHS");
     this.appendValueInput("RHS")
         .appendField(" != ") ;
+    this.appendDummyInput()
+        .appendField("", "RPAR");
+    this.setOperator(6);
     this.setInputsInline(true);
     this.setTypeVecs([
       ["any", "any", "bool"],
@@ -66,9 +76,14 @@ Blockly.Blocks['python_not_equals'] = {
 
 Blockly.Blocks['python_is'] = {
   init: function() {
+    this.appendDummyInput()
+        .appendField("", "LPAR");
     this.appendValueInput("LHS");
     this.appendValueInput("RHS")
-        .appendField(" is ") ;
+        .appendField(" is ");
+    this.appendDummyInput()
+        .appendField("", "RPAR");
+    this.setOperator(6);
     this.setInputsInline(true);
     this.setTypeVecs([
       ["any", "any", "bool"],
@@ -84,9 +99,14 @@ Blockly.Blocks['python_is'] = {
 
 Blockly.Blocks['python_less_than'] = {
   init: function() {
+    this.appendDummyInput()
+        .appendField("", "LPAR");
     this.appendValueInput("LHS");
     this.appendValueInput("RHS")
-        .appendField(" < ") ;
+        .appendField(" < ");
+    this.appendDummyInput()
+        .appendField("", "RPAR");
+    this.setOperator(6);
     this.setInputsInline(true);
     this.setTypeVecs([
       ["any", "any", "bool"],
@@ -102,9 +122,14 @@ Blockly.Blocks['python_less_than'] = {
 
 Blockly.Blocks['python_less_than_or_equal'] = {
   init: function() {
+    this.appendDummyInput()
+        .appendField("", "LPAR");
     this.appendValueInput("LHS");
     this.appendValueInput("RHS")
-        .appendField(" <= ") ;
+        .appendField(" <= ");
+    this.appendDummyInput()
+        .appendField("", "RPAR");
+    this.setOperator(6);
     this.setInputsInline(true);
     this.setTypeVecs([
       ["any", "any", "bool"],
@@ -120,9 +145,14 @@ Blockly.Blocks['python_less_than_or_equal'] = {
 
 Blockly.Blocks['python_greater_than'] = {
   init: function() {
+    this.appendDummyInput()
+        .appendField("", "LPAR");
     this.appendValueInput("LHS");
     this.appendValueInput("RHS")
-        .appendField(" > ") ;
+        .appendField(" > ");
+    this.appendDummyInput()
+        .appendField("", "RPAR");
+    this.setOperator(6);
     this.setInputsInline(true);
     this.setTypeVecs([
       ["any", "any", "bool"],
@@ -138,27 +168,14 @@ Blockly.Blocks['python_greater_than'] = {
 
 Blockly.Blocks['python_greater_than_or_equal'] = {
   init: function() {
+    this.appendDummyInput()
+        .appendField("", "LPAR");
     this.appendValueInput("LHS");
     this.appendValueInput("RHS")
-        .appendField(" >= ") ;
-    this.setInputsInline(true);
-    this.setTypeVecs([
-      ["any", "any", "bool"],
-      ["*any", "any", "bool"],
-      ["any", "*any", "bool"],
-      ["*any", "*any", "bool"]
-    ]);
-    this.setOutput(true);
-    this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
-  }
-};
-
-Blockly.Blocks['python_is'] = {
-  init: function() {
-    this.appendValueInput("LHS");
-    this.appendValueInput("RHS")
-        .appendField(" is ") ;
+        .appendField(" >= ");
+    this.appendDummyInput()
+        .appendField("", "RPAR");
+    this.setOperator(6);
     this.setInputsInline(true);
     this.setTypeVecs([
       ["any", "any", "bool"],

@@ -42,6 +42,24 @@ Blockly.Blocks['python_list_empty'] = {
   }
 };
 
+
+Blockly.Blocks['python_list_index'] = {
+  init: function() {
+    this.appendValueInput("ARG2");
+    this.appendValueInput("ARG2")
+        .appendField("[");
+    this.appendDummyInput()
+        .appendField("]");
+    this.setInputsInline(true);
+    this.setTypeVecs([
+      ["*matching", "int", "matching"],
+    ]);
+    this.setOutput(true);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+
 Blockly.Blocks['python_list_const'] = {
   init: function() {
     this.appendValueInput("ARG")
@@ -99,9 +117,14 @@ Blockly.Blocks['python_list_const3'] = {
 
 Blockly.Blocks['python_list_concat'] = {
   init: function() {
+    this.appendDummyInput()
+        .appendField("", "LPAR");
     this.appendValueInput("LHS");
     this.appendValueInput("RHS")
         .appendField(" + ");
+    this.appendDummyInput()
+        .appendField("", "RPAR");
+    this.setOperator(11);
     this.setInputsInline(true);
     this.setTypeVecs([["*matching", "*matching", "*matching"]]);
     this.setOutput(true);
@@ -112,30 +135,18 @@ Blockly.Blocks['python_list_concat'] = {
 
 Blockly.Blocks['python_list_repeat'] = {
   init: function() {
+    this.appendDummyInput()
+        .appendField("", "LPAR");
     this.appendValueInput("LHS");
     this.appendValueInput("RHS")
         .appendField(" * ");
+    this.appendDummyInput()
+        .appendField("", "RPAR");
+    this.setOperator(12);
     this.setInputsInline(true);
     this.setTypeVecs([
       ["*matching", "int", "*matching"],
       ["int", "*matching", "*matching"],
-    ]);
-    this.setOutput(true);
-    this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
-  }
-};
-
-Blockly.Blocks['python_list_index'] = {
-  init: function() {
-    this.appendValueInput("ARG1");
-    this.appendValueInput("ARG2")
-        .appendField("[");
-    this.appendDummyInput()
-        .appendField("]");
-    this.setInputsInline(true);
-    this.setTypeVecs([
-      ["*matching", "int", "matching"],
     ]);
     this.setOutput(true);
     this.setTooltip('');
@@ -186,7 +197,7 @@ Blockly.Blocks['python_list_slice2'] = {
     this.appendValueInput("ARG1");
     this.appendDummyInput()
         .appendField("[");
-    this.appendValueInput("ARG2")
+    this.appendValueInput("ARG3")
         .appendField(":");
     this.appendDummyInput()
         .appendField("]");
@@ -218,9 +229,14 @@ Blockly.Blocks['python_list_len'] = {
 
 Blockly.Blocks['python_list_in'] = {
   init: function() {
+    this.appendDummyInput()
+        .appendField("", "LPAR");
     this.appendValueInput("LHS");
     this.appendValueInput("RHS")
         .appendField(" in ");
+    this.appendDummyInput()
+        .appendField("", "RPAR");
+    this.setOperator(6);
     this.setInputsInline(true);
     this.setTypeVecs([
       ["matching", "*matching", "bool"]
@@ -337,7 +353,7 @@ Blockly.Blocks['python_insert'] = {
 
 Blockly.Blocks['python_pop'] = {
   init: function() {
-    this.appendValueInput("ARG");
+    this.appendValueInput("ARG1");
     this.appendDummyInput()
         .appendField(".pop()");
     this.setInputsInline(true);
@@ -352,7 +368,7 @@ Blockly.Blocks['python_pop'] = {
 
 Blockly.Blocks['python_pop_statement'] = {
   init: function() {
-    this.appendValueInput("ARG");
+    this.appendValueInput("ARG1");
     this.appendDummyInput()
         .appendField(".pop()");
     this.setInputsInline(true);
@@ -386,7 +402,7 @@ Blockly.Blocks['python_remove'] = {
 
 Blockly.Blocks['python_reverse'] = {
   init: function() {
-    this.appendValueInput("ARG");
+    this.appendValueInput("ARG1");
     this.appendDummyInput()
         .appendField(".reverse()");
     this.setInputsInline(true);
@@ -402,7 +418,7 @@ Blockly.Blocks['python_reverse'] = {
 
 Blockly.Blocks['python_sort'] = {
   init: function() {
-    this.appendValueInput("ARG");
+    this.appendValueInput("ARG1");
     this.appendDummyInput()
         .appendField(".sort()");
     this.setInputsInline(true);

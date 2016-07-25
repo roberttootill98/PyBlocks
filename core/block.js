@@ -114,6 +114,9 @@ Blockly.Block.prototype.fill = function(workspace, prototypeName) {
   this.fullTypeVecs = [];
   /** type {!Array<!Array<string>} */
   this.typeVecs = [];
+
+  this.operator = null;
+
   /** @type {boolean} */
   this.rendered = false;
   /** @type {boolean} */
@@ -821,6 +824,14 @@ Blockly.Block.prototype.setTypeVecs = function(typeVecs) {
   this.restoreFullTypes();
 };
 
+Blockly.Block.prototype.setOperator = function(precedence, right) {
+  this.operator = {};
+  this.operator.precedence = precedence;
+  this.operator.right = right;
+  console.log("OPER ", this.operator);
+}
+
+
 /**
  * Restores the block's type-vecs to, as for a new singleton block.
  */
@@ -1003,6 +1014,9 @@ Blockly.Block.prototype.jsonInit = function(json) {
   if (json['inputsInline'] !== undefined) {
     this.setInputsInline(json['inputsInline']);
   }
+  if (json['typeVecs'] !== undefined) {
+    this.setTypeVecs(json['typeVecs']);
+  }
   // Set output and previous/next connections.
   if (json['output'] !== undefined) {
     this.setOutput(true, json['output']);
@@ -1032,6 +1046,7 @@ Blockly.Block.prototype.jsonInit = function(json) {
  */
 Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign) {
   var tokens = Blockly.tokenizeInterpolation(message);
+  console.log("TOKENS ", tokens);
   // Interpolate the arguments.  Build a list of elements.
   var indexDup = [];
   var indexCount = 0;
@@ -1047,7 +1062,7 @@ Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign) {
       indexCount++;
       elements.push(args[token - 1]);
     } else {
-      token = token.trim();
+      //token = token.trim();  MJP hack to add space around =
       if (token) {
         elements.push(token);
       }
@@ -1489,6 +1504,8 @@ Blockly.Block.prototype.unifyUp = function() {
     if (child.outputConnection) {
       console.log("UNIFY child type: " + child.type);
       var position = child.outputConnection.targetConnection.inputNumber_;
+      var position2 = child.outputConnection.getInputNumber();
+      console.log("POSY ", position, position2);
       console.log("UNIFY UP", position, child.type);
       child.unifyUp();
       this.unify(child, position, -1);
@@ -1500,6 +1517,8 @@ Blockly.Block.prototype.unifyDown = function() {
   for (var i=0, child; child=this.childBlocks_[i]; i++) {
     if (child.outputConnection) {
       var position = child.outputConnection.targetConnection.inputNumber_;
+      var position2 = child.outputConnection.getInputNumber();
+      console.log("POSY ", position, position2);
       console.log("UNIFY DOWN ", position, child.type);
       child.unify(this, -1, position);
       child.unifyDown();

@@ -121,10 +121,41 @@ Blockly.Blocks['python_assign_intvar2'] = {
   }
 };
 
+Blockly.Blocks['python_floatvar3'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField(new Blockly.FieldVariable("daysRainfall"), "NAME");
+    this.setOutput(true);
+    this.setTypeVecs([["float"]]);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+
+Blockly.Blocks['python_assign_floatvar3'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField(new Blockly.FieldVariable("daysRainfall"), "LHS");
+    this.appendValueInput("RHS")
+        .setCheck(["float"])
+        .appendField(" = ");
+    this.appendDummyInput()
+        .appendField(" ");
+    this.setTypeVecs([
+      ["float", "none"]
+    ]);
+    this.setInputsInline(true);
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+
 Blockly.Blocks['python_float_list'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField(new Blockly.FieldVariable("rainfall"), "NAME");
+        .appendField(new Blockly.FieldVariable("weeksRainfall"), "NAME");
     this.setOutput(true);
     this.setTypeVecs([["*float"]]);
     this.setTooltip('');
@@ -135,7 +166,7 @@ Blockly.Blocks['python_float_list'] = {
 Blockly.Blocks['python_assign_float_list'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField(new Blockly.FieldVariable("rainfall"), "LHS");
+        .appendField(new Blockly.FieldVariable("weeksRainfall"), "LHS");
     this.appendValueInput("RHS")
         .appendField(" = ");
     this.appendDummyInput()
@@ -154,7 +185,7 @@ Blockly.Blocks['python_assign_float_list'] = {
 Blockly.Blocks['python_assign_float_list_index'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField(new Blockly.FieldVariable("rainfall"), "VAR");
+        .appendField(new Blockly.FieldVariable("weeksRainfall"), "VAR");
     this.appendValueInput("INDEX")
         .appendField("[");
     this.appendValueInput()
@@ -173,7 +204,7 @@ Blockly.Blocks['python_assign_float_list_index'] = {
 Blockly.Blocks['python_float_list_append'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField(new Blockly.FieldVariable("rainfall"), "VAR");
+        .appendField(new Blockly.FieldVariable("weeksRainfall"), "VAR");
     this.appendValueInput("ARG")
         .appendField(".append(");
     this.appendDummyInput()

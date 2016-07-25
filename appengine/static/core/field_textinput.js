@@ -326,3 +326,59 @@ Blockly.FieldTextInput.nonnegativeIntegerValidator = function(text) {
   }
   return n;
 };
+
+/**
+ * Ensure that only an integer may be entered.
+ * @param {string} text The user's text.
+ * @return {?string} A string representing a valid int, or null if invalid.
+ */
+Blockly.FieldTextInput.integerValidator = function(text) {
+  var n = parseInt(text || 0);
+  return isNaN(n) ? null : String(n);
+};
+
+/**
+ * Ensure that only a float may be entered.
+ * @param {string} text The user's text.
+ * @return {?string} A string representing a valid float, or null if invalid.
+ */
+Blockly.FieldTextInput.floatValidator = function(text) {
+  var n = parseFloat(text || 0);
+  if (isNaN(n)) {
+    return null;
+  }
+  else {
+    // Turn int into float
+    var s = String(n);
+    if (!/\./.test(s)) {
+      s += ".0";
+    }
+    return s;
+  }
+};
+
+/**
+ * Ensure that only a string literal may be entered.
+ * @param {string} text The user's text.
+ * @return {?string} A string representing a valid string literal, or null if invalid.
+ */
+Blockly.FieldTextInput.stringValidator = function(text) {
+  var s = text || '""';
+  s = s.trim();
+  var doubleQuoted = /^"(?:[^"\\]|\\.)*"$/;
+  var singleQuoted = /^'(?:[^'\\]|\\.)*'$/;
+  var missingDoubleQuotes = /^("|')?((?:[^"'\\]|\\.)*)("|')?$/g;
+  var missingSingleQuotes = /^'?((?:[^'\\]|\\.)*)'?$/;
+  if (doubleQuoted.test(s) || singleQuoted.test(s)) {
+    return s;
+  }
+  else if (missingDoubleQuotes.test(s)) {
+    return s.replace(missingDoubleQuotes, '"$2"');
+  }
+  else if (missingSingleQuotes.test(s)) {
+    return s.replace(missingSingleQuotes, "'$1'");
+  }
+  else {
+    return null;
+  }
+};

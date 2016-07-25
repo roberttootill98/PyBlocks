@@ -35,7 +35,7 @@
  */
 'use strict';
 
-//goog.provide('Blockly.Realtime');
+goog.provide('Blockly.Realtime');
 
 goog.require('goog.array');
 goog.require('goog.dom');

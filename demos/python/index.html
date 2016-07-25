@@ -1,16 +1,20 @@
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
-  <title>PythonBlocks</title>
+  <title>PythonBlocks Demo</title>
+
   <script src="/storage.js"></script>
+
   <link rel="stylesheet" type="text/css" href="style.css">
 
   <script src="../../blockly_uncompressed.js"></script>
   <script src="../../python_compressed.js"></script>
   <script src="../../blocks_compressed.js"></script>
+  <script src="../../core/python.js"></script>
   <script src="pycode.js" type="text/javascript"></script>
   <script src="../../msg/js/en.js"></script>
+  <script src="../../blocks/variablesmerge.js"></script>
   <script src="../../blocks/pynumeric.js"></script>
   <script src="../../blocks/pystrings.js"></script>
   <script src="../../blocks/pyconversions.js"></script>
@@ -20,7 +24,6 @@
   <script src="../../blocks/pyio.js"></script>
   <script src="../../blocks/pycontrol.js"></script>
   <script src="../../blocks/pyvars.js"></script>
-  <script src="../../core/python.js"></script>
   <script src="../../generators/python/pybooleans.js"></script>
   <script src="../../generators/python/pycomparisons.js"></script>
   <script src="../../generators/python/pycontrol.js"></script>
@@ -30,11 +33,161 @@
   <script src="../../generators/python/pynumeric.js"></script>
   <script src="../../generators/python/pystrings.js"></script>
   <script src="../../generators/python/pyvars.js"></script>
-  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js" type="text/javascript"></script>
-  <script src="http://www.skulpt.org/static/skulpt.min.js" type="text/javascript"></script>
-  <script src="http://www.skulpt.org/static/skulpt-stdlib.js" type="text/javascript"></script>
+  <script src="skulpt.min.js" type="text/javascript"></script>
+  <script src="jquery.min.js" type="text/javascript"></script>
+  <script src="skulpt-stdlib.js" type="text/javascript"></script>
   <script src="skulpt.js" type="text/javascript"></script>
 
+
+  <!--<script type="text/javascript" src="https://www.google.com/jsapi"></script>-->
+  <script type="text/javascript" src="https://apis.google.com/js/client.js"></script>
+  <script src="google-drive-picker.js" type="text/javascript"></script>
+  <script type="text/javascript">
+
+
+   var scope = ['https://www.googleapis.com/auth/drive'];
+
+   var useProxy = false;
+   var metaData = false;
+
+
+   var picker = new GoogleDrivePicker({
+     apiKey:   'AIzaSyBIJVAC6TKBZmMwIFeOUjWPyIC_YfUWk-I',
+     clientId: '600830548447-tjkqh0qmskmjc8v1l3mrknn2k14ok2r4.apps.googleusercontent.com'
+   });
+
+   function initLoad() {
+     picker.init();
+   }
+
+   function createPicker() {
+
+     picker.pick().then(function(data) {
+     var fileId = data.docs[0].id;
+     var url = 'https://www.googleapis.com/drive/v2/files/' + fileId;
+     getData(url, function(responseText) {
+                         metaData = JSON.parse(responseText);
+                         getData(metaData.downloadUrl, function(text) {
+                             window.location.href = text;
+                         });
+                     });
+  });
+
+}
+     /*if (pickerApiLoaded && oauthToken) {
+       var view = new google.picker.View(google.picker.ViewId.DOCS);
+       view.setMimeTypes("application/pythonblocks");
+       var picker = new google.picker.PickerBuilder()
+           .enableFeature(google.picker.Feature.NAV_HIDDEN)
+           .setAppId(appId)
+           .setOAuthToken(oauthToken)
+           .addView(view)
+           .addView(new google.picker.DocsUploadView())
+           .setDeveloperKey(developerKey)
+           .setCallback(pickerCallback)
+           .build();
+       picker.setVisible(true);
+     }*/
+
+
+
+   function saveBlocks() {
+     BlocklyStorage.link();
+
+     setTimeout(function() { saveDocument(); }, 350);
+   }
+
+
+   function saveDocument() {
+
+   			var content = window.location.href;
+   			var method = 'POST';
+   			var mimeType = 'application/pythonblocks';
+   			var path = '/upload/drive/v2/files/';
+   			var params = {'uploadType': 'multipart'};
+
+   			if (metaData && 'id' in metaData)
+   			{
+   				//update existing file
+   				method = 'PUT';
+   				mimeType = metaData.mimeType;
+   				path += metaData.id;
+   				params = {'uploadType': 'multipart', 'fileId': metaData.id};
+   			}
+   			else
+   			{
+   				var fileName = prompt("Enter a filename for your PythonBlocks program: ","untitled-pyblocks");
+   				if (fileName == null) return;
+   				metaData = {
+                       'title': fileName + ".pyb",
+                       'mimeType': mimeType,
+                       'description': 'PythonBlocks program'
+                   };
+   			}
+
+        // boundary value is arbitrary, don't worry about it
+   			var boundary = '-------314159265358979323846';
+   			var delimiter = "\r\n--" + boundary + "\r\n";
+   			var multipartRequestBody =
+   				delimiter +
+   				'Content-Type: application/json\r\n\r\n' +
+   				JSON.stringify(metaData) +
+   				delimiter +
+   				'Content-Type: ' + mimeType + '\r\n' +
+   				'Content-Length: ' + content.length + '\r\n' +
+   				'\r\n' +
+   				content +
+   				'\r\n--' + boundary + '--';
+
+   			gapi.client.request({
+   				'path': path,
+   				'method': method,
+   				'params': params,
+   				'headers': { 'Content-Type': 'multipart/mixed; boundary="' + boundary + '"' },
+   				'body': multipartRequestBody}
+   			).execute(function(newmeta) {
+   				metaData = newmeta;});
+          // Hack - fix later
+          //setTimeout(function() { location.reload(); }, 3000);
+           }
+
+           function getXMLHttpRequest()
+           {
+               if (window.XMLHttpRequest) {
+                   return new XMLHttpRequest;
+               } else { //code for IE6, IE5
+                   return new ActiveXObject("Microsoft.XMLHTTP");
+               }
+               return null;
+           }
+
+           function getData(url, callback) {
+                       var xhr = getXMLHttpRequest();
+                       if (xhr != null) {
+                           var myToken = gapi.auth.getToken().access_token;
+                           var openurl = url;
+                           useProxy = useProxy || !('withCredentials' in xhr);
+                           if (useProxy) openurl = 'xhr_proxy.php?gpath=' + encodeURIComponent(url) + '&auth=' + myToken;
+                           xhr.open('GET', openurl, true);
+                           xhr.onreadystatechange = function() {
+                               if (xhr.readyState == 4) {
+                                   if (xhr.status == 200) {
+                                       callback(xhr.responseText);
+                                   } else if (!useProxy) { //retry through proxy
+                                       useProxy = true;
+                                       getData(url, callback);
+                                   } else {
+                                       dialog.alert('Error occurred while retrieving document');
+                                   }
+                               }
+                           }
+                           xhr.setRequestHeader('Authorization', 'Bearer ' + myToken);
+                           xhr.send();
+                       }
+                       setTimeout(function() { location.reload(); }, 1000);
+                   }
+
+   </script>
 </head>
 <body>
 
@@ -44,24 +197,14 @@
       <span class="left">
       <h1>PythonBlocks</h1>
     </span>
-    <script>
-      if ('BlocklyStorage' in window) {
-        BlocklyStorage.HTTPREQUEST_ERROR = 'There was a problem with the request.\n';
-        BlocklyStorage.LINK_ALERT = 'Share your blocks with this link:\n\n%1';
-        BlocklyStorage.HASH_ERROR = 'Sorry, "%1" doesn\'t correspond with any saved Blockly file.';
-        BlocklyStorage.XML_ERROR = 'Could not load your saved file.\n'+
-            'Perhaps it was created with a different version of Blockly?';
-      } else {
-        document.write('<p id="sorry">Sorry, cloud storage is not available.  This demo must be hosted on App Engine.</p>');
-      }
-    </script>
+
       <span class="right">
       <button type="button" class="fancybuttons">Help</button>
       <button type="button" class="fancybuttons">Sample programs</button>
-      <button type="button" class="fancybuttons">Save</button>
-      <button type="button" class="fancybuttons">Load</button>
-      <button type="button" class="fancybuttons" onclick="copyToClipboard()">Copy code to clipboard</button>
-      <button type="button" class="fancybuttons" onclick="BlocklyStorage.link()">Save Blocks</button>
+      <button type="button" class="fancybuttons" onclick="saveBlocks();">Save</button>
+      <button type="button" class="fancybuttons" onclick="createPicker();">Load</button>
+      <button type="button" class="fancybuttons" onclick="copyToClipboard()">Copy</button>
+      <button type="button" class="fancybuttons" onclick="window.location.href='index.html'">Reset</button>
     </right>
 
       </td>
@@ -86,25 +229,10 @@
   <div id="blocklyDiv"></div>
 
   <xml id="toolbox">
-  <!--  <category name="Test">
-      <block type="python_for"></block>
-      <block type="python_assign_float_list"></block>
-      <block type="python_while"></block>
-      <block type="python_int"></block>
-      <block type="python_float_const"></block>
-      <block type="python_string_const"></block>
-      <block type="python_intvar2"></block>
-      <block type="python_equals"></block>
-      <block type="python_pow"></block>
-      <block type="python_abs"></block>
-      <block type="python_plus"></block>
-      <block type="python_divide"></block>
-      <block type="python_assign_intvar2"></block>
-      <block type="python_assign_floatvar"></block>
-      <block type="python_print"></block>
-      <block type="python_list_index"></block>
-      <block type="python_list_const"></block>
-    </category> -->
+    <category name="Test">
+      <!--<block type="variables_set"></block>
+      <block type="variables_get"></block>-->
+    </category>
     <category name="Numeric">
       <block type="python_int_const"></block>
       <block type="python_float_const"></block>
@@ -112,6 +240,8 @@
       <block type="python_minus"></block>
       <block type="python_multiply"></block>
       <block type="python_divide"></block>
+      <block type="python_int_divide"></block>
+      <block type="python_int_modulo"></block>
       <block type="python_pow_op"></block>
       <block type="python_unary_minus"></block>
     </category>
@@ -153,7 +283,6 @@
       <block type="python_bool"></block>
       <block type="python_chr"></block>
       <block type="python_ord"></block>
-      <block type="python_type"></block>
     </category>
     <category name="Comparisons">
       <block type="python_equals"></block>
@@ -212,20 +341,39 @@
       <block type="python_range2"></block>
       <block type="python_range3"></block>
     </category>
-    <category name="Variables">
+    <category name="Variables" custom="VARIABLE">
       <block type="python_floatvar"></block>
       <block type="python_assign_floatvar"></block>
       <block type="python_floatvar2"></block>
       <block type="python_assign_floatvar2"></block>
       <block type="python_intvar2"></block>
       <block type="python_assign_intvar2"></block>
+      <block type="python_floatvar3"></block>
+      <block type="python_assign_floatvar3"></block>
     </category>
-    <category name=" List Variables">
+    <category name=" List Variables" custom="VARIABLE">
       <block type="python_float_list"></block>
       <block type="python_assign_float_list"></block>
       <block type="python_assign_float_list_index"></block>
     </category>
   </xml>
+
+<!-- Blockly storage code -->
+<script>
+  if ('BlocklyStorage' in window) {
+    BlocklyStorage.HTTPREQUEST_ERROR = 'There was a problem with the request.\n';
+    BlocklyStorage.LINK_ALERT = 'Share your blocks with this link:\n\n%1';
+    BlocklyStorage.HASH_ERROR = 'Sorry, "%1" doesn\'t correspond with any saved Blockly file.';
+    BlocklyStorage.XML_ERROR = 'Could not load your saved file.\n'+
+        'Perhaps it was created with a different version of Blockly?';
+  } else {
+    document.write('<p id="sorry">Sorry, cloud storage is not available.  This demo must be hosted on App Engine.</p>');
+  }
+
+</script>
+
+<!-- Blockly code -->
+
   <script>
   var blocklyArea = document.getElementById('blocklyArea');
   var blocklyDiv = document.getElementById('blocklyDiv');
@@ -265,6 +413,8 @@
   }
   </script>
 
+<!-- Google Drive code -->
 
+  <script type="text/javascript" src="https://apis.google.com/js/api.js?onload=initLoad"></script>
 </body>
 </html>

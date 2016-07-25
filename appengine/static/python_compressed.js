@@ -72,3 +72,12 @@ b=b+"("+a+")";break;case "MEDIAN":b=Blockly.Python.provideFunction_("math_median
 b=b+"("+a+")";break;case "RANDOM":Blockly.Python.definitions_.import_random="import random";b="random.choice("+a+")";break;default:throw"Unknown operator: "+b;}return[b,Blockly.Python.ORDER_FUNCTION_CALL]};Blockly.Python.math_modulo=function(a){var b=Blockly.Python.valueToCode(a,"DIVIDEND",Blockly.Python.ORDER_MULTIPLICATIVE)||"0";a=Blockly.Python.valueToCode(a,"DIVISOR",Blockly.Python.ORDER_MULTIPLICATIVE)||"0";return[b+" % "+a,Blockly.Python.ORDER_MULTIPLICATIVE]};
 Blockly.Python.math_constrain=function(a){var b=Blockly.Python.valueToCode(a,"VALUE",Blockly.Python.ORDER_NONE)||"0",c=Blockly.Python.valueToCode(a,"LOW",Blockly.Python.ORDER_NONE)||"0";a=Blockly.Python.valueToCode(a,"HIGH",Blockly.Python.ORDER_NONE)||"float('inf')";return["min(max("+b+", "+c+"), "+a+")",Blockly.Python.ORDER_FUNCTION_CALL]};
 Blockly.Python.math_random_int=function(a){Blockly.Python.definitions_.import_random="import random";var b=Blockly.Python.valueToCode(a,"FROM",Blockly.Python.ORDER_NONE)||"0";a=Blockly.Python.valueToCode(a,"TO",Blockly.Python.ORDER_NONE)||"0";return["random.randint("+b+", "+a+")",Blockly.Python.ORDER_FUNCTION_CALL]};Blockly.Python.math_random_float=function(a){Blockly.Python.definitions_.import_random="import random";return["random.random()",Blockly.Python.ORDER_FUNCTION_CALL]};
+
+Blockly.Python.COLOUR = {};
+Blockly.Python.COLOUR['notype'] = '#8B7D6B';
+Blockly.Python.COLOUR['int'] = '#dfdf20';   //yellow
+Blockly.Python.COLOUR['float'] = '#FF1919'; // red
+Blockly.Python.COLOUR['str'] = '#00CC33';  // green
+Blockly.Python.COLOUR['bool'] = '#FF29FF'; // magenta
+Blockly.Python.COLOUR['range'] = '#0080FF' ; // blue
+Blockly.Python.RAINBOW = ['str', 'int', 'float', 'bool', 'range', 'str'];

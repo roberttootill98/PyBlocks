@@ -56,9 +56,14 @@ Blockly.Blocks['python_false'] = {
 
 Blockly.Blocks['python_and'] = {
   init: function() {
+    this.appendDummyInput()
+        .appendField("", "LPAR");
     this.appendValueInput("LHS");
     this.appendValueInput("RHS")
         .appendField(" and ");
+    this.appendDummyInput()
+        .appendField("", "RPAR");
+    this.setOperator(4);
     this.setInputsInline(true);
     this.setTypeVecs([
       ["bool", "bool", "bool"],
@@ -71,9 +76,14 @@ Blockly.Blocks['python_and'] = {
 
 Blockly.Blocks['python_or'] = {
   init: function() {
+    this.appendDummyInput()
+        .appendField("", "LPAR");
     this.appendValueInput("LHS");
     this.appendValueInput("RHS")
         .appendField(" or ");
+    this.appendDummyInput()
+        .appendField("", "RPAR");
+    this.setOperator(3);
     this.setInputsInline(true);
     this.setTypeVecs([
       ["bool", "bool", "bool"],
@@ -86,8 +96,13 @@ Blockly.Blocks['python_or'] = {
 
 Blockly.Blocks['python_not'] = {
   init: function() {
+    this.appendDummyInput()
+        .appendField("", "LPAR");
     this.appendValueInput("ARG")
         .appendField("not ");
+    this.appendDummyInput()
+        .appendField("", "RPAR");
+    this.setOperator(5);
     this.setInputsInline(true);
     this.setTypeVecs([
       ["bool", "bool"]

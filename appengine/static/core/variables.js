@@ -72,6 +72,7 @@ Blockly.Variables.allVariables = function(root) {
   for (var name in variableHash) {
     variableList.push(variableHash[name]);
   }
+  //variableList.push("hahaha"); // HACK
   return variableList;
 };
 

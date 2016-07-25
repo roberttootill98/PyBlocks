@@ -35,8 +35,10 @@ Blockly.Blocks['python_int_const'] = {
     this.setInputsInline(true);
     this.setTypeVecs([["int"]]);
     this.setOutput(true);
-    this.setTooltip(this.getFieldValue('VALUE'));
+    this.setTooltip('');
     this.setHelpUrl('http://www.example.com/');
+    this.getField('VALUE').setChangeHandler(
+        Blockly.FieldTextInput.integerValidator);
   }
 };
 
@@ -47,16 +49,23 @@ Blockly.Blocks['python_float_const'] = {
     this.setInputsInline(true);
     this.setTypeVecs([["float"]]);
     this.setOutput(true);
-    this.setTooltip(this.getFieldValue('VALUE'));
+    this.setTooltip('');
     this.setHelpUrl('http://www.example.com/');
+    this.getField('VALUE').setChangeHandler(
+        Blockly.FieldTextInput.floatValidator);
   }
 };
 
 Blockly.Blocks['python_plus'] = {
   init: function() {
+    this.appendDummyInput()
+        .appendField("", "LPAR");
     this.appendValueInput("LHS");
     this.appendValueInput("RHS")
         .appendField(" + ");
+    this.appendDummyInput()
+        .appendField("", "RPAR");
+    this.setOperator(11);
     this.setInputsInline(true);
     this.setTypeVecs([
       ["int", "int", "int"],
@@ -67,19 +76,19 @@ Blockly.Blocks['python_plus'] = {
     this.setOutput(true);
     this.setTooltip('');
     this.setHelpUrl('http://www.example.com/');
-  },
-  onchange: function(ev) {
-    var test = (Blockly.Python.valueToCode(this, 'LHS', Blockly.Python.ORDER_ATOMIC) || '0') +
-  (Blockly.Python.valueToCode(this, 'RHS', Blockly.Python.ORDER_ATOMIC) || '0');
-    this.setTooltip(test);
   }
 };
 
 Blockly.Blocks['python_minus'] = {
   init: function() {
+    this.appendDummyInput()
+        .appendField("", "LPAR");
     this.appendValueInput("LHS");
     this.appendValueInput("RHS")
         .appendField(" - ");
+    this.appendDummyInput()
+        .appendField("", "RPAR");
+    this.setOperator(11);
     this.setInputsInline(true);
     this.setTypeVecs([
       ["int", "int", "int"],
@@ -95,9 +104,16 @@ Blockly.Blocks['python_minus'] = {
 
 Blockly.Blocks['python_multiply'] = {
   init: function() {
+    this.appendDummyInput()
+        .appendField("", "LPAR");
     this.appendValueInput("LHS");
     this.appendValueInput("RHS")
         .appendField(" * ");
+    this.appendDummyInput()
+        .appendField("", "RPAR");
+    this.appendDummyInput()
+        .appendField("", "RPAR");
+    this.setOperator(12);
     this.setInputsInline(true);
     this.setTypeVecs([
       ["int", "int", "int"],
@@ -105,6 +121,7 @@ Blockly.Blocks['python_multiply'] = {
       ["int", "float", "float"],
       ["float", "float", "float"]
     ]);
+    this.setOperator(4, true);
     this.setOutput(true);
     this.setTooltip('');
     this.setHelpUrl('http://www.example.com/');
@@ -113,9 +130,14 @@ Blockly.Blocks['python_multiply'] = {
 
 Blockly.Blocks['python_divide'] = {
   init: function() {
+    this.appendDummyInput()
+        .appendField("", "LPAR");
     this.appendValueInput("LHS");
     this.appendValueInput("RHS")
         .appendField(" / ");
+    this.appendDummyInput()
+        .appendField("", "RPAR");
+    this.setOperator(12);
     this.setInputsInline(true);
     this.setTypeVecs([
       ["int", "int", "float"],
@@ -129,11 +151,57 @@ Blockly.Blocks['python_divide'] = {
   }
 };
 
+Blockly.Blocks['python_int_divide'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("", "LPAR");
+    this.appendValueInput("LHS");
+    this.appendValueInput("RHS")
+        .appendField(" // ");
+    this.appendDummyInput()
+        .appendField("", "RPAR");
+    this.setOperator(12);
+    this.setInputsInline(true);
+    this.setTypeVecs([
+      ["int", "int", "int"]
+    ]);
+    this.setOutput(true);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+
+Blockly.Blocks['python_int_modulo'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("", "LPAR");
+    this.appendValueInput("LHS");
+    this.appendValueInput("RHS")
+        .appendField(" % ");
+    this.appendDummyInput()
+        .appendField("", "RPAR");
+    this.setOperator(12);
+    this.setInputsInline(true);
+    this.setTypeVecs([
+      ["int", "int", "int"]
+    ]);
+    this.setOutput(true);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+
+
 Blockly.Blocks['python_pow_op'] = {
   init: function() {
+    this.appendDummyInput()
+        .appendField("", "LPAR");
     this.appendValueInput("LHS");
     this.appendValueInput("RHS")
         .appendField(" ** ");
+    this.appendDummyInput()
+        .appendField("", "RPAR");
+    this.setOperator(14);
     this.setInputsInline(true);
     this.setTypeVecs([
       ["int", "int", "int"],
@@ -149,8 +217,13 @@ Blockly.Blocks['python_pow_op'] = {
 
 Blockly.Blocks['python_unary_minus'] = {
   init: function() {
+    this.appendDummyInput()
+        .appendField("", "LPAR");
     this.appendValueInput("ARG")
         .appendField("-");
+    this.appendDummyInput()
+       .appendField("", "RPAR");
+    this.setOperator(13);
     this.setInputsInline(true);
     this.setTypeVecs([
       ["int", "int"],

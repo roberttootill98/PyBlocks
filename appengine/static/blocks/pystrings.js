@@ -37,6 +37,8 @@ Blockly.Blocks['python_string_const'] = {
     this.setOutput(true);
     this.setTooltip('');
     this.setHelpUrl('http://www.example.com/');
+    this.getField('VALUE').setChangeHandler(
+        Blockly.FieldTextInput.stringValidator);
   }
 };
 
@@ -44,9 +46,14 @@ Blockly.Blocks['python_string_const'] = {
 
 Blockly.Blocks['python_string_concat'] = {
   init: function() {
+    this.appendDummyInput()
+        .appendField("", "LPAR");
     this.appendValueInput("LHS");
     this.appendValueInput("RHS")
         .appendField(" + ");
+    this.appendDummyInput()
+        .appendField("", "RPAR");
+    this.setOperator(11);
     this.setInputsInline(true);
     this.setTypeVecs([["str", "str", "str"]]);
     this.setOutput(true);
@@ -57,9 +64,14 @@ Blockly.Blocks['python_string_concat'] = {
 
 Blockly.Blocks['python_string_repeat'] = {
   init: function() {
+    this.appendDummyInput()
+        .appendField("", "LPAR");
     this.appendValueInput("LHS");
     this.appendValueInput("RHS")
         .appendField(" * ");
+    this.appendDummyInput()
+        .appendField("", "RPAR");
+    this.setOperator(12);
     this.setInputsInline(true);
     this.setTypeVecs([
       ["str", "int", "str"],
@@ -131,7 +143,7 @@ Blockly.Blocks['python_string_slice2'] = {
     this.appendValueInput("ARG1");
     this.appendDummyInput()
         .appendField("[");
-    this.appendValueInput("ARG2")
+    this.appendValueInput("ARG3")
         .appendField(":");
     this.appendDummyInput()
         .appendField("]");
@@ -163,9 +175,14 @@ Blockly.Blocks['python_string_len'] = {
 
 Blockly.Blocks['python_string_in'] = {
   init: function() {
+    this.appendDummyInput()
+        .appendField("", "LPAR");
     this.appendValueInput("LHS");
     this.appendValueInput("RHS")
         .appendField(" in ");
+    this.appendDummyInput()
+        .appendField("", "RPAR");
+    this.setOperator(6);
     this.setInputsInline(true);
     this.setTypeVecs([
       ["str", "str", "bool"]

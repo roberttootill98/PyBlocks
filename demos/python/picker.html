@@ -13,7 +13,7 @@
       var clientId = "600830548447-tjkqh0qmskmjc8v1l3mrknn2k14ok2r4.apps.googleusercontent.com"
 
       // Scope to use to access user's photos.
-      var scope = ['https://www.googleapis.com/auth/docs'];
+      var scope = ['https://www.googleapis.com/auth/drive'];
 
       var pickerApiLoaded = false;
       var oauthToken;
@@ -46,7 +46,7 @@
         }
       }
 
-      // Create and render a Picker object for picking user Photos.
+      // Create and render a Picker object
       function createPicker() {
         if (pickerApiLoaded && oauthToken) {
           var picker = new google.picker.PickerBuilder().
@@ -63,11 +63,14 @@
       function pickerCallback(data) {
         var url = 'nothing';
         if (data[google.picker.Response.ACTION] == google.picker.Action.PICKED) {
+          window.location.replace("https://pythonblocks-1362.appspot.com/static/demos/python/index.html");
           var doc = data[google.picker.Response.DOCUMENTS][0];
           url = doc[google.picker.Document.URL];
+
         }
         var message = 'You picked: ' + url;
         document.getElementById('result').innerHTML = message;
+
       }
     </script>
   </head>

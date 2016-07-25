@@ -536,6 +536,7 @@ Blockly.BlockSvg.prototype.onMouseUp_ = function(e) {
           }
       }
       else { // this is an expression
+        this_.checkParentheses();
         this_.reType();
       }
 
@@ -2566,4 +2567,52 @@ Blockly.BlockSvg.prototype.renderDrawLeft_ =
   }
   //holeSteps.push('z')
   steps.push('z');
+};
+
+Blockly.Block.prototype.checkParentheses = function() {
+  console.log("PARS start");
+  var operator = this.operator;
+  if (operator) {
+    var parent = this.getParent();
+    if (parent) {
+      var parentOp = parent.operator;
+      if (!parentOp) {
+        return;
+      }
+      var position = this.outputConnection.getInputNumber();
+      if (parentOp.precedence < operator.precedence) {
+        console.log("PARS child has greater precedence");
+        return;
+      }
+      else if (parentOp.precedence == operator.precedence) {
+        console.log("PARS child has equal precedence");
+        console.log("PARS type ", this.type);
+
+        if (position == 1 && this.type == 'python_pow_op') {
+          return;
+        }
+
+        console.log("PARS input number is ", position);
+        if (position == 0 && this.type != 'python_pow_op') {
+          console.log("PARS child dropped in left slot");
+          return;
+        }
+      }
+      else {
+        console.log("PARS type parent type", this.type, parent.type);
+        if (position == 1 && parent.type == 'python_pow_op' &&
+            this.type == "python_unary_minus") {
+          return;
+        }
+      }
+      // add parentheses
+      this.setFieldValue("(", "LPAR");
+      this.setFieldValue(")", "RPAR");
+    }
+    else {
+      // remove parentheses which may or may not be present
+      this.setFieldValue("", "LPAR");
+      this.setFieldValue("", "RPAR");
+    }
+  }
 };

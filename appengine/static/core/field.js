@@ -344,7 +344,8 @@ Blockly.Field.prototype.updateTextNode_ = function() {
   }
   if (!text) {
     // Prevent the field from disappearing if empty.
-    text = Blockly.Field.NBSP;
+    // MJP - parentheses need to be able to disappear
+    //text = Blockly.Field.NBSP;
   }
   var textNode = document.createTextNode(text);
   this.textElement_.appendChild(textNode);
