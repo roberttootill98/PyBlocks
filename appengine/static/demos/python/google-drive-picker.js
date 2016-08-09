@@ -2,15 +2,15 @@
 
 (function() {
   /**
-   * Creates an instance of GoogleDrivePicker
-   *
-   * @constructor
-   * @this {GoogleDrivePicker}
-   * @param {Object} opts - Options for Picker
-   * @param {string} opts.apiKey - The API Key from Google's API console
-   * @param {string} opts.clientId - The client ID from Google's API console
-   * @param {Function} opts.config - Configuration handler
-   */
+  * Creates an instance of GoogleDrivePicker
+  *
+  * @constructor
+  * @this {GoogleDrivePicker}
+  * @param {Object} opts - Options for Picker
+  * @param {string} opts.apiKey - The API Key from Google's API console
+  * @param {string} opts.clientId - The client ID from Google's API console
+  * @param {Function} opts.config - Configuration handler
+  */
   function GoogleDrivePicker(opts) {
     opts               = opts ||  {};
     this.opts          = opts;
@@ -21,29 +21,29 @@
   }
 
   /**
-   * Primary private initialization method, loads APIs
-   *
-   * @returns {Object} Promise
-   */
+  * Primary private initialization method, loads APIs
+  *
+  * @returns {Object} Promise
+  */
   GoogleDrivePicker.prototype._initialize = function() {
     this._attempts++;
     return Promise.all([this._initializeAuth(), this._loadPicker()]).then(this._setInitialized.bind(this));
   };
 
   /**
-   * Load auth API then authorize
-   *
-   * @returns {Object} Promise
-   */
+  * Load auth API then authorize
+  *
+  * @returns {Object} Promise
+  */
   GoogleDrivePicker.prototype._initializeAuth = function() {
     return this._loadAuth().then(this._authorize.bind(this));
   }
 
   /**
-   * Load auth API
-   *
-   * @returns {Object} Promise
-   */
+  * Load auth API
+  *
+  * @returns {Object} Promise
+  */
   GoogleDrivePicker.prototype._loadAuth = function() {
     return new Promise(function(resolve, reject) {
       this._gapi.load('auth', {callback: resolve});
@@ -51,10 +51,10 @@
   };
 
   /**
-   * Tell the API to ask for Read-only Drive permissions when Picker opens, called after _loadAuth
-   *
-   * @returns {Object} Promise
-   */
+  * Tell the API to ask for Read-only Drive permissions when Picker opens, called after _loadAuth
+  *
+  * @returns {Object} Promise
+  */
   GoogleDrivePicker.prototype._authorize = function() {
     return new Promise(function(resolve, reject) {
       this._gapi.auth.authorize({
@@ -69,9 +69,9 @@
   };
 
   /**
-   * Load picker API
-   * @returns {Object} Promise
-   */
+  * Load picker API
+  * @returns {Object} Promise
+  */
   GoogleDrivePicker.prototype._loadPicker = function() {
     return new Promise(function(resolve, reject) {
       this._gapi.load('picker', {callback: resolve});
@@ -79,21 +79,21 @@
   };
 
   /**
-   * APIs have been loaded and initialized
-   */
+  * APIs have been loaded and initialized
+  */
   GoogleDrivePicker.prototype._setInitialized = function() {
     this._initialized = true;
   }
 
   /**
-   * Create a picker
-   *
-   * @param {string} locale - Google drive locale
-   * @param {string} view - Google drive view
-   * @param {Function} configFn - Configuration function
-   * @param {Function} cb - Callback
-   * @returns {Object}
-   */
+  * Create a picker
+  *
+  * @param {string} locale - Google drive locale
+  * @param {string} view - Google drive view
+  * @param {Function} configFn - Configuration function
+  * @param {Function} cb - Callback
+  * @returns {Object}
+  */
   GoogleDrivePicker.prototype._createPicker = function(configFn, cb) {
 
 
@@ -110,24 +110,24 @@
     else {
       // Defaults
       builder.enableFeature(google.picker.Feature.NAV_HIDDEN)
-          .addView(view)
-          .addView(new google.picker.DocsUploadView());
+      .addView(view)
+      .addView(new google.picker.DocsUploadView());
     }
 
     builder.setOAuthToken(this._oauthToken)
-           .setDeveloperKey(this.opts.apiKey)
-           .setCallback(cb);
+    .setDeveloperKey(this.opts.apiKey)
+    .setCallback(cb);
 
     return builder.build();
   };
 
   /**
-   * Choose from Google Drive
-   *
-   * @param {Object} opts - Options (optional)
-   * @param {Function} opts.config - Configuration handler
-   * @returns {Object} Promise
-   */
+  * Choose from Google Drive
+  *
+  * @param {Object} opts - Options (optional)
+  * @param {Function} opts.config - Configuration handler
+  * @returns {Object} Promise
+  */
   GoogleDrivePicker.prototype.pick = function(opts) {
     opts        = opts || {};
     opts.config = opts.config || this.opts.config;
@@ -151,11 +151,5 @@
 }());
 
 GoogleDrivePicker.prototype.init = function() {
-  // Initialize and try again
-  if (!this._initialized) {
-    if (this._attempts > 2) {
-      throw 'Unable to initialize Google Picker API, attempted 3 times';
-    }
-    return this._initialize();
-  }
+  return this._initialize();
 }

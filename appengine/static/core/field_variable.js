@@ -125,7 +125,7 @@ Blockly.FieldVariable.prototype.setValue = function(text) {
  * @this {!Blockly.FieldVariable}
  */
 Blockly.FieldVariable.dropdownCreate = function() {
-  if (this.sourceBlock_ && this.sourceBlock_.workspace) {
+/*  if (this.sourceBlock_ && this.sourceBlock_.workspace) {
     var variableList =
         Blockly.Variables.allVariables(this.sourceBlock_.workspace);
   } else {
@@ -136,9 +136,12 @@ Blockly.FieldVariable.dropdownCreate = function() {
   if (name && variableList.indexOf(name) == -1) {
     variableList.push(name);
   }
-  variableList.sort(goog.string.caseInsensitiveCompare);
+
+  variableList.sort(goog.string.caseInsensitiveCompare);*/
+
+  var variableList = [];
   variableList.push(Blockly.Msg.RENAME_VARIABLE);
-  variableList.push(Blockly.Msg.NEW_VARIABLE);
+//  variableList.push(Blockly.Msg.NEW_VARIABLE);
   // Variables are not language-specific, use the name as both the user-facing
   // text and the internal representation.
   var options = [];
@@ -162,44 +165,31 @@ Blockly.FieldVariable.dropdownChange = function(text) {
   function promptName(promptText, defaultText) {
     Blockly.hideChaff();
     var newVar = window.prompt(promptText, defaultText);
-    // Merge runs of whitespace.  Strip leading and trailing whitespace.
-    // Beyond this, all names are legal.
-    if (newVar) {
-      newVar = newVar.replace(/[\s\xa0]+/g, ' ').replace(/^ | $/g, '');
-      if (newVar == Blockly.Msg.RENAME_VARIABLE ||
-          newVar == Blockly.Msg.NEW_VARIABLE) {
-        // Ok, not ALL names are legal...
-        newVar = null;
-      }
-    }
     return newVar;
   }
   var workspace = this.sourceBlock_.workspace;
-  if (text == Blockly.Msg.RENAME_VARIABLE) {
-    var oldVar = this.getText();
-    text = promptName(Blockly.Msg.RENAME_VARIABLE_TITLE.replace('%1', oldVar),
+  var oldVar = this.getText();
+  var newVar = promptName(Blockly.Msg.RENAME_VARIABLE_TITLE.replace('%1', oldVar),
                       oldVar);
-    if (text) {
-      console.log("NEWVAR before newvar",
-        Blockly.Variables.allVariables(workspace));
-      Blockly.Variables.renameVariable(oldVar, text, workspace);
-      console.log("NEWVAR after newvar",
-        Blockly.Variables.allVariables(workspace));
-    }
-    return null;
-  } else if (text == Blockly.Msg.NEW_VARIABLE) {
-    text = promptName(Blockly.Msg.NEW_VARIABLE_TITLE, '');
-    // Since variables are case-insensitive, ensure that if the new variable
-    // matches with an existing variable, the new case prevails throughout.
-    if (text) {
-      console.log("NEWVAR before newvar",
-        Blockly.Variables.allVariables(workspace));
-      Blockly.Variables.renameVariable(text, text, workspace);
-      console.log("NEWVAR after newvar",
-        Blockly.Variables.allVariables(workspace));
-      return text;
-    }
+  if (!newVar || newVar == oldVar) {
+    // No change to variable name.
     return null;
   }
-  return undefined;
+  // Strip leading and trailing whitespace.
+  newVar = newVar.replace(/^ +| +$/g, '');
+  // If now empty ignore change.
+  if (!newVar) {
+    return null;
+  }
+  // Replace sequences of symbols with '_'.
+  newVar = newVar.replace(/\W+/g, '_');
+  // Prepend with '_' if begins with a digit.
+  if ('0123456789'.indexOf(newVar[0]) != -1) {
+    newVar = '_' + newVar;
+  }
+
+  var variables = Blockly.Variables.allVariables(workspace, true, true);
+  newVar = Blockly.Python.makeNameUnique(newVar, variables);
+  Blockly.Variables.renameVariable(oldVar, newVar, workspace);
+  return newVar;
 };

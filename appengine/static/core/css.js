@@ -243,6 +243,13 @@ Blockly.Css.CONTENT = [
     'font-size: 15pt;',
    '}',
 
+   '.blocklyIndicatorText {',
+     'text-anchor: middle;',
+     'fill: #000;',
+     'font-family: monospace;',
+     'font-size: 11pt;',
+    '}',
+
   '.blocklyNonEditableText>text {',
     'pointer-events: none;',
   '}',

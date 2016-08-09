@@ -77,6 +77,7 @@ Blockly.Input.prototype.visible_ = true;
  */
 Blockly.Input.prototype.appendField = function(field, opt_name) {
   // Empty string, Null or undefined generates no field, unless field is named.
+  console.log("VARS appending field with name ", field);
   if (!field && !opt_name) {
     return this;
   }

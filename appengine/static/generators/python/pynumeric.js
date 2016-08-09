@@ -18,10 +18,11 @@
  * limitations under the License.
  */
 
-/**
- * @fileoverview Variable blocks for Blockly.
- * @author fraser@google.com (Neil Fraser)
- */
+ /**
+  * @fileoverview Numeric blocks for PythonBlocks
+  * @author up649230@myport.ac.uk
+  */
+  
 'use strict';
 
 goog.provide('Blockly.Python.pynumeric');

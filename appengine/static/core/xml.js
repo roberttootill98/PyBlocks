@@ -103,6 +103,12 @@ Blockly.Xml.blockToDom_ = function(block) {
     element.appendChild(dataElement);
   }
 
+  // MJP HACK
+  if (block.type == "variables_get" || block.type == "variables_set") {
+    var pyType = goog.dom.createDom('pytype', null, block.typeVecs[0][0]);
+    element.appendChild(pyType);
+  }
+
   for (var i = 0, input; input = block.inputList[i]; i++) {
     var container;
     var empty = true;
@@ -129,6 +135,12 @@ Blockly.Xml.blockToDom_ = function(block) {
       element.appendChild(container);
     }
   }
+
+  // MJP HACK - doesn't work
+  if (block.lhsVarOnly) {
+    element.setAttribute('lhsVarOnly', true);
+  }
+
   if (block.inputsInlineDefault != block.inputsInline) {
     element.setAttribute('inline', block.inputsInline);
   }
@@ -301,8 +313,12 @@ Blockly.Xml.domToWorkspace = function(workspace, xml) {
  */
 Blockly.Xml.domToBlock = function(workspace, xmlBlock, opt_reuseBlock) {
   // Create top-level block.
+
   var topBlock = Blockly.Xml.domToBlockHeadless_(workspace, xmlBlock,
                                                  opt_reuseBlock);
+
+  console.log("VARS in domToBlock3", topBlock.getFieldValue("VAR"))
+
   if (workspace.rendered) {
     // Hide connections to speed up assembly.
     topBlock.setConnectionsHidden(true);
@@ -438,8 +454,32 @@ Blockly.Xml.domToBlockHeadless_ =
                        prototypeName);
           break;
         }
+        console.log("VARS in domToBlock1", block.getFieldValue("VAR"))
         field.setValue(xmlChild.textContent);
+        console.log("VARS in domToBlock2", block.getFieldValue("VAR"))
         break;
+
+      //MJP HACK
+      case 'pytype':
+        //console.log("VARS type in domToBlock1", block.typeVecs[0][0]);
+        if (block.type == 'variables_get') {
+          block.setTypeVecs([[xmlChild.textContent]]);
+        }
+        else if (block.type == 'variables_set') {
+          block.setTypeVecs([[xmlChild.textContent, xmlChild.textContent,
+              'none']]);
+          block.fullTypeVecs = [["matching", "matching", "none"],
+                                ["*matching", "*matching", "none"]];
+          block.setLhsVarOnly(true);
+          console.log("NEW BLOCK", block);
+        }
+        else {
+          console.warn("Ignoring Python type in non-variable block");
+        }
+        console.log("VARS type in domToBlock2", block.typeVecs[0][0]);
+        break;
+     //
+
       case 'value':
       case 'statement':
         input = block.getInput(name);
@@ -486,6 +526,12 @@ Blockly.Xml.domToBlockHeadless_ =
         // Unknown tag; ignore.  Same principle as HTML parsers.
         console.warn('Ignoring unknown tag: ' + xmlChild.nodeName);
     }
+  }
+
+  // MJP HACK - doesn't work
+  var lhsVarOnly = xmlBlock.getAttribute('lhsVarOnly');
+  if (lhsVarOnly) {
+    block.setLhsVarOnly(lhsVarOnly == 'true');
   }
 
   var inline = xmlBlock.getAttribute('inline');

@@ -121,7 +121,6 @@ Blockly.Blocks['python_multiply'] = {
       ["int", "float", "float"],
       ["float", "float", "float"]
     ]);
-    this.setOperator(4, true);
     this.setOutput(true);
     this.setTooltip('');
     this.setHelpUrl('http://www.example.com/');

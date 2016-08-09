@@ -3,17 +3,12 @@
 <head>
   <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
   <title>PythonBlocks Demo</title>
-
   <script src="/storage.js"></script>
-
   <link rel="stylesheet" type="text/css" href="style.css">
-
   <script src="../../blockly_uncompressed.js"></script>
   <script src="../../python_compressed.js"></script>
-  
   <script src="pycode.js" type="text/javascript"></script>
   <script src="../../msg/js/en.js"></script>
-  <script src="../../blocks/variablesmerge.js"></script>
   <script src="../../blocks/pynumeric.js"></script>
   <script src="../../blocks/pystrings.js"></script>
   <script src="../../blocks/pyconversions.js"></script>
@@ -22,217 +17,75 @@
   <script src="../../blocks/pylists.js"></script>
   <script src="../../blocks/pyio.js"></script>
   <script src="../../blocks/pycontrol.js"></script>
-  <script src="../../blocks/pyvars.js"></script>
+  <script src="../../blocks/pyvariables.js"></script>
+  <script src="../../blocks/pycomments.js"></script>
+  <script src="../../blocks/pystart.js"></script>
+  <script src="../../blocks/pymath.js"></script>
   <script src="../../generators/python/pybooleans.js"></script>
   <script src="../../generators/python/pycomparisons.js"></script>
   <script src="../../generators/python/pycontrol.js"></script>
   <script src="../../generators/python/pyconversions.js"></script>
+  <script src="../../generators/python/pycomments.js"></script>
   <script src="../../generators/python/pyio.js"></script>
   <script src="../../generators/python/pylists.js"></script>
   <script src="../../generators/python/pynumeric.js"></script>
   <script src="../../generators/python/pystrings.js"></script>
-  <script src="../../generators/python/pyvars.js"></script>
+  <script src="../../generators/python/pystart.js"></script>
+  <script src="../../generators/python/pymath.js"></script>
+  <script src="../../generators/python/pyvariables.js"></script>
   <script src="skulpt.min.js" type="text/javascript"></script>
   <script src="jquery.min.js" type="text/javascript"></script>
   <script src="skulpt-stdlib.js" type="text/javascript"></script>
   <script src="skulpt.js" type="text/javascript"></script>
-
-
-  <!--<script type="text/javascript" src="https://www.google.com/jsapi"></script>-->
   <script type="text/javascript" src="https://apis.google.com/js/client.js"></script>
-  <script src="google-drive-picker.js" type="text/javascript"></script>
-  <script type="text/javascript">
-
-
-   var scope = ['https://www.googleapis.com/auth/drive'];
-
-   var useProxy = false;
-   var metaData = false;
-
-
-   var picker = new GoogleDrivePicker({
-     apiKey:   'AIzaSyBIJVAC6TKBZmMwIFeOUjWPyIC_YfUWk-I',
-     clientId: '600830548447-tjkqh0qmskmjc8v1l3mrknn2k14ok2r4.apps.googleusercontent.com'
-   });
-
-   function initLoad() {
-     picker.init();
-   }
-
-   function createPicker() {
-
-     picker.pick().then(function(data) {
-     var fileId = data.docs[0].id;
-     var url = 'https://www.googleapis.com/drive/v2/files/' + fileId;
-     getData(url, function(responseText) {
-                         metaData = JSON.parse(responseText);
-                         getData(metaData.downloadUrl, function(text) {
-                             window.location.href = text;
-                         });
-                     });
-  });
-
-}
-     /*if (pickerApiLoaded && oauthToken) {
-       var view = new google.picker.View(google.picker.ViewId.DOCS);
-       view.setMimeTypes("application/pythonblocks");
-       var picker = new google.picker.PickerBuilder()
-           .enableFeature(google.picker.Feature.NAV_HIDDEN)
-           .setAppId(appId)
-           .setOAuthToken(oauthToken)
-           .addView(view)
-           .addView(new google.picker.DocsUploadView())
-           .setDeveloperKey(developerKey)
-           .setCallback(pickerCallback)
-           .build();
-       picker.setVisible(true);
-     }*/
-
-
-
-   function saveBlocks() {
-     BlocklyStorage.link();
-
-     setTimeout(function() { saveDocument(); }, 350);
-   }
-
-
-   function saveDocument() {
-
-   			var content = window.location.href;
-   			var method = 'POST';
-   			var mimeType = 'application/pythonblocks';
-   			var path = '/upload/drive/v2/files/';
-   			var params = {'uploadType': 'multipart'};
-
-   			if (metaData && 'id' in metaData)
-   			{
-   				//update existing file
-   				method = 'PUT';
-   				mimeType = metaData.mimeType;
-   				path += metaData.id;
-   				params = {'uploadType': 'multipart', 'fileId': metaData.id};
-   			}
-   			else
-   			{
-   				var fileName = prompt("Enter a filename for your PythonBlocks program: ","untitled-pyblocks");
-   				if (fileName == null) return;
-   				metaData = {
-                       'title': fileName + ".pyb",
-                       'mimeType': mimeType,
-                       'description': 'PythonBlocks program'
-                   };
-   			}
-
-        // boundary value is arbitrary, don't worry about it
-   			var boundary = '-------314159265358979323846';
-   			var delimiter = "\r\n--" + boundary + "\r\n";
-   			var multipartRequestBody =
-   				delimiter +
-   				'Content-Type: application/json\r\n\r\n' +
-   				JSON.stringify(metaData) +
-   				delimiter +
-   				'Content-Type: ' + mimeType + '\r\n' +
-   				'Content-Length: ' + content.length + '\r\n' +
-   				'\r\n' +
-   				content +
-   				'\r\n--' + boundary + '--';
-
-   			gapi.client.request({
-   				'path': path,
-   				'method': method,
-   				'params': params,
-   				'headers': { 'Content-Type': 'multipart/mixed; boundary="' + boundary + '"' },
-   				'body': multipartRequestBody}
-   			).execute(function(newmeta) {
-   				metaData = newmeta;});
-          // Hack - fix later
-          //setTimeout(function() { location.reload(); }, 3000);
-           }
-
-           function getXMLHttpRequest()
-           {
-               if (window.XMLHttpRequest) {
-                   return new XMLHttpRequest;
-               } else { //code for IE6, IE5
-                   return new ActiveXObject("Microsoft.XMLHTTP");
-               }
-               return null;
-           }
-
-           function getData(url, callback) {
-                       var xhr = getXMLHttpRequest();
-                       if (xhr != null) {
-                           var myToken = gapi.auth.getToken().access_token;
-                           var openurl = url;
-                           useProxy = useProxy || !('withCredentials' in xhr);
-                           if (useProxy) openurl = 'xhr_proxy.php?gpath=' + encodeURIComponent(url) + '&auth=' + myToken;
-                           xhr.open('GET', openurl, true);
-                           xhr.onreadystatechange = function() {
-                               if (xhr.readyState == 4) {
-                                   if (xhr.status == 200) {
-                                       callback(xhr.responseText);
-                                   } else if (!useProxy) { //retry through proxy
-                                       useProxy = true;
-                                       getData(url, callback);
-                                   } else {
-                                       dialog.alert('Error occurred while retrieving document');
-                                   }
-                               }
-                           }
-                           xhr.setRequestHeader('Authorization', 'Bearer ' + myToken);
-                           xhr.send();
-                       }
-                       setTimeout(function() { location.reload(); }, 1000);
-                   }
-
-   </script>
+  <script type="text/javascript" src="https://apis.google.com/js/api.js"></script>
+  <script type="text/javascript" src="google-drive-picker.js"></script>
+  <script type="text/javascript" src="persistence.js">
+  </script>
 </head>
 <body>
 
   <table>
     <tr>
       <td>
-      <span class="left">
-      <h1>PythonBlocks</h1>
-    </span>
+        <span class="left">
+          <h1>PythonBlocks</h1>
+        </span>
 
-      <span class="right">
-      <button type="button" class="fancybuttons">Help</button>
-      <button type="button" class="fancybuttons">Sample programs</button>
-      <button type="button" class="fancybuttons" onclick="saveBlocks();">Save</button>
-      <button type="button" class="fancybuttons" onclick="createPicker();">Load</button>
-      <button type="button" class="fancybuttons" onclick="copyToClipboard()">Copy</button>
-      <button type="button" class="fancybuttons" onclick="window.location.href='index.html'">Reset</button>
-    </right>
-
+        <span class="right">
+          <button type="button" class="fancybuttons">Help</button>
+          <button type="button" class="fancybuttons">Sample programs</button>
+          <button type="button" class="fancybuttons" onclick="saveBlocks()">Save</button>
+          <button type="button" class="fancybuttons" onclick="initLoad(createPicker)">Load</button>
+          <button type="button" class="fancybuttons" onclick="copyToClipboard()">Copy</button>
+          <button type="button" class="fancybuttons" onclick="reset()">Reset</button>
+          <button type="button" class="fancybuttons" onclick="runfull()">Run full</button>
+          <button type="button" class="fancybuttons" onclick="clr()">Clear console</button>
+        </span>
       </td>
     </tr>
 
     <tr>
       <td id="blocklyArea">
       </td>
-
+    </tr>
+    <tr>
       <td style="vertical-align:top;text-align:center">
         <textarea id="output" class="codearea" rows="15" cols="75" readonly="true">PyBlocks Interpreter
 
-      </textarea>
-      <button type="button" class="fancybuttons" onclick="runfull()">Run full</button>
-      <button type="button" class="fancybuttons" onclick="clr()">Clear console</button>
-      <textarea id="codearea" cols="20" rows="7" hidden="true"></textarea>
-      <textarea id="pycode" class="codearea" rows="12" cols="100" readonly="true" hidden="true"></textarea>
+</textarea>
+
+        <textarea id="codearea" cols="20" rows="7" hidden="true"></textarea>
+        <textarea id="pycode" class="codearea" rows="12" cols="100" readonly="true" hidden="true"></textarea>
       </td>
     </tr>
   </table>
 
-  <div id="blocklyDiv"></div>
+  <!-- Blockly workspace -->
+  <div id="blocklyDiv" style="position: absolute"></div>
 
-  <xml id="toolbox">
-    <category name="Test">
-      <!--<block type="variables_set"></block>
-      <block type="variables_get"></block>-->
-    </category>
-    <category name="Numeric">
+  <xml id="toolbox" style="display: none">
+    <category name="Numeric values & operators">
       <block type="python_int_const"></block>
       <block type="python_float_const"></block>
       <block type="python_plus"></block>
@@ -244,27 +97,27 @@
       <block type="python_pow_op"></block>
       <block type="python_unary_minus"></block>
     </category>
-    <category name="  Numeric Functions">
+    <category name="Numeric functions">
       <block type="python_round"></block>
       <block type="python_abs"></block>
       <block type="python_pow"></block>
       <block type="python_numeric_min"></block>
       <block type="python_numeric_max"></block>
       <block type="python_sum"></block>
-
     </category>
-    <category name="Strings">
+    <sep gap="4"></sep>
+    <category name="String values & operators">
       <block type="python_string_const"></block>
+      <block type="python_string_index"></block>
+      <block type="python_string_len"></block>
+      <block type="python_string_in"></block>
       <block type="python_string_concat"></block>
       <block type="python_string_repeat"></block>
-      <block type="python_string_index"></block>
       <block type="python_string_slice12"></block>
       <block type="python_string_slice1"></block>
       <block type="python_string_slice2"></block>
-      <block type="python_string_len"></block>
-      <block type="python_string_in"></block>
     </category>
-    <category name="  String Methods">
+    <category name="String methods">
       <block type="python_isdigit"></block>
       <block type="python_isalpha"></block>
       <block type="python_isspace"></block>
@@ -275,15 +128,8 @@
       <block type="python_string_count"></block>
       <block type="python_split"></block>
     </category>
-    <category name="Conversions">
-      <block type="python_int"></block>
-      <block type="python_float"></block>
-      <block type="python_str"></block>
-      <block type="python_bool"></block>
-      <block type="python_chr"></block>
-      <block type="python_ord"></block>
-    </category>
-    <category name="Comparisons">
+    <sep gap="4"></sep>
+    <category name="Comparison operators">
       <block type="python_equals"></block>
       <block type="python_not_equals"></block>
       <block type="python_is"></block>
@@ -292,47 +138,58 @@
       <block type="python_greater_than"></block>
       <block type="python_greater_than_or_equal"></block>
     </category>
-    <category name="Booleans">
+    <category name="Boolean values & operators">
       <block type="python_true"></block>
       <block type="python_false"></block>
       <block type="python_and"></block>
       <block type="python_or"></block>
       <block type="python_not"></block>
     </category>
-    <category name="Lists">
+    <sep gap="4"></sep>
+    <category name="List values & operators">
       <block type="python_list_empty"></block>
       <block type="python_list_const"></block>
-      <block type="python_list_const2"></block>
-      <block type="python_list_const3"></block>
+      <block type="python_list_index"></block>
       <block type="python_list_concat"></block>
       <block type="python_list_repeat"></block>
-      <block type="python_list_index"></block>
       <block type="python_list_slice12"></block>
       <block type="python_list_slice1"></block>
       <block type="python_list_slice2"></block>
+    </category>
+    <category name="List modification">
+        <block type="python_append"></block>
+        <block type="python_list_item_modify"></block>
+        <block type="python_extend"></block>
+        <block type="python_insert"></block>
+        <block type="python_remove"></block>
+        <block type="python_pop_statement"></block>
+        <block type="python_sort"></block>
+        <block type="python_reverse"></block>
+    </category>
+    <category name="List queries & tests">
       <block type="python_list_len"></block>
       <block type="python_list_in"></block>
+      <block type="python_list_index_method"></block>
       <block type="python_list_min"></block>
       <block type="python_list_max"></block>
       <block type="python_sorted"></block>
+      <block type="python_pop"></block>
+
     </category>
-    <category name="  List Methods">
-        <block type="python_append"></block>
-        <block type="python_extend"></block>
-        <block type="python_insert"></block>
-        <block type="python_pop"></block>
-        <block type="python_pop_statement"></block>
-        <block type="python_remove"></block>
-        <block type="python_reverse"></block>
-        <block type="python_sort"></block>
-        <block type="python_list_index_method"></block>
-    </category>
-    <category name="Input/Output">
-      <block type="python_input"></block>
+    <sep gap="4"></sep>
+    <category name="I/O & type conversions">
       <block type="python_print"></block>
-      <block type="python_print2"></block>
+      <block type="python_input"></block>
+      <block type="python_format"></block>
+      <block type="python_int"></block>
+      <block type="python_float"></block>
+      <block type="python_str"></block>
+      <block type="python_bool"></block>
+      <block type="python_chr"></block>
+      <block type="python_ord"></block>
+      </category>
     </category>
-    <category name="Control">
+    <category name="Conditionals & loops">
       <block type="python_if"></block>
       <block type="python_while"></block>
       <block type="python_for"></block>
@@ -340,80 +197,264 @@
       <block type="python_range2"></block>
       <block type="python_range3"></block>
     </category>
-    <category name="Variables" custom="VARIABLE">
-      <block type="python_floatvar"></block>
-      <block type="python_assign_floatvar"></block>
-      <block type="python_floatvar2"></block>
-      <block type="python_assign_floatvar2"></block>
-      <block type="python_intvar2"></block>
-      <block type="python_assign_intvar2"></block>
-      <block type="python_floatvar3"></block>
-      <block type="python_assign_floatvar3"></block>
+    <category name="Comments and spacing">
+  <block type="python_linespace"></block>
+  <block type="python_comment"></block>
+</category>
+    <sep gap="4"></sep>
+    <category name="Program variables" custom="VARIABLE">
     </category>
-    <category name=" List Variables" custom="VARIABLE">
-      <block type="python_float_list"></block>
-      <block type="python_assign_float_list"></block>
-      <block type="python_assign_float_list_index"></block>
+    <category name="Basic variable creation" custom="NEW_VARIABLE">
     </category>
+  </category>
+  <category name="List variable creation" custom="NEW_LIST_VAR">
+  </category>
+    </category>
+    <sep gap="4"></sep>
   </xml>
 
-<!-- Blockly storage code -->
-<script>
+  <xml id="toolboxmaths" style="display: none">
+    <category name="Numeric values & operators">
+      <block type="python_int_const"></block>
+      <block type="python_float_const"></block>
+      <block type="python_plus"></block>
+      <block type="python_minus"></block>
+      <block type="python_multiply"></block>
+      <block type="python_divide"></block>
+      <block type="python_int_divide"></block>
+      <block type="python_int_modulo"></block>
+      <block type="python_pow_op"></block>
+      <block type="python_unary_minus"></block>
+    </category>
+    <category name="Numeric functions">
+      <block type="python_round"></block>
+      <block type="python_abs"></block>
+      <block type="python_pow"></block>
+      <block type="python_numeric_min"></block>
+      <block type="python_numeric_max"></block>
+      <block type="python_sum"></block>
+    </category>
+    <sep gap="4"></sep>
+    <category name="String values & operators">
+      <block type="python_string_const"></block>
+      <block type="python_string_index"></block>
+      <block type="python_string_len"></block>
+      <block type="python_string_in"></block>
+      <block type="python_string_concat"></block>
+      <block type="python_string_repeat"></block>
+      <block type="python_string_slice12"></block>
+      <block type="python_string_slice1"></block>
+      <block type="python_string_slice2"></block>
+    </category>
+    <category name="String methods">
+      <block type="python_isdigit"></block>
+      <block type="python_isalpha"></block>
+      <block type="python_isspace"></block>
+      <block type="python_lower"></block>
+      <block type="python_upper"></block>
+      <block type="python_find"></block>
+      <block type="python_index_method"></block>
+      <block type="python_string_count"></block>
+      <block type="python_split"></block>
+    </category>
+    <sep gap="4"></sep>
+    <category name="Comparison operators">
+      <block type="python_equals"></block>
+      <block type="python_not_equals"></block>
+      <block type="python_is"></block>
+      <block type="python_less_than"></block>
+      <block type="python_less_than_or_equal"></block>
+      <block type="python_greater_than"></block>
+      <block type="python_greater_than_or_equal"></block>
+    </category>
+    <category name="Boolean values & operators">
+      <block type="python_true"></block>
+      <block type="python_false"></block>
+      <block type="python_and"></block>
+      <block type="python_or"></block>
+      <block type="python_not"></block>
+    </category>
+    <sep gap="4"></sep>
+    <category name="List values & operators">
+      <block type="python_list_empty"></block>
+      <block type="python_list_const"></block>
+      <block type="python_list_index"></block>
+      <block type="python_list_concat"></block>
+      <block type="python_list_repeat"></block>
+      <block type="python_list_slice12"></block>
+      <block type="python_list_slice1"></block>
+      <block type="python_list_slice2"></block>
+    </category>
+    <category name="List modification">
+        <block type="python_append"></block>
+        <block type="python_list_item_modify"></block>
+        <block type="python_extend"></block>
+        <block type="python_insert"></block>
+        <block type="python_remove"></block>
+        <block type="python_pop_statement"></block>
+        <block type="python_sort"></block>
+        <block type="python_reverse"></block>
+    </category>
+    <category name="List queries & tests">
+      <block type="python_list_len"></block>
+      <block type="python_list_in"></block>
+      <block type="python_list_index_method"></block>
+      <block type="python_list_min"></block>
+      <block type="python_list_max"></block>
+      <block type="python_sorted"></block>
+      <block type="python_pop"></block>
+
+    </category>
+    <sep gap="4"></sep>
+    <category name="I/O & type conversions">
+      <block type="python_print"></block>
+      <block type="python_input"></block>
+      <block type="python_format"></block>
+      <block type="python_int"></block>
+      <block type="python_float"></block>
+      <block type="python_str"></block>
+      <block type="python_bool"></block>
+      <block type="python_chr"></block>
+      <block type="python_ord"></block>
+      </category>
+    </category>
+    <category name="Conditionals & loops">
+      <block type="python_if"></block>
+      <block type="python_while"></block>
+      <block type="python_for"></block>
+      <block type="python_range1"></block>
+      <block type="python_range2"></block>
+      <block type="python_range3"></block>
+    </category>
+    <category name="Comments and spacing">
+  <block type="python_linespace"></block>
+  <block type="python_comment"></block>
+</category>
+    <sep gap="4"></sep>
+    <category name="Program variables" custom="VARIABLE">
+    </category>
+    <category name="Basic variable creation" custom="NEW_VARIABLE">
+    </category>
+  </category>
+  <category name="List variable creation" custom="NEW_LIST_VAR">
+  </category>
+    </category>
+    <sep gap="4"></sep>
+    <category name="Theoretic & respresentation functions">
+      <block type="python_math_ceil"></block>
+      <block type="python_math_copysign"></block>
+      <block type="python_math_fabs"></block>
+      <block type="python_math_factorial"></block>
+      <block type="python_math_floor"></block>
+      <block type="python_math_fmod"></block>
+      <block type="python_math_frexp"></block>
+      <block type="python_math_fsum"></block>
+      <block type="python_math_isinf"></block>
+      <block type="python_math_isnan"></block>
+      <block type="python_math_ldexp"></block>
+      <block type="python_math_modf"></block>
+      <block type="python_math_trunc"></block>
+      </category>
+      <category name="Power & logarithmic functions">
+        <block type="python_math_exp"></block>
+        <block type="python_math_expm1"></block>
+        <block type="python_math_log"></block>
+        <block type="python_math_log1p"></block>
+        <block type="python_math_log10"></block>
+        <block type="python_math_pow"></block>
+        <block type="python_math_sqrt"></block>
+        </category>
+        <category name="Trigonometric functions">
+          <block type="python_math_acos"></block>
+          <block type="python_math_asin"></block>
+          <block type="python_math_atan"></block>
+          <block type="python_math_atan2"></block>
+          <block type="python_math_cos"></block>
+          <block type="python_math_hypot"></block>
+          <block type="python_math_sin"></block>
+          <block type="python_math_tan"></block>
+          </category>
+          <category name="Angular conversion">
+            <block type="python_math_degrees"></block>
+            <block type="python_math_radians"></block>
+          </category>
+          <category name="Hyperbolic functions">
+            <block type="python_math_acosh"></block>
+            <block type="python_math_asinh"></block>
+            <block type="python_math_atanh"></block>
+            <block type="python_math_cosh"></block>
+            <block type="python_math_sinh"></block>
+            <block type="python_math_tanh"></block>
+            </category>
+            <category name="Special functions">
+              <block type="python_math_erf"></block>
+              <block type="python_math_erfc"></block>
+              <block type="python_math_gamma"></block>
+              <block type="python_math_lgamma"></block>
+            </category>
+            <category name="Constants">
+              <block type="python_math_pi"></block>
+              <block type="python_math_e"></block>
+            </category>
+    </category>
+  </xml>
+  <!-- Blockly storage code -->
+  <script>
   if ('BlocklyStorage' in window) {
     BlocklyStorage.HTTPREQUEST_ERROR = 'There was a problem with the request.\n';
-    BlocklyStorage.LINK_ALERT = 'Share your blocks with this link:\n\n%1';
-    BlocklyStorage.HASH_ERROR = 'Sorry, "%1" doesn\'t correspond with any saved Blockly file.';
-    BlocklyStorage.XML_ERROR = 'Could not load your saved file.\n'+
-        'Perhaps it was created with a different version of Blockly?';
+    BlocklyStorage.HASH_ERROR = 'Sorry, "%1" doesn\'t correspond with any saved PythonBlocks file.';
+    BlocklyStorage.XML_ERROR = 'Could not load your file.\n';
   } else {
-    document.write('<p id="sorry">Sorry, cloud storage is not available.  This demo must be hosted on App Engine.</p>');
-  }
-
-</script>
-
-<!-- Blockly code -->
-
-  <script>
-  var blocklyArea = document.getElementById('blocklyArea');
-  var blocklyDiv = document.getElementById('blocklyDiv');
-  var workspace = Blockly.inject(blocklyDiv,
-      {media: '../../media/',
-       toolbox: document.getElementById('toolbox')});
-  var onresize = function(e) {
-    // Compute the absolute coordinates and dimensions of blocklyArea.
-    var element = blocklyArea;
-    var x = 0;
-    var y = 0;
-    do {
-      x += element.offsetLeft;
-      y += element.offsetTop;
-      element = element.offsetParent;
-    } while (element);
-    // Position blocklyDiv over blocklyArea.
-    blocklyDiv.style.left = x + 'px';
-    blocklyDiv.style.top = y + 'px';
-    blocklyDiv.style.width = blocklyArea.offsetWidth + 'px';
-    blocklyDiv.style.height = blocklyArea.offsetHeight + 'px';
-  };
-  window.addEventListener('resize', onresize, false);
-  onresize();
-
-  function generateCode(event) {
-    var content = document.getElementById('pycode');
-
-      code = Blockly.Python.workspaceToCode(workspace);
-      content.textContent = code;
-  };
-
-  workspace.addChangeListener(generateCode);
-
-  if ('BlocklyStorage' in window && window.location.hash.length > 1) {
-    BlocklyStorage.retrieveXml(window.location.hash.substring(1));
+    document.write('<p id="sorry">Cloud storage is not available.  PythonBlocks must be hosted on App Engine.</p>');
   }
   </script>
 
-<!-- Google Drive code -->
+  <!-- Blockly code -->
+  <script>
+  var blocklyArea = document.getElementById('blocklyArea');
+  var blocklyDiv = document.getElementById('blocklyDiv');
+  var output = document.getElementById('output');
+  var workspace = Blockly.inject(blocklyDiv,
+    {media: '../../media/',
+    toolbox: document.getElementById('toolbox')});
+    var onresize = function(e) {
+      // Compute the absolute coordinates and dimensions of blocklyArea.
+      var element = blocklyArea;
+      var x = 0;
+      var y = 0;
+      do {
+        x += element.offsetLeft;
+        y += element.offsetTop;
+        element = element.offsetParent;
+      } while (element);
+      // Position blocklyDiv over blocklyArea.
+      blocklyDiv.style.left = x + 'px';
+      blocklyDiv.style.top = y + 'px';
+      blocklyDiv.style.width = blocklyArea.offsetWidth + 'px';
+      blocklyDiv.style.height = blocklyArea.offsetHeight + 'px';
+      Blockly.svgResize(workspace);
+    };
+    window.addEventListener('resize', onresize, false);
+    output.addEventListener('transitionend', onresize);
+    onresize();
 
-  <script type="text/javascript" src="https://apis.google.com/js/api.js?onload=initLoad"></script>
-</body>
-</html>
+    function generateCode(event) {
+      var content = document.getElementById('pycode');
+
+      code = Blockly.Python.workspaceToCode(workspace);
+      content.textContent = code;
+    };
+
+    workspace.addChangeListener(generateCode);
+
+    if ('BlocklyStorage' in window && window.location.hash.length > 1) {
+      BlocklyStorage.retrieveXml(window.location.hash.substring(1));
+    } else {
+      var xml = '<xml><block id="startBlock" type="python_start" deletable="false" movable="false"></block></xml>';
+      Blockly.Xml.domToWorkspace(workspace, Blockly.Xml.textToDom(xml));
+    }
+    </script>
+
+
+  </body>
+  </html>

@@ -18,10 +18,11 @@
  * limitations under the License.
  */
 
-/**
- * @fileoverview Variable blocks for Blockly.
- * @author fraser@google.com (Neil Fraser)
- */
+ /**
+  * @fileoverview Control blocks for PythonBlocks
+  * @author up649230@myport.ac.uk
+  */
+
 'use strict';
 
 goog.provide('Blockly.Python.pycontrol');
@@ -29,9 +30,19 @@ goog.provide('Blockly.Python.pycontrol');
 goog.require('Blockly.Python');
 
 Blockly.Python['python_if'] = function(block) {
-  var condition = Blockly.Python.valueToCode(block, 'CONDITION', Blockly.Python.ORDER_NONE);
-  var branch = Blockly.Python.statementToCode(block, 'BODY') || Blockly.Python.PASS;
-  var code = 'if ' + condition + ':\n' + branch;
+
+  var code;
+  var elifs;
+
+  code = 'if ' + Blockly.Python.valueToCode(block, 'CONDITION0', Blockly.Python.ORDER_NONE) + ':\n' + (Blockly.Python.statementToCode(block, 'BODY0') || Blockly.Python.ORDER_PASS + '\n');
+
+  for (var i = 1, elifs = block.elifCount; i <= elifs; i++) {
+    code += 'elif ' + Blockly.Python.valueToCode(block, 'COND' + i, Blockly.Python.ORDER_NONE) + ':\n' + (Blockly.Python.statementToCode(block, 'BODY' + i) || Blockly.Python.ORDER_PASS + '\n');
+  }
+
+  if (block.hasElse) {
+    code += 'else:\n' + Blockly.Python.statementToCode(block, 'ELSE_BODY') || Blockly.Python.ORDER_PASS + '\n';
+  }
 
   return code;
 };
@@ -45,9 +56,10 @@ Blockly.Python['python_while'] = function(block) {
 };
 
 Blockly.Python['python_for'] = function(block) {
-  var condition = Blockly.Python.valueToCode(block, 'CONDITION', Blockly.Python.ORDER_NONE);
-  var branch = Blockly.Python.statementToCode(block, 'BODY') || Blockly.Python.PASS;
-  var code = 'for ' + condition + ':\n' + branch;
+  var loopvar = Blockly.Python.valueToCode(block, 'LOOPVAR', Blockly.Python.ORDER_NONE);
+  var sequence = Blockly.Python.valueToCode(block, 'SEQUENCE', Blockly.Python.ORDER_NONE);
+  var body = Blockly.Python.statementToCode(block, 'BODY') || Blockly.Python.PASS;
+  var code = 'for ' + loopvar + ' in ' + sequence + ':\n' + body;
 
   return code;
 };

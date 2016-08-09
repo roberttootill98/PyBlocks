@@ -78,6 +78,9 @@ Blockly.Python.ORDER_LOGICAL_OR = 14;       // or
 Blockly.Python.ORDER_CONDITIONAL = 15;      // if else
 Blockly.Python.ORDER_LAMBDA = 16;           // lambda
 Blockly.Python.ORDER_NONE = 99;             // (...)
+Blockly.Python.ORDER_NEWLINE = '
+
+';
 
 /**
  * Empty loops or conditionals are not allowed in Python.

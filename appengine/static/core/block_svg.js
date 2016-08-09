@@ -536,6 +536,7 @@ Blockly.BlockSvg.prototype.onMouseUp_ = function(e) {
           }
       }
       else { // this is an expression
+        console.log("DROPPED INTO INPUT ", this_.outputConnection.targetConnection.inputNumber_);
         this_.checkParentheses();
         this_.reType();
       }
@@ -576,6 +577,10 @@ Blockly.BlockSvg.prototype.onMouseUp_ = function(e) {
 };
 
 Blockly.Block.prototype.reType = function() {
+  if (!this.workspace) {
+    // don't bother if not on workspace
+    return;
+  }
   var topLevel = this.getTopLevel();
   console.log("RETYPE, top level: ", topLevel.type);
   topLevel.restoreFullTypes();
@@ -625,6 +630,7 @@ Blockly.BlockSvg.prototype.showContextMenu_ = function(e) {
     }
     menuOptions.push(duplicateOption);
 
+/* MJP remove add comment, collapse and disable options
     if (this.isEditable() && !this.collapsed_ &&
         this.workspace.options.comments) {
       // Option to add/remove a comment.
@@ -642,6 +648,7 @@ Blockly.BlockSvg.prototype.showContextMenu_ = function(e) {
       }
       menuOptions.push(commentOption);
     }
+
 
     // Option to make block inline.
     if (!this.collapsed_) {
@@ -694,6 +701,7 @@ Blockly.BlockSvg.prototype.showContextMenu_ = function(e) {
       };
       menuOptions.push(disableOption);
     }
+*/
 
     // Option to delete this block.
     // Count the number of blocks that are nested in this block.
@@ -1520,6 +1528,7 @@ Blockly.BlockSvg.prototype.updateColour = function() {
 
   //for (var i = 0, indicatorPair; indicatorPair = this.indicators[i]; i++) {
   for (var emptySlotNumber in this.indicators) {
+    console.log("SLOTfill", emptySlotNumber);
     var indicatorPair = this.indicators[emptySlotNumber];
     if (indicatorPair.basic) {
       var basicTypes = this.getInputTypesByKind(emptySlotNumber).basic;
@@ -1821,6 +1830,9 @@ Blockly.BlockSvg.prototype.render = function(opt_bubble) {
   // If there are no icons, cursorX will be 0, otherwise it will be the
   // width that the first label needs to move over by.
 
+  // MJP HACK TO GET COLOURS RIGHT
+  this.reType();
+
   var inputRows = this.renderCompute_(cursorX);
   this.renderDraw_(cursorX, inputRows);
 
@@ -1928,6 +1940,7 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
     // The width is currently only needed for inline value inputs.
     if (isInline && input.type == Blockly.INPUT_VALUE) {
       slotNumber++;
+      console.log("SLOT ", slotNumber, " connection ", input.connection.inputNumber_);
       var kinds = this.getInputKinds(slotNumber);
       if (kinds.basic && kinds.list) {
         input.renderWidth = Blockly.BlockSvg.DOUBLE_SLOT_WIDTH;
@@ -2011,27 +2024,28 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
 
   }
 
-  // HACK to make row of statements at least minumum thickness
+  // HACK to adjust height of rows in statement blocks
   if (!this.outputConnection) {
-    if (inputRows[0].height < Blockly.BlockSvg.MIN_STMT_BLOCK_Y) {
-        inputRows[0].height = Blockly.BlockSvg.MIN_STMT_BLOCK_Y;
-    }
-    else {
-        var shortfall = (inputRows[0].height - Blockly.BlockSvg.MIN_STMT_BLOCK_Y) %
-                          Blockly.BlockSvg.INLINE_PADDING_BOTTOM;
-        console.log("shortfall0 =", shortfall)
-        inputRows[0].height += Blockly.BlockSvg.INLINE_PADDING_BOTTOM - shortfall;
-    }
-
-    if (inputRows.length == 2) {
-        console.log("while loop with row 1", inputRows[1].height);
-        if (inputRows[1].height > Blockly.BlockSvg.MIN_STMT_BLOCK_Y) {
-            inputRows[1].height -= 4; // notch height
+    for (var i = 0, row; row = inputRows[i]; i++) {
+      if (i % 2 == 0 || this.type == "python_comment") {
+        // row with inputs
+        if (inputRows[i].height < Blockly.BlockSvg.MIN_STMT_BLOCK_Y) {
+          inputRows[i].height = Blockly.BlockSvg.MIN_STMT_BLOCK_Y;
         }
-
+      }
+      else {
+        // row with nested statements
+        if (inputRows[i].height > Blockly.BlockSvg.MIN_STMT_BLOCK_Y) {
+           inputRows[i].height -= 4;
+        }
+      }
     }
-
-    //console.log("2 statement row thickness",inputRows[0].height );
+  }
+  else {
+    //var shortfall = (inputRows[0].height - Blockly.BlockSvg.MIN_STMT_BLOCK_Y) %
+    //                  Blockly.BlockSvg.INLINE_PADDING_BOTTOM;
+    //console.log("shortfall0 =", shortfall)
+    //inputRows[0].height += Blockly.BlockSvg.INLINE_PADDING_BOTTOM - shortfall;
   }
   //else {
     //  console.log("2 expression row thickness",inputRows[0].height );
@@ -2133,6 +2147,7 @@ Blockly.BlockSvg.prototype.renderDraw_ = function(iconWidth, inputRows) {
   }
   //for (var i=0, indicator; indicator=this.indicators[i]; i++) {
   for (var emptySlotNumber in this.indicators) {
+    console.log("SLOT adding slot", emptySlotNumber, "to group");
     var indicatorPair = this.indicators[emptySlotNumber];
     if (indicatorPair.basic) {
       console.log("Basic indicator " + emptySlotNumber);
@@ -2142,6 +2157,12 @@ Blockly.BlockSvg.prototype.renderDraw_ = function(iconWidth, inputRows) {
       for (var j=0, stripe; stripe=indicatorPair.list[j]; j++) {
         console.log("List indicator stripe" + j);
          this.svgIndicatorGroup.appendChild(stripe);
+      }
+    }
+    if (indicatorPair.varInd) {
+      for (var j=0, ind; ind=indicatorPair.varInd[j]; j++) {
+        console.log("List indicator stripe" + j);
+         this.svgIndicatorGroup.appendChild(ind);
       }
     }
   }
@@ -2217,6 +2238,16 @@ Blockly.BlockSvg.prototype.renderDrawTop_ =
  */
 Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, holeSteps,
     indicatorSteps, connectionsXY, inputRows, iconWidth) {
+
+  var addVarIndicator = function(x, y) {
+    var text = Blockly.createSvgElement('text', {});
+    text.setAttribute('class', 'blocklyIndicatorText');
+    text.setAttribute('x', x + Blockly.BlockSvg.INDICATOR_WIDTH / 2);
+    text.setAttribute('y', y + Blockly.BlockSvg.INDICATOR_HEIGHT - 3);
+    text.appendChild(document.createTextNode("var"));
+    return text;
+  };
+
   var cursorX;
   var cursorY = 0;
 
@@ -2224,6 +2255,7 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, holeSteps,
     console.log("statement cursor first", cursorY);
   }
   var connectionX, connectionY;
+  var slotNumber = -1;
   for (var y = 0, row; row = inputRows[y]; y++) {
     cursorX = Blockly.BlockSvg.SEP_SPACE_X;
     if (y == 0) {
@@ -2243,8 +2275,10 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, holeSteps,
       steps.push('v', remainder);
       this.width += Blockly.BlockSvg.JAGGED_TEETH_WIDTH;
     } else if (row.type == Blockly.BlockSvg.INLINE) {
+    //  if (row.height < Blockly.BlockSvg.MIN_STMT_BLOCK_Y) {
+    //     row.height = Blockly.BlockSvg.MIN_STMT_BLOCK_Y;
+    //  }
       // Inline inputs.
-      var slotNumber = -1;
       for (var x = 0, input; input = row[x]; x++) {
         var fieldX = cursorX;
         var fieldY = cursorY;
@@ -2291,9 +2325,9 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, holeSteps,
 
 
           if (!input.connection.targetConnection) {
-
+            console.log("XYZVAR ", this.type, this.typeVecs);
             var params = this.getInputKinds(slotNumber);
-            console.log(params);
+            console.log("XYZVAR ", params);
 
             var indicatorX = cursorX;
             if (params.basic && params.list) {
@@ -2313,7 +2347,8 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, holeSteps,
 
             var indicatorPair = {
               'basic': null,
-              'list': null
+              'list': null,
+              'varInd': []
             };
             // Draw basic type indicator
 
@@ -2331,8 +2366,14 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, holeSteps,
             };
 
             if (params.basic) {
+              console.log("XYZVAR basic");
               var indicator = createBasicIndicator(indicatorX, indicatorY);
               indicatorPair.basic = indicator;
+
+              if (slotNumber === 0 && this.lhsVarOnly) {
+                  var varInd = addVarIndicator(indicatorX, indicatorY);
+                  indicatorPair.varInd.push(varInd);
+              }
               indicatorX += Blockly.BlockSvg.INDICATOR_WIDTH +
                   Blockly.BlockSvg.INDICATOR_GAP_X;
             }
@@ -2350,6 +2391,7 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, holeSteps,
               for (var i=0; i<3; i++) {
                 var stripe = Blockly.createSvgElement('rect',{},
                   this.svgGroup_);
+                  //this.indicatorGroup);
                 //stripe.setAttribute('x', i * (tempListRectWidth + tempListGapWidth));
                 stripe.setAttribute('x', 0);
                 stripe.setAttribute('y', 0);
@@ -2362,10 +2404,16 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, holeSteps,
                 //    (0.5 + indicatorX) + ', '  + indicatorY + ')');
                 indicatorPair.list.push(stripe);
               }
+              if (slotNumber === 0 && this.lhsVarOnly) {
+                  var varInd = addVarIndicator(indicatorX, indicatorY);
+                  indicatorPair.varInd.push(varInd);
+              }
               //indicatorPair.list = ;
             }
             //this.indicators.push(indicatorPair);
             this.indicators[slotNumber] = indicatorPair;
+            console.log("SLOT ", slotNumber, " assigned ", indicatorPair);
+            console.log("SLOT ", this.indicators);
           }
 
           // Create inline input connection.
@@ -2570,7 +2618,6 @@ Blockly.BlockSvg.prototype.renderDrawLeft_ =
 };
 
 Blockly.Block.prototype.checkParentheses = function() {
-  console.log("PARS start");
   var operator = this.operator;
   if (operator) {
     var parent = this.getParent();
@@ -2581,25 +2628,17 @@ Blockly.Block.prototype.checkParentheses = function() {
       }
       var position = this.outputConnection.getInputNumber();
       if (parentOp.precedence < operator.precedence) {
-        console.log("PARS child has greater precedence");
         return;
       }
       else if (parentOp.precedence == operator.precedence) {
-        console.log("PARS child has equal precedence");
-        console.log("PARS type ", this.type);
-
         if (position == 1 && this.type == 'python_pow_op') {
           return;
         }
-
-        console.log("PARS input number is ", position);
         if (position == 0 && this.type != 'python_pow_op') {
-          console.log("PARS child dropped in left slot");
           return;
         }
       }
       else {
-        console.log("PARS type parent type", this.type, parent.type);
         if (position == 1 && parent.type == 'python_pow_op' &&
             this.type == "python_unary_minus") {
           return;

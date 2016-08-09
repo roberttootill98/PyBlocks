@@ -115,7 +115,11 @@ Blockly.Block.prototype.fill = function(workspace, prototypeName) {
   /** type {!Array<!Array<string>} */
   this.typeVecs = [];
 
+  this.lhsVarOnly = false;
+
   this.operator = null;
+
+
 
   /** @type {boolean} */
   this.rendered = false;
@@ -824,6 +828,10 @@ Blockly.Block.prototype.setTypeVecs = function(typeVecs) {
   this.restoreFullTypes();
 };
 
+Blockly.Block.prototype.setLhsVarOnly = function(lhsVarOnly) {
+  this.lhsVarOnly = lhsVarOnly;
+};
+
 Blockly.Block.prototype.setOperator = function(precedence, right) {
   this.operator = {};
   this.operator.precedence = precedence;
@@ -1224,6 +1232,19 @@ Blockly.Block.prototype.moveInputBefore = function(name, refName) {
   this.moveNumberedInputBefore(inputIndex, refIndex);
 };
 
+// PyBlocks MJP
+Blockly.Block.prototype.renumberParameterConnections = function() {
+  var inputNumber = 0;
+  for (var i = 0, input; input = this.inputList[i]; i++) {
+    if (input.type == Blockly.INPUT_VALUE) {
+      console.log("RENUM from ", input.connection.inputNumber_);
+      input.connection.setInputNumber(inputNumber);
+      console.log("RENUM to ", input.connection.inputNumber_);
+      inputNumber++;
+    }
+  }
+};
+
 /**
  * Move a numbered input to a different location on this block.
  * @param {number} inputIndex Index of the input to move.
@@ -1245,6 +1266,8 @@ Blockly.Block.prototype.moveNumberedInputBefore = function(
   }
   // Reinsert input.
   this.inputList.splice(refIndex, 0, input);
+  // MJP PyBlocks
+  this.renumberParameterConnections();
   if (this.rendered) {
     this.render();
     // Moving an input will cause the block to change shape.
@@ -1262,6 +1285,7 @@ Blockly.Block.prototype.moveNumberedInputBefore = function(
 Blockly.Block.prototype.removeInput = function(name, opt_quiet) {
   for (var i = 0, input; input = this.inputList[i]; i++) {
     if (input.name == name) {
+
       if (input.connection && input.connection.targetConnection) {
         // Disconnect any attached block.
         input.connection.targetBlock().setParent(null);
@@ -1272,6 +1296,11 @@ Blockly.Block.prototype.removeInput = function(name, opt_quiet) {
         this.render();
         // Removing an input will cause the block to change shape.
         this.bumpNeighbours_();
+      }
+      // MJP Pyblocks
+      if (input.type == Blockly.INPUT_VALUE) {
+        this.numParameters--;
+        this.renumberParameterConnections();
       }
       return;
     }
@@ -1447,7 +1476,7 @@ Blockly.Block.prototype.outputsAList = function() {
  * @param {!Array<string} holeTypes types indicated in hole.
  * @return {bool} true if the drop is legal, false otherwise.
  */
-Blockly.Block.prototype.legalDrop = function(holeTypes) {
+Blockly.Block.prototype.legalDrop = function(holeTypes, requiresVariable) {
   var includesListType = function(types) {
     for (var i=0; i<types.length; i++) {
       if (types[i][0] == "*") {
@@ -1476,6 +1505,11 @@ Blockly.Block.prototype.legalDrop = function(holeTypes) {
     return (types.indexOf("*any") != -1 ||
            types.indexOf("*matching") != -1);
   };
+
+  if (requiresVariable && this.type != 'variables_get') {
+    return false;
+  }
+
   if (includesGreyBasic(holeTypes) && !this.outputsAList()) {
     return true;
   }

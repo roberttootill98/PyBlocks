@@ -139,3 +139,52 @@ Blockly.ContextMenu.callbackFactory = function(block, xml) {
     newBlock.select();
   };
 };
+
+Blockly.ContextMenu.addInputCallback = function(block) {
+  return function() {
+    block.add();
+  };
+};
+
+Blockly.ContextMenu.removeInputCallback = function(block) {
+  return function() {
+    block.remove();
+  };
+};
+
+Blockly.ContextMenu.finalInputCallback = function(block, inputExists) {
+  if (inputExists) {
+    return function() {
+      block.removeFinal();
+    };
+  }
+  else {
+    return function() {
+      block.addFinal();
+    };
+  }
+};
+
+Blockly.ContextMenu.modifyMathInputCallback = function(block) {
+  return function() {
+    if (block.hasMath) {
+      block.hasMath = !block.hasMath;
+      block.modify('math', 'remove');
+    } else {
+      block.hasMath = !block.hasMath;
+      block.modify('math', 'add');
+    }
+  };
+};
+
+Blockly.ContextMenu.modifyTurtleInputCallback = function(block) {
+  return function() {
+    if (block.hasTurtle) {
+      block.hasTurtle = !block.hasTurtle;
+      block.modify('turtle', 'remove');
+    } else {
+      block.hasTurtle = !block.hasTurtle;
+      block.modify('turtle', 'add');
+    }
+  };
+};

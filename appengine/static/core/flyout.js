@@ -367,14 +367,19 @@ Blockly.Flyout.prototype.show = function(xmlList) {
   }
   this.buttons_.length = 0;
 
-  if (xmlList == Blockly.Variables.NAME_TYPE) {
-    // Special category for variables.
-    xmlList =
-        Blockly.Variables.flyoutCategory(this.workspace_.targetWorkspace);
-  } else if (xmlList == Blockly.Procedures.NAME_TYPE) {
-    // Special category for procedures.
-    xmlList =
-        Blockly.Procedures.flyoutCategory(this.workspace_.targetWorkspace);
+  switch (xmlList) {
+    case Blockly.Variables.CAT_EXISTING:
+      xmlList = Blockly.Variables.existingFlyoutCategory(this.workspace_.targetWorkspace);
+      break;
+    case Blockly.Variables.CAT_NEW_BASIC:
+      xmlList = Blockly.Variables.newFlyoutCategory(this.workspace_.targetWorkspace);
+      break;
+  //  case Blockly.Variables.CAT_EXISTING_LIST:
+  //    xmlList = Blockly.Variables.existingListFlyoutCategory(this.workspace_.targetWorkspace);
+  //    break;
+    case Blockly.Variables.CAT_NEW_LIST:
+      xmlList = Blockly.Variables.newListFlyoutCategory(this.workspace_.targetWorkspace);
+      break;
   }
 
   var margin = this.CORNER_RADIUS;
@@ -384,8 +389,22 @@ Blockly.Flyout.prototype.show = function(xmlList) {
   var gaps = [];
   for (var i = 0, xml; xml = xmlList[i]; i++) {
     if (xml.tagName && xml.tagName.toUpperCase() == 'BLOCK') {
+      //var pytype = xml.getAttribute('pytype');
+      //var pytype2 = xml.getAttribute('pytype2');
+      console.log("VARS calling domToBlock on ", xml);
       var block = Blockly.Xml.domToBlock(
           /** @type {!Blockly.Workspace} */ (this.workspace_), xml);
+      //if (pytype) {
+      //  block.setTypeVecs([[pytype, pytype, "none"]]);
+      //  block.fullTypeVecs = [["matching", "matching", "none"]];
+      //}
+      //if (pytype2) {
+      //  block.setTypeVecs([[pytype2]]);
+      //  block.fullTypeVecs = [[pytype2]];
+      //}
+      console.log("VARSS4", block.type, block.getFieldValue("VAR"));
+
+
       blocks.push(block);
       var gap = parseInt(xml.getAttribute('gap'), 10);
       gaps.push(gap || margin * 3);

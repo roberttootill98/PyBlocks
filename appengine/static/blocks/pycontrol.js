@@ -30,21 +30,97 @@ goog.require('Blockly.Blocks');
 
 Blockly.Blocks['python_if'] = {
   init: function() {
-    this.appendValueInput("CONDITION")
-        .setAlign(Blockly.ALIGN_RIGHT)
-        .appendField("if ")
-        .setCheck(["bool"]);
+    this.appendValueInput("CONDITION0")
+        .appendField("if ");
     this.appendDummyInput()
         .appendField(":");
-    this.appendStatementInput("BODY");
+    this.appendStatementInput("BODY0");
     this.setInputsInline(true);
     this.setTypeVecs([["bool", "none"]]);
     this.setPreviousStatement(true);
     this.setNextStatement(true);
     this.setTooltip('');
     this.setHelpUrl('http://www.example.com/');
+    this.elifCount = 0;
+    this.hasElse = false;
+  },
+
+  customContextMenu: function(options) {
+    var optionRemove = {enabled: this.elifCount > 0};
+    optionRemove.text = "Remove elif clause";
+    optionRemove.callback = Blockly.ContextMenu.removeInputCallback(this);
+    var optionAdd = {enabled: true};
+    optionAdd.text = "Add elif clause";
+    optionAdd.callback = Blockly.ContextMenu.addInputCallback(this);
+    var optionElse = {enabled: true};
+    optionElse.text = this.hasElse ?
+        'Remove else clause' : 'Add else clause';
+    optionElse.callback =
+        Blockly.ContextMenu.finalInputCallback(this, this.hasElse);
+    options.unshift(optionAdd, optionRemove, optionElse);
+  },
+
+  mutationToDom: function() {
+    var container = document.createElement('mutation');
+    container.setAttribute('elif_count', this.elifCount);
+    container.setAttribute('has_else_clause', this.hasElse);
+    return container;
+  },
+
+  domToMutation: function(xmlElement) {
+    var elifs = parseInt(xmlElement.getAttribute('elif_count'));
+    for (var i = 0; i < elifs; i++) {
+      this.add();
+    }
+    if (xmlElement.getAttribute('has_else_clause') == "true") {
+      this.addFinal();
+    }
+  },
+
+  add: function() {
+    this.elifCount++;
+    var conditionName = "COND" + this.elifCount;
+    this.appendValueInput(conditionName)
+        .appendField("elif ");
+    var colonName = "COLON" + this.elifCount;
+    this.appendDummyInput(colonName)
+        .appendField(":");
+    var bodyName = 'BODY' + this.elifCount;
+    this.appendStatementInput(bodyName);
+    this.fullTypeVecs[0].unshift("bool");
+    console.log("IFSTMT ", this.fullTypeVecs);
+    if (this.hasElse) {
+
+      this.moveInputBefore(conditionName, "ELSE");
+      this.moveInputBefore(colonName, "ELSE");
+      this.moveInputBefore(bodyName, "ELSE");
+    }
+    this.render();
+  },
+
+  remove: function() {
+    this.removeInput('COND' + this.elifCount);
+    this.removeInput('COLON' + this.elifCount);
+    this.removeInput('BODY' + this.elifCount);
+    this.elifCount--;
+    this.fullTypeVecs[0].splice(0, 1);
+    this.render();
+  },
+
+  addFinal: function() {
+    this.hasElse= true;
+    this.appendDummyInput("ELSE")
+        .appendField("else:  ");  // two space hack for nice space for notch
+    this.appendStatementInput("ELSE_BODY");
+  },
+
+  removeFinal: function() {
+    this.hasElse = false;
+    this.removeInput('ELSE_BODY');
+    this.removeInput('ELSE');
   }
 };
+
 
 Blockly.Blocks['python_while'] = {
   init: function() {
@@ -66,19 +142,18 @@ Blockly.Blocks['python_while'] = {
 
 Blockly.Blocks['python_for'] = {
   init: function() {
-    this.appendDummyInput()
-        .appendField("for ");
     this.appendValueInput("LOOPVAR")
-        .setCheck(["str"])
-        .setAlign(Blockly.ALIGN_RIGHT)
-        .appendField(new Blockly.FieldVariable("item"), "SEQUENCE")
+        .appendField("for ")
+    this.appendValueInput("SEQUENCE")
         .appendField(" in ")
-        .setCheck(["str"]);
     this.appendDummyInput()
         .appendField(":");
     this.appendStatementInput("BODY");
     this.setInputsInline(true);
-    this.setTypeVecs([["*any", "none"], ["range", "none"], ["str", "none"]]);
+    this.setTypeVecs([["matching", "*matching", "none"],
+                      ["int", "range", "none"],
+                      ["str", "str", "none"]]);
+    this.setLhsVarOnly(true);
     this.setPreviousStatement(true);
     this.setNextStatement(true);
     this.setTooltip('');

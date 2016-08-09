@@ -24,26 +24,21 @@
  */
 'use strict';
 
-goog.provide('Blockly.Python.pyio');
+goog.provide('Blockly.Python.pyvariables');
 
 goog.require('Blockly.Python');
+goog.require('Blockly.Names');
 
 
-Blockly.Python['python_input'] = function(block) {
-  var code = Blockly.Python.valueToCode(block, 'ARG', Blockly.Python.ORDER_NONE);
-  return ['input(' + code + ')', Blockly.Python.ORDER_ATOMIC];
+Blockly.Python['variables_set'] = function(block) {
+  // var variable = block.getFieldValue(block, 'VAR', Blockly.Python.ORDER_NONE);
+  // var value = block.getFieldValue(block, 'VALUE', Blockly.Python.ORDER_NONE);
+
+  var variable = Blockly.Python.valueToCode(block, 'VAR', Blockly.Python.ORDER_NONE);
+  var value = Blockly.Python.valueToCode(block, 'VALUE', Blockly.Python.ORDER_NONE);
+  return variable + ' = ' + value + '\n';
 };
 
-Blockly.Python['python_print'] = function(block) {
-  var code = Blockly.Python.getFieldValue(block, 'ARG1');
-  //for (i = 1, params = block.parameterCount; i > params; i++) {
-    //code += Blockly.Python.valueToCode(block, 'ARG' + i, Blockly.Python.ORDER_NONE);
-
-  //  console.log()
-//  }
-//console.log(block.parameterCount + ' parameter');
-  return ['print(' + code + ')', Blockly.Python.ORDER_ATOMIC];
-};
 
 // Blockly.Python['python_print2'] = function(block) {
 //   var block1 = Blockly.Python.valueToCode(block, 'ARG1', Blockly.Python.ORDER_NONE);

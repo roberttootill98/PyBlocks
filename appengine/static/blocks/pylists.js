@@ -45,7 +45,7 @@ Blockly.Blocks['python_list_empty'] = {
 
 Blockly.Blocks['python_list_index'] = {
   init: function() {
-    this.appendValueInput("ARG2");
+    this.appendValueInput("ARG1");
     this.appendValueInput("ARG2")
         .appendField("[");
     this.appendDummyInput()
@@ -62,9 +62,10 @@ Blockly.Blocks['python_list_index'] = {
 
 Blockly.Blocks['python_list_const'] = {
   init: function() {
-    this.appendValueInput("ARG")
-        .appendField("[");
-    this.appendDummyInput()
+    this.appendDummyInput().
+      appendField("[");
+    this.appendValueInput("ARG1");
+    this.appendDummyInput("CLOSE")
         .appendField("]");
     this.setInputsInline(true);
     this.setTypeVecs([
@@ -73,6 +74,48 @@ Blockly.Blocks['python_list_const'] = {
     this.setOutput(true);
     this.setTooltip('');
     this.setHelpUrl('http://www.example.com/');
+    this.parameterCount = 1;
+  },
+
+  customContextMenu: function(options) {
+    var optionRemove = {enabled: this.parameterCount > 1};
+    optionRemove.text = "Remove value";
+    optionRemove.callback = Blockly.ContextMenu.removeInputCallback(this);
+    var optionAdd = {enabled: true};
+    optionAdd.text = "Add value";
+    optionAdd.callback = Blockly.ContextMenu.addInputCallback(this);
+    options.unshift(optionAdd, optionRemove);
+  },
+
+  mutationToDom: function() {
+    var container = document.createElement('mutation');
+    container.setAttribute('parameter_count', this.parameterCount);
+    return container;
+  },
+
+  domToMutation: function(xmlElement) {
+    var parameters = parseInt(xmlElement.getAttribute('parameter_count'));
+    for (var i = 1; i < parameters; i++) {
+      this.add();
+    }
+  },
+
+  add: function() {
+    this.parameterCount++;
+    var inputName = 'ARG' + this.parameterCount;
+    var input = this.appendValueInput(inputName);
+    if (this.parameterCount > 1) {
+      input.appendField(", ");
+    }
+    this.fullTypeVecs[0].splice(-1, 0, "matching");
+    this.moveInputBefore(inputName, "CLOSE");
+  },
+
+  remove: function() {
+    this.removeInput('ARG' + this.parameterCount);
+    this.parameterCount--;
+    this.fullTypeVecs[0].splice(-2, 1);
+    this.render();
   }
 };
 
@@ -306,6 +349,26 @@ Blockly.Blocks['python_append'] = {
     this.setTypeVecs([
       ["*matching", "matching", "none"]
     ]);
+    this.setLhsVarOnly(true);
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+
+Blockly.Blocks['python_list_item_modify'] = {
+  init: function() {
+    this.appendValueInput("ARG1");
+    this.appendValueInput("ARG2")
+        .appendField("[");
+    this.appendValueInput("ARG3")
+        .appendField("] = ");
+    this.setInputsInline(true);
+    this.setTypeVecs([
+      ["*matching", "int", "matching", "none"],
+    ]);
+    this.setLhsVarOnly(true);
     this.setPreviousStatement(true);
     this.setNextStatement(true);
     this.setTooltip('');
@@ -324,6 +387,7 @@ Blockly.Blocks['python_extend'] = {
     this.setTypeVecs([
       ["*matching", "*matching", "none"]
     ]);
+    this.setLhsVarOnly(true);
     this.setPreviousStatement(true);
     this.setNextStatement(true);
     this.setTooltip('');
@@ -344,6 +408,7 @@ Blockly.Blocks['python_insert'] = {
     this.setTypeVecs([
       ["*matching", "matching", "int", "none"]
     ]);
+    this.setLhsVarOnly(true);
     this.setPreviousStatement(true);
     this.setNextStatement(true);
     this.setTooltip('');
@@ -360,6 +425,7 @@ Blockly.Blocks['python_pop'] = {
     this.setTypeVecs([
       ["*matching", "matching"]
     ]);
+    this.setLhsVarOnly(true);
     this.setOutput(true);
     this.setTooltip('');
     this.setHelpUrl('http://www.example.com/');
@@ -375,6 +441,7 @@ Blockly.Blocks['python_pop_statement'] = {
     this.setTypeVecs([
       ["*any", "none"]
     ]);
+    this.setLhsVarOnly(true);
     this.setPreviousStatement(true);
     this.setNextStatement(true);
     this.setTooltip('');
@@ -393,6 +460,7 @@ Blockly.Blocks['python_remove'] = {
     this.setTypeVecs([
       ["*matching", "matching", "none"]
     ]);
+    this.setLhsVarOnly(true);
     this.setPreviousStatement(true);
     this.setNextStatement(true);
     this.setTooltip('');
@@ -409,6 +477,7 @@ Blockly.Blocks['python_reverse'] = {
     this.setTypeVecs([
       ["*any", "none"]
     ]);
+    this.setLhsVarOnly(true);
     this.setPreviousStatement(true);
     this.setNextStatement(true);
     this.setTooltip('');
@@ -425,6 +494,7 @@ Blockly.Blocks['python_sort'] = {
     this.setTypeVecs([
       ["*any", "none"]
     ]);
+    this.setLhsVarOnly(true);
     this.setPreviousStatement(true);
     this.setNextStatement(true);
     this.setTooltip('');

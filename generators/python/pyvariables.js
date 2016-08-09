@@ -1,6 +1,6 @@
 /**
  * @license
- * Visual Blocks Language
+ * Visual Blocks Editor
  *
  * Copyright 2012 Google Inc.
  * https://developers.google.com/blockly/
@@ -19,28 +19,25 @@
  */
 
 /**
- * @fileoverview Generating Python for variable blocks.
- * @author q.neutron@gmail.com (Quynh Neutron)
+ * @fileoverview Variable blocks for Blockly.
+ * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 
-goog.provide('Blockly.Python.variables');
+goog.provide('Blockly.Python.pyvars');
 
 goog.require('Blockly.Python');
 
 
-Blockly.Python['variables_get'] = function(block) {
-  // Variable getter.
-  var code = Blockly.Python.variableDB_.getName(block.getFieldValue('VAR'),
-      Blockly.Variables.NAME_TYPE);
-  return [code, Blockly.Python.ORDER_ATOMIC];
+Blockly.Python['variables_set'] = function(block) {
+  var variable = Blockly.Python.getFieldValue(block, 'VAR', Blockly.Python.ORDER_NONE);
+  var value = Blockly.Python.getFieldValue(block, 'VALUE', Blockly.Python.ORDER_NONE);
+  return [variable + ' = ' + value, Blockly.Python.ORDER_ATOMIC];
 };
 
-Blockly.Python['variables_set'] = function(block) {
-  // Variable setter.
-  var argument0 = Blockly.Python.valueToCode(block, 'VALUE',
-      Blockly.Python.ORDER_NONE) || '0';
-  var varName = Blockly.Python.variableDB_.getName(block.getFieldValue('VAR'),
-      Blockly.Variables.NAME_TYPE);
-  return varName + ' = ' + argument0 + '\n';
-};
+
+// Blockly.Python['python_print2'] = function(block) {
+//   var block1 = Blockly.Python.valueToCode(block, 'ARG1', Blockly.Python.ORDER_NONE);
+//   var block2 = Blockly.Python.valueToCode(block, 'ARG2', Blockly.Python.ORDER_NONE);
+//   return 'print(' + block1 + ', ' + block2 + ')';
+// };

@@ -18,10 +18,11 @@
  * limitations under the License.
  */
 
-/**
- * @fileoverview Variable blocks for Blockly.
- * @author fraser@google.com (Neil Fraser)
- */
+ /**
+  * @fileoverview List blocks for PythonBlocks
+  * @author up649230@myport.ac.uk
+  */
+
 'use strict';
 
 goog.provide('Blockly.Python.pylists');
@@ -34,25 +35,20 @@ Blockly.Python['python_list_empty'] = function(block) {
 };
 
 Blockly.Python['python_list_const'] = function(block) {
-  var code = Blockly.Python.valueToCode(block, 'ARG', Blockly.Python.ORDER_NONE);
+  var params;
+  var code;
 
-  return ['[' + code + ']', Blockly.Python.ORDER_ATOMIC];
+  for (var i = 1, params = block.parameterCount, code = ''; i <= params; i++) {
+    if (params - i == 0) {
+      code += Blockly.Python.valueToCode(block, 'ARG' + i, Blockly.Python.ORDER_NONE);
+    } else {
+      code += Blockly.Python.valueToCode(block, 'ARG' + i, Blockly.Python.ORDER_NONE) + ', ';
+    }
+  }
+
+  return ['[' + code + ']', Blockly.Python.ORDER_NONE];
 };
 
-Blockly.Python['python_list_const2'] = function(block) {
-  var block1 = Blockly.Python.valueToCode(block, 'ARG1', Blockly.Python.ORDER_NONE);
-  var block2 = Blockly.Python.valueToCode(block, 'ARG2', Blockly.Python.ORDER_NONE);
-
-  return ['[' + block1 + ', ' + block2 + ']', Blockly.Python.ORDER_ATOMIC];
-};
-
-Blockly.Python['python_list_const3'] = function(block) {
-  var block1 = Blockly.Python.valueToCode(block, 'ARG1', Blockly.Python.ORDER_NONE);
-  var block2 = Blockly.Python.valueToCode(block, 'ARG2', Blockly.Python.ORDER_NONE);
-  var block3 = Blockly.Python.valueToCode(block, 'ARG3', Blockly.Python.ORDER_NONE);
-
-  return ['[' + block1 + ', ' + block2 + ', ' + block3 + ']', Blockly.Python.ORDER_ATOMIC];
-};
 
 Blockly.Python['python_list_concat'] = function(block) {
   var block1 = Blockly.Python.valueToCode(block, 'LHS', Blockly.Python.ORDER_NONE);
@@ -132,14 +128,14 @@ Blockly.Python['python_append'] = function(block) {
   var block1 = Blockly.Python.valueToCode(block, 'ARG1', Blockly.Python.ORDER_NONE);
   var block2 = Blockly.Python.valueToCode(block, 'ARG2', Blockly.Python.ORDER_NONE);
 
-  return block1 + '.append(' + block2 + ')';
+  return block1 + '.append(' + block2 + ')\n';
 };
 
 Blockly.Python['python_extend'] = function(block) {
   var block1 = Blockly.Python.valueToCode(block, 'ARG1', Blockly.Python.ORDER_NONE);
   var block2 = Blockly.Python.valueToCode(block, 'ARG2', Blockly.Python.ORDER_NONE);
 
-  return block1 + '.extend(' + block2 + ')';
+  return block1 + '.extend(' + block2 + ')\n';
 };
 
 Blockly.Python['python_insert'] = function(block) {
@@ -147,7 +143,7 @@ Blockly.Python['python_insert'] = function(block) {
   var block2 = Blockly.Python.valueToCode(block, 'ARG2', Blockly.Python.ORDER_NONE);
   var block3 = Blockly.Python.valueToCode(block, 'ARG3', Blockly.Python.ORDER_NONE);
 
-  return block1 + '.insert(' + block2 + ', ' + block3 + ')';
+  return block1 + '.insert(' + block2 + ', ' + block3 + ')\n';
 };
 
 Blockly.Python['python_pop'] = function(block) {
@@ -159,31 +155,31 @@ Blockly.Python['python_pop'] = function(block) {
 Blockly.Python['python_pop_statement'] = function(block) {
   var code = Blockly.Python.valueToCode(block, 'ARG', Blockly.Python.ORDER_NONE);
 
-  return code + '.pop()';
+  return code + '.pop()\n';
 };
 
 Blockly.Python['python_remove'] = function(block) {
   var block1 = Blockly.Python.valueToCode(block, 'ARG1', Blockly.Python.ORDER_NONE);
   var block2 = Blockly.Python.valueToCode(block, 'ARG2', Blockly.Python.ORDER_NONE);
 
-  return block1 + '.remove(' + block2 + ')';
+  return block1 + '.remove(' + block2 + ')\n';
 };
 
 Blockly.Python['python_reverse'] = function(block) {
   var code = Blockly.Python.valueToCode(block, 'ARG', Blockly.Python.ORDER_NONE);
 
-  return code + '.reverse()';
+  return code + '.reverse()\n';
 };
 
 Blockly.Python['python_sort'] = function(block) {
   var code = Blockly.Python.valueToCode(block, 'ARG', Blockly.Python.ORDER_NONE);
 
-  return code + '.sort()';
+  return code + '.sort()\n';
 };
 
 Blockly.Python['python_list_index_method'] = function(block) {
   var block1 = Blockly.Python.valueToCode(block, 'ARG1', Blockly.Python.ORDER_NONE);
   var block2 = Blockly.Python.valueToCode(block, 'ARG2', Blockly.Python.ORDER_NONE);
 
-  return [block1 + '.index(' + block2 + ')', Blockly.Python.ORDER_ATOMIC];
+  return [block1 + '.index(' + block2 + ')\n', Blockly.Python.ORDER_ATOMIC];
 };

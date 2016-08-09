@@ -382,3 +382,19 @@ Blockly.FieldTextInput.stringValidator = function(text) {
     return null;
   }
 };
+
+/**
+ * Ensure that a comment is long enough so that it can be clicked on
+ * @param {string} text The user's comment text.
+ * @return {string} A string representing a valid comment
+ */
+Blockly.FieldTextInput.commentValidator = function(text) {
+  var s = text || '     ';
+  console.log("VALIDATING '" + s +"'");
+  if (s.length >= 5) {
+    return s;
+  }
+  else {
+    return String(s + "           ").slice(0,5);
+  }
+};
