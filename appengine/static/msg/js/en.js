@@ -67,6 +67,7 @@ Blockly.Msg.DELETE_BLOCK = "Delete Block";
 Blockly.Msg.DELETE_X_BLOCKS = "Delete %1 Blocks";
 Blockly.Msg.DISABLE_BLOCK = "Disable Block";
 Blockly.Msg.DUPLICATE_BLOCK = "Duplicate";
+Blockly.Msg.EVAL = "Evaluate Blocks";
 Blockly.Msg.ENABLE_BLOCK = "Enable Block";
 Blockly.Msg.EXPAND_ALL = "Expand Blocks";
 Blockly.Msg.EXPAND_BLOCK = "Expand Block";

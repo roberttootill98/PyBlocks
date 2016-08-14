@@ -42,8 +42,6 @@ Blockly.Blocks['python_string_const'] = {
   }
 };
 
-
-
 Blockly.Blocks['python_string_concat'] = {
   init: function() {
     this.appendDummyInput()

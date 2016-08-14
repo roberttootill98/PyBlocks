@@ -30,8 +30,7 @@ goog.provide('Blockly.Python.pylists');
 goog.require('Blockly.Python');
 
 Blockly.Python['python_list_empty'] = function(block) {
-  var code = '[]';
-  return [code, Blockly.Python.ORDER_ATOMIC];
+  return ['[]', Blockly.Python.ORDER_ATOMIC];
 };
 
 Blockly.Python['python_list_const'] = function(block) {
@@ -40,13 +39,13 @@ Blockly.Python['python_list_const'] = function(block) {
 
   for (var i = 1, params = block.parameterCount, code = ''; i <= params; i++) {
     if (params - i == 0) {
-      code += Blockly.Python.valueToCode(block, 'ARG' + i, Blockly.Python.ORDER_NONE);
+      code += Blockly.Python.valueToCode(block, 'ARG' + i, Blockly.Python.ORDER_MEMBER);
     } else {
-      code += Blockly.Python.valueToCode(block, 'ARG' + i, Blockly.Python.ORDER_NONE) + ', ';
+      code += Blockly.Python.valueToCode(block, 'ARG' + i, Blockly.Python.ORDER_MEMBER) + ', ';
     }
   }
 
-  return ['[' + code + ']', Blockly.Python.ORDER_NONE];
+  return ['[' + code + ']', Blockly.Python.ORDER_MEMBER];
 };
 
 
@@ -58,88 +57,96 @@ Blockly.Python['python_list_concat'] = function(block) {
 };
 
 Blockly.Python['python_list_repeat'] = function(block) {
-  var block1 = Blockly.Python.valueToCode(block, 'LHS', Blockly.Python.ORDER_NONE);
-  var block2 = Blockly.Python.valueToCode(block, 'RHS', Blockly.Python.ORDER_NONE);
+  var block1 = Blockly.Python.valueToCode(block, 'LHS', Blockly.Python.ORDER_MULTIPLICATIVE);
+  var block2 = Blockly.Python.valueToCode(block, 'RHS', Blockly.Python.ORDER_MULTIPLICATIVE);
 
-  return [block1 + ' * ' + block2, Blockly.Python.ORDER_ATOMIC];
+  return [block1 + ' * ' + block2, Blockly.Python.ORDER_MULTIPLICATIVE];
 };
 
 Blockly.Python['python_list_index'] = function(block) {
   var block1 = Blockly.Python.valueToCode(block, 'ARG1', Blockly.Python.ORDER_NONE);
-  var block2 = Blockly.Python.valueToCode(block, 'ARG2', Blockly.Python.ORDER_NONE);
+  var block2 = Blockly.Python.valueToCode(block, 'ARG2', Blockly.Python.ORDER_MEMBER);
 
-  return [block1 + '[' + block2 + ']', Blockly.Python.ORDER_ATOMIC];
+  return [block1 + '[' + block2 + ']', Blockly.Python.ORDER_MEMBER];
 };
 
 Blockly.Python['python_list_slice12'] = function(block) {
   var block1 = Blockly.Python.valueToCode(block, 'ARG1', Blockly.Python.ORDER_NONE);
-  var block2 = Blockly.Python.valueToCode(block, 'ARG2', Blockly.Python.ORDER_NONE);
-  var block3 = Blockly.Python.valueToCode(block, 'ARG3', Blockly.Python.ORDER_NONE);
+  var block2 = Blockly.Python.valueToCode(block, 'ARG2', Blockly.Python.ORDER_MEMBER);
+  var block3 = Blockly.Python.valueToCode(block, 'ARG3', Blockly.Python.ORDER_MEMBER);
 
-  return [block1 + '[' + block2 + ':' + block3 + ']', Blockly.Python.ORDER_ATOMIC];
+  return [block1 + '[' + block2 + ':' + block3 + ']', Blockly.Python.ORDER_MEMBER];
 };
 
 Blockly.Python['python_list_slice1'] = function(block) {
   var block1 = Blockly.Python.valueToCode(block, 'ARG1', Blockly.Python.ORDER_NONE);
-  var block2 = Blockly.Python.valueToCode(block, 'ARG2', Blockly.Python.ORDER_NONE);
+  var block2 = Blockly.Python.valueToCode(block, 'ARG2', Blockly.Python.ORDER_MEMBER);
 
-  return [block1 + '[' + block2 + ':]', Blockly.Python.ORDER_ATOMIC];
+  return [block1 + '[' + block2 + ':]', Blockly.Python.ORDER_MEMBER];
 };
 
 Blockly.Python['python_list_slice2'] = function(block) {
   var block1 = Blockly.Python.valueToCode(block, 'ARG1', Blockly.Python.ORDER_NONE);
-  var block2 = Blockly.Python.valueToCode(block, 'ARG2', Blockly.Python.ORDER_NONE);
+  var block2 = Blockly.Python.valueToCode(block, 'ARG2', Blockly.Python.ORDER_MEMBER);
 
-  return [block1 + '[:' + block2 + ']', Blockly.Python.ORDER_ATOMIC];
+  return [block1 + '[:' + block2 + ']', Blockly.Python.ORDER_MEMBER];
 };
 
 Blockly.Python['python_list_len'] = function(block) {
   var code = Blockly.Python.valueToCode(block, 'ARG', Blockly.Python.ORDER_NONE);
 
-  return ['len(' + code + ')', Blockly.Python.ORDER_ATOMIC];
+  return ['len(' + code + ')', Blockly.Python.ORDER_FUNCTION_CALL];
 };
 
 Blockly.Python['python_list_in'] = function(block) {
-  var block1 = Blockly.Python.valueToCode(block, 'LHS', Blockly.Python.ORDER_NONE);
-  var block2 = Blockly.Python.valueToCode(block, 'RHS', Blockly.Python.ORDER_NONE);
+  var block1 = Blockly.Python.valueToCode(block, 'LHS', Blockly.Python.ORDER_RELATIONAL);
+  var block2 = Blockly.Python.valueToCode(block, 'RHS', Blockly.Python.ORDER_RELATIONAL);
 
-  return [block1 + ' in ' + block2, Blockly.Python.ORDER_ATOMIC];
+  return [block1 + ' in ' + block2, Blockly.Python.ORDER_RELATIONAL];
 };
 
 Blockly.Python['python_list_min'] = function(block) {
   var code = Blockly.Python.valueToCode(block, 'ARG', Blockly.Python.ORDER_NONE);
 
-  return ['min(' + code + ')', Blockly.Python.ORDER_ATOMIC];
+  return ['min(' + code + ')', Blockly.Python.ORDER_FUNCTION_CALL];
 };
 
 Blockly.Python['python_list_max'] = function(block) {
   var code = Blockly.Python.valueToCode(block, 'ARG', Blockly.Python.ORDER_NONE);
 
-  return ['max(' + code + ')', Blockly.Python.ORDER_ATOMIC];
+  return ['max(' + code + ')', Blockly.Python.ORDER_FUNCTION_CALL];
 };
 
 Blockly.Python['python_sorted'] = function(block) {
   var code = Blockly.Python.valueToCode(block, 'ARG', Blockly.Python.ORDER_NONE);
 
-  return ['sorted(' + code + ')', Blockly.Python.ORDER_ATOMIC];
+  return ['sorted(' + code + ')', Blockly.Python.ORDER_FUNCTION_CALL];
 };
 
 Blockly.Python['python_append'] = function(block) {
-  var block1 = Blockly.Python.valueToCode(block, 'ARG1', Blockly.Python.ORDER_NONE);
+  var block1 = Blockly.Python.valueToCode(block, 'ARG1', Blockly.Python.ORDER_MEMBER);
   var block2 = Blockly.Python.valueToCode(block, 'ARG2', Blockly.Python.ORDER_NONE);
 
   return block1 + '.append(' + block2 + ')\n';
 };
 
-Blockly.Python['python_extend'] = function(block) {
+Blockly.Python['python_list_item_modify'] = function(block) {
   var block1 = Blockly.Python.valueToCode(block, 'ARG1', Blockly.Python.ORDER_NONE);
+  var block2 = Blockly.Python.valueToCode(block, 'ARG2', Blockly.Python.ORDER_MEMBER);
+  var block3 = Blockly.Python.valueToCode(block, 'ARG3', Blockly.Python.ORDER_NONE);
+
+  return block1 + '[' + block2 + '] = ' + block3 + '\n';
+};
+
+Blockly.Python['python_extend'] = function(block) {
+  var block1 = Blockly.Python.valueToCode(block, 'ARG1', Blockly.Python.ORDER_MEMBER);
   var block2 = Blockly.Python.valueToCode(block, 'ARG2', Blockly.Python.ORDER_NONE);
 
   return block1 + '.extend(' + block2 + ')\n';
 };
 
 Blockly.Python['python_insert'] = function(block) {
-  var block1 = Blockly.Python.valueToCode(block, 'ARG1', Blockly.Python.ORDER_NONE);
+  var block1 = Blockly.Python.valueToCode(block, 'ARG1', Blockly.Python.ORDER_MEMBER);
   var block2 = Blockly.Python.valueToCode(block, 'ARG2', Blockly.Python.ORDER_NONE);
   var block3 = Blockly.Python.valueToCode(block, 'ARG3', Blockly.Python.ORDER_NONE);
 
@@ -147,39 +154,39 @@ Blockly.Python['python_insert'] = function(block) {
 };
 
 Blockly.Python['python_pop'] = function(block) {
-  var code = Blockly.Python.valueToCode(block, 'ARG', Blockly.Python.ORDER_NONE);
+  var code = Blockly.Python.valueToCode(block, 'ARG', Blockly.Python.ORDER_MEMBER);
 
-  return [code + '.pop()', Blockly.Python.ORDER_ATOMIC];
+  return [code + '.pop()', Blockly.Python.ORDER_FUNCTION_CALL];
 };
 
 Blockly.Python['python_pop_statement'] = function(block) {
-  var code = Blockly.Python.valueToCode(block, 'ARG', Blockly.Python.ORDER_NONE);
+  var code = Blockly.Python.valueToCode(block, 'ARG', Blockly.Python.ORDER_MEMBER);
 
   return code + '.pop()\n';
 };
 
 Blockly.Python['python_remove'] = function(block) {
-  var block1 = Blockly.Python.valueToCode(block, 'ARG1', Blockly.Python.ORDER_NONE);
+  var block1 = Blockly.Python.valueToCode(block, 'ARG1', Blockly.Python.ORDER_MEMBER);
   var block2 = Blockly.Python.valueToCode(block, 'ARG2', Blockly.Python.ORDER_NONE);
 
   return block1 + '.remove(' + block2 + ')\n';
 };
 
 Blockly.Python['python_reverse'] = function(block) {
-  var code = Blockly.Python.valueToCode(block, 'ARG', Blockly.Python.ORDER_NONE);
+  var code = Blockly.Python.valueToCode(block, 'ARG', Blockly.Python.ORDER_MEMBER);
 
   return code + '.reverse()\n';
 };
 
 Blockly.Python['python_sort'] = function(block) {
-  var code = Blockly.Python.valueToCode(block, 'ARG', Blockly.Python.ORDER_NONE);
+  var code = Blockly.Python.valueToCode(block, 'ARG', Blockly.Python.ORDER_MEMBER);
 
   return code + '.sort()\n';
 };
 
 Blockly.Python['python_list_index_method'] = function(block) {
-  var block1 = Blockly.Python.valueToCode(block, 'ARG1', Blockly.Python.ORDER_NONE);
+  var block1 = Blockly.Python.valueToCode(block, 'ARG1', Blockly.Python.ORDER_MEMBER);
   var block2 = Blockly.Python.valueToCode(block, 'ARG2', Blockly.Python.ORDER_NONE);
 
-  return [block1 + '.index(' + block2 + ')\n', Blockly.Python.ORDER_ATOMIC];
+  return [block1 + '.index(' + block2 + ')', Blockly.Python.ORDER_FUNCTION_CALL];
 };

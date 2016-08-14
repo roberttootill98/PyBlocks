@@ -418,7 +418,7 @@ Blockly.Blocks['python_insert'] = {
 
 Blockly.Blocks['python_pop'] = {
   init: function() {
-    this.appendValueInput("ARG1");
+    this.appendValueInput("ARG");
     this.appendDummyInput()
         .appendField(".pop()");
     this.setInputsInline(true);
@@ -434,7 +434,7 @@ Blockly.Blocks['python_pop'] = {
 
 Blockly.Blocks['python_pop_statement'] = {
   init: function() {
-    this.appendValueInput("ARG1");
+    this.appendValueInput("ARG");
     this.appendDummyInput()
         .appendField(".pop()");
     this.setInputsInline(true);
@@ -470,7 +470,7 @@ Blockly.Blocks['python_remove'] = {
 
 Blockly.Blocks['python_reverse'] = {
   init: function() {
-    this.appendValueInput("ARG1");
+    this.appendValueInput("ARG");
     this.appendDummyInput()
         .appendField(".reverse()");
     this.setInputsInline(true);
@@ -487,7 +487,7 @@ Blockly.Blocks['python_reverse'] = {
 
 Blockly.Blocks['python_sort'] = {
   init: function() {
-    this.appendValueInput("ARG1");
+    this.appendValueInput("ARG");
     this.appendDummyInput()
         .appendField(".sort()");
     this.setInputsInline(true);

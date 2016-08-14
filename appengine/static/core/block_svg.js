@@ -515,7 +515,7 @@ Blockly.BlockSvg.prototype.onMouseUp_ = function(e) {
       // If this is a statement nested in another block which has a next
       // statement, reorder the DOM to prevent nested blocks casting an
       // incorrect shadow over the next statement block
-      if (!this_.outputConnection) {
+      if (!this_.outputConnection && previousConnection != null) {
           var previousConnection = this_.previousConnection;
           var connectionX = previousConnection.x_;
           var previousBlock = previousConnection.targetBlock();
@@ -536,7 +536,7 @@ Blockly.BlockSvg.prototype.onMouseUp_ = function(e) {
           }
       }
       else { // this is an expression
-        console.log("DROPPED INTO INPUT ", this_.outputConnection.targetConnection.inputNumber_);
+        //console.log("DROPPED INTO INPUT ", this_.outputConnection.targetConnection.inputNumber_);
         this_.checkParentheses();
         this_.reType();
       }
@@ -629,6 +629,16 @@ Blockly.BlockSvg.prototype.showContextMenu_ = function(e) {
       duplicateOption.enabled = false;
     }
     menuOptions.push(duplicateOption);
+
+    var evaluateOption = {
+      text: Blockly.Msg.EVAL,
+      enabled: true,
+      callback: function() {
+        var code = Blockly.Python.blockToCode(block);
+        console.log('TRAXIS', code);
+      }
+    };
+    menuOptions.push(evaluateOption);
 
 /* MJP remove add comment, collapse and disable options
     if (this.isEditable() && !this.collapsed_ &&

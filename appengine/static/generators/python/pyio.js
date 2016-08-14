@@ -32,7 +32,7 @@ goog.require('Blockly.Python');
 
 Blockly.Python['python_input'] = function(block) {
   var code = Blockly.Python.valueToCode(block, 'ARG', Blockly.Python.ORDER_NONE);
-  return ['input(' + code + ')', Blockly.Python.ORDER_ATOMIC];
+  return ['input(' + code + ')', Blockly.Python.ORDER_FUNCTION_CALL];
 };
 
 Blockly.Python['python_print'] = function(block) {
@@ -54,3 +54,19 @@ Blockly.Python['python_print'] = function(block) {
 
   return 'print(' + code + ')\n';
 };
+
+Blocly.Python['python_format'] = function(block) {
+  var block1 = Blockly.Python.valueToCode(block, 'ARG0', Blockly.Python.ORDER_NONE);
+
+  var params;
+  var code;
+
+  for (var i = 1, params = block.parameterCount, code = ''; i <= params; i++) {
+    if (params - i == 0) {
+      code += Blockly.Python.valueToCode(block, 'ARG' + i, Blockly.Python.ORDER_NONE);
+    } else {
+      code += Blockly.Python.valueToCode(block, 'ARG' + i, Blockly.Python.ORDER_NONE) + ', ';
+    }
+  }
+  return [block1 + '.format(' + code + ')', Blockly.Python.ORDER_FUNCTION_CALL];
+}

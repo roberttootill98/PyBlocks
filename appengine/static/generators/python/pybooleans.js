@@ -38,18 +38,18 @@ Blockly.Python['python_false'] = function(block) {
 };
 
 Blockly.Python['python_and'] = function(block) {
-  var block1 = Blockly.Python.valueToCode(block, 'LHS', Blockly.Python.ORDER_NONE);
-  var block2 = Blockly.Python.valueToCode(block, 'RHS', Blockly.Python.ORDER_NONE);
-  return [block1 + ' and ' + block2, Blockly.Python.ORDER_ATOMIC];
+  var block1 = Blockly.Python.valueToCode(block, 'LHS', Blockly.Python.ORDER_LOGICAL_AND);
+  var block2 = Blockly.Python.valueToCode(block, 'RHS', Blockly.Python.ORDER_LOGICAL_AND);
+  return [block1 + ' and ' + block2, Blockly.Python.ORDER_LOGICAL_AND];
 };
 
 Blockly.Python['python_or'] = function(block) {
-  var block1 = Blockly.Python.valueToCode(block, 'LHS', Blockly.Python.ORDER_NONE);
-  var block2 = Blockly.Python.valueToCode(block, 'RHS', Blockly.Python.ORDER_NONE);
-  return [block1 + ' or ' + block2, Blockly.Python.ORDER_ATOMIC];
+  var block1 = Blockly.Python.valueToCode(block, 'LHS', Blockly.Python.ORDER_LOGICAL_OR);
+  var block2 = Blockly.Python.valueToCode(block, 'RHS', Blockly.Python.ORDER_LOGICAL_OR);
+  return [block1 + ' or ' + block2, Blockly.Python.ORDER_LOGICAL_OR];
 };
 
 Blockly.Python['python_not'] = function(block) {
-  var code = Blockly.Python.valueToCode(block, 'ARG', Blockly.Python.ORDER_NONE);
-  return ['not ' + code, Blockly.Python.ORDER_ATOMIC];
+  var code = Blockly.Python.valueToCode(block, 'ARG', Blockly.Python.ORDER_LOGICAL_NOT);
+  return ['not ' + code, Blockly.Python.ORDER_LOGICAL_NOT];
 };
