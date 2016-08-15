@@ -55,7 +55,7 @@ Blockly.Python['python_print'] = function(block) {
   return 'print(' + code + ')\n';
 };
 
-Blocly.Python['python_format'] = function(block) {
+Blockly.Python['python_format'] = function(block) {
   var block1 = Blockly.Python.valueToCode(block, 'ARG0', Blockly.Python.ORDER_NONE);
 
   var params;

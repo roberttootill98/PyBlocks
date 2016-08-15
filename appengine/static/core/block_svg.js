@@ -636,6 +636,11 @@ Blockly.BlockSvg.prototype.showContextMenu_ = function(e) {
       callback: function() {
         var code = Blockly.Python.blockToCode(block);
         console.log('TRAXIS', code);
+        if (code.constructor === Array) {
+          runeval('print(' + code[0] + ')');
+        } else {
+          runeval(code);
+        }
       }
     };
     menuOptions.push(evaluateOption);

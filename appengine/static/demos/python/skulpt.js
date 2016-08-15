@@ -46,6 +46,26 @@ function runfull() {
        mypre.innerHTML = mypre.innerHTML + err.toString() + "\n";
        console.log(err.toString());
  });
+ document.getElementById("output").focus();
+}
+
+function runeval(code) {
+  var mypre = document.getElementById("output");
+
+  Sk.pre = "output";
+  Sk.configure({output:outf, read:builtinRead});
+  var myPromise = Sk.misceval.asyncToPromise(function() {
+      return Sk.importMainWithBody("<stdin>", false, code, true);
+  });
+  myPromise.then(function(mod) {
+      console.log('success');
+  },
+      function(err) {
+        var mypre = document.getElementById("output");
+        mypre.innerHTML = mypre.innerHTML + err.toString() + "\n";
+        console.log(err.toString());
+  });
+  document.getElementById("output").focus();
 }
 
 function copyToClipboard() {
