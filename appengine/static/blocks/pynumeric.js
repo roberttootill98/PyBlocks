@@ -29,16 +29,21 @@ goog.provide('Blockly.Blocks.pynumeric');
 goog.require('Blockly.Blocks');
 
 Blockly.Blocks['python_int_const'] = {
+
   init: function() {
+      var tooltip = '';
     this.appendDummyInput()
         .appendField(new Blockly.FieldTextInput("42"), "VALUE");
     this.setInputsInline(true);
     this.setTypeVecs([["int"]]);
     this.setOutput(true);
-    this.setTooltip('');
+    this.setTooltip(this.getFieldValue("VALUE"));
     this.setHelpUrl('http://www.example.com/');
     this.getField('VALUE').setChangeHandler(
         Blockly.FieldTextInput.integerValidator);
+  },
+  onchange: function(ev) {
+    this.setTooltip(this.getFieldValue("VALUE"));
   }
 };
 
@@ -49,11 +54,14 @@ Blockly.Blocks['python_float_const'] = {
     this.setInputsInline(true);
     this.setTypeVecs([["float"]]);
     this.setOutput(true);
-    this.setTooltip('');
+    this.setTooltip(this.getFieldValue("VALUE"));
     this.setHelpUrl('http://www.example.com/');
     this.getField('VALUE').setChangeHandler(
         Blockly.FieldTextInput.floatValidator);
-  }
+      },
+      onchange: function(ev) {
+        this.setTooltip(this.getFieldValue("VALUE"));
+      }
 };
 
 Blockly.Blocks['python_plus'] = {
@@ -74,8 +82,17 @@ Blockly.Blocks['python_plus'] = {
       ["float", "float", "float"]
     ]);
     this.setOutput(true);
-    this.setTooltip('');
     this.setHelpUrl('http://www.example.com/');
+  },
+  onchange: function(ev) {
+    if (Blockly.Python.valueToCode(this, 'LHS', Blockly.Python.ORDER_NONE) != '' &&  Blockly.Python.valueToCode(this, 'RHS', Blockly.Python.ORDER_NONE) != '') {
+      this.holesFilled = true;
+      runtooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+      this.setTooltip(document.getElementById("hiddenoutput").textContent);
+    } else {
+      this.holesFilled = false;
+      this.setTooltip('Returns the sum of two integers/floating point numbers')
+    }
   }
 };
 
@@ -97,8 +114,17 @@ Blockly.Blocks['python_minus'] = {
       ["float", "float", "float"]
     ]);
     this.setOutput(true);
-    this.setTooltip('');
     this.setHelpUrl('http://www.example.com/');
+  },
+  onchange: function(ev) {
+    if (Blockly.Python.valueToCode(this, 'LHS', Blockly.Python.ORDER_NONE) != '' &&  Blockly.Python.valueToCode(this, 'RHS', Blockly.Python.ORDER_NONE) != '') {
+      this.holesFilled = true;
+      runtooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+      this.setTooltip(document.getElementById("hiddenoutput").textContent);
+    } else {
+      this.holesFilled = false;
+      this.setTooltip('Returns the difference of two integers/floating point numbers')
+    }
   }
 };
 
@@ -122,8 +148,17 @@ Blockly.Blocks['python_multiply'] = {
       ["float", "float", "float"]
     ]);
     this.setOutput(true);
-    this.setTooltip('');
     this.setHelpUrl('http://www.example.com/');
+  },
+  onchange: function(ev) {
+    if (Blockly.Python.valueToCode(this, 'LHS', Blockly.Python.ORDER_NONE) != '' &&  Blockly.Python.valueToCode(this, 'RHS', Blockly.Python.ORDER_NONE) != '') {
+      this.holesFilled = true;
+      runtooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+      this.setTooltip(document.getElementById("hiddenoutput").textContent);
+    } else {
+      this.holesFilled = false;
+      this.setTooltip('Returns the product of two integers/floating point numbers')
+    }
   }
 };
 
@@ -145,8 +180,17 @@ Blockly.Blocks['python_divide'] = {
       ["float", "float", "float"]
     ]);
     this.setOutput(true);
-    this.setTooltip('');
     this.setHelpUrl('http://www.example.com/');
+  },
+  onchange: function(ev) {
+    if (Blockly.Python.valueToCode(this, 'LHS', Blockly.Python.ORDER_NONE) != '' &&  Blockly.Python.valueToCode(this, 'RHS', Blockly.Python.ORDER_NONE) != '') {
+      this.holesFilled = true;
+      runtooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+      this.setTooltip(document.getElementById("hiddenoutput").textContent);
+    } else {
+      this.holesFilled = false;
+      this.setTooltip('Returns the quotient of two integers/floating point numbers')
+    }
   }
 };
 
@@ -165,8 +209,17 @@ Blockly.Blocks['python_int_divide'] = {
       ["int", "int", "int"]
     ]);
     this.setOutput(true);
-    this.setTooltip('');
     this.setHelpUrl('http://www.example.com/');
+  },
+  onchange: function(ev) {
+    if (Blockly.Python.valueToCode(this, 'LHS', Blockly.Python.ORDER_NONE) != '' &&  Blockly.Python.valueToCode(this, 'RHS', Blockly.Python.ORDER_NONE) != '') {
+      this.holesFilled = true;
+      runtooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+      this.setTooltip(document.getElementById("hiddenoutput").textContent);
+    } else {
+      this.holesFilled = false;
+      this.setTooltip('Returns the quotient of two integers')
+    }
   }
 };
 
@@ -185,8 +238,17 @@ Blockly.Blocks['python_int_modulo'] = {
       ["int", "int", "int"]
     ]);
     this.setOutput(true);
-    this.setTooltip('');
     this.setHelpUrl('http://www.example.com/');
+  },
+  onchange: function(ev) {
+    if (Blockly.Python.valueToCode(this, 'LHS', Blockly.Python.ORDER_NONE) != '' &&  Blockly.Python.valueToCode(this, 'RHS', Blockly.Python.ORDER_NONE) != '') {
+      this.holesFilled = true;
+      runtooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+      this.setTooltip(document.getElementById("hiddenoutput").textContent);
+    } else {
+      this.holesFilled = false;
+      this.setTooltip('Returns the remainder of two integers after division')
+    }
   }
 };
 
@@ -209,8 +271,17 @@ Blockly.Blocks['python_pow_op'] = {
       ["float", "float", "float"]
     ]);
     this.setOutput(true);
-    this.setTooltip('');
     this.setHelpUrl('http://www.example.com/');
+  },
+  onchange: function(ev) {
+    if (Blockly.Python.valueToCode(this, 'LHS', Blockly.Python.ORDER_NONE) != '' &&  Blockly.Python.valueToCode(this, 'RHS', Blockly.Python.ORDER_NONE) != '') {
+      this.holesFilled = true;
+      runtooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+      this.setTooltip(document.getElementById("hiddenoutput").textContent);
+    } else {
+      this.holesFilled = false;
+      this.setTooltip('Returns the power of two integers/floating point numbers')
+    }
   }
 };
 
@@ -229,8 +300,17 @@ Blockly.Blocks['python_unary_minus'] = {
       ["float", "float"]
     ]);
     this.setOutput(true);
-    this.setTooltip('');
     this.setHelpUrl('http://www.example.com/');
+  },
+  onchange: function(ev) {
+    if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '') {
+      this.holesFilled = true;
+      runtooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+      this.setTooltip(document.getElementById("hiddenoutput").textContent);
+    } else {
+      this.holesFilled = false;
+      this.setTooltip('Returns a negative integer or floating point number')
+    }
   }
 };
 
@@ -246,8 +326,17 @@ Blockly.Blocks['python_abs'] = {
       ["float", "float"]
     ]);
     this.setOutput(true);
-    this.setTooltip('');
     this.setHelpUrl('http://www.example.com/');
+  },
+  onchange: function(ev) {
+    if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '') {
+      this.holesFilled = true;
+      runtooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+      this.setTooltip(document.getElementById("hiddenoutput").textContent);
+    } else {
+      this.holesFilled = false;
+      this.setTooltip('Returns the absolute value of an integer or floating point number')
+    }
   }
 };
 
@@ -263,8 +352,17 @@ Blockly.Blocks['python_round'] = {
       ["float", "int"]
     ]);
     this.setOutput(true);
-    this.setTooltip('');
     this.setHelpUrl('http://www.example.com/');
+  },
+  onchange: function(ev) {
+    if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '') {
+      this.holesFilled = true;
+      runtooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+      this.setTooltip(document.getElementById("hiddenoutput").textContent);
+    } else {
+      this.holesFilled = false;
+      this.setTooltip('Rounds a floating point number to the whole integer number')
+    }
   }
 };
 
@@ -285,8 +383,17 @@ Blockly.Blocks['python_pow'] = {
       ["float", "float", "float"]
     ]);
     this.setOutput(true);
-    this.setTooltip('');
     this.setHelpUrl('http://www.example.com/');
+  },
+  onchange: function(ev) {
+    if (Blockly.Python.valueToCode(this, 'ARG1', Blockly.Python.ORDER_NONE) != '' &&  Blockly.Python.valueToCode(this, 'ARG2', Blockly.Python.ORDER_NONE) != '') {
+      this.holesFilled = true;
+      runtooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+      this.setTooltip(document.getElementById("hiddenoutput").textContent);
+    } else {
+      this.holesFilled = false;
+      this.setTooltip('Returns the power of two integers/floating point numbers')
+    }
   }
 };
 
@@ -304,8 +411,17 @@ Blockly.Blocks['python_numeric_min'] = {
       ["float", "float", "float"]
     ]);
     this.setOutput(true);
-    this.setTooltip('');
     this.setHelpUrl('http://www.example.com/');
+  },
+  onchange: function(ev) {
+    if (Blockly.Python.valueToCode(this, 'ARG1', Blockly.Python.ORDER_NONE) != '' &&  Blockly.Python.valueToCode(this, 'ARG2', Blockly.Python.ORDER_NONE) != '') {
+      this.holesFilled = true;
+      runtooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+      this.setTooltip(document.getElementById("hiddenoutput").textContent);
+    } else {
+      this.holesFilled = false;
+      this.setTooltip('Returns the smallest value of two integers/floating point numbers')
+    }
   }
 };
 
@@ -323,8 +439,17 @@ Blockly.Blocks['python_numeric_max'] = {
       ["float", "float", "float"]
     ]);
     this.setOutput(true);
-    this.setTooltip('');
     this.setHelpUrl('http://www.example.com/');
+  },
+  onchange: function(ev) {
+    if (Blockly.Python.valueToCode(this, 'ARG1', Blockly.Python.ORDER_NONE) != '' &&  Blockly.Python.valueToCode(this, 'ARG2', Blockly.Python.ORDER_NONE) != '') {
+      this.holesFilled = true;
+      runtooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+      this.setTooltip(document.getElementById("hiddenoutput").textContent);
+    } else {
+      this.holesFilled = false;
+      this.setTooltip('Returns the largest value of two integers/floating point numbers')
+    }
   }
 };
 
@@ -340,7 +465,16 @@ Blockly.Blocks['python_sum'] = {
       ["*float", "float"]
     ]);
     this.setOutput(true);
-    this.setTooltip('');
     this.setHelpUrl('http://www.example.com/');
+  },
+  onchange: function(ev) {
+    if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '') {
+      this.holesFilled = true;
+      runtooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+      this.setTooltip(document.getElementById("hiddenoutput").textContent);
+    } else {
+      this.holesFilled = false;
+      this.setTooltip('Returns the sum of a list of integers/floating point numbers')
+    }
   }
 };

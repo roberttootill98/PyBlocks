@@ -85,7 +85,7 @@ Blockly.Python.ORDER_NEWLINE = '
 /**
  * Empty loops or conditionals are not allowed in Python.
  */
-Blockly.Python.PASS = '  pass\n';
+Blockly.Python.PASS = '    pass\n';
 
 /**
  * Initialise the database of variable names.

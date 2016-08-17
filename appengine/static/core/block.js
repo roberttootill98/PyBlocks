@@ -119,7 +119,7 @@ Blockly.Block.prototype.fill = function(workspace, prototypeName) {
 
   this.operator = null;
 
-
+  this.holesFilled = false;
 
   /** @type {boolean} */
   this.rendered = false;

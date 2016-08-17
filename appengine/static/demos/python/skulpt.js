@@ -4,6 +4,12 @@ function outf(text) {
   var mypre = document.getElementById("output");
   mypre.innerHTML = mypre.innerHTML + text;
 }
+
+function outfhidden(text) {
+  var mypre = document.getElementById("hiddenoutput");
+  mypre.innerHTML = mypre.innerHTML + text;
+}
+
 function builtinRead(x) {
   if (Sk.builtinFiles === undefined || Sk.builtinFiles["files"][x] === undefined)
           throw "File not found: '" + x + "'";
@@ -66,6 +72,25 @@ function runeval(code) {
         console.log(err.toString());
   });
   document.getElementById("output").focus();
+}
+
+function runtooltip(code) {
+  document.getElementById("hiddenoutput").innerHTML = '';
+  var mypre = document.getElementById("hiddenoutput");
+
+  Sk.pre = "hiddenoutput";
+  Sk.configure({output:outfhidden, read:builtinRead});
+  var myPromise = Sk.misceval.asyncToPromise(function() {
+      return Sk.importMainWithBody("<stdin>", false, code, true);
+  });
+  myPromise.then(function(mod) {
+      console.log('success');
+  },
+      function(err) {
+        var mypre = document.getElementById("hiddenoutput");
+        mypre.innerHTML = mypre.innerHTML + err.toString() + "\n";
+        console.log(err.toString());
+  });
 }
 
 function copyToClipboard() {

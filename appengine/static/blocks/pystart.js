@@ -19,7 +19,7 @@
  */
 
 /**
- * @fileoverview Variable blocks for Blockly.
+ * @fileoverview Start block for Blockly.
  * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
@@ -28,24 +28,6 @@ goog.provide('Blockly.Blocks.pystart');
 
 goog.require('Blockly.Blocks');
 
-Blockly.Blocks['python_startt'] = {
-  init: function() {
-    var IMPORTS =
-        [['math', 'math'],
-         ['turtle', 'turtle']];
-    this.appendDummyInput()
-        .appendField('<<START>>')
-    this.appendDummyInput()
-        .appendField('import ')
-        .appendField(new Blockly.FieldDropdown(IMPORTS), 'IMPORTS');
-    this.appendDummyInput();
-    this.setNextStatement(true);
-    this.setTooltip('The start block is not a true Python block and is only\
-    there to indicate which blocks will be executed when "Run full" is\
-    pressed.');
-    this.setHelpUrl('http://www.example.com/');
-  }
-};
 
 Blockly.Blocks['python_start'] = {
 

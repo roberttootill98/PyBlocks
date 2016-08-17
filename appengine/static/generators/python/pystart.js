@@ -19,7 +19,7 @@
  */
 
  /**
-  * @fileoverview I/O blocks for PythonBlocks
+  * @fileoverview Start block for PythonBlocks
   * @author up649230@myport.ac.uk
   */
 
@@ -34,6 +34,7 @@ Blockly.Python['python_start'] = function(block) {
 
     if (block.hasMath) {
       code += 'import maths\n';
+      workspace.updateToolbox(document.getElementById('toolboxmaths'));
     }
 
     if (block.hasTurtle) {
@@ -42,9 +43,7 @@ Blockly.Python['python_start'] = function(block) {
 
   code += '\n';
 
-  if (block.hasMath) {
-    workspace.updateToolbox(document.getElementById('toolboxmaths'));
-  } else {
+  if (!block.hasMath) {
     workspace.updateToolbox(document.getElementById('toolbox'));
   }
 
