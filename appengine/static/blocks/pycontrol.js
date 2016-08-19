@@ -39,7 +39,7 @@ Blockly.Blocks['python_if'] = {
     this.setTypeVecs([["bool", "none"]]);
     this.setPreviousStatement(true);
     this.setNextStatement(true);
-    this.setTooltip('');
+    this.setTooltip('If a specified boolean evaluates to true, the following code is executed. Additional if statements can be added and a catch-all else statement can be added to the end');
     this.setHelpUrl('http://www.example.com/');
     this.elifCount = 0;
     this.hasElse = false;
@@ -135,7 +135,7 @@ Blockly.Blocks['python_while'] = {
     this.setTypeVecs([["bool", "none"]]);
     this.setPreviousStatement(true);
     this.setNextStatement(true);
-    this.setTooltip('');
+    this.setTooltip('While the specified boolean evaluates to true, the following code is executed in a loop');
     this.setHelpUrl('http://www.example.com/');
   }
 };
@@ -156,7 +156,7 @@ Blockly.Blocks['python_for'] = {
     this.setLhsVarOnly(true);
     this.setPreviousStatement(true);
     this.setNextStatement(true);
-    this.setTooltip('');
+    this.setTooltip('A loop used to repeat a piece of code n number of times, typically using range() to specify how many times to loop the code');
     this.setHelpUrl('http://www.example.com/');
   }
 };
@@ -172,8 +172,17 @@ Blockly.Blocks['python_range1'] = {
       ["int", "range"],
     ]);
     this.setOutput(true);
-    this.setTooltip('');
     this.setHelpUrl('http://www.example.com/');
+  },
+  onchange: function(ev) {
+    if (Blockly.Python.valueToCode(this, 'ARG1', Blockly.Python.ORDER_NONE) != '') {
+      this.holesFilled = true;
+      runtooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+      this.setTooltip(document.getElementById("hiddenoutput").textContent);
+    } else {
+      this.holesFilled = false;
+    this.setTooltip('Generates an iterable list of numbers from 0 to the specified integer number');
+    }
   }
 };
 
@@ -190,8 +199,17 @@ Blockly.Blocks['python_range2'] = {
       ["int", "int", "range"],
     ]);
     this.setOutput(true);
-    this.setTooltip('');
     this.setHelpUrl('http://www.example.com/');
+  },
+  onchange: function(ev) {
+    if (Blockly.Python.valueToCode(this, 'ARG1', Blockly.Python.ORDER_NONE) != '' &&  Blockly.Python.valueToCode(this, 'ARG2', Blockly.Python.ORDER_NONE) != '') {
+      this.holesFilled = true;
+      runtooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+      this.setTooltip(document.getElementById("hiddenoutput").textContent);
+    } else {
+      this.holesFilled = false;
+    this.setTooltip('Returns an iterable list of numbers from and to the specified integer numbers');
+    }
   }
 };
 
@@ -210,7 +228,16 @@ Blockly.Blocks['python_range3'] = {
       ["int", "int", "int", "range"],
     ]);
     this.setOutput(true);
-    this.setTooltip('');
     this.setHelpUrl('http://www.example.com/');
+  },
+  onchange: function(ev) {
+    if (Blockly.Python.valueToCode(this, 'ARG1', Blockly.Python.ORDER_NONE) != '' &&  Blockly.Python.valueToCode(this, 'ARG2', Blockly.Python.ORDER_NONE) != '' &&  Blockly.Python.valueToCode(this, 'ARG3', Blockly.Python.ORDER_NONE) != '') {
+      this.holesFilled = true;
+      runtooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+      this.setTooltip(document.getElementById("hiddenoutput").textContent);
+    } else {
+      this.holesFilled = false;
+    this.setTooltip('Generates an iterable list of numbers from and to the specified integer numbers with a specified number of gaps inbetween');
+    }
   }
 };

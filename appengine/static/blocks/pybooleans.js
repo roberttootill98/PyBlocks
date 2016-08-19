@@ -36,7 +36,7 @@ Blockly.Blocks['python_true'] = {
       ["bool"]
     ]);
     this.setOutput(true);
-    this.setTooltip('');
+    this.setTooltip('Returns the boolean value True');
     this.setHelpUrl('http://www.example.com/');
   }
 };
@@ -49,7 +49,7 @@ Blockly.Blocks['python_false'] = {
       ["bool"]
     ]);
     this.setOutput(true);
-    this.setTooltip('');
+    this.setTooltip('Returns the boolean value False');
     this.setHelpUrl('http://www.example.com/');
   }
 };
@@ -69,8 +69,17 @@ Blockly.Blocks['python_and'] = {
       ["bool", "bool", "bool"],
     ]);
     this.setOutput(true);
-    this.setTooltip('');
     this.setHelpUrl('http://www.example.com/');
+  },
+  onchange: function(ev) {
+    if (Blockly.Python.valueToCode(this, 'LHS', Blockly.Python.ORDER_NONE) != '' &&  Blockly.Python.valueToCode(this, 'RHS', Blockly.Python.ORDER_NONE) != '') {
+      this.holesFilled = true;
+      runtooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+      this.setTooltip(document.getElementById("hiddenoutput").textContent);
+    } else {
+      this.holesFilled = false;
+      this.setTooltip('Returns true if both sides are true');
+    }
   }
 };
 
@@ -89,8 +98,17 @@ Blockly.Blocks['python_or'] = {
       ["bool", "bool", "bool"],
     ]);
     this.setOutput(true);
-    this.setTooltip('');
     this.setHelpUrl('http://www.example.com/');
+  },
+  onchange: function(ev) {
+    if (Blockly.Python.valueToCode(this, 'LHS', Blockly.Python.ORDER_NONE) != '' &&  Blockly.Python.valueToCode(this, 'RHS', Blockly.Python.ORDER_NONE) != '') {
+      this.holesFilled = true;
+      runtooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+      this.setTooltip(document.getElementById("hiddenoutput").textContent);
+    } else {
+      this.holesFilled = false;
+      this.setTooltip('Returns true if either side is true');
+    }
   }
 };
 
@@ -108,7 +126,16 @@ Blockly.Blocks['python_not'] = {
       ["bool", "bool"]
     ]);
     this.setOutput(true);
-    this.setTooltip('');
     this.setHelpUrl('http://www.example.com/');
+  },
+  onchange: function(ev) {
+    if (Blockly.Python.valueToCode(this, 'LHS', Blockly.Python.ORDER_NONE) != '') {
+      this.holesFilled = true;
+      runtooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+      this.setTooltip(document.getElementById("hiddenoutput").textContent);
+    } else {
+      this.holesFilled = false;
+      this.setTooltip('Returns the inverse of the boolean value');
+    }
   }
 };

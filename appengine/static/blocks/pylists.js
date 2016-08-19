@@ -37,11 +37,10 @@ Blockly.Blocks['python_list_empty'] = {
       ["*matching"],
     ]);
     this.setOutput(true);
-    this.setTooltip('');
+    this.setTooltip('Returns an empty list');
     this.setHelpUrl('http://www.example.com/');
   }
 };
-
 
 Blockly.Blocks['python_list_index'] = {
   init: function() {
@@ -55,8 +54,17 @@ Blockly.Blocks['python_list_index'] = {
       ["*matching", "int", "matching"],
     ]);
     this.setOutput(true);
-    this.setTooltip('');
     this.setHelpUrl('http://www.example.com/');
+  },
+  onchange: function(ev) {
+    if (Blockly.Python.valueToCode(this, 'ARG1', Blockly.Python.ORDER_NONE) != '' &&  Blockly.Python.valueToCode(this, 'ARG2', Blockly.Python.ORDER_NONE) != '') {
+      this.holesFilled = true;
+      runtooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+      this.setTooltip(document.getElementById("hiddenoutput").textContent);
+    } else {
+      this.holesFilled = false;
+      this.setTooltip('Returns an element from a list from the specified index location');
+    }
   }
 };
 
@@ -72,7 +80,6 @@ Blockly.Blocks['python_list_const'] = {
       ["matching", "*matching"],
     ]);
     this.setOutput(true);
-    this.setTooltip('');
     this.setHelpUrl('http://www.example.com/');
     this.parameterCount = 1;
   },
@@ -116,47 +123,28 @@ Blockly.Blocks['python_list_const'] = {
     this.parameterCount--;
     this.fullTypeVecs[0].splice(-2, 1);
     this.render();
+  },
+
+  onchange: function(ev) {
+    var filledCount;
+
+    for (var i = 1, filledCount = 0; i <= this.parameterCount; i++) {
+      if (Blockly.Python.valueToCode(this, 'ARG' + i, Blockly.Python.ORDER_NONE) != '') {
+        filledCount++;
+      }
+    }
+
+    if (filledCount == this.parameterCount) {
+      this.holesFilled = true;
+      runtooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+      this.setTooltip(document.getElementById("hiddenoutput").textContent);
+    } else {
+      this.holesFilled = false;
+      this.setTooltip('Returns a list of elements');
+    }
+
   }
 };
-
-Blockly.Blocks['python_list_const2'] = {
-  init: function() {
-    this.appendValueInput("ARG1")
-        .appendField("[");
-    this.appendValueInput("ARG2")
-        .appendField(", ");
-    this.appendDummyInput()
-        .appendField("]");
-    this.setInputsInline(true);
-    this.setTypeVecs([
-      ["matching", "matching", "*matching"],
-    ]);
-    this.setOutput(true);
-    this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
-  }
-};
-
-Blockly.Blocks['python_list_const3'] = {
-  init: function() {
-    this.appendValueInput("ARG1")
-        .appendField("[");
-    this.appendValueInput("ARG2")
-        .appendField(", ");
-    this.appendValueInput("ARG3")
-        .appendField(", ");
-    this.appendDummyInput()
-        .appendField("]");
-    this.setInputsInline(true);
-    this.setTypeVecs([
-      ["matching", "matching", "matching", "*matching"],
-    ]);
-    this.setOutput(true);
-    this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
-  }
-};
-
 
 Blockly.Blocks['python_list_concat'] = {
   init: function() {
@@ -171,8 +159,17 @@ Blockly.Blocks['python_list_concat'] = {
     this.setInputsInline(true);
     this.setTypeVecs([["*matching", "*matching", "*matching"]]);
     this.setOutput(true);
-    this.setTooltip('');
     this.setHelpUrl('http://www.example.com/');
+  },
+  onchange: function(ev) {
+    if (Blockly.Python.valueToCode(this, 'LHS', Blockly.Python.ORDER_NONE) != '' &&  Blockly.Python.valueToCode(this, 'RHS', Blockly.Python.ORDER_NONE) != '') {
+      this.holesFilled = true;
+      runtooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+      this.setTooltip(document.getElementById("hiddenoutput").textContent);
+    } else {
+      this.holesFilled = false;
+      this.setTooltip('Returns the concatenation of two lists');
+    }
   }
 };
 
@@ -192,8 +189,17 @@ Blockly.Blocks['python_list_repeat'] = {
       ["int", "*matching", "*matching"],
     ]);
     this.setOutput(true);
-    this.setTooltip('');
     this.setHelpUrl('http://www.example.com/');
+  },
+  onchange: function(ev) {
+    if (Blockly.Python.valueToCode(this, 'LHS', Blockly.Python.ORDER_NONE) != '' &&  Blockly.Python.valueToCode(this, 'RHS', Blockly.Python.ORDER_NONE) != '') {
+      this.holesFilled = true;
+      runtooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+      this.setTooltip(document.getElementById("hiddenoutput").textContent);
+    } else {
+      this.holesFilled = false;
+      this.setTooltip('Returns a list repeated n number of times');
+    }
   }
 };
 
@@ -211,8 +217,17 @@ Blockly.Blocks['python_list_slice12'] = {
       ["*matching", "int", "int", "*matching"],
     ]);
     this.setOutput(true);
-    this.setTooltip('');
     this.setHelpUrl('http://www.example.com/');
+  },
+  onchange: function(ev) {
+    if (Blockly.Python.valueToCode(this, 'ARG1', Blockly.Python.ORDER_NONE) != '' &&  Blockly.Python.valueToCode(this, 'ARG2', Blockly.Python.ORDER_NONE) != '' && Blockly.Python.valueToCode(this, 'ARG3', Blockly.Python.ORDER_NONE) != '') {
+      this.holesFilled = true;
+      runtooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+      this.setTooltip(document.getElementById("hiddenoutput").textContent);
+    } else {
+      this.holesFilled = false;
+      this.setTooltip('Returns sliced list from and to the specified location');
+    }
   }
 };
 
@@ -230,8 +245,17 @@ Blockly.Blocks['python_list_slice1'] = {
       ["*matching", "int", "*matching"],
     ]);
     this.setOutput(true);
-    this.setTooltip('');
     this.setHelpUrl('http://www.example.com/');
+  },
+  onchange: function(ev) {
+    if (Blockly.Python.valueToCode(this, 'ARG1', Blockly.Python.ORDER_NONE) != '' &&  Blockly.Python.valueToCode(this, 'ARG2', Blockly.Python.ORDER_NONE) != '') {
+      this.holesFilled = true;
+      runtooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+      this.setTooltip(document.getElementById("hiddenoutput").textContent);
+    } else {
+      this.holesFilled = false;
+      this.setTooltip('Returns sliced list from a specified location to the end');
+    }
   }
 };
 
@@ -240,7 +264,7 @@ Blockly.Blocks['python_list_slice2'] = {
     this.appendValueInput("ARG1");
     this.appendDummyInput()
         .appendField("[");
-    this.appendValueInput("ARG3")
+    this.appendValueInput("ARG2")
         .appendField(":");
     this.appendDummyInput()
         .appendField("]");
@@ -249,8 +273,17 @@ Blockly.Blocks['python_list_slice2'] = {
       ["*matching", "int", "*matching"],
     ]);
     this.setOutput(true);
-    this.setTooltip('');
     this.setHelpUrl('http://www.example.com/');
+  },
+  onchange: function(ev) {
+    if (Blockly.Python.valueToCode(this, 'ARG1', Blockly.Python.ORDER_NONE) != '' &&  Blockly.Python.valueToCode(this, 'ARG2', Blockly.Python.ORDER_NONE) != '') {
+      this.holesFilled = true;
+      runtooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+      this.setTooltip(document.getElementById("hiddenoutput").textContent);
+    } else {
+      this.holesFilled = false;
+      this.setTooltip('Returns sliced list from the beginning to a specified location');
+    }
   }
 };
 
@@ -265,8 +298,17 @@ Blockly.Blocks['python_list_len'] = {
       ["*any", "int"]
     ]);
     this.setOutput(true);
-    this.setTooltip('');
     this.setHelpUrl('http://www.example.com/');
+  },
+  onchange: function(ev) {
+    if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '') {
+      this.holesFilled = true;
+      runtooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+      this.setTooltip(document.getElementById("hiddenoutput").textContent);
+    } else {
+      this.holesFilled = false;
+      this.setTooltip('Returns the length of a list');
+    }
   }
 };
 
@@ -285,8 +327,17 @@ Blockly.Blocks['python_list_in'] = {
       ["matching", "*matching", "bool"]
     ]);
     this.setOutput(true);
-    this.setTooltip('');
     this.setHelpUrl('http://www.example.com/');
+  },
+  onchange: function(ev) {
+    if (Blockly.Python.valueToCode(this, 'LHS', Blockly.Python.ORDER_NONE) != '' &&  Blockly.Python.valueToCode(this, 'RHS', Blockly.Python.ORDER_NONE) != '') {
+      this.holesFilled = true;
+      runtooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+      this.setTooltip(document.getElementById("hiddenoutput").textContent);
+    } else {
+      this.holesFilled = false;
+      this.setTooltip('Returns true if the sub-list belongs to a specified list');
+    }
   }
 };
 
@@ -301,8 +352,17 @@ Blockly.Blocks['python_list_min'] = {
       ["*matching", "matching"]
     ]);
     this.setOutput(true);
-    this.setTooltip('');
     this.setHelpUrl('http://www.example.com/');
+  },
+  onchange: function(ev) {
+    if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '') {
+      this.holesFilled = true;
+      runtooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+      this.setTooltip(document.getElementById("hiddenoutput").textContent);
+    } else {
+      this.holesFilled = false;
+      this.setTooltip('Returns the minimum value of a list');
+    }
   }
 };
 
@@ -317,8 +377,17 @@ Blockly.Blocks['python_list_max'] = {
       ["*matching", "matching"]
     ]);
     this.setOutput(true);
-    this.setTooltip('');
     this.setHelpUrl('http://www.example.com/');
+  },
+  onchange: function(ev) {
+    if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '') {
+      this.holesFilled = true;
+      runtooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+      this.setTooltip(document.getElementById("hiddenoutput").textContent);
+    } else {
+      this.holesFilled = false;
+      this.setTooltip('Returns the maximum value of a list');
+    }
   }
 };
 
@@ -333,8 +402,17 @@ Blockly.Blocks['python_sorted'] = {
       ["*matching", "*matching"]
     ]);
     this.setOutput(true);
-    this.setTooltip('');
     this.setHelpUrl('http://www.example.com/');
+  },
+  onchange: function(ev) {
+    if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '') {
+      this.holesFilled = true;
+      runtooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+      this.setTooltip(document.getElementById("hiddenoutput").textContent);
+    } else {
+      this.holesFilled = false;
+      this.setTooltip('Returns a sorted version of the specified list');
+    }
   }
 };
 
@@ -352,7 +430,7 @@ Blockly.Blocks['python_append'] = {
     this.setLhsVarOnly(true);
     this.setPreviousStatement(true);
     this.setNextStatement(true);
-    this.setTooltip('');
+    this.setTooltip('Appends an element to a list');
     this.setHelpUrl('http://www.example.com/');
   }
 };
@@ -371,7 +449,7 @@ Blockly.Blocks['python_list_item_modify'] = {
     this.setLhsVarOnly(true);
     this.setPreviousStatement(true);
     this.setNextStatement(true);
-    this.setTooltip('');
+    this.setTooltip('Modifies an element in a list at the specified location index');
     this.setHelpUrl('http://www.example.com/');
   }
 };
@@ -390,7 +468,7 @@ Blockly.Blocks['python_extend'] = {
     this.setLhsVarOnly(true);
     this.setPreviousStatement(true);
     this.setNextStatement(true);
-    this.setTooltip('');
+    this.setTooltip('Adds a list to the end of another list');
     this.setHelpUrl('http://www.example.com/');
   }
 };
@@ -411,7 +489,7 @@ Blockly.Blocks['python_insert'] = {
     this.setLhsVarOnly(true);
     this.setPreviousStatement(true);
     this.setNextStatement(true);
-    this.setTooltip('');
+    this.setTooltip('Inserts an object into a list at the specified location index');
     this.setHelpUrl('http://www.example.com/');
   }
 };
@@ -427,8 +505,17 @@ Blockly.Blocks['python_pop'] = {
     ]);
     this.setLhsVarOnly(true);
     this.setOutput(true);
-    this.setTooltip('');
     this.setHelpUrl('http://www.example.com/');
+  },
+  onchange: function(ev) {
+    if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '') {
+      this.holesFilled = true;
+      runtooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+      this.setTooltip(document.getElementById("hiddenoutput").textContent);
+    } else {
+      this.holesFilled = false;
+      this.setTooltip('Returns and removes the last element of a list');
+    }
   }
 };
 
@@ -444,7 +531,7 @@ Blockly.Blocks['python_pop_statement'] = {
     this.setLhsVarOnly(true);
     this.setPreviousStatement(true);
     this.setNextStatement(true);
-    this.setTooltip('');
+    this.setTooltip('Removes the last element of a list');
     this.setHelpUrl('http://www.example.com/');
   }
 };
@@ -463,7 +550,7 @@ Blockly.Blocks['python_remove'] = {
     this.setLhsVarOnly(true);
     this.setPreviousStatement(true);
     this.setNextStatement(true);
-    this.setTooltip('');
+    this.setTooltip('Removes the first item from the list which matches the specified value');
     this.setHelpUrl('http://www.example.com/');
   }
 };
@@ -480,7 +567,7 @@ Blockly.Blocks['python_reverse'] = {
     this.setLhsVarOnly(true);
     this.setPreviousStatement(true);
     this.setNextStatement(true);
-    this.setTooltip('');
+    this.setTooltip('Reverses the list');
     this.setHelpUrl('http://www.example.com/');
   }
 };
@@ -497,7 +584,7 @@ Blockly.Blocks['python_sort'] = {
     this.setLhsVarOnly(true);
     this.setPreviousStatement(true);
     this.setNextStatement(true);
-    this.setTooltip('');
+    this.setTooltip('Sorts the list');
     this.setHelpUrl('http://www.example.com/');
   }
 };
@@ -514,7 +601,16 @@ Blockly.Blocks['python_list_index_method'] = {
       ["*matching", "matching", "int"]
     ]);
     this.setOutput(true);
-    this.setTooltip('');
     this.setHelpUrl('http://www.example.com/');
+  },
+  onchange: function(ev) {
+    if (Blockly.Python.valueToCode(this, 'ARG1', Blockly.Python.ORDER_NONE) != '' &&  Blockly.Python.valueToCode(this, 'ARG2', Blockly.Python.ORDER_NONE) != '') {
+      this.holesFilled = true;
+      runtooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+      this.setTooltip(document.getElementById("hiddenoutput").textContent);
+    } else {
+      this.holesFilled = false;
+      this.setTooltip('Returns the lowest index in a list where the specified value appears');
+    }
   }
 };

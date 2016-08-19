@@ -30,7 +30,7 @@ goog.provide('Blockly.Python.pystrings');
 goog.require('Blockly.Python');
 
 Blockly.Python['python_string_const'] = function(block) {
-  var code = "'" + block.getFieldValue('VALUE').slice(1, -1) + "'";
+  var code = block.getFieldValue('VALUE');
   return [code, Blockly.Python.ORDER_ATOMIC];
 };
 

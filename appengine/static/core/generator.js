@@ -278,7 +278,7 @@ Blockly.Generator.prototype.addLoopTrap = function(branch, id) {
  * may override this to increase indent or change to tabs.
  * @type {string}
  */
-Blockly.Generator.prototype.INDENT = '  ';
+Blockly.Generator.prototype.INDENT = '    ';
 
 /**
  * Comma-separated list of reserved words.

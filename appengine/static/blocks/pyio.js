@@ -39,8 +39,17 @@ Blockly.Blocks['python_input'] = {
       ["str", "str"],
     ]);
     this.setOutput(true);
-    this.setTooltip('');
     this.setHelpUrl('http://www.example.com/');
+  },
+  onchange: function(ev) {
+    if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '') {
+      this.holesFilled = true;
+      runtooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+      this.setTooltip(document.getElementById("hiddenoutput").textContent);
+    } else {
+      this.holesFilled = false;
+      this.setTooltip('Prompts the user to input a message and returns it');
+    }
   }
 };
 
@@ -58,7 +67,7 @@ Blockly.Blocks['python_print'] = {
     ]);
     this.setPreviousStatement(true);
     this.setNextStatement(true);
-    this.setTooltip('');
+    this.setTooltip('Prints the given argument to the interpreter');
     this.setHelpUrl('http://www.example.com/');
     this.parameterCount = 1;
     this.hasEndParameter = false;
@@ -185,7 +194,6 @@ Blockly.Blocks['python_format'] = {
       ["str", "any", "str"]
     ]);
     this.setOutput(true);
-    this.setTooltip('');
     this.setHelpUrl('http://www.example.com/');
     this.parameterCount = 1;
   },
@@ -229,5 +237,24 @@ Blockly.Blocks['python_format'] = {
     this.parameterCount--;
     this.fullTypeVecs[0].splice(-2, 1);
     this.render();
+  },
+
+  onchange: function(ev) {
+    var filledCount;
+
+    for (var i = 1, filledCount = 0; i <= this.parameterCount; i++) {
+      if (Blockly.Python.valueToCode(this, 'ARG' + i, Blockly.Python.ORDER_NONE) != '') {
+        filledCount++;
+      }
+    }
+    if (filledCount == this.parameterCount && Blockly.Python.valueToCode(this, 'ARG0', Blockly.Python.ORDER_NONE) != '') {
+      this.holesFilled = true;
+      runtooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+      this.setTooltip(document.getElementById("hiddenoutput").textContent);
+    } else {
+      this.holesFilled = false;
+      this.setTooltip('Returns a list of elements');
+    }
+
   }
 };

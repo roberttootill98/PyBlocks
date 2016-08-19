@@ -34,7 +34,7 @@ Blockly.Blocks['python_linespace'] = {
         .appendField("  ");
     this.setPreviousStatement(true);
     this.setNextStatement(true);
-    this.setTooltip('');
+    this.setTooltip('An empty line');
     this.setHelpUrl('http://www.example.com/');
   }
 };
@@ -53,6 +53,7 @@ Blockly.Blocks['python_comment'] = {
           Blockly.FieldTextInput.commentValidator);
     this.setPreviousStatement(true);
     this.setNextStatement(true);
+    this.setTooltip('Comments are used to describe ambiguous code, they have no effect on execution');
     this.setHelpUrl('http://www.example.com/');
     this.lineCount = 1;
 

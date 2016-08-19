@@ -33,19 +33,12 @@ Blockly.Python['python_start'] = function(block) {
   var code = '';
 
     if (block.hasMath) {
-      code += 'import maths\n';
-      workspace.updateToolbox(document.getElementById('toolboxmaths'));
+      code += 'import math\n';
     }
 
     if (block.hasTurtle) {
       code += 'import turtle\n'
     }
-
-  code += '\n';
-
-  if (!block.hasMath) {
-    workspace.updateToolbox(document.getElementById('toolbox'));
-  }
 
   return code;
 };

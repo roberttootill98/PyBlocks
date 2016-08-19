@@ -91,7 +91,7 @@ Blockly.Blocks['python_plus'] = {
       this.setTooltip(document.getElementById("hiddenoutput").textContent);
     } else {
       this.holesFilled = false;
-      this.setTooltip('Returns the sum of two integers/floating point numbers')
+      this.setTooltip('Returns the sum of two integers/floating point numbers');
     }
   }
 };
@@ -123,7 +123,7 @@ Blockly.Blocks['python_minus'] = {
       this.setTooltip(document.getElementById("hiddenoutput").textContent);
     } else {
       this.holesFilled = false;
-      this.setTooltip('Returns the difference of two integers/floating point numbers')
+      this.setTooltip('Returns the difference of two integers/floating point numbers');
     }
   }
 };
@@ -157,7 +157,7 @@ Blockly.Blocks['python_multiply'] = {
       this.setTooltip(document.getElementById("hiddenoutput").textContent);
     } else {
       this.holesFilled = false;
-      this.setTooltip('Returns the product of two integers/floating point numbers')
+      this.setTooltip('Returns the product of two integers/floating point numbers');
     }
   }
 };
@@ -189,7 +189,7 @@ Blockly.Blocks['python_divide'] = {
       this.setTooltip(document.getElementById("hiddenoutput").textContent);
     } else {
       this.holesFilled = false;
-      this.setTooltip('Returns the quotient of two integers/floating point numbers')
+      this.setTooltip('Returns the quotient of two integers/floating point numbers');
     }
   }
 };
@@ -218,7 +218,7 @@ Blockly.Blocks['python_int_divide'] = {
       this.setTooltip(document.getElementById("hiddenoutput").textContent);
     } else {
       this.holesFilled = false;
-      this.setTooltip('Returns the quotient of two integers')
+      this.setTooltip('Returns the quotient of two integers');
     }
   }
 };
@@ -247,7 +247,7 @@ Blockly.Blocks['python_int_modulo'] = {
       this.setTooltip(document.getElementById("hiddenoutput").textContent);
     } else {
       this.holesFilled = false;
-      this.setTooltip('Returns the remainder of two integers after division')
+      this.setTooltip('Returns the remainder of two integers after division');
     }
   }
 };
@@ -280,7 +280,7 @@ Blockly.Blocks['python_pow_op'] = {
       this.setTooltip(document.getElementById("hiddenoutput").textContent);
     } else {
       this.holesFilled = false;
-      this.setTooltip('Returns the power of two integers/floating point numbers')
+      this.setTooltip('Returns the power of two integers/floating point numbers');
     }
   }
 };
@@ -309,7 +309,7 @@ Blockly.Blocks['python_unary_minus'] = {
       this.setTooltip(document.getElementById("hiddenoutput").textContent);
     } else {
       this.holesFilled = false;
-      this.setTooltip('Returns a negative integer or floating point number')
+      this.setTooltip('Returns a negative integer or floating point number');
     }
   }
 };
@@ -335,7 +335,7 @@ Blockly.Blocks['python_abs'] = {
       this.setTooltip(document.getElementById("hiddenoutput").textContent);
     } else {
       this.holesFilled = false;
-      this.setTooltip('Returns the absolute value of an integer or floating point number')
+      this.setTooltip('Returns the absolute value of an integer or floating point number');
     }
   }
 };
@@ -361,7 +361,7 @@ Blockly.Blocks['python_round'] = {
       this.setTooltip(document.getElementById("hiddenoutput").textContent);
     } else {
       this.holesFilled = false;
-      this.setTooltip('Rounds a floating point number to the whole integer number')
+      this.setTooltip('Rounds a floating point number to the whole integer number');
     }
   }
 };
@@ -392,7 +392,7 @@ Blockly.Blocks['python_pow'] = {
       this.setTooltip(document.getElementById("hiddenoutput").textContent);
     } else {
       this.holesFilled = false;
-      this.setTooltip('Returns the power of two integers/floating point numbers')
+      this.setTooltip('Returns the power of two integers/floating point numbers');
     }
   }
 };
@@ -420,7 +420,7 @@ Blockly.Blocks['python_numeric_min'] = {
       this.setTooltip(document.getElementById("hiddenoutput").textContent);
     } else {
       this.holesFilled = false;
-      this.setTooltip('Returns the smallest value of two integers/floating point numbers')
+      this.setTooltip('Returns the smallest value of two integers/floating point numbers');
     }
   }
 };
@@ -448,7 +448,7 @@ Blockly.Blocks['python_numeric_max'] = {
       this.setTooltip(document.getElementById("hiddenoutput").textContent);
     } else {
       this.holesFilled = false;
-      this.setTooltip('Returns the largest value of two integers/floating point numbers')
+      this.setTooltip('Returns the largest value of two integers/floating point numbers');
     }
   }
 };
@@ -474,7 +474,7 @@ Blockly.Blocks['python_sum'] = {
       this.setTooltip(document.getElementById("hiddenoutput").textContent);
     } else {
       this.holesFilled = false;
-      this.setTooltip('Returns the sum of a list of integers/floating point numbers')
+      this.setTooltip('Returns the sum of a list of integers/floating point numbers');
     }
   }
 };

@@ -58,19 +58,21 @@ Blockly.Blocks['python_start'] = {
   mutationToDom: function() {
     var container = document.createElement('mutation');
     container.setAttribute('line_count', this.lineCount);
-    container.setAttribute('has_maths', this.hasMaths);
+    container.setAttribute('has_math', this.hasMath);
     container.setAttribute('has_turtle', this.hasTurtle);
     return container;
   },
 
   domToMutation: function(xmlElement) {
-    var lines = parseInt(xmlElement.getAttribute('line_count'));
+    this.lineCount = parseInt(xmlElement.getAttribute('line_count'));
 
-    if (xmlElement.getAttribute('has_maths')) {
-      this.modify('maths', 'add');
+    if (xmlElement.getAttribute('has_math') == 'true') {
+      this.hasMath = true;
+      this.modify('math', 'add');
     }
 
-    if (xmlElement.getAttribute('has_turtle')) {
+    if (xmlElement.getAttribute('has_turtle') == 'true') {
+      this.hasTurtle = true;
       this.modify('turtle', 'add');
     }
   },
