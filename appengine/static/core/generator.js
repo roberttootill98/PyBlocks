@@ -168,6 +168,23 @@ Blockly.Generator.prototype.blockToCode = function(block) {
   // The current prefered method of accessing the block is through the second
   // argument to func.call, which becomes the first parameter to the generator.
   var code = func.call(block, block);
+
+  if (block.holesFilled) {
+    block.setWarningText(null);
+  }
+
+  if (workspace.running && block.holesFilled == false) {
+
+    block.setWarningText('Missing parameters');
+    workspace.generatorSuccess = false;
+
+    if (block.getNextBlock() == null) {
+      return;
+    } else {
+      return this.blockToCode(block.getNextBlock());
+    }
+  }
+
   if (goog.isArray(code)) {
     // Value blocks return tuples of code and operator order.
     return [this.scrub_(block, code[0]), code[1]];
@@ -183,6 +200,7 @@ Blockly.Generator.prototype.blockToCode = function(block) {
   } else {
     goog.asserts.fail('Invalid code generated: %s', code);
   }
+
 };
 
 /**

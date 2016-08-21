@@ -96,6 +96,7 @@ Blockly.Blocks['python_if'] = {
       this.moveInputBefore(bodyName, "ELSE");
     }
     this.render();
+    this.onchange();
   },
 
   remove: function() {
@@ -105,6 +106,7 @@ Blockly.Blocks['python_if'] = {
     this.elifCount--;
     this.fullTypeVecs[0].splice(0, 1);
     this.render();
+    this.onchange();
   },
 
   addFinal: function() {
@@ -112,12 +114,31 @@ Blockly.Blocks['python_if'] = {
     this.appendDummyInput("ELSE")
         .appendField("else:  ");  // two space hack for nice space for notch
     this.appendStatementInput("ELSE_BODY");
+    this.onchange();
   },
 
   removeFinal: function() {
     this.hasElse = false;
     this.removeInput('ELSE_BODY');
     this.removeInput('ELSE');
+    this.onchange();
+  },
+
+  onchange: function(ev) {
+    var filledCount;
+
+    for (var i = 1, filledCount = 0; i <= this.elifCount; i++) {
+      if (Blockly.Python.valueToCode(this, 'COND' + i, Blockly.Python.ORDER_NONE) != '') {
+        filledCount++;
+      }
+    }
+
+    if (Blockly.Python.valueToCode(this, 'CONDITION0', Blockly.Python.ORDER_NONE) != '' && filledCount == this.elifCount) {
+      this.holesFilled = true;
+    } else {
+      this.holesFilled = false;
+    }
+
   }
 };
 
@@ -137,6 +158,13 @@ Blockly.Blocks['python_while'] = {
     this.setNextStatement(true);
     this.setTooltip('While the specified boolean evaluates to true, the following code is executed in a loop');
     this.setHelpUrl('http://www.example.com/');
+  },
+  onchange: function(ev) {
+    if (Blockly.Python.valueToCode(this, 'CONDITION', Blockly.Python.ORDER_NONE) != '') {
+      this.holesFilled = true;
+    } else {
+      this.holesFilled = false;
+    }
   }
 };
 
@@ -158,6 +186,13 @@ Blockly.Blocks['python_for'] = {
     this.setNextStatement(true);
     this.setTooltip('A loop used to repeat a piece of code n number of times, typically using range() to specify how many times to loop the code');
     this.setHelpUrl('http://www.example.com/');
+  },
+  onchange: function(ev) {
+    if (Blockly.Python.valueToCode(this, 'LOOPVAR', Blockly.Python.ORDER_NONE) != '' &&  Blockly.Python.valueToCode(this, 'SEQUENCE', Blockly.Python.ORDER_NONE) != '') {
+      this.holesFilled = true;
+    } else {
+      this.holesFilled = false;
+    }
   }
 };
 

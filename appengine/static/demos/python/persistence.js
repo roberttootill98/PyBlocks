@@ -52,6 +52,11 @@ function reset() {
 
 function saveDocument() {
 
+// Method described in https://developers.google.com/drive/v3/web/manage-uploads
+// under 'Multipart upload', this method is used because Node.js is yet to be
+// available to EU countries. Once the beta phase has ended, this function can be
+// simplified considerably.
+
   var content = window.location.href;
   var method = 'POST';
   var mimeType = 'application/pythonblocks';

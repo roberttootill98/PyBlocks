@@ -16,31 +16,17 @@ function builtinRead(x) {
   return Sk.builtinFiles["files"][x];
 }
 
-function runit(codearea, output) {
- var prog = document.getElementById(codearea).value;
- var mypre = document.getElementById(output);
-
- Sk.pre = "output";
- Sk.configure({output:outf, read:builtinRead});
- var myPromise = Sk.misceval.asyncToPromise(function() {
-     return Sk.importMainWithBody("<stdin>", false, prog, false);
- });
- myPromise.then(function(mod) {
-     console.log('success');
- },
-     function(err) {
-     var mypre = document.getElementById("output");
-       mypre.innerHTML = mypre.innerHTML + err.toString() + "\n";
-     console.log(err.toString());
- });
-}
-
 function runfull() {
+
+workspace.running = true;
+workspace.generatorSuccess = true;
+
+if (generateCode() && workspace.generatorSuccess) {
  var prog = document.getElementById("pycode").textContent;
  var mypre = document.getElementById("output");
-
  Sk.pre = "output";
  Sk.configure({output:outf, read:builtinRead});
+ (Sk.TurtleGraphics || (Sk.TurtleGraphics = {})).target = 'mycanvas';
  var myPromise = Sk.misceval.asyncToPromise(function() {
      return Sk.importMainWithBody("<stdin>", false, prog, true);
  });
@@ -53,9 +39,26 @@ function runfull() {
        console.log(err.toString());
  });
  document.getElementById("output").focus();
+ } else {
+   alert('You have missed some parameters! Please look for the blue exclamation\
+   triangles and make sure no block is missing.');
+ }
+   workspace.running = false;
 }
 
-function runeval(code) {
+function runeval(block) {
+
+  workspace.running = true;
+  workspace.generatorSuccess = true;
+
+  var code = Blockly.Python.blockToCode(block);
+
+  if (workspace.generatorSuccess) {
+
+  if (code.constructor === Array) {
+    code = 'print(' + code[0] + ')';
+  }
+
   var mypre = document.getElementById("output");
 
   Sk.pre = "output";
@@ -71,7 +74,13 @@ function runeval(code) {
         mypre.innerHTML = mypre.innerHTML + err.toString() + "\n";
         console.log(err.toString());
   });
+
   document.getElementById("output").focus();
+} else {
+  alert('You have missed some parameters! Please look for the blue exclamation\
+  triangles and make sure no block is missing.');
+}
+workspace.running = false;
 }
 
 function runtooltip(code) {
@@ -97,24 +106,15 @@ function copyToClipboard() {
   window.prompt("Press CTRL + C to copy the code to clipboard", document.getElementById("pycode").textContent);
 }
 
-/*function runblock() {
- var prog = document["content_python"].text;
- var mypre = document.getElementById("output");
- //mypre.innerHTML = '';
- Sk.pre = "output";
- Sk.configure({output:outf, read:builtinRead});
- var myPromise = Sk.misceval.asyncToPromise(function() {
-     return Sk.importMainWithBody("<stdin>", false, prog, true);
- });
- myPromise.then(function(mod) {
-     console.log('success');
- },
-     function(err) {
-     console.log(err.toString());
- });
-}
-*/
 function clr() {
 var mypre = document.getElementById("output");
 mypre.innerHTML = 'PyBlocks Interpreter' + '\n\n';
 }
+
+function generateCode(event) {
+  var content = document.getElementById('pycode');
+
+  code = Blockly.Python.workspaceToCode(workspace);
+  content.textContent = code;
+  return true;
+};

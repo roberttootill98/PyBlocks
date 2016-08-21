@@ -116,6 +116,7 @@ Blockly.Blocks['python_list_const'] = {
     }
     this.fullTypeVecs[0].splice(-1, 0, "matching");
     this.moveInputBefore(inputName, "CLOSE");
+    this.onchange();
   },
 
   remove: function() {
@@ -123,6 +124,7 @@ Blockly.Blocks['python_list_const'] = {
     this.parameterCount--;
     this.fullTypeVecs[0].splice(-2, 1);
     this.render();
+    this.onchange();
   },
 
   onchange: function(ev) {
@@ -432,6 +434,13 @@ Blockly.Blocks['python_append'] = {
     this.setNextStatement(true);
     this.setTooltip('Appends an element to a list');
     this.setHelpUrl('http://www.example.com/');
+  },
+  onchange: function(ev) {
+    if (Blockly.Python.valueToCode(this, 'ARG1', Blockly.Python.ORDER_NONE) != '' &&  Blockly.Python.valueToCode(this, 'ARG2', Blockly.Python.ORDER_NONE) != '') {
+      this.holesFilled = true;
+    } else {
+      this.holesFilled = false;
+    }
   }
 };
 
@@ -451,6 +460,13 @@ Blockly.Blocks['python_list_item_modify'] = {
     this.setNextStatement(true);
     this.setTooltip('Modifies an element in a list at the specified location index');
     this.setHelpUrl('http://www.example.com/');
+  },
+  onchange: function(ev) {
+    if (Blockly.Python.valueToCode(this, 'ARG1', Blockly.Python.ORDER_NONE) != '' &&  Blockly.Python.valueToCode(this, 'ARG2', Blockly.Python.ORDER_NONE) != '' &&  Blockly.Python.valueToCode(this, 'ARG3', Blockly.Python.ORDER_NONE) != '') {
+      this.holesFilled = true;
+    } else {
+      this.holesFilled = false;
+    }
   }
 };
 
@@ -470,6 +486,13 @@ Blockly.Blocks['python_extend'] = {
     this.setNextStatement(true);
     this.setTooltip('Adds a list to the end of another list');
     this.setHelpUrl('http://www.example.com/');
+  },
+  onchange: function(ev) {
+    if (Blockly.Python.valueToCode(this, 'ARG1', Blockly.Python.ORDER_NONE) != '' &&  Blockly.Python.valueToCode(this, 'ARG2', Blockly.Python.ORDER_NONE) != '') {
+      this.holesFilled = true;
+    } else {
+      this.holesFilled = false;
+    }
   }
 };
 
@@ -491,6 +514,13 @@ Blockly.Blocks['python_insert'] = {
     this.setNextStatement(true);
     this.setTooltip('Inserts an object into a list at the specified location index');
     this.setHelpUrl('http://www.example.com/');
+  },
+  onchange: function(ev) {
+    if (Blockly.Python.valueToCode(this, 'ARG1', Blockly.Python.ORDER_NONE) != '' &&  Blockly.Python.valueToCode(this, 'ARG2', Blockly.Python.ORDER_NONE) != '' &&  Blockly.Python.valueToCode(this, 'ARG3', Blockly.Python.ORDER_NONE) != '') {
+      this.holesFilled = true;
+    } else {
+      this.holesFilled = false;
+    }
   }
 };
 
@@ -533,6 +563,13 @@ Blockly.Blocks['python_pop_statement'] = {
     this.setNextStatement(true);
     this.setTooltip('Removes the last element of a list');
     this.setHelpUrl('http://www.example.com/');
+  },
+  onchange: function(ev) {
+    if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '') {
+      this.holesFilled = true;
+    } else {
+      this.holesFilled = false;
+    }
   }
 };
 
@@ -552,6 +589,13 @@ Blockly.Blocks['python_remove'] = {
     this.setNextStatement(true);
     this.setTooltip('Removes the first item from the list which matches the specified value');
     this.setHelpUrl('http://www.example.com/');
+  },
+  onchange: function(ev) {
+    if (Blockly.Python.valueToCode(this, 'ARG1', Blockly.Python.ORDER_NONE) != '' &&  Blockly.Python.valueToCode(this, 'ARG2', Blockly.Python.ORDER_NONE) != '') {
+      this.holesFilled = true;
+    } else {
+      this.holesFilled = false;
+    }
   }
 };
 
@@ -569,6 +613,13 @@ Blockly.Blocks['python_reverse'] = {
     this.setNextStatement(true);
     this.setTooltip('Reverses the list');
     this.setHelpUrl('http://www.example.com/');
+  },
+  onchange: function(ev) {
+    if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '') {
+      this.holesFilled = true;
+    } else {
+      this.holesFilled = false;
+    }
   }
 };
 
@@ -586,6 +637,13 @@ Blockly.Blocks['python_sort'] = {
     this.setNextStatement(true);
     this.setTooltip('Sorts the list');
     this.setHelpUrl('http://www.example.com/');
+  },
+  onchange: function(ev) {
+    if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '') {
+      this.holesFilled = true;
+    } else {
+      this.holesFilled = false;
+    }
   }
 };
 

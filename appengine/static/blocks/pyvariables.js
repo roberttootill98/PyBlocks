@@ -45,6 +45,7 @@ Blockly.Blocks['variables_get'] = {
     this.appendDummyInput()
         .appendField(new Blockly.Field(
         "initname"), 'VAR');
+    this.holesFilled = true;
     this.setOutput(true);
     this.setTypeVecs([["none"]]);
     this.setTooltip(Blockly.Msg.VARIABLES_GET_TOOLTIP);
@@ -118,6 +119,13 @@ Blockly.Blocks['variables_set'] = {
     });
     //this.contextMenuMsg_ = Blockly.Msg.VARIABLES_SET_CREATE_GET;
   },
+  onchange: function(ev) {
+    if (Blockly.Python.valueToCode(this, 'VAR', Blockly.Python.ORDER_NONE) != '' && Blockly.Python.valueToCode(this, 'VALUE', Blockly.Python.ORDER_NONE) != '') {
+      this.holesFilled = true;
+    } else {
+      this.holesFilled = false;
+    }
+  }
 };
 
 /* possibly leave till later

@@ -37,7 +37,6 @@ Blockly.Blocks['python_int_const'] = {
     this.setInputsInline(true);
     this.setTypeVecs([["int"]]);
     this.setOutput(true);
-    this.setTooltip(this.getFieldValue("VALUE"));
     this.setHelpUrl('http://www.example.com/');
     this.getField('VALUE').setChangeHandler(
         Blockly.FieldTextInput.integerValidator);
@@ -54,7 +53,6 @@ Blockly.Blocks['python_float_const'] = {
     this.setInputsInline(true);
     this.setTypeVecs([["float"]]);
     this.setOutput(true);
-    this.setTooltip(this.getFieldValue("VALUE"));
     this.setHelpUrl('http://www.example.com/');
     this.getField('VALUE').setChangeHandler(
         Blockly.FieldTextInput.floatValidator);

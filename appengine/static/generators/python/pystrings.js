@@ -74,7 +74,7 @@ Blockly.Python['python_string_slice2'] = function(block) {
 };
 
 Blockly.Python['python_string_len'] = function(block) {
-  var code = Blockly.Python.valueToCode(block, 'ARG1', Blockly.Python.ORDER_NONE);
+  var code = Blockly.Python.valueToCode(block, 'ARG', Blockly.Python.ORDER_NONE);
   return ['len(' + code + ')', Blockly.Python.ORDER_FUNCTION_CALL];
 };
 

@@ -64,11 +64,12 @@ Blockly.Blocks['python_start'] = {
   },
 
   domToMutation: function(xmlElement) {
-    this.lineCount = parseInt(xmlElement.getAttribute('line_count'));
+    //parameters = parseInt(xmlElement.getAttribute('line_count'));
 
     if (xmlElement.getAttribute('has_math') == 'true') {
       this.hasMath = true;
       this.modify('math', 'add');
+      workspace.updateToolbox(document.getElementById('toolboxmaths'));
     }
 
     if (xmlElement.getAttribute('has_turtle') == 'true') {
@@ -83,8 +84,8 @@ Blockly.Blocks['python_start'] = {
       this.appendDummyInput(importName)
       .appendField('import ' + importName);
     } else {
-      this.lineCount--;
       this.removeInput(importName);
+      this.lineCount--;
     }
   }
 

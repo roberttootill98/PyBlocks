@@ -34,14 +34,14 @@ Blockly.Python['python_if'] = function(block) {
   var code;
   var elifs;
 
-  code = 'if ' + Blockly.Python.valueToCode(block, 'CONDITION0', Blockly.Python.ORDER_NONE) + ':\n' + (Blockly.Python.statementToCode(block, 'BODY0') || Blockly.Python.ORDER_PASS + '\n');
+  code = 'if ' + Blockly.Python.valueToCode(block, 'CONDITION0', Blockly.Python.ORDER_NONE) + ':\n' + (Blockly.Python.statementToCode(block, 'BODY0') || Blockly.Python.PASS + '\n');
 
   for (var i = 1, elifs = block.elifCount; i <= elifs; i++) {
-    code += 'elif ' + Blockly.Python.valueToCode(block, 'COND' + i, Blockly.Python.ORDER_NONE) + ':\n' + (Blockly.Python.statementToCode(block, 'BODY' + i) || Blockly.Python.ORDER_PASS + '\n');
+    code += 'elif ' + Blockly.Python.valueToCode(block, 'COND' + i, Blockly.Python.ORDER_NONE) + ':\n' + (Blockly.Python.statementToCode(block, 'BODY' + i) || Blockly.Python.PASS + '\n');
   }
 
   if (block.hasElse) {
-    code += 'else:\n' + Blockly.Python.statementToCode(block, 'ELSE_BODY') || Blockly.Python.ORDER_PASS + '\n';
+    code += 'else:\n' + Blockly.Python.statementToCode(block, 'ELSE_BODY') || Blockly.Python.PASS + '\n';
   }
 
   return code;

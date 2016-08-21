@@ -132,6 +132,7 @@ Blockly.Blocks['python_print'] = {
     else {
       this.moveInputBefore(inputName, "CLOSE");
     }
+    this.onchange();
   },
 
   remove: function() {
@@ -148,6 +149,7 @@ Blockly.Blocks['python_print'] = {
     }
     console.log("PRINTIO after", JSON.stringify(this.fullTypeVecs), "\n");
     this.render();
+    this.onchange();
   },
 
   addFinal: function() {
@@ -165,7 +167,7 @@ Blockly.Blocks['python_print'] = {
     }
     this.moveInputBefore("END", "CLOSE");
     console.log("PRINTIO after", JSON.stringify(this.fullTypeVecs), "\n");
-
+    this.onchange();
   },
 
   removeFinal: function() {
@@ -176,6 +178,32 @@ Blockly.Blocks['python_print'] = {
       this.fullTypeVecs[i].splice(-2, 1);
     }
     console.log("PRINTIO after", JSON.stringify(this.fullTypeVecs), "\n");
+    this.onchange();
+  },
+
+  onchange: function(ev) {
+    var filledCount;
+    var filledEnd;
+
+    for (var i = 1, filledCount = 0; i <= this.parameterCount; i++) {
+      if (Blockly.Python.valueToCode(this, 'ARG' + i, Blockly.Python.ORDER_NONE) != '') {
+        filledCount++;
+      }
+    }
+
+    if (this.hasEndParameter && Blockly.Python.valueToCode(this, 'END', Blockly.Python.ORDER_NONE) != '') {
+      filledEnd = true;
+    } else if (this.hasEndParameter == false) {
+      filledEnd = true;
+    } else {
+      filledEnd = false;
+    }
+
+    if (filledCount == this.parameterCount && filledEnd) {
+      this.holesFilled = true;
+    } else {
+      this.holesFilled = false;
+    }
 
   }
 };
@@ -230,6 +258,7 @@ Blockly.Blocks['python_format'] = {
     }
     this.fullTypeVecs[0].splice(-1, 0, "any");
     this.moveInputBefore(inputName, "CLOSE");
+    this.onchange();
   },
 
   remove: function() {
@@ -237,6 +266,7 @@ Blockly.Blocks['python_format'] = {
     this.parameterCount--;
     this.fullTypeVecs[0].splice(-2, 1);
     this.render();
+    this.onchange();
   },
 
   onchange: function(ev) {
