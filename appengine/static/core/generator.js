@@ -178,11 +178,11 @@ Blockly.Generator.prototype.blockToCode = function(block) {
     block.setWarningText('Missing parameters');
     workspace.generatorSuccess = false;
 
-    if (block.getNextBlock() == null) {
-      return;
-    } else {
-      return this.blockToCode(block.getNextBlock());
-    }
+    // if (block.getNextBlock() == null) {
+    //   return;
+    // } else {
+    //   return this.blockToCode(block.getNextBlock());
+    // }
   }
 
   if (goog.isArray(code)) {
