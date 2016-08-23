@@ -90,6 +90,9 @@ block.poisoned = false;
 }
 
 function runtooltip(code) {
+  if (code.indexOf('input(') >= 0) {
+    return;
+  }
   document.getElementById("hiddenoutput").innerHTML = '';
   var mypre = document.getElementById("hiddenoutput");
 
