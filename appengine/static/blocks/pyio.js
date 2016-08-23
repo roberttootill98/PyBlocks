@@ -39,16 +39,14 @@ Blockly.Blocks['python_input'] = {
       ["str", "str"],
     ]);
     this.setOutput(true);
+    this.setTooltip('Prompts the user to input a message and returns it');
     this.setHelpUrl('http://www.example.com/');
   },
   onchange: function(ev) {
     if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '') {
       this.holesFilled = true;
-      runtooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
-      this.setTooltip(document.getElementById("hiddenoutput").textContent);
     } else {
       this.holesFilled = false;
-      this.setTooltip('Prompts the user to input a message and returns it');
     }
   }
 };
