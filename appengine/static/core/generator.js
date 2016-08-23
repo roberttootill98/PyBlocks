@@ -169,6 +169,8 @@ Blockly.Generator.prototype.blockToCode = function(block) {
   // argument to func.call, which becomes the first parameter to the generator.
   var code = func.call(block, block);
 
+  // Josef - The following two if statements will only apply to runfull and
+  // runeval in skulpt.js
   if (block.holesFilled) {
     block.setWarningText(null);
   }

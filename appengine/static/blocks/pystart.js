@@ -40,9 +40,7 @@ Blockly.Blocks['python_start'] = {
     there to indicate which blocks will be executed when "Run full" is\
     pressed.');
     this.setHelpUrl('http://www.example.com/');
-    this.lineCount = 0;
-    this.hasMath = false;
-    this.hasTurtle = false;
+    this.imports = [];
   },
 
   customContextMenu: function(options) {
@@ -57,35 +55,37 @@ Blockly.Blocks['python_start'] = {
 
   mutationToDom: function() {
     var container = document.createElement('mutation');
-    container.setAttribute('line_count', this.lineCount);
-    container.setAttribute('has_math', this.hasMath);
-    container.setAttribute('has_turtle', this.hasTurtle);
+    container.setAttribute('imports', this.imports);
     return container;
   },
 
   domToMutation: function(xmlElement) {
-    //parameters = parseInt(xmlElement.getAttribute('line_count'));
+    var dImports = xmlElement.getAttribute('imports').split(',');
 
-    if (xmlElement.getAttribute('has_math') == 'true') {
-      this.hasMath = true;
-      this.modify('math', 'add');
-      workspace.updateToolbox(document.getElementById('toolboxmaths'));
-    }
-
-    if (xmlElement.getAttribute('has_turtle') == 'true') {
-      this.hasTurtle = true;
-      this.modify('turtle', 'add');
+    for (var i = 0; i < dImports.length; i++) {
+      this.modify(dImports[i], 'add');
     }
   },
 
   modify: function(importName, op) {
+
     if (op == 'add') {
-      this.lineCount++;
+      this.imports.push(importName);
       this.appendDummyInput(importName)
       .appendField('import ' + importName);
+
+      if (importName == 'math') {
+        workspace.updateToolbox(document.getElementById('toolboxmaths'));
+      }
+
     } else {
       this.removeInput(importName);
-      this.lineCount--;
+
+      if (importName == 'math') {
+        workspace.updateToolbox(document.getElementById('toolbox'));
+      }
+
+      this.imports.splice(this.imports.indexOf(importName), 1);
     }
   }
 

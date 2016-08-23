@@ -438,6 +438,7 @@
     output.addEventListener('transitionend', onresize);
     onresize();
 
+
     //workspace.addChangeListener(generateCode);
 
     if ('BlocklyStorage' in window && window.location.hash.length > 1) {
@@ -446,6 +447,9 @@
       var xml = '<xml><block id="startBlock" type="python_start" deletable="false" movable="false" x="325" y="50"></block></xml>';
       Blockly.Xml.domToWorkspace(workspace, Blockly.Xml.textToDom(xml));
     }
+
+    // Needed to init values for variable blocks
+    Blockly.Python.workspaceToCode(workspace);
     </script>
 
 

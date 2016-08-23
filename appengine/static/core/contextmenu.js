@@ -167,27 +167,19 @@ Blockly.ContextMenu.finalInputCallback = function(block, inputExists) {
 
 Blockly.ContextMenu.modifyMathInputCallback = function(block) {
   return function() {
-    if (block.hasMath) {
-      block.hasMath = !block.hasMath;
+    if (block.imports.indexOf('math') > -1) {
       block.modify('math', 'remove');
-      workspace.updateToolbox(document.getElementById('toolbox'));
-
     } else {
-      block.hasMath = !block.hasMath;
       block.modify('math', 'add');
-      workspace.updateToolbox(document.getElementById('toolboxmaths'));
-
     }
   };
 };
 
 Blockly.ContextMenu.modifyTurtleInputCallback = function(block) {
   return function() {
-    if (block.hasTurtle) {
-      block.hasTurtle = !block.hasTurtle;
+    if (block.imports.indexOf('turtle') > -1) {
       block.modify('turtle', 'remove');
     } else {
-      block.hasTurtle = !block.hasTurtle;
       block.modify('turtle', 'add');
     }
   };
