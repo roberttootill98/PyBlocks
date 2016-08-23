@@ -30,15 +30,11 @@ goog.provide('Blockly.Python.pystart');
 goog.require('Blockly.Python');
 
 Blockly.Python['python_start'] = function(block) {
-  var code = '';
-
-    if (block.hasMath) {
-      code += 'import math\n';
-    }
-
-    if (block.hasTurtle) {
-      code += 'import turtle\n'
-    }
+  var code;
+  
+  for (var i = 0, code = ''; i < block.imports.length; i++) {
+    code += 'import ' + block.imports[i] + '\n';
+  }
 
   return code;
 };

@@ -43,8 +43,8 @@ if (generateCode() && workspace.generatorSuccess) {
  });
  document.getElementById("output").focus();
  } else {
-   alert('You have missed some parameters! Please look for the blue exclamation\
-   triangles and make sure no block is missing.');
+   alert('Errors found! Please look for the blue warning\
+   triangles for more information.');
  }
    workspace.running = false;
 }
@@ -53,6 +53,8 @@ function runeval(block) {
 
   workspace.running = true;
   workspace.generatorSuccess = true;
+  // Poison the block selected to not search for more variable setters above it
+  block.poisoned = true;
 
   var code = Blockly.Python.blockToCode(block);
 
@@ -80,10 +82,11 @@ function runeval(block) {
 
   document.getElementById("output").focus();
 } else {
-  alert('You have missed some parameters! Please look for the blue exclamation\
-  triangles and make sure no block is missing.');
+  alert('Errors found! Please look for the blue warning\
+  triangles for more information.');
 }
 workspace.running = false;
+block.poisoned = false;
 }
 
 function runtooltip(code) {

@@ -45,10 +45,11 @@ Blockly.Workspace = function(opt_options) {
   /* Running is needed to differentiate between running code and
   tooltip evaluation */
   this.running = false;
-  /* generatorSuccess gives the ultimate decision whether to interpret the 
+  /* generatorSuccess gives the ultimate decision whether to interpret the
   generated Python code or not whereas running is used to tell PythonBlocks
   to continue searching for errors */
   this.generatorSuccess = true;
+
 };
 
 /**

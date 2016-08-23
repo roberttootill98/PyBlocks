@@ -121,6 +121,8 @@ Blockly.Block.prototype.fill = function(workspace, prototypeName) {
 
   this.holesFilled = true;
 
+  this.poisoned = false;
+
   /** @type {boolean} */
   this.rendered = false;
   /** @type {boolean} */
@@ -429,6 +431,21 @@ Blockly.Block.prototype.getRootBlock = function() {
     block = rootBlock.parentBlock_;
   } while (block);
   return rootBlock;
+};
+
+Blockly.Block.prototype.findVariable = function() {
+
+
+  var variableBlock;
+  var block = this;
+  do {
+    variableBlock = block;
+    block = variableBlock.parentBlock_;
+    if (variableBlock.type == 'variables_set' && this.getFieldValue("VAR") == Blockly.Python.valueToCode(variableBlock, 'VAR', Blockly.Python.ORDER_NONE)) {
+      return true;
+  }
+} while (!variableBlock.poisoned && block)
+  return variableBlock;
 };
 
 /**
@@ -1413,8 +1430,7 @@ Blockly.Block.prototype.getInputKinds = function(index) {
 };
 
 
-Blockly.
-Block.prototype.getInputTypes = function(index) {
+Blockly.Block.prototype.getInputTypes = function(index) {
   var paramTypes = [];
   var typeVecs = this.typeVecs;
   for (var i=0; i < typeVecs.length; i++) {

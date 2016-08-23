@@ -45,7 +45,6 @@ Blockly.Blocks['variables_get'] = {
     this.appendDummyInput()
         .appendField(new Blockly.Field(
         "initname"), 'VAR');
-    this.holesFilled = true;
     this.setOutput(true);
     this.setTypeVecs([["none"]]);
     this.setTooltip(Blockly.Msg.VARIABLES_GET_TOOLTIP);

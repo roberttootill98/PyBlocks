@@ -44,13 +44,13 @@ Blockly.Blocks['python_start'] = {
   },
 
   customContextMenu: function(options) {
-    var optionAddMath = {enabled: true};
-    optionAddMath.text = "Add/remove import math";
-    optionAddMath.callback = Blockly.ContextMenu.modifyMathInputCallback(this);
-    var optionAddTurtle = {enabled: true};
-    optionAddTurtle.text = "Add/remove import turtle";
-    optionAddTurtle.callback = Blockly.ContextMenu.modifyTurtleInputCallback(this);
-    options.unshift(optionAddMath, optionAddTurtle);
+    var optionMath = {enabled: true};
+    optionMath.text = "Add/remove import math";
+    optionMath.callback = Blockly.ContextMenu.modifyMathInputCallback(this);
+    var optionTurtle = {enabled: true};
+    optionTurtle.text = "Add/remove import turtle";
+    optionTurtle.callback = Blockly.ContextMenu.modifyTurtleInputCallback(this);
+    options.unshift(optionMath, optionTurtle);
   },
 
   mutationToDom: function() {
@@ -60,10 +60,11 @@ Blockly.Blocks['python_start'] = {
   },
 
   domToMutation: function(xmlElement) {
-    var dImports = xmlElement.getAttribute('imports').split(',');
-
-    for (var i = 0; i < dImports.length; i++) {
-      this.modify(dImports[i], 'add');
+    var dImports = xmlElement.getAttribute('imports').split(',')
+    if (dImports[0] != '') {
+      for (var i = 0; i < dImports.length; i++) {
+        this.modify(dImports[i], 'add');
+      }
     }
   },
 
@@ -74,18 +75,18 @@ Blockly.Blocks['python_start'] = {
       this.appendDummyInput(importName)
       .appendField('import ' + importName);
 
-      if (importName == 'math') {
+      if (this.imports.indexOf('math') > -1) {
         workspace.updateToolbox(document.getElementById('toolboxmaths'));
       }
 
     } else {
       this.removeInput(importName);
+      this.imports.splice(this.imports.indexOf(importName), 1);
 
-      if (importName == 'math') {
+      if (this.imports.indexOf('math') == -1) {
         workspace.updateToolbox(document.getElementById('toolbox'));
       }
 
-      this.imports.splice(this.imports.indexOf(importName), 1);
     }
   }
 
