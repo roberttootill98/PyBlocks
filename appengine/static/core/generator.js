@@ -78,9 +78,13 @@ Blockly.Generator.prototype.workspaceToCode = function(workspace) {
   this.init(workspace);
   var blocks = workspace.getTopBlocks(true);
   for (var x = 0, block; block = blocks[x]; x++) {
-    if (block.getRootBlock().getNextBlock() == '') {
+
+    // Josef - make sure at least one statement block is attached to the start
+    // block
+    if (block.type == 'python_start' && block.getNextBlock() == null) {
       return 0;
     }
+
     // Josef - only convert the blocks which has the root type of python_start
     // to code
     if (block.getRootBlock().type == 'python_start') {

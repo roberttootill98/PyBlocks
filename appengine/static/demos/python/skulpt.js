@@ -29,7 +29,7 @@ if (generateCode() && workspace.generatorSuccess) {
  var mypre = document.getElementById("output");
  Sk.pre = "output";
  Sk.configure({output:outf, read:builtinRead, inputfunTakesPrompt: true});
- // (Sk.TurtleGraphics || (Sk.TurtleGraphics = {})).target = 'mycanvas';
+ (Sk.TurtleGraphics || (Sk.TurtleGraphics = {})).target = 'mycanvas';
 
  var myPromise = Sk.misceval.asyncToPromise(function() {
      return Sk.importMainWithBody("<stdin>", false, prog, true);
