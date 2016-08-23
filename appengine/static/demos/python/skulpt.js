@@ -1,4 +1,7 @@
 Sk.python3 = true;
+Sk.inputfun = function(prompt) {
+ return new Promise(function (resolve) { resolve(window.prompt(prompt)); });
+     };
 
 function outf(text) {
   var mypre = document.getElementById("output");
@@ -17,7 +20,6 @@ function builtinRead(x) {
 }
 
 function runfull() {
-
 workspace.running = true;
 workspace.generatorSuccess = true;
 
@@ -26,8 +28,8 @@ if (generateCode() && workspace.generatorSuccess) {
  var prog = document.getElementById("pycode").textContent;
  var mypre = document.getElementById("output");
  Sk.pre = "output";
- Sk.configure({output:outf, read:builtinRead});
- (Sk.TurtleGraphics || (Sk.TurtleGraphics = {})).target = 'mycanvas';
+ Sk.configure({output:outf, read:builtinRead, inputfunTakesPrompt: true});
+ // (Sk.TurtleGraphics || (Sk.TurtleGraphics = {})).target = 'mycanvas';
 
  var myPromise = Sk.misceval.asyncToPromise(function() {
      return Sk.importMainWithBody("<stdin>", false, prog, true);
