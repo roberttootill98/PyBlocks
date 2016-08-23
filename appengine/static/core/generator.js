@@ -177,17 +177,15 @@ Blockly.Generator.prototype.blockToCode = function(block) {
 
   // Josef - The following three if statements will only apply to runfull and
   // runeval in skulpt.js
-
-
   if (workspace.running && block.holesFilled == false) {
     block.setWarningText('Missing parameters');
     workspace.generatorSuccess = false;
 
-  } else if (workspace.running && !block.isInFlyout && block.type == 'variables_get' && block.getParent().type != 'variables_set' && block.findVariable() != true) {
-    block.setWarningText('You have not declared this variable yet!');
+  } else if (workspace.running && !block.isInFlyout && block.type == 'variables_get' && block.getTopLevel().type != 'variables_set' && block.findVariable() != true) {
+    block.setWarningText('You have not declared this variable yet');
     workspace.generatorSuccess = false;
 
-  } else if (workspace.running && block.holesFilled == true) {
+  } else if (workspace.running) {
     block.setWarningText(null)
   }
 
