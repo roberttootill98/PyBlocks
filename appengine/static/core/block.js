@@ -434,8 +434,6 @@ Blockly.Block.prototype.getRootBlock = function() {
 };
 
 Blockly.Block.prototype.findVariable = function() {
-
-
   var variableBlock;
   var block = this;
   do {
