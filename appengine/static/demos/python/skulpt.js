@@ -44,6 +44,8 @@ if (generateCode() && workspace.generatorSuccess) {
        console.log(err.toString());
  });
  document.getElementById("output").focus();
+ } else if (!generateCode()) {
+   alert('You need to have at least one statement block attached to the start block.')
  } else {
    alert('Errors found! Please look for the blue warning\
    triangles for more information.');
@@ -126,6 +128,12 @@ function generateCode(event) {
   var content = document.getElementById('pycode');
 
   code = Blockly.Python.workspaceToCode(workspace);
-  content.textContent = code;
-  return true;
+  if (code != 0){
+    content.textContent = code;
+    return true;
+  } else {
+    return false;
+  }
+
+
 };
