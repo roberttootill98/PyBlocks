@@ -55,6 +55,8 @@ if (generateCode() && workspace.generatorSuccess) {
 
 function runeval(block) {
 
+
+
   workspace.running = true;
   workspace.generatorSuccess = true;
   // Poison the block selected to not search for more variable setters above it
@@ -116,7 +118,10 @@ function runtooltip(code) {
 }
 
 function copyToClipboard() {
-  window.prompt("Press CTRL + C to copy the code to clipboard", document.getElementById("pycode").textContent);
+  if (generateCode()) {
+    window.prompt("Press CTRL + C to copy the code to clipboard", document.getElementById("pycode").textContent);
+  }
+
 }
 
 function clr() {

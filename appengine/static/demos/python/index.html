@@ -451,6 +451,9 @@
 
     // Needed to init values for variable blocks
     Blockly.Python.workspaceToCode(workspace);
+
+    goog.events.listen(document.getElementById('blocklyDiv'),
+      'dblclick', function() { runeval(Blockly.selected); });
     </script>
 
 
