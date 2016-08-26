@@ -53,14 +53,14 @@
         </span>
 
         <span class="right">
-          <button type="button" class="fancybuttons">Help</button>
-          <button type="button" class="fancybuttons">Sample programs</button>
+          <button type="button" class="fancybuttons" id="run" onclick="runfull()">Run</button>
           <button type="button" class="fancybuttons" onclick="saveBlocks()">Save</button>
           <button type="button" class="fancybuttons" onclick="initLoad(createPicker)">Load</button>
           <button type="button" class="fancybuttons" onclick="copyToClipboard()">Copy</button>
           <button type="button" class="fancybuttons" onclick="reset()">Reset</button>
-          <button type="button" class="fancybuttons" onclick="runfull()">Run full</button>
           <button type="button" class="fancybuttons" onclick="clr()">Clear console</button>
+          <button type="button" class="fancybuttons">Sample programs</button>
+          <button type="button" class="fancybuttons">Help</button>
         </span>
       </td>
     </tr>
@@ -71,9 +71,7 @@
     </tr>
     <tr>
       <td style="vertical-align:top;text-align:center">
-        <textarea id="output" class="codearea" rows="15" cols="75" readonly="true">PyBlocks Interpreter
-
-</textarea>
+        <textarea id="output" class="codearea" rows="15" cols="75" readonly="true"></textarea>
 <div id="mycanvas"></div>
         <textarea id="hiddenoutput" cols="20" rows="7" hidden="true"></textarea>
         <textarea id="pycode" class="codearea" rows="12" cols="100" readonly="true" hidden="true"></textarea>
@@ -438,9 +436,10 @@
     window.addEventListener('resize', onresize, false);
     output.addEventListener('transitionend', onresize);
     onresize();
+    initInterpreter();
 
 
-    //workspace.addChangeListener(generateCode);
+    workspace.addChangeListener(generateCode());
 
     if ('BlocklyStorage' in window && window.location.hash.length > 1) {
       BlocklyStorage.retrieveXml(window.location.hash.substring(1));

@@ -19,11 +19,23 @@ function builtinRead(x) {
   return Sk.builtinFiles["files"][x];
 }
 
+function initInterpreter() {
+  var interpreter = document.getElementById("output");
+  initVal = 'PyBlocks Interpreter\n\n';
+  interpreter.innerHTML = initVal;
+  if (interpreter.innerHTML == initVal) {
+    return true;
+  } else {
+    return false;
+  }
+
+}
 function runfull() {
 workspace.running = true;
 workspace.generatorSuccess = true;
+workspace.varBlocks = [];
 
-if (generateCode() && workspace.generatorSuccess) {
+if (initInterpreter() && generateCode() && workspace.generatorSuccess) {
 
  var prog = document.getElementById("pycode").textContent;
  var mypre = document.getElementById("output");
@@ -43,7 +55,9 @@ if (generateCode() && workspace.generatorSuccess) {
        mypre.innerHTML = mypre.innerHTML + err.toString() + "\n";
        console.log(err.toString());
  });
- document.getElementById("output").focus();
+ mypre.focus();
+ mypre.scrollTop = mypre.scrollHeight;
+
  } else if (!generateCode()) {
    alert('You need to have at least one statement block attached to the start block.')
  } else {
@@ -55,14 +69,12 @@ if (generateCode() && workspace.generatorSuccess) {
 
 function runeval(block) {
 
-
-
   workspace.running = true;
   workspace.generatorSuccess = true;
   // Poison the block selected to not search for more variable setters above it
   block.poisoned = true;
 
-  var code = Blockly.Python.blockToCode(block);
+  var code = workspace.varBlocks + Blockly.Python.blockToCode(block);
 
   if (workspace.generatorSuccess) {
 
@@ -85,8 +97,8 @@ function runeval(block) {
         mypre.innerHTML = mypre.innerHTML + err.toString() + "\n";
         console.log(err.toString());
   });
-
-  document.getElementById("output").focus();
+  mypre.focus();
+  mypre.scrollTop = mypre.scrollHeight;
 } else {
   alert('Errors found! Please look for the blue warning\
   triangles for more information.');
@@ -126,7 +138,7 @@ function copyToClipboard() {
 
 function clr() {
 var mypre = document.getElementById("output");
-mypre.innerHTML = 'PyBlocks Interpreter' + '\n\n';
+mypre.innerHTML = 'PyBlocks Interpreter\n\n';
 }
 
 function generateCode(event) {

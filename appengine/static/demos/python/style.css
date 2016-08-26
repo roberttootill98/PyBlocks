@@ -4,16 +4,19 @@ html, body {
 }
 
 body {
-  background-color: rgb(221,221,221);
+  background-color: #DDDDDD;
   font-family: sans-serif;
   overflow: hidden;
 }
 
 h1 {
+  padding: 0px;
+  margin: 0px;
   display: inline-block;
-  font-weight: bolder;
-  font-size: 100%;
-  text-shadow: 3px 2px 2px rgba(150, 150, 150, 1);
+  font-family: sans-serif;
+  font-size: 22pt;
+  text-shadow: -1px -1px 0 #EEE, 1px -1px 0 #EEE, -1px 1px 0 #EEE, 1px 1px 0 #EEE, 4px 4px 2px rgba(150, 150, 150, 1);
+  color: #001f3f;
 }
 
 table {
@@ -29,12 +32,12 @@ table {
 .codearea {
   border-radius: 6px;
   background-color:#000;
-  color:#fff;
-  font-family:'Oxygen Mono', Consolas, 'Liberation Mono', 'DejaVu Sans Mono', monospace;
+  color:#2ECC40;
+  font-family: sans-serif;
   font-size: 20px;
   overflow: hidden;
   resize: none;
-  transition: all 0.5s ease;
+  transition: all 0.3s ease;
   width: 40em;
   height: 2em;
   opacity: 0.48;
@@ -46,15 +49,12 @@ textarea:focus {
   font-size: 14px;
   opacity:0.95;
   text-align: left;
-  width: 95%;
+  width: 99%;
   overflow-y: visible;
 }
 
 textarea:hover {
   opacity:0.95;
-  -webkit-transform: scale(1.004);
-  -ms-transform: scale(1.004);
-  transform: scale(1.004);
 }
 
 .codearea:focus {
@@ -84,6 +84,11 @@ textarea:hover {
 
 .fancybuttons:focus {
   outline:0 !important;
+}
+
+.fancybuttons#run{
+  background: #efefef url('../../media/play_icon.png') no-repeat right;
+  padding-right: 28px;
 }
 
 .right{

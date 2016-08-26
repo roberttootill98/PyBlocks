@@ -165,6 +165,11 @@ Blockly.Generator.prototype.blockToCode = function(block) {
     return this.blockToCode(block.getNextBlock());
   }
 
+    // Josef - save variable blocks to simulate interactive mode
+  if (block.type == 'variables_set') {
+    workspace.varBlocks += block + '\n';
+  }
+
   var func = this[block.type];
   goog.asserts.assertFunction(func,
       'Language "%s" does not know how to generate code for block type "%s".',
@@ -175,8 +180,6 @@ Blockly.Generator.prototype.blockToCode = function(block) {
   // argument to func.call, which becomes the first parameter to the generator.
   var code = func.call(block, block);
 
-  // Josef - The following three if statements will only apply to runfull and
-  // runeval in skulpt.js
   if (workspace.running && block.holesFilled == false) {
     block.setWarningText('Missing parameters');
     workspace.generatorSuccess = false;
@@ -185,7 +188,7 @@ Blockly.Generator.prototype.blockToCode = function(block) {
     block.setWarningText('You have not declared this variable yet');
     workspace.generatorSuccess = false;
 
-  } else if (workspace.running) {
+  } else {
     block.setWarningText(null)
   }
 

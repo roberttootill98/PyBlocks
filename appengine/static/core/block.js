@@ -439,7 +439,12 @@ Blockly.Block.prototype.findVariable = function() {
   do {
     variableBlock = block;
     block = variableBlock.parentBlock_;
-    if (variableBlock.type == 'variables_set' && this.getFieldValue("VAR") == Blockly.Python.valueToCode(variableBlock, 'VAR', Blockly.Python.ORDER_NONE)) {
+    // Josef - First check if variable has already been declared in stack of
+    // variables, if not then continue searching as if it is a clean run
+    if (workspace.varBlocks.indexOf(block.getFieldValue("VAR")  != -1) ||
+    (variableBlock.type == 'variables_set' && this.getFieldValue("VAR") ==
+    Blockly.Python.valueToCode(variableBlock, 'VAR',
+    Blockly.Python.ORDER_NONE))) {
       return true;
   }
 } while (!variableBlock.poisoned && block)

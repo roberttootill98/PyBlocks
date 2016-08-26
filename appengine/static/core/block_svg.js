@@ -73,6 +73,8 @@ Blockly.BlockSvg = function() {
 
   this.svgIndicatorGroup = Blockly.createSvgElement('g', {}, this.svgGroup_);
   this.indicators = {};
+  this.clicks = 0;
+  this.dblChk = null;
 
   this.svgBlockPath_.tooltip = this;
   Blockly.Tooltip.bindMouseEvents(this.svgBlockPath_);
@@ -450,10 +452,29 @@ Blockly.BlockSvg.prototype.tab = function(start, forward) {
  * @param {!Event} e Mouse down event.
  * @private
  */
+
 Blockly.BlockSvg.prototype.onMouseDown_ = function(e) {
   if (this.isInFlyout) {
     return;
   }
+
+  // If no double-click eval, unfocus interpreter
+  if (document.getElementById('output') === document.activeElement) {
+    this.clicks++;
+    e.preventDefault();
+
+    this.dblChk = setTimeout(function() {
+      if (this.clicks <= 1) {
+        document.getElementById('output').blur();
+        this.clicks = 0;
+      } else {
+        document.getElementById('output').focus(); // Just in case
+        clearTimeout(this.dblChk);
+        this.clicks = 0;
+      }
+    }.bind(this), 500);
+  }
+
   this.workspace.markFocused();
   // Update Blockly's knowledge of its own location.
   Blockly.svgResize(this.workspace);
