@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  <title>PythonBlocks Help</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body onload="readFile('helpassets/1.txt')">
+
+  <div id="helptitlediv">
+    <h1 id="title">PythonBlocks Tutorial (1/11)</h1>
+  </div>
+
+  <div id="helptextdiv">
+    <textarea id="helptext" class="helptext" readonly="true"></textarea>
+    <img id="helpimage" src="helpassets/1.png"  style="align:center"></img>
+  </div>
+
+  <div id="helpbuttonsdiv">
+    <button id="nextbutton" class="fancybuttons" onclick="page++;traversePage()">Next</button>
+    <button id="backbutton" class="fancybuttons" onclick="page--;traversePage()">Back</button>
+    <button id="exitbutton" class="fancybuttons" onclick="window.close()">Exit</button>
+  </div>
+
+  <script>
+  var page = 1;
+  var title = document.getElementById('title');
+  var helptext_ = document.getElementById('helptext');
+  var image = document.getElementById('helpimage');
+
+  function traversePage() {
+    if (page == 0) {
+      page = 1;
+      return;
+    } else if (page == 12) {
+      page = 11;
+      return;
+    }
+    title.innerHTML = 'PythonBlocks Tutorial (' + page + '/11)';
+    readFile('helpassets/' + page + '.txt');
+    image.src = 'helpassets/' + page + '.png';
+  }
+
+  function readFile(file)
+  {
+    var rawRead = new XMLHttpRequest();
+    rawRead.open("GET", file, false);
+    rawRead.onreadystatechange = function ()
+    {
+      if(rawRead.readyState === 4)
+      {
+        if(rawRead.status === 200 || rawRead.status == 0)
+        {
+          var text = rawRead.responseText;
+          helptext_.innerHTML = text;
+        }
+      }
+    }
+    rawRead.send(null);
+  }
+  </script>
+</body>
+</html>
