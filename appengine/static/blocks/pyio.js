@@ -217,7 +217,9 @@ Blockly.Blocks['python_format'] = {
         .appendField(")");
     this.setInputsInline(true);
     this.setTypeVecs([
-      ["str", "any", "str"]
+      ["str", "int", "str"],
+      ["str", "float", "str"],
+      ["str", "str", "str"]
     ]);
     this.setOutput(true);
     this.setHelpUrl('http://www.example.com/');

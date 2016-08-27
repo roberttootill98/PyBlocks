@@ -460,6 +460,7 @@ Blockly.Css.CONTENT = [
     'white-space: nowrap;',
   '}',
 
+
   '.blocklyToolboxDiv[dir="RTL"] .blocklyTreeRow {',
     'margin-left: 8px;',
   '}',
@@ -521,9 +522,15 @@ Blockly.Css.CONTENT = [
     'text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;',
   '}',
 
+  '.blocklyTreeSelected {',
+  'background-color: rgba(24, 24, 24, 0.8) !important;',
+  '}',
+
   '.blocklyTreeSelected .blocklyTreeLabel {',
     'color: #fff;',
   '}',
+
+
 
   /* Copied from: goog/css/colorpicker-simplegrid.css */
   /*

@@ -441,7 +441,7 @@ Blockly.Block.prototype.findVariable = function() {
     block = variableBlock.parentBlock_;
     // Josef - First check if variable has already been declared in stack of
     // variables, if not then continue searching as if it is a clean run
-    if (workspace.varBlocks.indexOf(block.getFieldValue("VAR")  != -1) ||
+    if (workspace.varBlocks.indexOf(this.getFieldValue("VAR")) !== -1 ||
     (variableBlock.type == 'variables_set' && this.getFieldValue("VAR") ==
     Blockly.Python.valueToCode(variableBlock, 'VAR',
     Blockly.Python.ORDER_NONE))) {
@@ -817,6 +817,9 @@ Blockly.Block.prototype.setOutput = function(newBoolean, opt_check) {
     this.render();
     this.bumpNeighbours_();
   }
+
+    this.canHaveTooltipValue = newBoolean;
+    
 };
 
 /**

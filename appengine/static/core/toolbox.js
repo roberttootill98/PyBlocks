@@ -115,17 +115,20 @@ Blockly.Toolbox.prototype.init = function() {
       });
   var workspaceOptions = {
     disabledPatternId: workspace.options.disabledPatternId,
-    multiTypePatternLargeId: workspace.options.multiTypePatternLargeId,
-    multiTypePatternSmallId: workspace.options.multiTypePatternSmallId,
-    numericalTypePatternLargeId: workspace.options.numericalTypePatternLargeId,
-    floatintTypePatternId: workspace.options.floatintTypePatternId,
-    floatstrTypePatternId: workspace.options.floatstrTypePatternId,
-    intstrTypePatternId: workspace.options.intstrTypePatternId,
-    rangestrTypePatternId: workspace.options.rangestrTypePatternId,
+    anyTypePatternLargeId: workspace.options.anyTypePatternLargeId,
+    anyTypePatternSmallId: workspace.options.anyTypePatternSmallId,
+    floatintTypePatternLargeId: workspace.options.floatintTypePatternLargeId,
+    floatintTypePatternSmallId: workspace.options.floatintTypePatternSmallId,
+    floatstrTypePatternSmallId: workspace.options.floatstrTypePatternSmallId,
+    intstrTypePatternSmallId: workspace.options.intstrTypePatternSmallId,
+    intstrTypePatternLargeId: workspace.options.intstrTypePatternLargeId,
+    floatintstrTypePatternSmallId: workspace.options.floatintstrTypePatternSmallId,
+    rangestrTypePatternSmallId: workspace.options.rangestrTypePatternSmallId,
     parentWorkspace: workspace,
     RTL: workspace.RTL,
     svg: workspace.options.svg
   };
+  console.log("WSOPTIONSTB", workspaceOptions);
   /**
    * @type {!Blockly.Flyout}
    * @private

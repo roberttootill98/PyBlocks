@@ -129,5 +129,10 @@ Blockly.Python['python_string_count'] = function(block) {
 
 Blockly.Python['python_split'] = function(block) {
   var code = Blockly.Python.valueToCode(block, 'ARG', Blockly.Python.ORDER_MEMBER);
-  return [code + '.split()', Blockly.Python.ORDER_FUNCTION_CALL];
+  if (block.hasSepParameter) {
+    return [code + '.split(' + Blockly.Python.valueToCode(block, 'SEP',
+    Blockly.Python.ORDER_NONE) + ')', Blockly.Python.ORDER_FUNCTION_CALL];
+  } else {
+    return [code + '.split()', Blockly.Python.ORDER_FUNCTION_CALL];
+  }
 };

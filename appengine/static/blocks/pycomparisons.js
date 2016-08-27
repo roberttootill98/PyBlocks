@@ -28,11 +28,24 @@ goog.provide('Blockly.Blocks.pycomparisons');
 
 goog.require('Blockly.Blocks');
 
-var COMPARISON_TYPE_VECS = [
+var EQUALITY_TYPE_VECS = [
   ["matching", "matching", "bool"],
   ["int", "float", "bool"],
   ["float", "int", "bool"],
   ["*matching", "*matching", "bool"],
+  ["*int", "*float", "bool"],
+  ["*float", "*int", "bool"],
+];
+
+var ORDERING_TYPE_VECS = [
+  ["str", "str", "bool"],
+  ["int", "int", "bool"],
+  ["float", "float", "bool"],
+  ["int", "float", "bool"],
+  ["float", "int", "bool"],
+  ["*str", "*str", "bool"],
+  ["*int", "*int", "bool"],
+  ["*float", "*float", "bool"],
   ["*int", "*float", "bool"],
   ["*float", "*int", "bool"],
 ];
@@ -48,7 +61,7 @@ Blockly.Blocks['python_equals'] = {
         .appendField("", "RPAR");
     this.setOperator(6);
     this.setInputsInline(true);
-    this.setTypeVecs(COMPARISON_TYPE_VECS);
+    this.setTypeVecs(EQUALITY_TYPE_VECS);
     this.setOutput(true);
     this.setHelpUrl('http://www.example.com/');
   },
@@ -75,7 +88,7 @@ Blockly.Blocks['python_not_equals'] = {
         .appendField("", "RPAR");
     this.setOperator(6);
     this.setInputsInline(true);
-    this.setTypeVecs(COMPARISON_TYPE_VECS);
+    this.setTypeVecs(EQUALITY_TYPE_VECS);
     this.setOutput(true);
     this.setHelpUrl('http://www.example.com/');
   },
@@ -102,7 +115,10 @@ Blockly.Blocks['python_is'] = {
         .appendField("", "RPAR");
     this.setOperator(6);
     this.setInputsInline(true);
-    this.setTypeVecs(COMPARISON_TYPE_VECS);
+    this.setTypeVecs([
+      ["matching", "matching", "bool"],
+      ["*matching", "*matching", "bool"]
+    ]);
     this.setOutput(true);
     this.setHelpUrl('http://www.example.com/');
   },
@@ -129,7 +145,7 @@ Blockly.Blocks['python_less_than'] = {
         .appendField("", "RPAR");
     this.setOperator(6);
     this.setInputsInline(true);
-    this.setTypeVecs(COMPARISON_TYPE_VECS);
+    this.setTypeVecs(ORDERING_TYPE_VECS);
     this.setOutput(true);
     this.setHelpUrl('http://www.example.com/');
   },
@@ -156,7 +172,7 @@ Blockly.Blocks['python_less_than_or_equal'] = {
         .appendField("", "RPAR");
     this.setOperator(6);
     this.setInputsInline(true);
-    this.setTypeVecs(COMPARISON_TYPE_VECS);
+    this.setTypeVecs(ORDERING_TYPE_VECS);
     this.setOutput(true);
     this.setHelpUrl('http://www.example.com/');
   },
@@ -184,7 +200,7 @@ Blockly.Blocks['python_greater_than'] = {
         .appendField("", "RPAR");
     this.setOperator(6);
     this.setInputsInline(true);
-    this.setTypeVecs(COMPARISON_TYPE_VECS);
+    this.setTypeVecs(ORDERING_TYPE_VECS);
     this.setOutput(true);
     this.setHelpUrl('http://www.example.com/');
   },
@@ -212,7 +228,7 @@ Blockly.Blocks['python_greater_than_or_equal'] = {
         .appendField("", "RPAR");
     this.setOperator(6);
     this.setInputsInline(true);
-    this.setTypeVecs(COMPARISON_TYPE_VECS);
+    this.setTypeVecs(ORDERING_TYPE_VECS);
     this.setOutput(true);
     this.setHelpUrl('http://www.example.com/');
   },

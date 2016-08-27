@@ -60,7 +60,8 @@ Blockly.Blocks['python_string_concat'] = {
     this.setHelpUrl('http://www.example.com/');
   },
   onchange: function(ev) {
-    if (Blockly.Python.valueToCode(this, 'LHS', Blockly.Python.ORDER_NONE) != '' &&  Blockly.Python.valueToCode(this, 'RHS', Blockly.Python.ORDER_NONE) != '') {
+    if (Blockly.Python.valueToCode(this, 'LHS', Blockly.Python.ORDER_NONE) != '' &&
+    Blockly.Python.valueToCode(this, 'RHS', Blockly.Python.ORDER_NONE) != '') {
       this.holesFilled = true;
       runtooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
       this.setTooltip(document.getElementById("hiddenoutput").textContent);
@@ -90,7 +91,8 @@ Blockly.Blocks['python_string_repeat'] = {
     this.setHelpUrl('http://www.example.com/');
   },
   onchange: function(ev) {
-    if (Blockly.Python.valueToCode(this, 'LHS', Blockly.Python.ORDER_NONE) != '' &&  Blockly.Python.valueToCode(this, 'RHS', Blockly.Python.ORDER_NONE) != '') {
+    if (Blockly.Python.valueToCode(this, 'LHS', Blockly.Python.ORDER_NONE) != '' &&
+    Blockly.Python.valueToCode(this, 'RHS', Blockly.Python.ORDER_NONE) != '') {
       this.holesFilled = true;
       runtooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
       this.setTooltip(document.getElementById("hiddenoutput").textContent);
@@ -116,7 +118,8 @@ Blockly.Blocks['python_string_index'] = {
     this.setHelpUrl('http://www.example.com/');
   },
   onchange: function(ev) {
-    if (Blockly.Python.valueToCode(this, 'ARG1', Blockly.Python.ORDER_NONE) != '' &&  Blockly.Python.valueToCode(this, 'ARG2', Blockly.Python.ORDER_NONE) != '') {
+    if (Blockly.Python.valueToCode(this, 'ARG1', Blockly.Python.ORDER_NONE) != '' &&
+    Blockly.Python.valueToCode(this, 'ARG2', Blockly.Python.ORDER_NONE) != '') {
       this.holesFilled = true;
       runtooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
       this.setTooltip(document.getElementById("hiddenoutput").textContent);
@@ -144,7 +147,9 @@ Blockly.Blocks['python_string_slice12'] = {
     this.setHelpUrl('http://www.example.com/');
   },
   onchange: function(ev) {
-    if (Blockly.Python.valueToCode(this, 'ARG1', Blockly.Python.ORDER_NONE) != '' &&  Blockly.Python.valueToCode(this, 'ARG2', Blockly.Python.ORDER_NONE) != '' && Blockly.Python.valueToCode(this, 'ARG3', Blockly.Python.ORDER_NONE) != '') {
+    if (Blockly.Python.valueToCode(this, 'ARG1', Blockly.Python.ORDER_NONE) != '' &&
+    Blockly.Python.valueToCode(this, 'ARG2', Blockly.Python.ORDER_NONE) != '' &&
+    Blockly.Python.valueToCode(this, 'ARG3', Blockly.Python.ORDER_NONE) != '') {
       this.holesFilled = true;
       runtooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
       this.setTooltip(document.getElementById("hiddenoutput").textContent);
@@ -172,7 +177,8 @@ Blockly.Blocks['python_string_slice1'] = {
     this.setHelpUrl('http://www.example.com/');
   },
   onchange: function(ev) {
-    if (Blockly.Python.valueToCode(this, 'ARG1', Blockly.Python.ORDER_NONE) != '' &&  Blockly.Python.valueToCode(this, 'ARG2', Blockly.Python.ORDER_NONE) != '') {
+    if (Blockly.Python.valueToCode(this, 'ARG1', Blockly.Python.ORDER_NONE) != '' &&
+    Blockly.Python.valueToCode(this, 'ARG2', Blockly.Python.ORDER_NONE) != '') {
       this.holesFilled = true;
       runtooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
       this.setTooltip(document.getElementById("hiddenoutput").textContent);
@@ -200,13 +206,15 @@ Blockly.Blocks['python_string_slice2'] = {
     this.setHelpUrl('http://www.example.com/');
   },
   onchange: function(ev) {
-    if (Blockly.Python.valueToCode(this, 'ARG1', Blockly.Python.ORDER_NONE) != '' &&  Blockly.Python.valueToCode(this, 'ARG2', Blockly.Python.ORDER_NONE) != '') {
+    if (Blockly.Python.valueToCode(this, 'ARG1', Blockly.Python.ORDER_NONE) != '' &&
+    Blockly.Python.valueToCode(this, 'ARG2', Blockly.Python.ORDER_NONE) != '') {
       this.holesFilled = true;
       runtooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
       this.setTooltip(document.getElementById("hiddenoutput").textContent);
     } else {
       this.holesFilled = false;
-      this.setTooltip('Returns a sliced substring from the beginning to a specified position');
+      this.setTooltip('Returns a sliced substring from the beginning to a \
+      specified position');
     }
   }
 };
@@ -254,7 +262,8 @@ Blockly.Blocks['python_string_in'] = {
     this.setHelpUrl('http://www.example.com/');
   },
   onchange: function(ev) {
-    if (Blockly.Python.valueToCode(this, 'LHS', Blockly.Python.ORDER_NONE) != '' &&  Blockly.Python.valueToCode(this, 'RHS', Blockly.Python.ORDER_NONE) != '') {
+    if (Blockly.Python.valueToCode(this, 'LHS', Blockly.Python.ORDER_NONE) != '' &&
+    Blockly.Python.valueToCode(this, 'RHS', Blockly.Python.ORDER_NONE) != '') {
       this.holesFilled = true;
       runtooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
       this.setTooltip(document.getElementById("hiddenoutput").textContent);
@@ -308,7 +317,8 @@ Blockly.Blocks['python_isalpha'] = {
       this.setTooltip(document.getElementById("hiddenoutput").textContent);
     } else {
       this.holesFilled = false;
-      this.setTooltip('Returns whether a string consists of alphanumeric characters');
+      this.setTooltip('Returns whether a string consists of alphanumeric \
+      characters');
     }
   }
 };
@@ -400,13 +410,15 @@ Blockly.Blocks['python_find'] = {
     this.setHelpUrl('http://www.example.com/');
   },
   onchange: function(ev) {
-    if (Blockly.Python.valueToCode(this, 'ARG1', Blockly.Python.ORDER_NONE) != '' &&  Blockly.Python.valueToCode(this, 'ARG2', Blockly.Python.ORDER_NONE) != '') {
+    if (Blockly.Python.valueToCode(this, 'ARG1', Blockly.Python.ORDER_NONE) != '' &&
+     Blockly.Python.valueToCode(this, 'ARG2', Blockly.Python.ORDER_NONE) != '') {
       this.holesFilled = true;
       runtooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
       this.setTooltip(document.getElementById("hiddenoutput").textContent);
     } else {
       this.holesFilled = false;
-      this.setTooltip('Searches for a substring of a string and returns the starting and ending indexes');
+      this.setTooltip('Searches for a substring of a string and returns the \
+      starting and ending indexes');
     }
   }
 };
@@ -426,13 +438,15 @@ Blockly.Blocks['python_index_method'] = {
     this.setHelpUrl('http://www.example.com/');
   },
   onchange: function(ev) {
-    if (Blockly.Python.valueToCode(this, 'ARG1', Blockly.Python.ORDER_NONE) != '' &&  Blockly.Python.valueToCode(this, 'ARG2', Blockly.Python.ORDER_NONE) != '') {
+    if (Blockly.Python.valueToCode(this, 'ARG1', Blockly.Python.ORDER_NONE) != '' &&
+      Blockly.Python.valueToCode(this, 'ARG2', Blockly.Python.ORDER_NONE) != '') {
       this.holesFilled = true;
       runtooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
       this.setTooltip(document.getElementById("hiddenoutput").textContent);
     } else {
       this.holesFilled = false;
-      this.setTooltip('Searches for a substring of a string and returns the starting and ending indexes, returns an exception if string is not found');
+      this.setTooltip('Searches for a substring of a string and returns the \
+      starting and ending indexes, returns an exception if string is not found');
     }
   }
 };
@@ -452,7 +466,8 @@ Blockly.Blocks['python_string_count'] = {
     this.setHelpUrl('http://www.example.com/');
   },
   onchange: function(ev) {
-    if (Blockly.Python.valueToCode(this, 'ARG1', Blockly.Python.ORDER_NONE) != '' &&  Blockly.Python.valueToCode(this, 'ARG2', Blockly.Python.ORDER_NONE) != '') {
+    if (Blockly.Python.valueToCode(this, 'ARG1', Blockly.Python.ORDER_NONE) != '' &&
+    Blockly.Python.valueToCode(this, 'ARG2', Blockly.Python.ORDER_NONE) != '') {
       this.holesFilled = true;
       runtooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
       this.setTooltip(document.getElementById("hiddenoutput").textContent);
@@ -467,22 +482,69 @@ Blockly.Blocks['python_split'] = {
   init: function() {
     this.appendValueInput("ARG");
     this.appendDummyInput()
-        .appendField(".split()");
+        .appendField(".split(");
+    this.appendDummyInput("CLOSE")
+        .appendField(")");
     this.setInputsInline(true);
     this.setTypeVecs([
       ["str", "*str"]
     ]);
     this.setOutput(true);
+    this.setTooltip('');
     this.setHelpUrl('http://www.example.com/');
+    this.hasSepParameter = false;
   },
   onchange: function(ev) {
-    if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '') {
+    if ((Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != ''
+      && this.hasSepParameter && Blockly.Python.valueToCode(this, 'SEP',
+      Blockly.Python.ORDER_NONE != '')) ||
+      (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != ''
+      && this.hasSepParameter == false)) {
+
       this.holesFilled = true;
       runtooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
       this.setTooltip(document.getElementById("hiddenoutput").textContent);
     } else {
       this.holesFilled = false;
-      this.setTooltip('Returns a list of substrings from the specified string delimited by whitespace');
+      this.setTooltip('Returns a list of substrings from the specified string\
+      , delimiter can be set optionally (default: whitespace)');
     }
+  },
+
+  customContextMenu: function(options) {
+    var optionSep = {enabled: true};
+    optionSep.text = this.hasSepParameter ?
+        'Remove separator parameter' : 'Add separator parameter';
+    optionSep.callback =
+        Blockly.ContextMenu.finalInputCallback(this, this.hasSepParameter);
+    options.unshift(optionSep);
+  },
+
+  mutationToDom: function() {
+    var container = document.createElement('mutation');
+    container.setAttribute('has_sep_parameter', this.hasSepParameter);
+    return container;
+  },
+
+  domToMutation: function(xmlElement) {
+    if (xmlElement.getAttribute('has_sep_parameter') == "true") {
+      this.addFinal();
+    }
+  },
+
+  addFinal: function() {
+    this.hasSepParameter = true;
+    this.appendValueInput("SEP");
+    this.fullTypeVecs[0].splice(-1, 0, "str");
+    this.moveInputBefore("SEP", "CLOSE");
+    this.onchange();
+  },
+
+  removeFinal: function() {
+    this.hasSepParameter = false;
+    this.removeInput('SEP');
+    this.fullTypeVecs[0].splice(-2, 1);
+    this.onchange();
   }
+
 };

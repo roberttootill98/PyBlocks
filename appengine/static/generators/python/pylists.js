@@ -48,6 +48,11 @@ Blockly.Python['python_list_const'] = function(block) {
   return ['[' + code + ']', Blockly.Python.ORDER_MEMBER];
 };
 
+Blockly.Python['python_list_function'] = function(block) {
+  var code = Blockly.Python.valueToCode(block, 'ARG', Blockly.Python.ORDER_NONE);
+
+  return ['list(' + code + ')', Blockly.Python.ORDER_FUNCTION_CALL];
+};
 
 Blockly.Python['python_list_concat'] = function(block) {
   var block1 = Blockly.Python.valueToCode(block, 'LHS', Blockly.Python.ORDER_NONE);

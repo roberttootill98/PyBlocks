@@ -148,6 +148,33 @@ Blockly.Blocks['python_list_const'] = {
   }
 };
 
+Blockly.Blocks['python_list_function'] = {
+  init: function() {
+    this.appendDummyInput().
+      appendField("list(");
+    this.appendValueInput("ARG");
+    this.appendDummyInput()
+        .appendField(")");
+    this.setInputsInline(true);
+    this.setTypeVecs([
+      ["str", "*str"],
+      ["range", "*int"]
+    ]);
+    this.setOutput(true);
+    this.setHelpUrl('http://www.example.com/');
+  },
+  onchange: function(ev) {
+    if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '') {
+      this.holesFilled = true;
+      runtooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+      this.setTooltip(document.getElementById("hiddenoutput").textContent);
+    } else {
+      this.holesFilled = false;
+      this.setTooltip('Takes a tuple and returns a list');
+    }
+  }
+};
+
 Blockly.Blocks['python_list_concat'] = {
   init: function() {
     this.appendDummyInput()

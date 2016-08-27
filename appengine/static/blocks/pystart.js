@@ -33,7 +33,6 @@ Blockly.Blocks['python_start'] = {
 
   init: function() {
     Blockly.BlockSvg.START_HAT = true;
-    this.appendDummyInput();
     this.setNextStatement(true);
     this.setTooltip('The start block is not a true Python block and is only\
     there to indicate which blocks will be executed when "Run full" is\

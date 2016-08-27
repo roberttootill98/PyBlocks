@@ -282,20 +282,25 @@ Blockly.WorkspaceSvg.prototype.addFlyout_ = function() {
   var workspaceOptions = {
     disabledPatternId: this.options.disabledPatternId,
 
-    multiTypePatternLargeId: this.options.multiTypePatternLargeId,
-    multiTypePatternSmallId: this.options.multiTypePatternSmallId,
-    numericalTypePatternLargeId: this.options.numericalTypePatternLargeId,
-    floatintTypePatternId: this.options.floatintTypePatternId,
-    floatstrTypePatternId: this.options.floatstrTypePatternId,
-    intstrTypePatternId: this.options.intstrTypePatternId,
-    rangestrTypePatternId: this.options.rangestrTypePatternId,
-    //  multiTypeGradientId: this.options.multiTypeGradientId,
+    anyTypePatternLargeId: this.options.anyTypePatternLargeId,
+    anyTypePatternSmallId: this.options.anyTypePatternSmallId,
+    //numericalTypePatternLargeId: this.options.numericalTypePatternLargeId,
+    floatintTypePatternSmallId: this.options.floatintTypePatternSmallId,
+    floatstrTypePatternSmallId: this.options.floatstrTypePatternSmallId,
+    intstrTypePatternSmallId: this.options.intstrTypePatternSmallId,
+    intstrTypePatternLargeId: this.options.intstrTypePatternLargeId,
+    floatintstrTypePatternSmallId: this.options.floatintstrTypePatternSmallId,
+    rangestrTypePatternSmallId: this.options.rangestrTypePatternSmallId,
+    floatintTypePatternLargeId: this.options.floatintTypePatternLargeId,
+    //  anyTypeGradientId: this.options.anyTypeGradientId,
     //  numericalTypeGradient2Id: this.options.numericalTypeGradient2Id,
       //numericalTypeGradientId: this.options.numericalTypeGradientId,
 
     parentWorkspace: this,
     RTL: this.RTL
   };
+  console.log("WSOPTIONS", workspaceOptions);
+
   /** @type {Blockly.Flyout} */
   this.flyout_ = new Blockly.Flyout(workspaceOptions);
   this.flyout_.autoClose = false;

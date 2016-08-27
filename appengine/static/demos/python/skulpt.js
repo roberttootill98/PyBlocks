@@ -1,7 +1,7 @@
 Sk.python3 = true;
 Sk.inputfun = function(prompt) {
- return new Promise(function (resolve) { resolve(window.prompt(prompt)); });
-     };
+  return new Promise(function (resolve) { resolve(window.prompt(prompt)); });
+};
 
 function outf(text) {
   var mypre = document.getElementById("output");
@@ -14,9 +14,22 @@ function outfhidden(text) {
 }
 
 function builtinRead(x) {
-  if (Sk.builtinFiles === undefined || Sk.builtinFiles["files"][x] === undefined)
-          throw "File not found: '" + x + "'";
-  return Sk.builtinFiles["files"][x];
+  if (Sk.builtinFiles === undefined || Sk.builtinFiles["files"][x] === undefined) {
+    throw "File not found: '" + x + "'";
+  }
+  var file = Sk.builtinFiles["files"][x];
+  if (!file) {
+    return new Promise(function (accept, reject) {
+      function reqListener () {
+        accept(this.responseText);
+      }
+      var oReq = new XMLHttpRequest();
+      oReq.addEventListener("load", reqListener);
+      oReq.open("GET", "%(root)s" + file);
+      oReq.send();
+    });
+  }
+  return file;
 }
 
 function initInterpreter() {
@@ -31,40 +44,40 @@ function initInterpreter() {
 
 }
 function runfull() {
-workspace.running = true;
-workspace.generatorSuccess = true;
-workspace.varBlocks = [];
+  workspace.running = true;
+  workspace.generatorSuccess = true;
+  workspace.varBlocks = [];
 
-if (initInterpreter() && generateCode() && workspace.generatorSuccess) {
+  if (initInterpreter() && generateCode() && workspace.generatorSuccess) {
 
- var prog = document.getElementById("pycode").textContent;
- var mypre = document.getElementById("output");
- Sk.pre = "output";
- Sk.configure({output:outf, read:builtinRead, inputfunTakesPrompt: true});
- (Sk.TurtleGraphics || (Sk.TurtleGraphics = {})).target = 'mycanvas';
+    var prog = document.getElementById("pycode").textContent;
+    var mypre = document.getElementById("output");
+    Sk.pre = "output";
+    Sk.configure({output:outf, read:builtinRead, inputfunTakesPrompt: true});
+    (Sk.TurtleGraphics || (Sk.TurtleGraphics = {})).target = 'mycanvas';
 
- var myPromise = Sk.misceval.asyncToPromise(function() {
-     return Sk.importMainWithBody("<stdin>", false, prog, true);
- });
+    var myPromise = Sk.misceval.asyncToPromise(function() {
+      return Sk.importMainWithBody("<stdin>", false, prog, true);
+    });
 
- myPromise.then(function(mod) {
-     console.log('success');
- },
-     function(err) {
-       var mypre = document.getElementById("output");
-       mypre.innerHTML = mypre.innerHTML + err.toString() + "\n";
-       console.log(err.toString());
- });
- mypre.focus();
- mypre.scrollTop = mypre.scrollHeight;
+    myPromise.then(function(mod) {
+      console.log('success');
+    },
+    function(err) {
+      var mypre = document.getElementById("output");
+      mypre.innerHTML = mypre.innerHTML + err.toString() + "\n";
+      console.log(err.toString());
+    });
+    mypre.focus();
+    mypre.scrollTop = mypre.scrollHeight;
 
- } else if (!generateCode()) {
-   alert('You need to have at least one statement block attached to the start block.')
- } else {
-   alert('Errors found! Please look for the blue warning\
-   triangles for more information.');
- }
-   workspace.running = false;
+  } else if (!generateCode()) {
+    alert('You need to have at least one statement block attached to the start block.')
+  } else {
+    alert('Errors found! Please look for the warning\
+    symbols for more information.');
+  }
+  workspace.running = false;
 }
 
 function runeval(block) {
@@ -78,33 +91,33 @@ function runeval(block) {
 
   if (workspace.generatorSuccess) {
 
-  if (code.constructor === Array) {
-    code = 'print(' + code[0] + ')';
-  }
+    if (code.constructor === Array) {
+      code = 'print(' + code[0] + ')';
+    }
 
-  var mypre = document.getElementById("output");
+    var mypre = document.getElementById("output");
 
-  Sk.pre = "output";
-  Sk.configure({output:outf, read:builtinRead});
-  var myPromise = Sk.misceval.asyncToPromise(function() {
+    Sk.pre = "output";
+    Sk.configure({output:outf, read:builtinRead, inputfunTakesPrompt: true});
+    var myPromise = Sk.misceval.asyncToPromise(function() {
       return Sk.importMainWithBody("<stdin>", false, code, true);
-  });
-  myPromise.then(function(mod) {
+    });
+    myPromise.then(function(mod) {
       console.log('success');
-  },
-      function(err) {
-        var mypre = document.getElementById("output");
-        mypre.innerHTML = mypre.innerHTML + err.toString() + "\n";
-        console.log(err.toString());
-  });
-  mypre.focus();
-  mypre.scrollTop = mypre.scrollHeight;
-} else {
-  alert('Errors found! Please look for the blue warning\
-  triangles for more information.');
-}
-workspace.running = false;
-block.poisoned = false;
+    },
+    function(err) {
+      var mypre = document.getElementById("output");
+      mypre.innerHTML = mypre.innerHTML + err.toString() + "\n";
+      console.log(err.toString());
+    });
+    mypre.focus();
+    mypre.scrollTop = mypre.scrollHeight;
+  } else {
+    alert('Errors found! Please look for the warning\
+    symbols for more information.');
+  }
+  workspace.running = false;
+  block.poisoned = false;
 }
 
 function runtooltip(code) {
@@ -117,28 +130,29 @@ function runtooltip(code) {
   Sk.pre = "hiddenoutput";
   Sk.configure({output:outfhidden, read:builtinRead});
   var myPromise = Sk.misceval.asyncToPromise(function() {
-      return Sk.importMainWithBody("<stdin>", false, code, true);
+    return Sk.importMainWithBody("<stdin>", false, code, true);
   });
   myPromise.then(function(mod) {
-      console.log('success');
+    console.log('success');
   },
-      function(err) {
-        var mypre = document.getElementById("hiddenoutput");
-        mypre.innerHTML = mypre.innerHTML + err.toString() + "\n";
-        console.log(err.toString());
+  function(err) {
+    var mypre = document.getElementById("hiddenoutput");
+    mypre.innerHTML = mypre.innerHTML + err.toString() + "\n";
+    console.log(err.toString());
   });
 }
 
 function copyToClipboard() {
   if (generateCode()) {
-    window.prompt("Press CTRL + C to copy the code to clipboard", document.getElementById("pycode").textContent);
+    window.prompt("Press CTRL + C to copy the code to clipboard",
+    document.getElementById("pycode").textContent);
   }
 
 }
 
 function clr() {
-var mypre = document.getElementById("output");
-mypre.innerHTML = 'PyBlocks Interpreter\n\n';
+  var mypre = document.getElementById("output");
+  mypre.innerHTML = 'PyBlocks Interpreter\n\n';
 }
 
 function generateCode(event) {

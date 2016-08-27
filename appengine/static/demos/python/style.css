@@ -29,10 +29,15 @@ table {
   height: 100%;
 }
 
+.interpreterdiv {
+  display: inline-block;
+  position: relative;
+}
+
 .codearea {
   border-radius: 6px;
   background-color:#000;
-  color:#2ECC40;
+  color:#DDD;
   font-family: sans-serif;
   font-size: 20px;
   overflow: hidden;
@@ -42,23 +47,22 @@ table {
   height: 2em;
   opacity: 0.48;
   text-align: center;
+  position: relative;
 }
 
-textarea:focus {
+.codearea:focus {
+  outline:0 !important;
   height: 10em;
   font-size: 14px;
   opacity:0.95;
   text-align: left;
   width: 99%;
   overflow-y: visible;
+  z-index: 1;
 }
 
-textarea:hover {
+.codearea:hover {
   opacity:0.95;
-}
-
-.codearea:focus {
-  outline:0 !important;
 }
 
 .fancybuttons {
@@ -89,6 +93,14 @@ textarea:hover {
 .fancybuttons#run{
   background: #efefef url('../../media/play_icon.png') no-repeat right;
   padding-right: 28px;
+}
+
+.fancybuttons#clear{
+  /*float: top;*/
+  position: absolute;
+  bottom: 11px;
+  right: 15px;
+  z-index: 2;
 }
 
 .right{
