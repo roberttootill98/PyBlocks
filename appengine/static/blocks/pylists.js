@@ -38,7 +38,6 @@ Blockly.Blocks['python_list_empty'] = {
     ]);
     this.setOutput(true);
     this.setTooltip('Returns an empty list');
-    this.setHelpUrl('http://www.example.com/');
   }
 };
 
@@ -54,7 +53,6 @@ Blockly.Blocks['python_list_index'] = {
       ["*matching", "int", "matching"],
     ]);
     this.setOutput(true);
-    this.setHelpUrl('http://www.example.com/');
   },
   onchange: function(ev) {
     if (Blockly.Python.valueToCode(this, 'ARG1', Blockly.Python.ORDER_NONE) != '' &&  Blockly.Python.valueToCode(this, 'ARG2', Blockly.Python.ORDER_NONE) != '') {
@@ -80,7 +78,6 @@ Blockly.Blocks['python_list_const'] = {
       ["matching", "*matching"],
     ]);
     this.setOutput(true);
-    this.setHelpUrl('http://www.example.com/');
     this.parameterCount = 1;
   },
 
@@ -161,7 +158,6 @@ Blockly.Blocks['python_list_function'] = {
       ["range", "*int"]
     ]);
     this.setOutput(true);
-    this.setHelpUrl('http://www.example.com/');
   },
   onchange: function(ev) {
     if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '') {
@@ -188,7 +184,6 @@ Blockly.Blocks['python_list_concat'] = {
     this.setInputsInline(true);
     this.setTypeVecs([["*matching", "*matching", "*matching"]]);
     this.setOutput(true);
-    this.setHelpUrl('http://www.example.com/');
   },
   onchange: function(ev) {
     if (Blockly.Python.valueToCode(this, 'LHS', Blockly.Python.ORDER_NONE) != '' &&  Blockly.Python.valueToCode(this, 'RHS', Blockly.Python.ORDER_NONE) != '') {
@@ -218,7 +213,6 @@ Blockly.Blocks['python_list_repeat'] = {
       ["int", "*matching", "*matching"],
     ]);
     this.setOutput(true);
-    this.setHelpUrl('http://www.example.com/');
   },
   onchange: function(ev) {
     if (Blockly.Python.valueToCode(this, 'LHS', Blockly.Python.ORDER_NONE) != '' &&  Blockly.Python.valueToCode(this, 'RHS', Blockly.Python.ORDER_NONE) != '') {
@@ -246,7 +240,6 @@ Blockly.Blocks['python_list_slice12'] = {
       ["*matching", "int", "int", "*matching"],
     ]);
     this.setOutput(true);
-    this.setHelpUrl('http://www.example.com/');
   },
   onchange: function(ev) {
     if (Blockly.Python.valueToCode(this, 'ARG1', Blockly.Python.ORDER_NONE) != '' &&  Blockly.Python.valueToCode(this, 'ARG2', Blockly.Python.ORDER_NONE) != '' && Blockly.Python.valueToCode(this, 'ARG3', Blockly.Python.ORDER_NONE) != '') {
@@ -274,7 +267,6 @@ Blockly.Blocks['python_list_slice1'] = {
       ["*matching", "int", "*matching"],
     ]);
     this.setOutput(true);
-    this.setHelpUrl('http://www.example.com/');
   },
   onchange: function(ev) {
     if (Blockly.Python.valueToCode(this, 'ARG1', Blockly.Python.ORDER_NONE) != '' &&  Blockly.Python.valueToCode(this, 'ARG2', Blockly.Python.ORDER_NONE) != '') {
@@ -302,7 +294,6 @@ Blockly.Blocks['python_list_slice2'] = {
       ["*matching", "int", "*matching"],
     ]);
     this.setOutput(true);
-    this.setHelpUrl('http://www.example.com/');
   },
   onchange: function(ev) {
     if (Blockly.Python.valueToCode(this, 'ARG1', Blockly.Python.ORDER_NONE) != '' &&  Blockly.Python.valueToCode(this, 'ARG2', Blockly.Python.ORDER_NONE) != '') {
@@ -327,7 +318,6 @@ Blockly.Blocks['python_list_len'] = {
       ["*any", "int"]
     ]);
     this.setOutput(true);
-    this.setHelpUrl('http://www.example.com/');
   },
   onchange: function(ev) {
     if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '') {
@@ -356,7 +346,6 @@ Blockly.Blocks['python_list_in'] = {
       ["matching", "*matching", "bool"]
     ]);
     this.setOutput(true);
-    this.setHelpUrl('http://www.example.com/');
   },
   onchange: function(ev) {
     if (Blockly.Python.valueToCode(this, 'LHS', Blockly.Python.ORDER_NONE) != '' &&  Blockly.Python.valueToCode(this, 'RHS', Blockly.Python.ORDER_NONE) != '') {
@@ -381,7 +370,6 @@ Blockly.Blocks['python_list_min'] = {
       ["*matching", "matching"]
     ]);
     this.setOutput(true);
-    this.setHelpUrl('http://www.example.com/');
   },
   onchange: function(ev) {
     if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '') {
@@ -406,7 +394,6 @@ Blockly.Blocks['python_list_max'] = {
       ["*matching", "matching"]
     ]);
     this.setOutput(true);
-    this.setHelpUrl('http://www.example.com/');
   },
   onchange: function(ev) {
     if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '') {
@@ -431,7 +418,6 @@ Blockly.Blocks['python_sorted'] = {
       ["*matching", "*matching"]
     ]);
     this.setOutput(true);
-    this.setHelpUrl('http://www.example.com/');
   },
   onchange: function(ev) {
     if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '') {
@@ -460,7 +446,6 @@ Blockly.Blocks['python_append'] = {
     this.setPreviousStatement(true);
     this.setNextStatement(true);
     this.setTooltip('Appends an element to a list');
-    this.setHelpUrl('http://www.example.com/');
   },
   onchange: function(ev) {
     if (Blockly.Python.valueToCode(this, 'ARG1', Blockly.Python.ORDER_NONE) != '' &&  Blockly.Python.valueToCode(this, 'ARG2', Blockly.Python.ORDER_NONE) != '') {
@@ -486,7 +471,6 @@ Blockly.Blocks['python_list_item_modify'] = {
     this.setPreviousStatement(true);
     this.setNextStatement(true);
     this.setTooltip('Modifies an element in a list at the specified location index');
-    this.setHelpUrl('http://www.example.com/');
   },
   onchange: function(ev) {
     if (Blockly.Python.valueToCode(this, 'ARG1', Blockly.Python.ORDER_NONE) != '' &&  Blockly.Python.valueToCode(this, 'ARG2', Blockly.Python.ORDER_NONE) != '' &&  Blockly.Python.valueToCode(this, 'ARG3', Blockly.Python.ORDER_NONE) != '') {
@@ -512,7 +496,6 @@ Blockly.Blocks['python_extend'] = {
     this.setPreviousStatement(true);
     this.setNextStatement(true);
     this.setTooltip('Adds a list to the end of another list');
-    this.setHelpUrl('http://www.example.com/');
   },
   onchange: function(ev) {
     if (Blockly.Python.valueToCode(this, 'ARG1', Blockly.Python.ORDER_NONE) != '' &&  Blockly.Python.valueToCode(this, 'ARG2', Blockly.Python.ORDER_NONE) != '') {
@@ -540,7 +523,6 @@ Blockly.Blocks['python_insert'] = {
     this.setPreviousStatement(true);
     this.setNextStatement(true);
     this.setTooltip('Inserts an object into a list at the specified location index');
-    this.setHelpUrl('http://www.example.com/');
   },
   onchange: function(ev) {
     if (Blockly.Python.valueToCode(this, 'ARG1', Blockly.Python.ORDER_NONE) != '' &&  Blockly.Python.valueToCode(this, 'ARG2', Blockly.Python.ORDER_NONE) != '' &&  Blockly.Python.valueToCode(this, 'ARG3', Blockly.Python.ORDER_NONE) != '') {
@@ -562,7 +544,6 @@ Blockly.Blocks['python_pop'] = {
     ]);
     this.setLhsVarOnly(true);
     this.setOutput(true);
-    this.setHelpUrl('http://www.example.com/');
   },
   onchange: function(ev) {
     if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '') {
@@ -589,7 +570,6 @@ Blockly.Blocks['python_pop_statement'] = {
     this.setPreviousStatement(true);
     this.setNextStatement(true);
     this.setTooltip('Removes the last element of a list');
-    this.setHelpUrl('http://www.example.com/');
   },
   onchange: function(ev) {
     if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '') {
@@ -615,7 +595,6 @@ Blockly.Blocks['python_remove'] = {
     this.setPreviousStatement(true);
     this.setNextStatement(true);
     this.setTooltip('Removes the first item from the list which matches the specified value');
-    this.setHelpUrl('http://www.example.com/');
   },
   onchange: function(ev) {
     if (Blockly.Python.valueToCode(this, 'ARG1', Blockly.Python.ORDER_NONE) != '' &&  Blockly.Python.valueToCode(this, 'ARG2', Blockly.Python.ORDER_NONE) != '') {
@@ -639,7 +618,6 @@ Blockly.Blocks['python_reverse'] = {
     this.setPreviousStatement(true);
     this.setNextStatement(true);
     this.setTooltip('Reverses the list');
-    this.setHelpUrl('http://www.example.com/');
   },
   onchange: function(ev) {
     if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '') {
@@ -663,7 +641,6 @@ Blockly.Blocks['python_sort'] = {
     this.setPreviousStatement(true);
     this.setNextStatement(true);
     this.setTooltip('Sorts the list');
-    this.setHelpUrl('http://www.example.com/');
   },
   onchange: function(ev) {
     if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '') {
@@ -686,7 +663,6 @@ Blockly.Blocks['python_list_index_method'] = {
       ["*matching", "matching", "int"]
     ]);
     this.setOutput(true);
-    this.setHelpUrl('http://www.example.com/');
   },
   onchange: function(ev) {
     if (Blockly.Python.valueToCode(this, 'ARG1', Blockly.Python.ORDER_NONE) != '' &&  Blockly.Python.valueToCode(this, 'ARG2', Blockly.Python.ORDER_NONE) != '') {

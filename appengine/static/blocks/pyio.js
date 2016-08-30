@@ -40,7 +40,6 @@ Blockly.Blocks['python_input'] = {
     ]);
     this.setOutput(true);
     this.setTooltip('Prompts the user to input a message and returns it');
-    this.setHelpUrl('http://www.example.com/');
   },
   onchange: function(ev) {
     if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '') {
@@ -66,7 +65,6 @@ Blockly.Blocks['python_print'] = {
     this.setPreviousStatement(true);
     this.setNextStatement(true);
     this.setTooltip('Prints the given argument to the interpreter');
-    this.setHelpUrl('http://www.example.com/');
     this.parameterCount = 1;
     this.hasEndParameter = false;
   },
@@ -222,7 +220,6 @@ Blockly.Blocks['python_format'] = {
       ["str", "str", "str"]
     ]);
     this.setOutput(true);
-    this.setHelpUrl('http://www.example.com/');
     this.parameterCount = 1;
   },
 

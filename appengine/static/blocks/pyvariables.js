@@ -92,6 +92,8 @@ Blockly.Blocks['variables_set'] = {
    * @this Blockly.Block
    */
   init: function() {
+    this.declaredVar = '';
+    this.permitSetter = true;
     this.jsonInit({
       "message0": "%1 = %2",
       "args0": [
@@ -119,12 +121,22 @@ Blockly.Blocks['variables_set'] = {
     //this.contextMenuMsg_ = Blockly.Msg.VARIABLES_SET_CREATE_GET;
   },
   onchange: function(ev) {
+    // this.vn = Blockly.Python.valueToCode(this, 'VAR', Blockly.Python.ORDER_NONE);
+    // console.log('TRAXIS', this.vn);
+
     if (Blockly.Python.valueToCode(this, 'VAR', Blockly.Python.ORDER_NONE) != '' && Blockly.Python.valueToCode(this, 'VALUE', Blockly.Python.ORDER_NONE) != '') {
       this.holesFilled = true;
     } else {
       this.holesFilled = false;
     }
+
+    if (this.getSurroundParent() != null && (this.getSurroundParent().type == 'python_if' || this.getSurroundParent().type == 'python_while' || this.getSurroundParent().type == 'python_for')) {
+    this.declaredVar = Blockly.Python.valueToCode(this, 'VAR', Blockly.Python.ORDER_NONE) + '_CTRL';
+  } else {
+    this.declaredVar = Blockly.Python.valueToCode(this, 'VAR', Blockly.Python.ORDER_NONE) + '_NOCTRL';
   }
+  //console.log('DECVAR', this.declaredVar);
+}
 };
 
 /* possibly leave till later

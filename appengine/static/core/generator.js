@@ -149,6 +149,7 @@ Blockly.Generator.prototype.allNestedComments = function(block) {
   return comments.join('\n');
 };
 
+
 /**
  * Generate code for the specified block (and attached blocks).
  * @param {Blockly.Block} block The block to generate code for.
@@ -165,10 +166,33 @@ Blockly.Generator.prototype.blockToCode = function(block) {
     return this.blockToCode(block.getNextBlock());
   }
 
-    // Josef - save variable blocks to simulate interactive mode
-  if (block.type == 'variables_set') {
-    workspace.varBlocks += block + '\n';
-  }
+  // Josef - save variable blocks and imports to simulate interactive mode
+  // if (block != '???' && (block.type == 'python_start') || (block.type == 'variables_set' &&
+  // block.getParent() != null && block.getSurroundParent().type != 'python_if' &&
+  // block.getSurroundParent().type != 'python_while' & block.getSurroundParent().type != 'python_for')) {
+  //   workspace.permaBlocks += block + '\n';
+  // }
+
+  // if (block != '???' && block.type == 'python_if') {
+  //   if (runassigncheck('print(' + block, 'CONDITION0', Blockly.Python.ORDER_NONE) + ')') == 'True\n') {
+  //
+  //   }
+  // }
+//   if (block != '???' && block.getParent() != null && block.getSurroundParent().type == 'python_if' && block.type == 'variables_set') {
+//
+//       if (block.getSurroundParent().poisoned == false && runassigncheck('print(' + block.getSurroundParent(), 'CONDITION0', Blockly.Python.ORDER_NONE) + ')') == 'True\n') {
+//         workspace.permaBlocks += block + '\n';
+//         block.getSurroundParent().poisoned = true;
+//         console.log('TRAXIS', workspace.permaBlocks);
+//         console.log('TRAXIS', block.getSurroundParent());
+//       }
+//
+//       if (block.getSurroundParent().poisoned == false && block.getSurroundParent().hasElse) {
+//         workspace.permaBlocks += block + '\n';
+//       }
+//
+// }
+
 
   var func = this[block.type];
   goog.asserts.assertFunction(func,
@@ -180,18 +204,50 @@ Blockly.Generator.prototype.blockToCode = function(block) {
   // argument to func.call, which becomes the first parameter to the generator.
   var code = func.call(block, block);
 
+
+
   if (workspace.running && block.holesFilled == false) {
+
     block.setWarningText('Missing parameters');
     workspace.generatorSuccess = false;
 
-  } else if (workspace.running && !block.isInFlyout && block.type == 'variables_get' && block.getTopLevel().type != 'variables_set' && block.findVariable() != true) {
-    block.setWarningText('You have not declared this variable yet');
+  } else if (workspace.running && !block.isInFlyout && block.type == 'variables_get' &&
+  block.getSurroundParent().type != 'variables_set' &&
+  workspace.vars.indexOf(block.getFieldValue("VAR")) == -1) {
+
+    block.setWarningText('Undeclared variable')
     workspace.generatorSuccess = false;
 
-  } else {
-    block.setWarningText(null)
+  } else if (workspace.running && !block.isInFlyout && block.type == 'variables_get' &&
+  block.getSurroundParent().type != 'variables_set' &&
+  workspace.vars.indexOf(block.getFieldValue("VAR") + '_CTRL') >= 0 &&
+  workspace.vars.indexOf(block.getFieldValue("VAR") + '_NOCTRL') == -1) {
+
+    block.setWarningText('Potentially undeclared variable');
+
+
+  } else if (workspace.running && !block.isInFlyout && block.type == 'variables_get' &&
+  block.getSurroundParent().type != 'variables_set' &&
+  workspace.vars.indexOf(block.getFieldValue("VAR") + '_CTRL') >= 0) {
+
+    block.setWarningText('Variable was altered in a control statement and may contain unpredictable values');
+
+} else if (workspace.generatorSuccess) {
+    block.setWarningText(null);
+
   }
 
+  if (block.type == 'variables_set') {
+    workspace.vars += block.declaredVar + '\n';
+  }
+
+    //
+    // } else if (workspace.running && !block.isInFlyout && block.type == 'variables_get' && block.getTopLevel().type != 'variables_set' && block.findVariable() == 'nocontrol') {
+    //   block.setWarningText('You have not declared this variable yet');
+    //  workspace.generatorSuccess = false;
+    //
+    // } else if (workspace.running && !block.isInFlyout && block.type == 'variables_get' && block.getTopLevel().type != 'variables_set' && block.findVariable() == 'control') {
+    //  block.setWarningText('This variable is potentially undeclared');
   if (goog.isArray(code)) {
     // Value blocks return tuples of code and operator order.
     return [this.scrub_(block, code[0]), code[1]];

@@ -36,7 +36,7 @@
   <script src="jquery.min.js" type="text/javascript"></script>
   <script src="skulpt.min.js" type="text/javascript"></script>
   <script src="skulpt-stdlib.js" type="text/javascript"></script>
-  <script src="skulpt.js" type="text/javascript"></script>
+  <script src="skulptpyb.js" type="text/javascript"></script>
   <script type="text/javascript" src="https://apis.google.com/js/client.js"></script>
   <script type="text/javascript" src="https://apis.google.com/js/api.js"></script>
   <script type="text/javascript" src="google-drive-picker.js"></script>
@@ -59,7 +59,7 @@
           <button type="button" class="fancybuttons" onclick="copyToClipboard()">Copy</button>
           <button type="button" class="fancybuttons" onclick="reset()">Reset</button>
           <button type="button" class="fancybuttons">Sample programs</button>
-          <button type="button" class="fancybuttons" onclick="window.open('help.html', 'PythonBlocks Help', 'width=835,height=565')">Help</button>
+          <button type="button" class="fancybuttons" onclick="popupwindow('help.html', 'PythonBlocks Help', 'window', '835', '565')">Help</button>
         </span>
       </td>
     </tr>
@@ -76,6 +76,7 @@
         </div>
         <div id="mycanvas"></div>
         <textarea id="hiddenoutput" cols="20" rows="7" hidden="true"></textarea>
+        <textarea id="hiddenoutput2" cols="20" rows="7" hidden="true"></textarea>
         <textarea id="pycode" class="codearea" rows="12" cols="100" readonly="true" hidden="true"></textarea>
       </td>
     </tr>
@@ -341,63 +342,77 @@
 </category>
 </category>
 <sep gap="4"></sep>
-<category name="Theoretic & respresentation functions" hidden="true">
+<category name="Mathematical functions">
   <block type="python_math_ceil"></block>
-  <block type="python_math_copysign"></block>
-  <block type="python_math_fabs"></block>
-  <block type="python_math_factorial"></block>
   <block type="python_math_floor"></block>
-  <block type="python_math_fmod"></block>
-  <block type="python_math_frexp"></block>
-  <block type="python_math_fsum"></block>
-  <block type="python_math_isinf"></block>
-  <block type="python_math_isnan"></block>
-  <block type="python_math_ldexp"></block>
-  <block type="python_math_modf"></block>
-  <block type="python_math_trunc"></block>
-</category>
-<category name="Power & logarithmic functions">
-  <block type="python_math_exp"></block>
-  <block type="python_math_expm1"></block>
+  <block type="python_math_factorial"></block>
   <block type="python_math_log"></block>
-  <block type="python_math_log1p"></block>
   <block type="python_math_log10"></block>
   <block type="python_math_pow"></block>
   <block type="python_math_sqrt"></block>
-</category>
-<category name="Trigonometric functions">
-  <block type="python_math_acos"></block>
-  <block type="python_math_asin"></block>
-  <block type="python_math_atan"></block>
-  <block type="python_math_atan2"></block>
   <block type="python_math_cos"></block>
-  <block type="python_math_hypot"></block>
   <block type="python_math_sin"></block>
   <block type="python_math_tan"></block>
-</category>
-<category name="Angular conversion">
-  <block type="python_math_degrees"></block>
-  <block type="python_math_radians"></block>
-</category>
-<category name="Hyperbolic functions">
-  <block type="python_math_acosh"></block>
-  <block type="python_math_asinh"></block>
-  <block type="python_math_atanh"></block>
-  <block type="python_math_cosh"></block>
-  <block type="python_math_sinh"></block>
-  <block type="python_math_tanh"></block>
-</category>
-<category name="Special functions">
-  <block type="python_math_erf"></block>
-  <block type="python_math_erfc"></block>
-  <block type="python_math_gamma"></block>
-  <block type="python_math_lgamma"></block>
-</category>
-<category name="Constants">
   <block type="python_math_pi"></block>
   <block type="python_math_e"></block>
 </category>
+<!-- <category name="Theoretic & respresentation functions">
+<block type="python_math_ceil"></block>
+<block type="python_math_copysign"></block>
+<block type="python_math_fabs"></block>
+<block type="python_math_factorial"></block>
+<block type="python_math_floor"></block>
+<block type="python_math_fmod"></block>
+<block type="python_math_frexp"></block>
+<block type="python_math_fsum"></block>
+<block type="python_math_isinf"></block>
+<block type="python_math_isnan"></block>
+<block type="python_math_ldexp"></block>
+<block type="python_math_modf"></block>
+<block type="python_math_trunc"></block>
 </category>
+<category name="Power & logarithmic functions">
+<block type="python_math_exp"></block>
+<block type="python_math_expm1"></block>
+<block type="python_math_log"></block>
+<block type="python_math_log1p"></block>
+<block type="python_math_log10"></block>
+<block type="python_math_pow"></block>
+<block type="python_math_sqrt"></block>
+</category>
+<category name="Trigonometric functions">
+<block type="python_math_acos"></block>
+<block type="python_math_asin"></block>
+<block type="python_math_atan"></block>
+<block type="python_math_atan2"></block>
+<block type="python_math_cos"></block>
+<block type="python_math_hypot"></block>
+<block type="python_math_sin"></block>
+<block type="python_math_tan"></block>
+</category>
+<category name="Angular conversion">
+<block type="python_math_degrees"></block>
+<block type="python_math_radians"></block>
+</category>
+<category name="Hyperbolic functions">
+<block type="python_math_acosh"></block>
+<block type="python_math_asinh"></block>
+<block type="python_math_atanh"></block>
+<block type="python_math_cosh"></block>
+<block type="python_math_sinh"></block>
+<block type="python_math_tanh"></block>
+</category>
+<category name="Special functions">
+<block type="python_math_erf"></block>
+<block type="python_math_erfc"></block>
+<block type="python_math_gamma"></block>
+<block type="python_math_lgamma"></block>
+</category>
+<category name="Constants">
+<block type="python_math_pi"></block>
+<block type="python_math_e"></block>
+</category>
+</category> -->
 </xml>
 <!-- Blockly storage code -->
 <script>
@@ -441,8 +456,8 @@ var workspace = Blockly.inject(blocklyDiv,
   onresize();
   initInterpreter();
 
-
-  workspace.addChangeListener(generateCode());
+  
+  //workspace.addChangeListener(generateCode());
 
   if ('BlocklyStorage' in window && window.location.hash.length > 1) {
     BlocklyStorage.retrieveXml(window.location.hash.substring(1));
@@ -456,6 +471,12 @@ var workspace = Blockly.inject(blocklyDiv,
 
   goog.events.listen(document.getElementById('blocklyDiv'),
   'dblclick', function() { runeval(Blockly.selected); });
+
+  function popupwindow(url, title, win, w, h) {
+    var y = window.top.outerHeight / 2 + window.top.screenY - ( h / 2)
+    var x = window.top.outerWidth / 2 + window.top.screenX - ( w / 2)
+    return window.open(url, title, 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width='+w+', height='+h+', top='+y+', left='+x);
+  }
   </script>
 
 

@@ -35,7 +35,6 @@ Blockly.Blocks['python_string_const'] = {
     this.setInputsInline(true);
     this.setTypeVecs([["str"]]);
     this.setOutput(true);
-    this.setHelpUrl('http://www.example.com/');
     this.getField('VALUE').setChangeHandler(
         Blockly.FieldTextInput.stringValidator);
       },
@@ -57,7 +56,6 @@ Blockly.Blocks['python_string_concat'] = {
     this.setInputsInline(true);
     this.setTypeVecs([["str", "str", "str"]]);
     this.setOutput(true);
-    this.setHelpUrl('http://www.example.com/');
   },
   onchange: function(ev) {
     if (Blockly.Python.valueToCode(this, 'LHS', Blockly.Python.ORDER_NONE) != '' &&
@@ -88,7 +86,6 @@ Blockly.Blocks['python_string_repeat'] = {
       ["int", "str", "str"],
     ]);
     this.setOutput(true);
-    this.setHelpUrl('http://www.example.com/');
   },
   onchange: function(ev) {
     if (Blockly.Python.valueToCode(this, 'LHS', Blockly.Python.ORDER_NONE) != '' &&
@@ -115,7 +112,6 @@ Blockly.Blocks['python_string_index'] = {
       ["str", "int", "str"],
     ]);
     this.setOutput(true);
-    this.setHelpUrl('http://www.example.com/');
   },
   onchange: function(ev) {
     if (Blockly.Python.valueToCode(this, 'ARG1', Blockly.Python.ORDER_NONE) != '' &&
@@ -144,7 +140,6 @@ Blockly.Blocks['python_string_slice12'] = {
       ["str", "int", "int", "str"],
     ]);
     this.setOutput(true);
-    this.setHelpUrl('http://www.example.com/');
   },
   onchange: function(ev) {
     if (Blockly.Python.valueToCode(this, 'ARG1', Blockly.Python.ORDER_NONE) != '' &&
@@ -174,7 +169,6 @@ Blockly.Blocks['python_string_slice1'] = {
       ["str", "int", "str"],
     ]);
     this.setOutput(true);
-    this.setHelpUrl('http://www.example.com/');
   },
   onchange: function(ev) {
     if (Blockly.Python.valueToCode(this, 'ARG1', Blockly.Python.ORDER_NONE) != '' &&
@@ -203,7 +197,6 @@ Blockly.Blocks['python_string_slice2'] = {
       ["str", "int", "str"],
     ]);
     this.setOutput(true);
-    this.setHelpUrl('http://www.example.com/');
   },
   onchange: function(ev) {
     if (Blockly.Python.valueToCode(this, 'ARG1', Blockly.Python.ORDER_NONE) != '' &&
@@ -230,7 +223,6 @@ Blockly.Blocks['python_string_len'] = {
       ["str", "int"]
     ]);
     this.setOutput(true);
-    this.setHelpUrl('http://www.example.com/');
   },
   onchange: function(ev) {
     if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '') {
@@ -259,7 +251,6 @@ Blockly.Blocks['python_string_in'] = {
       ["str", "str", "bool"]
     ]);
     this.setOutput(true);
-    this.setHelpUrl('http://www.example.com/');
   },
   onchange: function(ev) {
     if (Blockly.Python.valueToCode(this, 'LHS', Blockly.Python.ORDER_NONE) != '' &&
@@ -284,7 +275,6 @@ Blockly.Blocks['python_isdigit'] = {
       ["str", "bool"]
     ]);
     this.setOutput(true);
-    this.setHelpUrl('http://www.example.com/');
   },
   onchange: function(ev) {
     if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '') {
@@ -308,7 +298,6 @@ Blockly.Blocks['python_isalpha'] = {
       ["str", "bool"]
     ]);
     this.setOutput(true);
-    this.setHelpUrl('http://www.example.com/');
   },
   onchange: function(ev) {
     if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '') {
@@ -333,7 +322,6 @@ Blockly.Blocks['python_isspace'] = {
       ["str", "bool"]
     ]);
     this.setOutput(true);
-    this.setHelpUrl('http://www.example.com/');
   },
   onchange: function(ev) {
     if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '') {
@@ -357,7 +345,6 @@ Blockly.Blocks['python_lower'] = {
       ["str", "str"]
     ]);
     this.setOutput(true);
-    this.setHelpUrl('http://www.example.com/');
   },
   onchange: function(ev) {
     if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '') {
@@ -381,7 +368,6 @@ Blockly.Blocks['python_upper'] = {
       ["str", "str"]
     ]);
     this.setOutput(true);
-    this.setHelpUrl('http://www.example.com/');
   },
   onchange: function(ev) {
     if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '') {
@@ -407,7 +393,6 @@ Blockly.Blocks['python_find'] = {
       ["str", "str", "int"]
     ]);
     this.setOutput(true);
-    this.setHelpUrl('http://www.example.com/');
   },
   onchange: function(ev) {
     if (Blockly.Python.valueToCode(this, 'ARG1', Blockly.Python.ORDER_NONE) != '' &&
@@ -435,7 +420,6 @@ Blockly.Blocks['python_index_method'] = {
       ["str", "str", "int"]
     ]);
     this.setOutput(true);
-    this.setHelpUrl('http://www.example.com/');
   },
   onchange: function(ev) {
     if (Blockly.Python.valueToCode(this, 'ARG1', Blockly.Python.ORDER_NONE) != '' &&
@@ -463,7 +447,6 @@ Blockly.Blocks['python_string_count'] = {
       ["str", "str", "int"]
     ]);
     this.setOutput(true);
-    this.setHelpUrl('http://www.example.com/');
   },
   onchange: function(ev) {
     if (Blockly.Python.valueToCode(this, 'ARG1', Blockly.Python.ORDER_NONE) != '' &&
@@ -491,7 +474,6 @@ Blockly.Blocks['python_split'] = {
     ]);
     this.setOutput(true);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
     this.hasSepParameter = false;
   },
   onchange: function(ev) {

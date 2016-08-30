@@ -50,7 +50,7 @@ Blockly.Workspace = function(opt_options) {
   to continue searching for errors */
   this.generatorSuccess = true;
 
-  this.varBlocks = [];
+  this.vars = '';
 
 };
 

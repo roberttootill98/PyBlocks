@@ -63,7 +63,6 @@ Blockly.Blocks['python_equals'] = {
     this.setInputsInline(true);
     this.setTypeVecs(EQUALITY_TYPE_VECS);
     this.setOutput(true);
-    this.setHelpUrl('http://www.example.com/');
   },
   onchange: function(ev) {
     if (Blockly.Python.valueToCode(this, 'LHS', Blockly.Python.ORDER_NONE) != '' &&  Blockly.Python.valueToCode(this, 'RHS', Blockly.Python.ORDER_NONE) != '') {
@@ -90,7 +89,6 @@ Blockly.Blocks['python_not_equals'] = {
     this.setInputsInline(true);
     this.setTypeVecs(EQUALITY_TYPE_VECS);
     this.setOutput(true);
-    this.setHelpUrl('http://www.example.com/');
   },
   onchange: function(ev) {
     if (Blockly.Python.valueToCode(this, 'LHS', Blockly.Python.ORDER_NONE) != '' &&  Blockly.Python.valueToCode(this, 'RHS', Blockly.Python.ORDER_NONE) != '') {
@@ -120,7 +118,6 @@ Blockly.Blocks['python_is'] = {
       ["*matching", "*matching", "bool"]
     ]);
     this.setOutput(true);
-    this.setHelpUrl('http://www.example.com/');
   },
   onchange: function(ev) {
     if (Blockly.Python.valueToCode(this, 'LHS', Blockly.Python.ORDER_NONE) != '' &&  Blockly.Python.valueToCode(this, 'RHS', Blockly.Python.ORDER_NONE) != '') {
@@ -147,7 +144,6 @@ Blockly.Blocks['python_less_than'] = {
     this.setInputsInline(true);
     this.setTypeVecs(ORDERING_TYPE_VECS);
     this.setOutput(true);
-    this.setHelpUrl('http://www.example.com/');
   },
   onchange: function(ev) {
     if (Blockly.Python.valueToCode(this, 'LHS', Blockly.Python.ORDER_NONE) != '' &&  Blockly.Python.valueToCode(this, 'RHS', Blockly.Python.ORDER_NONE) != '') {
@@ -174,7 +170,6 @@ Blockly.Blocks['python_less_than_or_equal'] = {
     this.setInputsInline(true);
     this.setTypeVecs(ORDERING_TYPE_VECS);
     this.setOutput(true);
-    this.setHelpUrl('http://www.example.com/');
   },
   onchange: function(ev) {
     if (Blockly.Python.valueToCode(this, 'LHS', Blockly.Python.ORDER_NONE) != '' &&  Blockly.Python.valueToCode(this, 'RHS', Blockly.Python.ORDER_NONE) != '') {
@@ -202,7 +197,6 @@ Blockly.Blocks['python_greater_than'] = {
     this.setInputsInline(true);
     this.setTypeVecs(ORDERING_TYPE_VECS);
     this.setOutput(true);
-    this.setHelpUrl('http://www.example.com/');
   },
   onchange: function(ev) {
     if (Blockly.Python.valueToCode(this, 'LHS', Blockly.Python.ORDER_NONE) != '' &&  Blockly.Python.valueToCode(this, 'RHS', Blockly.Python.ORDER_NONE) != '') {
@@ -230,7 +224,6 @@ Blockly.Blocks['python_greater_than_or_equal'] = {
     this.setInputsInline(true);
     this.setTypeVecs(ORDERING_TYPE_VECS);
     this.setOutput(true);
-    this.setHelpUrl('http://www.example.com/');
   },
   onchange: function(ev) {
     if (Blockly.Python.valueToCode(this, 'LHS', Blockly.Python.ORDER_NONE) != '' &&  Blockly.Python.valueToCode(this, 'RHS', Blockly.Python.ORDER_NONE) != '') {

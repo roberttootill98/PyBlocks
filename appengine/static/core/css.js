@@ -520,6 +520,12 @@ Blockly.Css.CONTENT = [
     'text-shadow: 1px 0px 2px rgba(150, 150, 150, 1);',
     'color: white;',
     'text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;',
+    '-webkit-touch-callout: none;',
+    '-webkit-user-select: none;',
+    '-khtml-user-select: none;',
+    '-moz-user-select: none;',
+    '-ms-user-select: none;',
+    'user-select: none;',
   '}',
 
   '.blocklyTreeSelected {',

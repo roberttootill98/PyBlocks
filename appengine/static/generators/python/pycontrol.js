@@ -41,7 +41,7 @@ Blockly.Python['python_if'] = function(block) {
   }
 
   if (block.hasElse) {
-    code += 'else:\n' + Blockly.Python.statementToCode(block, 'ELSE_BODY') || Blockly.Python.PASS + '\n';
+    code += 'else:\n' + (Blockly.Python.statementToCode(block, 'ELSE_BODY') || Blockly.Python.PASS + '\n');
   }
 
   return code;

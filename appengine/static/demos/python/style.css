@@ -178,8 +178,8 @@ table {
 .fancybuttons#clear{
   /*float: top;*/
   position: absolute;
-  bottom: 11px;
-  right: 15px;
+  bottom: 15px;
+  right: 50px;
   z-index: 2;
 }
 

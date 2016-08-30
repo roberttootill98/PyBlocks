@@ -753,13 +753,13 @@ Blockly.BlockSvg.prototype.showContextMenu_ = function(e) {
   }
 
   // Option to get help.
-  var url = goog.isFunction(this.helpUrl) ? this.helpUrl() : this.helpUrl;
-  var helpOption = {enabled: !!url};
-  helpOption.text = Blockly.Msg.HELP;
-  helpOption.callback = function() {
-    block.showHelp_();
-  };
-  menuOptions.push(helpOption);
+  // var url = goog.isFunction(this.helpUrl) ? this.helpUrl() : this.helpUrl;
+  // var helpOption = {enabled: !!url};
+  // helpOption.text = Blockly.Msg.HELP;
+  // helpOption.callback = function() {
+  //   block.showHelp_();
+  // };
+  // menuOptions.push(helpOption);
 
   // Allow the block to add or modify menuOptions.
   if (this.customContextMenu && !block.isInFlyout) {
@@ -2069,15 +2069,17 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
   }
 
   // HACK to adjust height of rows in statement blocks
+  // Another HACK to cater for start block row height
   if (!this.outputConnection) {
     for (var i = 0, row; row = inputRows[i]; i++) {
-      if (i % 2 == 0 || this.type == "python_comment") {
+      if (this.type == "python_start") {
+        inputRows[i].height = 30;
+      } else if (i % 2 == 0 || this.type == "python_comment") {
         // row with inputs
         if (inputRows[i].height < Blockly.BlockSvg.MIN_STMT_BLOCK_Y) {
           inputRows[i].height = Blockly.BlockSvg.MIN_STMT_BLOCK_Y;
         }
-      }
-      else {
+      } else {
         // row with nested statements
         if (inputRows[i].height > Blockly.BlockSvg.MIN_STMT_BLOCK_Y) {
            inputRows[i].height -= 4;

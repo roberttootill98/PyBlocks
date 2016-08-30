@@ -37,7 +37,6 @@ Blockly.Blocks['python_int_const'] = {
     this.setInputsInline(true);
     this.setTypeVecs([["int"]]);
     this.setOutput(true);
-    this.setHelpUrl('http://www.example.com/');
     this.getField('VALUE').setChangeHandler(
         Blockly.FieldTextInput.integerValidator);
   },
@@ -53,7 +52,6 @@ Blockly.Blocks['python_float_const'] = {
     this.setInputsInline(true);
     this.setTypeVecs([["float"]]);
     this.setOutput(true);
-    this.setHelpUrl('http://www.example.com/');
     this.getField('VALUE').setChangeHandler(
         Blockly.FieldTextInput.floatValidator);
       },
@@ -80,7 +78,6 @@ Blockly.Blocks['python_plus'] = {
       ["float", "float", "float"]
     ]);
     this.setOutput(true);
-    this.setHelpUrl('http://www.example.com/');
   },
   onchange: function(ev) {
     if (Blockly.Python.valueToCode(this, 'LHS', Blockly.Python.ORDER_NONE) != '' &&  Blockly.Python.valueToCode(this, 'RHS', Blockly.Python.ORDER_NONE) != '') {
@@ -112,7 +109,6 @@ Blockly.Blocks['python_minus'] = {
       ["float", "float", "float"]
     ]);
     this.setOutput(true);
-    this.setHelpUrl('http://www.example.com/');
   },
   onchange: function(ev) {
     if (Blockly.Python.valueToCode(this, 'LHS', Blockly.Python.ORDER_NONE) != '' &&  Blockly.Python.valueToCode(this, 'RHS', Blockly.Python.ORDER_NONE) != '') {
@@ -146,7 +142,6 @@ Blockly.Blocks['python_multiply'] = {
       ["float", "float", "float"]
     ]);
     this.setOutput(true);
-    this.setHelpUrl('http://www.example.com/');
   },
   onchange: function(ev) {
     if (Blockly.Python.valueToCode(this, 'LHS', Blockly.Python.ORDER_NONE) != '' &&  Blockly.Python.valueToCode(this, 'RHS', Blockly.Python.ORDER_NONE) != '') {
@@ -178,7 +173,6 @@ Blockly.Blocks['python_divide'] = {
       ["float", "float", "float"]
     ]);
     this.setOutput(true);
-    this.setHelpUrl('http://www.example.com/');
   },
   onchange: function(ev) {
     if (Blockly.Python.valueToCode(this, 'LHS', Blockly.Python.ORDER_NONE) != '' &&  Blockly.Python.valueToCode(this, 'RHS', Blockly.Python.ORDER_NONE) != '') {
@@ -207,7 +201,6 @@ Blockly.Blocks['python_int_divide'] = {
       ["int", "int", "int"]
     ]);
     this.setOutput(true);
-    this.setHelpUrl('http://www.example.com/');
   },
   onchange: function(ev) {
     if (Blockly.Python.valueToCode(this, 'LHS', Blockly.Python.ORDER_NONE) != '' &&  Blockly.Python.valueToCode(this, 'RHS', Blockly.Python.ORDER_NONE) != '') {
@@ -236,7 +229,6 @@ Blockly.Blocks['python_int_modulo'] = {
       ["int", "int", "int"]
     ]);
     this.setOutput(true);
-    this.setHelpUrl('http://www.example.com/');
   },
   onchange: function(ev) {
     if (Blockly.Python.valueToCode(this, 'LHS', Blockly.Python.ORDER_NONE) != '' &&  Blockly.Python.valueToCode(this, 'RHS', Blockly.Python.ORDER_NONE) != '') {
@@ -269,7 +261,6 @@ Blockly.Blocks['python_pow_op'] = {
       ["float", "float", "float"]
     ]);
     this.setOutput(true);
-    this.setHelpUrl('http://www.example.com/');
   },
   onchange: function(ev) {
     if (Blockly.Python.valueToCode(this, 'LHS', Blockly.Python.ORDER_NONE) != '' &&  Blockly.Python.valueToCode(this, 'RHS', Blockly.Python.ORDER_NONE) != '') {
@@ -298,7 +289,6 @@ Blockly.Blocks['python_unary_minus'] = {
       ["float", "float"]
     ]);
     this.setOutput(true);
-    this.setHelpUrl('http://www.example.com/');
   },
   onchange: function(ev) {
     if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '') {
@@ -324,7 +314,6 @@ Blockly.Blocks['python_abs'] = {
       ["float", "float"]
     ]);
     this.setOutput(true);
-    this.setHelpUrl('http://www.example.com/');
   },
   onchange: function(ev) {
     if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '') {
@@ -350,7 +339,6 @@ Blockly.Blocks['python_round'] = {
       ["float", "int"]
     ]);
     this.setOutput(true);
-    this.setHelpUrl('http://www.example.com/');
   },
   onchange: function(ev) {
     if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '') {
@@ -381,7 +369,6 @@ Blockly.Blocks['python_pow'] = {
       ["float", "float", "float"]
     ]);
     this.setOutput(true);
-    this.setHelpUrl('http://www.example.com/');
   },
   onchange: function(ev) {
     if (Blockly.Python.valueToCode(this, 'ARG1', Blockly.Python.ORDER_NONE) != '' &&  Blockly.Python.valueToCode(this, 'ARG2', Blockly.Python.ORDER_NONE) != '') {
@@ -409,7 +396,6 @@ Blockly.Blocks['python_numeric_min'] = {
       ["float", "float", "float"]
     ]);
     this.setOutput(true);
-    this.setHelpUrl('http://www.example.com/');
   },
   onchange: function(ev) {
     if (Blockly.Python.valueToCode(this, 'ARG1', Blockly.Python.ORDER_NONE) != '' &&  Blockly.Python.valueToCode(this, 'ARG2', Blockly.Python.ORDER_NONE) != '') {
@@ -437,7 +423,6 @@ Blockly.Blocks['python_numeric_max'] = {
       ["float", "float", "float"]
     ]);
     this.setOutput(true);
-    this.setHelpUrl('http://www.example.com/');
   },
   onchange: function(ev) {
     if (Blockly.Python.valueToCode(this, 'ARG1', Blockly.Python.ORDER_NONE) != '' &&  Blockly.Python.valueToCode(this, 'ARG2', Blockly.Python.ORDER_NONE) != '') {
@@ -463,7 +448,6 @@ Blockly.Blocks['python_sum'] = {
       ["*float", "float"]
     ]);
     this.setOutput(true);
-    this.setHelpUrl('http://www.example.com/');
   },
   onchange: function(ev) {
     if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '') {

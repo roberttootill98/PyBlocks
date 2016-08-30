@@ -37,7 +37,6 @@ Blockly.Blocks['python_true'] = {
     ]);
     this.setOutput(true);
     this.setTooltip('Returns the boolean value True');
-    this.setHelpUrl('http://www.example.com/');
   }
 };
 
@@ -50,7 +49,6 @@ Blockly.Blocks['python_false'] = {
     ]);
     this.setOutput(true);
     this.setTooltip('Returns the boolean value False');
-    this.setHelpUrl('http://www.example.com/');
   }
 };
 
@@ -69,7 +67,6 @@ Blockly.Blocks['python_and'] = {
       ["bool", "bool", "bool"],
     ]);
     this.setOutput(true);
-    this.setHelpUrl('http://www.example.com/');
   },
   onchange: function(ev) {
     if (Blockly.Python.valueToCode(this, 'LHS', Blockly.Python.ORDER_NONE) != '' &&  Blockly.Python.valueToCode(this, 'RHS', Blockly.Python.ORDER_NONE) != '') {
@@ -98,7 +95,6 @@ Blockly.Blocks['python_or'] = {
       ["bool", "bool", "bool"],
     ]);
     this.setOutput(true);
-    this.setHelpUrl('http://www.example.com/');
   },
   onchange: function(ev) {
     if (Blockly.Python.valueToCode(this, 'LHS', Blockly.Python.ORDER_NONE) != '' &&  Blockly.Python.valueToCode(this, 'RHS', Blockly.Python.ORDER_NONE) != '') {
@@ -126,7 +122,6 @@ Blockly.Blocks['python_not'] = {
       ["bool", "bool"]
     ]);
     this.setOutput(true);
-    this.setHelpUrl('http://www.example.com/');
   },
   onchange: function(ev) {
     if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '') {

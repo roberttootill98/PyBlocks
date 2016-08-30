@@ -35,7 +35,6 @@ Blockly.Blocks['python_linespace'] = {
     this.setPreviousStatement(true);
     this.setNextStatement(true);
     this.setTooltip('An empty line');
-    this.setHelpUrl('http://www.example.com/');
   }
 };
 
@@ -54,7 +53,6 @@ Blockly.Blocks['python_comment'] = {
     this.setPreviousStatement(true);
     this.setNextStatement(true);
     this.setTooltip('Comments are used to describe ambiguous code, they have no effect on execution');
-    this.setHelpUrl('http://www.example.com/');
     this.lineCount = 1;
 
   },

@@ -33,12 +33,12 @@ Blockly.Blocks['python_start'] = {
 
   init: function() {
     Blockly.BlockSvg.START_HAT = true;
-    // .appendField(new Blockly.FieldImage('../../media/play_icon.png', 32, 32, '*'));
+    // Josef -
+    //.appendField(new Blockly.FieldImage('../../media/play_icon.png', 32, 32, '*'));
     this.setNextStatement(true);
     this.setTooltip('The start block is not a true Python block and is only\
     there to indicate which blocks will be executed when "Run full" is\
     pressed.');
-    this.setHelpUrl('http://www.example.com/');
     this.imports = [];
   },
 
@@ -72,7 +72,7 @@ Blockly.Blocks['python_start'] = {
     if (op == 'add') {
       this.imports.push(importName);
       this.appendDummyInput(importName)
-      .appendField('import ' + importName);
+          .appendField('import ' + importName);
 
       if (this.imports.indexOf('math') > -1) {
         workspace.updateToolbox(document.getElementById('toolboxmaths'));

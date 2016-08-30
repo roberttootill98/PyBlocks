@@ -123,6 +123,8 @@ Blockly.Block.prototype.fill = function(workspace, prototypeName) {
 
   this.poisoned = false;
 
+  this.declared = false;
+
   /** @type {boolean} */
   this.rendered = false;
   /** @type {boolean} */
@@ -439,13 +441,19 @@ Blockly.Block.prototype.findVariable = function() {
   do {
     variableBlock = block;
     block = variableBlock.parentBlock_;
-    // Josef - First check if variable has already been declared in stack of
-    // variables, if not then continue searching as if it is a clean run
-    if (workspace.varBlocks.indexOf(this.getFieldValue("VAR")) !== -1 ||
-    (variableBlock.type == 'variables_set' && this.getFieldValue("VAR") ==
+
+    if ((variableBlock.type == 'variables_set' && this.getFieldValue("VAR") ==
     Blockly.Python.valueToCode(variableBlock, 'VAR',
-    Blockly.Python.ORDER_NONE))) {
-      return true;
+    Blockly.Python.ORDER_NONE)) && variableBlock.getSurroundParent().type != 'python_if' &&
+  variableBlock.getSurroundParent().type != 'python_while' && variableBlock.getSurroundParent().type != 'python_for') {
+
+      return 'nocontrol';
+
+  } else if (variableBlock.type == 'variables_set' && this.getFieldValue("VAR") ==
+  Blockly.Python.valueToCode(variableBlock, 'VAR',
+  Blockly.Python.ORDER_NONE)) {
+
+    return 'control';
   }
 } while (!variableBlock.poisoned && block)
   return variableBlock;
@@ -819,7 +827,7 @@ Blockly.Block.prototype.setOutput = function(newBoolean, opt_check) {
   }
 
     this.canHaveTooltipValue = newBoolean;
-    
+
 };
 
 /**
