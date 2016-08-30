@@ -240,6 +240,14 @@ Blockly.Generator.prototype.blockToCode = function(block) {
     workspace.vars += block.declaredVar + '\n';
   }
 
+  if (block.type == 'python_start') {
+
+    for (var i = 0; i < block.imports.length; i++) {
+      workspace.imports += 'import ' + block.imports[i] + '\n';
+      console.log('IMPORTSS', workspace.imports);
+    }
+  }
+
     //
     // } else if (workspace.running && !block.isInFlyout && block.type == 'variables_get' && block.getTopLevel().type != 'variables_set' && block.findVariable() == 'nocontrol') {
     //   block.setWarningText('You have not declared this variable yet');

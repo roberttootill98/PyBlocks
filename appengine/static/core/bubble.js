@@ -73,14 +73,17 @@ Blockly.Bubble = function(workspace, content, shape,
   this.renderArrow_();
   this.rendered_ = true;
 
-  if (!workspace.options.readOnly) {
-    Blockly.bindEvent_(this.bubbleBack_, 'mousedown', this,
-                       this.bubbleMouseDown_);
-    if (this.resizeGroup_) {
-      Blockly.bindEvent_(this.resizeGroup_, 'mousedown', this,
-                         this.resizeMouseDown_);
-    }
-  }
+  // Blockly.bindEvent_(document.getElementById('blocklyDiv'), 'mouseup', this,
+  //                    function(e) { this.dispose() });
+
+  // if (!workspace.options.readOnly) {
+  //   Blockly.bindEvent_(this.bubbleBack_, 'mousedown', this,
+  //                      this.bubbleMouseDown_);
+  //   if (this.resizeGroup_) {
+  //     Blockly.bindEvent_(this.resizeGroup_, 'mousedown', this,
+  //                        this.resizeMouseDown_);
+  //   }
+  // }
 };
 
 /**
@@ -223,7 +226,7 @@ Blockly.Bubble.prototype.createDom_ = function(content, hasResize) {
       filter, this.bubbleGroup_);
   this.bubbleArrow_ = Blockly.createSvgElement('path', {}, bubbleEmboss);
   this.bubbleBack_ = Blockly.createSvgElement('rect',
-      {'class': 'blocklyDraggable', 'x': 0, 'y': 0,
+      {'x': 0, 'y': 0,
       'rx': Blockly.Bubble.BORDER_WIDTH, 'ry': Blockly.Bubble.BORDER_WIDTH},
       bubbleEmboss);
   if (hasResize) {

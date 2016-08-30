@@ -55,6 +55,7 @@ function runfull() {
   workspace.running = true;
   workspace.generatorSuccess = true;
   workspace.vars = '';
+  workspace.imports = '';
 
   if (initInterpreter() && generateCode() && workspace.generatorSuccess) {
 

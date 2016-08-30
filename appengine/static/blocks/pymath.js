@@ -41,7 +41,16 @@ Blockly.Blocks['python_math_ceil'] = {
       ["int", "float"],
     ]);
     this.setOutput(true);
-    this.setTooltip('');
+  },
+  onchange: function(ev) {
+    if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '' && workspace.imports.indexOf('import math') >= 0) {
+      this.holesFilled = true;
+      runtooltip(workspace.imports + 'print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+      this.setTooltip(document.getElementById("hiddenoutput").textContent);
+    } else {
+      this.holesFilled = false;
+      this.setTooltip('Returns the ceiling of a number');
+    }
   }
 };
 
@@ -95,8 +104,16 @@ Blockly.Blocks['python_math_factorial'] = {
       ["int", "float"],
     ]);
     this.setOutput(true);
-    this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+  },
+  onchange: function(ev) {
+    if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '' && workspace.imports.indexOf('import math') >= 0) {
+      this.holesFilled = true;
+      runtooltip(workspace.imports + 'print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+      this.setTooltip(document.getElementById("hiddenoutput").textContent);
+    } else {
+      this.holesFilled = false;
+      this.setTooltip('Returns the factorial of a number');
+    }
   }
 };
 
@@ -112,8 +129,16 @@ Blockly.Blocks['python_math_floor'] = {
       ["int", "float"],
     ]);
     this.setOutput(true);
-    this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+  },
+  onchange: function(ev) {
+    if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '' && workspace.imports.indexOf('import math') >= 0) {
+      this.holesFilled = true;
+      runtooltip(workspace.imports + 'print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+      this.setTooltip(document.getElementById("hiddenoutput").textContent);
+    } else {
+      this.holesFilled = false;
+      this.setTooltip('Returns the floor of a number');
+    }
   }
 };
 
@@ -309,8 +334,16 @@ Blockly.Blocks['python_math_log'] = {
       ["int", "float"],
     ]);
     this.setOutput(true);
-    this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+  },
+  onchange: function(ev) {
+    if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '' && workspace.imports.indexOf('import math') >= 0) {
+      this.holesFilled = true;
+      runtooltip(workspace.imports + 'print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+      this.setTooltip(document.getElementById("hiddenoutput").textContent);
+    } else {
+      this.holesFilled = false;
+      this.setTooltip('Returns the logarithm of a number');
+    }
   }
 };
 
@@ -343,8 +376,16 @@ Blockly.Blocks['python_math_log10'] = {
       ["int", "float"],
     ]);
     this.setOutput(true);
-    this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+  },
+  onchange: function(ev) {
+    if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '' && workspace.imports.indexOf('import math') >= 0) {
+      this.holesFilled = true;
+      runtooltip(workspace.imports + 'print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+      this.setTooltip(document.getElementById("hiddenoutput").textContent);
+    } else {
+      this.holesFilled = false;
+      this.setTooltip('Returns the log10 of a number');
+    }
   }
 };
 
@@ -364,8 +405,16 @@ Blockly.Blocks['python_math_pow'] = {
       ["int", "int", "float"],
     ]);
     this.setOutput(true);
-    this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+  },
+  onchange: function(ev) {
+    if (Blockly.Python.valueToCode(this, 'ARG1', Blockly.Python.ORDER_NONE) != '' && Blockly.Python.valueToCode(this, 'ARG2', Blockly.Python.ORDER_NONE) != '' && workspace.imports.indexOf('import math') >= 0) {
+      this.holesFilled = true;
+      runtooltip(workspace.imports + 'print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+      this.setTooltip(document.getElementById("hiddenoutput").textContent);
+    } else {
+      this.holesFilled = false;
+      this.setTooltip('Returns the power of two numbers');
+    }
   }
 };
 
@@ -381,8 +430,16 @@ Blockly.Blocks['python_math_sqrt'] = {
       ["int", "float"],
     ]);
     this.setOutput(true);
-    this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+  },
+  onchange: function(ev) {
+    if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '' && workspace.imports.indexOf('import math') >= 0) {
+      this.holesFilled = true;
+      runtooltip(workspace.imports + 'print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+      this.setTooltip(document.getElementById("hiddenoutput").textContent);
+    } else {
+      this.holesFilled = false;
+      this.setTooltip('Returns the square root of a number');
+    }
   }
 };
 
@@ -470,8 +527,16 @@ Blockly.Blocks['python_math_cos'] = {
       ["int", "float"],
     ]);
     this.setOutput(true);
-    this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+  },
+  onchange: function(ev) {
+    if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '' && workspace.imports.indexOf('import math') >= 0) {
+      this.holesFilled = true;
+      runtooltip(workspace.imports + 'print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+      this.setTooltip(document.getElementById("hiddenoutput").textContent);
+    } else {
+      this.holesFilled = false;
+      this.setTooltip('Returns the cosine of the specified radians');
+    }
   }
 };
 
@@ -508,8 +573,16 @@ Blockly.Blocks['python_math_sin'] = {
       ["int", "float"],
     ]);
     this.setOutput(true);
-    this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+  },
+  onchange: function(ev) {
+    if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '' && workspace.imports.indexOf('import math') >= 0) {
+      this.holesFilled = true;
+      runtooltip(workspace.imports + 'print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+      this.setTooltip(document.getElementById("hiddenoutput").textContent);
+    } else {
+      this.holesFilled = false;
+      this.setTooltip('Returns the sine of the specified radians');
+    }
   }
 };
 
@@ -525,8 +598,16 @@ Blockly.Blocks['python_math_tan'] = {
       ["int", "float"],
     ]);
     this.setOutput(true);
-    this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+  },
+  onchange: function(ev) {
+    if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '' && workspace.imports.indexOf('import math') >= 0) {
+      this.holesFilled = true;
+      runtooltip(workspace.imports + 'print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+      this.setTooltip(document.getElementById("hiddenoutput").textContent);
+    } else {
+      this.holesFilled = false;
+      this.setTooltip('Returns the tangent of the specified radians');
+    }
   }
 };
 
@@ -741,8 +822,14 @@ Blockly.Blocks['python_math_pi'] = {
     this.setInputsInline(true);
     this.setTypeVecs([["float"]]);
     this.setOutput(true);
-    this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+  },
+  onchange: function(ev) {
+    if (workspace.imports.indexOf('import math') >= 0) {
+      runtooltip(workspace.imports + 'print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+      this.setTooltip(document.getElementById("hiddenoutput").textContent);
+    } else {
+      this.setTooltip('Returns the pi mathematical constant');
+    }
   }
 };
 
@@ -753,7 +840,14 @@ Blockly.Blocks['python_math_e'] = {
     this.setInputsInline(true);
     this.setTypeVecs([["float"]]);
     this.setOutput(true);
-    this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+
+  },
+  onchange: function(ev) {
+    if (workspace.imports.indexOf('import math') >= 0) {
+      runtooltip(workspace.imports + 'print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+      this.setTooltip(document.getElementById("hiddenoutput").textContent);
+    } else {
+      this.setTooltip('Returns the e mathematical constant');
+    }
   }
 };
