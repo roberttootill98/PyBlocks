@@ -189,7 +189,7 @@ Blockly.Blocks['python_print'] = {
 
     if (this.hasEndParameter && Blockly.Python.valueToCode(this, 'END', Blockly.Python.ORDER_NONE) != '') {
       filledEnd = true;
-    } else if (this.hasEndParameter == false) {
+    } else if (!this.hasEndParameter) {
       filledEnd = true;
     } else {
       filledEnd = false;

@@ -456,8 +456,8 @@ var workspace = Blockly.inject(blocklyDiv,
   onresize();
   initInterpreter();
 
-  
-  //workspace.addChangeListener(generateCode());
+
+  //workspace.addChangeListener(checkWorkspace);
 
   if ('BlocklyStorage' in window && window.location.hash.length > 1) {
     BlocklyStorage.retrieveXml(window.location.hash.substring(1));
@@ -466,8 +466,11 @@ var workspace = Blockly.inject(blocklyDiv,
     Blockly.Xml.domToWorkspace(workspace, Blockly.Xml.textToDom(xml));
   }
 
+
+
   // Needed to init values for variable blocks
-  Blockly.Python.workspaceToCode(workspace);
+  // Blockly.Python.workspaceToCode(workspace);
+  checkWorkspace();
 
   goog.events.listen(document.getElementById('blocklyDiv'),
   'dblclick', function() { runeval(Blockly.selected); });

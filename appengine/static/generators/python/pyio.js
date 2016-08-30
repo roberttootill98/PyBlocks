@@ -41,7 +41,7 @@ Blockly.Python['python_print'] = function(block) {
   var code;
 
   for (var i = 1, params = block.parameterCount, code = ''; i <= params; i++) {
-    if ((params - i == 0 && block.hasEndParameter == false)) {
+    if ((params - i == 0 && !block.hasEndParameter)) {
       code += Blockly.Python.valueToCode(block, 'ARG' + i, Blockly.Python.ORDER_NONE);
     } else {
       code += Blockly.Python.valueToCode(block, 'ARG' + i, Blockly.Python.ORDER_NONE) + ', ';

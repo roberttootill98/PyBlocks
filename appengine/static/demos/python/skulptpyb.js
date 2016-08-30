@@ -86,15 +86,12 @@ function runfull() {
     alert('Errors found! Please look for the warning symbols for more information.');
   }
   workspace.running = false;
-  console.log('DECVAR', workspace.vars);
 }
 
 function runeval(block) {
 
   workspace.running = true;
   workspace.generatorSuccess = true;
-  // Poison the block selected to not search for more variable setters above it
-  block.poisoned = true;
 
   var code = Blockly.Python.blockToCode(block);
 
@@ -114,7 +111,6 @@ function runeval(block) {
     myPromise.then(function(mod) {
       console.log('success');
       canRetainGlobals = true;
-      console.log('TEKKY', Sk.globals);
     },
     function(err) {
       var mypre = document.getElementById("output");
@@ -127,8 +123,6 @@ function runeval(block) {
     alert('Errors found! Please look for the warning symbols for more information.');
   }
   workspace.running = false;
-  block.poisoned = false;
-  console.log('DECVAR', workspace.vars);
 }
 
 function runtooltip(code) {
@@ -156,29 +150,29 @@ function runtooltip(code) {
   return mypre.innerHTML;
 }
 
-function runassigncheck(code) {
-  // if (code.indexOf('input(') >= 0) {
-  //   return;
-  // }
-
-  document.getElementById("hiddenoutput2").innerHTML = '';
-  var mypre = document.getElementById("hiddenoutput2");
-
-  Sk.pre = "hiddenoutput2";
-  Sk.configure({output:outfhidden2, read:builtinRead});
-  var myPromise = Sk.misceval.asyncToPromise(function() {
-    return Sk.importMainWithBody("<stdin>", false, code, true);
-  });
-  myPromise.then(function(mod) {
-    console.log('success');
-  },
-  function(err) {
-    var mypre = document.getElementById("hiddenoutput2");
-    mypre.innerHTML = mypre.innerHTML + err.toString() + "\n";
-    console.log(err.toString());
-  });
-  return mypre.innerHTML;
-}
+// function runassigncheck(code) {
+//   // if (code.indexOf('input(') >= 0) {
+//   //   return;
+//   // }
+//
+//   document.getElementById("hiddenoutput2").innerHTML = '';
+//   var mypre = document.getElementById("hiddenoutput2");
+//
+//   Sk.pre = "hiddenoutput2";
+//   Sk.configure({output:outfhidden2, read:builtinRead});
+//   var myPromise = Sk.misceval.asyncToPromise(function() {
+//     return Sk.importMainWithBody("<stdin>", false, code, true);
+//   });
+//   myPromise.then(function(mod) {
+//     console.log('success');
+//   },
+//   function(err) {
+//     var mypre = document.getElementById("hiddenoutput2");
+//     mypre.innerHTML = mypre.innerHTML + err.toString() + "\n";
+//     console.log(err.toString());
+//   });
+//   return mypre.innerHTML;
+// }
 
 function copyToClipboard() {
   if (generateCode()) {
@@ -195,10 +189,14 @@ function clr() {
   mypre.innerHTML = 'PyBlocks Interpreter\n\n';
 }
 
+function checkWorkspace(event) {
+  Blockly.Python.workspaceToCode(workspace);
+}
+
 function generateCode(event) {
   var content = document.getElementById('pycode');
 
-  code = Blockly.Python.workspaceToCode(workspace);
+  code = Blockly.Python.blockToCode(workspace.getBlockById(1));
   if (code != 0) {
     content.textContent = code;
     return true;

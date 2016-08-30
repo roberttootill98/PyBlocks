@@ -34,7 +34,7 @@ Blockly.Blocks['python_start'] = {
   init: function() {
     Blockly.BlockSvg.START_HAT = true;
     // Josef -
-    //.appendField(new Blockly.FieldImage('../../media/play_icon.png', 32, 32, '*'));
+    this.appendDummyInput().appendField('   ').appendField(new Blockly.FieldImage('../../media/play_icon.png', 32, 32, '*'));
     this.setNextStatement(true);
     this.setTooltip('The start block is not a true Python block and is only\
     there to indicate which blocks will be executed when "Run full" is\

@@ -2071,10 +2071,20 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
   // HACK to adjust height of rows in statement blocks
   // Another HACK to cater for start block row height
   if (!this.outputConnection) {
+
+    if (this.type == "python_start") {
+      for (var i = 0, row; row = inputRows[i]; i++) {
+        if (i == 0) {
+          inputRows[i].height = 45;
+        } else {
+          inputRows[i].height = 35;
+        }
+    }
+      }
     for (var i = 0, row; row = inputRows[i]; i++) {
-      if (this.type == "python_start") {
-        inputRows[i].height = 30;
-      } else if (i % 2 == 0 || this.type == "python_comment") {
+
+
+        if (i % 2 == 0 || this.type == "python_comment") {
         // row with inputs
         if (inputRows[i].height < Blockly.BlockSvg.MIN_STMT_BLOCK_Y) {
           inputRows[i].height = Blockly.BlockSvg.MIN_STMT_BLOCK_Y;

@@ -81,13 +81,13 @@ Blockly.Generator.prototype.workspaceToCode = function(workspace) {
 
     // Josef - make sure at least one statement block is attached to the start
     // block
-    if (block.type == 'python_start' && block.getNextBlock() == null) {
-      return 0;
-    }
+    // if (block.type == 'python_start' && block.getNextBlock() == null) {
+    //   return 0;
+    // }
 
     // Josef - only convert the blocks which has the root type of python_start
     // to code
-    if (block.getRootBlock().type == 'python_start') {
+    // if (block.getRootBlock().type == 'python_start') {
       var line = this.blockToCode(block);
 
     if (goog.isArray(line)) {
@@ -104,7 +104,7 @@ Blockly.Generator.prototype.workspaceToCode = function(workspace) {
       }
       code.push(line);
       }
-    }
+    // }
   }
   code = code.join('\n');  // Blank line between each section.
   code = this.finish(code);
@@ -206,7 +206,7 @@ Blockly.Generator.prototype.blockToCode = function(block) {
 
 
 
-  if (workspace.running && block.holesFilled == false) {
+  if (workspace.running && !block.holesFilled) {
 
     block.setWarningText('Missing parameters');
     workspace.generatorSuccess = false;
@@ -234,7 +234,6 @@ Blockly.Generator.prototype.blockToCode = function(block) {
 
 } else if (workspace.generatorSuccess) {
     block.setWarningText(null);
-
   }
 
   if (block.type == 'variables_set') {
