@@ -27,6 +27,10 @@ function createPicker() {
       metaData = JSON.parse(responseText);
       getData(metaData.downloadUrl, function(text) {
         window.location.href = text;
+        if (window.location.href == text) {
+          location.reload();
+        }
+
       });
     });
 
@@ -118,5 +122,4 @@ function saveDocument() {
       xhr.setRequestHeader('Authorization', 'Bearer ' + myToken);
       xhr.send();
     }
-    setTimeout(function() { location.reload(); }, 1000);
   }
