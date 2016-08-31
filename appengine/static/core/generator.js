@@ -206,7 +206,12 @@ Blockly.Generator.prototype.blockToCode = function(block) {
 
 
 
-  if (workspace.running && !block.holesFilled) {
+if (block.type.indexOf('math') >= 0 && workspace.imports.indexOf('import math') == -1) {
+
+    block.setWarningText('You have not imported the math module');
+    workspace.generatorSuccess = false;
+
+  } else if (workspace.running && !block.holesFilled) {
 
     block.setWarningText('Missing parameters');
     workspace.generatorSuccess = false;
@@ -236,7 +241,7 @@ Blockly.Generator.prototype.blockToCode = function(block) {
     block.setWarningText(null);
   }
 
-  if (block.type == 'variables_set') {
+  if (block.type == 'variables_set' && workspace.generatorSuccess) {
     workspace.vars += block.declaredVar + '\n';
   }
 

@@ -8,7 +8,7 @@ var canRetainGlobals = true;
 
 function outf(text) {
   var mypre = document.getElementById("output");
-  mypre.innerHTML = mypre.innerHTML + text;
+  mypre.innerHTML = mypre.innerHTML + '>>> ' + text;
 }
 
 function outfhidden(text) {
@@ -40,9 +40,24 @@ function builtinRead(x) {
   return file;
 }
 
+function normaliseDate(i) {
+    if (i < 10) {i = "0" + i};  // add zero in front of numbers < 10
+    return i;
+}
+
 function initInterpreter() {
+  var d = new Date();
+  var year = d.getFullYear();
+  var month = normaliseDate(d.getMonth());
+  var day = normaliseDate(d.getDate());
+  var hour = d.getHours();
+  var minute = normaliseDate(d.getMinutes());
+  var second = normaliseDate(d.getSeconds());
+
+
   var interpreter = document.getElementById("output");
-  initVal = 'PyBlocks Interpreter\n\n';
+  initVal = 'PythonBlocks | Python 3 Interpreter (' + day + '/' + month + '/'
+  + year + ', ' + hour + ':' + minute + ':' + second + ')\n\n';
   interpreter.innerHTML = initVal;
   if (interpreter.innerHTML == initVal) {
     return true;
@@ -186,8 +201,7 @@ function copyToClipboard() {
 function clr() {
   canRetainGlobals = false;
   workspace.vars = '';
-  var mypre = document.getElementById("output");
-  mypre.innerHTML = 'PyBlocks Interpreter\n\n';
+  initInterpreter();
 }
 
 function checkWorkspace(event) {

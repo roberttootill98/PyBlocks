@@ -32,11 +32,11 @@ goog.provide('Blockly.Python');
 
 Blockly.Python.COLOUR = {};
 Blockly.Python.COLOUR['notype'] = '#8B7D6B';
-Blockly.Python.COLOUR['float'] = '#FF1919';
-Blockly.Python.COLOUR['int'] = '#40E0D0';
-Blockly.Python.COLOUR['str'] = '#00CC33' ;
-Blockly.Python.COLOUR['range'] = '#0080FF';
-Blockly.Python.COLOUR['bool'] = '#FF29FF';
+Blockly.Python.COLOUR['str'] = '#FF29FF';
+Blockly.Python.COLOUR['range'] = '#00CED1';   // '#40E0D0';
+Blockly.Python.COLOUR['int'] = '#FF8C00' ;
+Blockly.Python.COLOUR['float'] = '#0080FF';
+Blockly.Python.COLOUR['bool'] = '#00CC33';
 Blockly.Python.RAINBOW = ['str', 'int', 'float', 'bool', 'range', 'str'];
 
 Blockly.Python.NEW_VARS = [
