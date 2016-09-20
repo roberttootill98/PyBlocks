@@ -249,11 +249,22 @@ Blockly.Css.CONTENT = [
     'font-size: 15pt;',
    '}',
 
+
+  '.blocklyIndicatorSymbol {',
+    'text-anchor: middle;',
+    'fill: #fff;',
+   // 'writing-mode: tb;',
+    'font-family: monospace;',
+    'font-size: 10pt;',
+   '}',
+
+
    '.blocklyIndicatorText {',
      'text-anchor: middle;',
      'fill: #000;',
+     // 'writing-mode: tb;',
      'font-family: monospace;',
-     'font-size: 11pt;',
+     'font-size: 12pt;',
     '}',
 
   '.blocklyNonEditableText>text {',
@@ -429,7 +440,7 @@ Blockly.Css.CONTENT = [
 
   /* Category tree in Toolbox. */
   '.blocklyToolboxDiv {',
-    'background-color: #CC5500;',
+    'background-color: #708090;',
     'overflow-x: visible;',
     'overflow-y: auto;',
     'position: absolute;',
@@ -466,7 +477,7 @@ Blockly.Css.CONTENT = [
   '}',
 
   '.blocklyTreeRow:not(.blocklyTreeSelected):hover {',
-    'background-color: #EEA21B;',
+    'background-color: #BBB;',
   '}',
 
   '.blocklyTreeSeparator {',

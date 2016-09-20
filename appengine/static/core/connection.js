@@ -278,7 +278,8 @@ Blockly.Connection.prototype.connect = function(otherConnection) {
     } else {
       // Child block does not change shape.  Rendering the parent node will
       // move its connected children into position.
-      parentBlock.render();
+      var parsChanged = childBlock.checkParentheses();
+      parentBlock.reType(!parsChanged);
     }
   }
 };
@@ -339,11 +340,9 @@ Blockly.Connection.prototype.disconnect = function() {
 
   //}
   if (childBlock.outputConnection) {
-    console.log("DISC " + parentBlock.type);
-    parentBlock.reType();
-    console.log("DISC " + childBlock.type);
-    childBlock.reType();
+    parentBlock.reType(true);
     childBlock.checkParentheses();
+    childBlock.reType(false);
   }
 
   var shadow = parentConnection.getShadowDom();
@@ -361,13 +360,13 @@ Blockly.Connection.prototype.disconnect = function() {
     blockShadow.initSvg();
     blockShadow.render(false);
   }
-  if (parentBlock.rendered) {
+  /*if (parentBlock.rendered) {
     parentBlock.render();
   }
   if (childBlock.rendered) {
     childBlock.updateDisabled();
     childBlock.render();
-  }
+  }*/
 };
 
 /**
@@ -710,7 +709,7 @@ Blockly.Connection.prototype.checkType_ = function(otherConnection) {
   if (this.type == Blockly.OUTPUT_VALUE &&
       otherConnection.type == Blockly.INPUT_VALUE) {
       console.log("CONNX Hole types for input number : ", inputNumber, ": ", holeTypes);
-      console.log("CONNX req var: ", requiresVariable);  
+      console.log("CONNX req var: ", requiresVariable);
       if (thisBlock.legalDrop(holeTypes, requiresVariable)) {
         console.log("CONN Legal drop for input number ", inputNumber);
         return true;

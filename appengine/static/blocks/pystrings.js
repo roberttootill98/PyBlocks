@@ -37,9 +37,6 @@ Blockly.Blocks['python_string_const'] = {
     this.setOutput(true);
     this.getField('VALUE').setChangeHandler(
         Blockly.FieldTextInput.stringValidator);
-      },
-      onchange: function(ev) {
-        this.setTooltip(this.getFieldValue("VALUE"));
       }
 };
 
@@ -107,6 +104,7 @@ Blockly.Blocks['python_string_index'] = {
         .appendField("[");
     this.appendDummyInput()
         .appendField("]");
+        this.setOperator(16);
     this.setInputsInline(true);
     this.setTypeVecs([
       ["str", "int", "str"],
@@ -135,6 +133,7 @@ Blockly.Blocks['python_string_slice12'] = {
         .appendField(":");
     this.appendDummyInput()
         .appendField("]");
+    this.setOperator(16);
     this.setInputsInline(true);
     this.setTypeVecs([
       ["str", "int", "int", "str"],

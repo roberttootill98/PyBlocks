@@ -73,14 +73,101 @@ b=b+"("+a+")";break;case "RANDOM":Blockly.Python.definitions_.import_random="imp
 Blockly.Python.math_constrain=function(a){var b=Blockly.Python.valueToCode(a,"VALUE",Blockly.Python.ORDER_NONE)||"0",c=Blockly.Python.valueToCode(a,"LOW",Blockly.Python.ORDER_NONE)||"0";a=Blockly.Python.valueToCode(a,"HIGH",Blockly.Python.ORDER_NONE)||"float('inf')";return["min(max("+b+", "+c+"), "+a+")",Blockly.Python.ORDER_FUNCTION_CALL]};
 Blockly.Python.math_random_int=function(a){Blockly.Python.definitions_.import_random="import random";var b=Blockly.Python.valueToCode(a,"FROM",Blockly.Python.ORDER_NONE)||"0";a=Blockly.Python.valueToCode(a,"TO",Blockly.Python.ORDER_NONE)||"0";return["random.randint("+b+", "+a+")",Blockly.Python.ORDER_FUNCTION_CALL]};Blockly.Python.math_random_float=function(a){Blockly.Python.definitions_.import_random="import random";return["random.random()",Blockly.Python.ORDER_FUNCTION_CALL]};
 
+var red =    '#FF3010'; // '#FF4500';
+var orange = '#ffaa00';
+var yellow = '#dfdf20';
+var green = '#00CC33' ;
+var cyan = '#40E0D0';
+var blue =  '#0080FF';
+var magenta = '#FF29FF';
+
+
 Blockly.Python.COLOUR = {};
 Blockly.Python.COLOUR['notype'] = '#8B7D6B';
-Blockly.Python.COLOUR['str'] = '#FF29FF';
-Blockly.Python.COLOUR['range'] = '#00CED1';   // '#40E0D0';
-Blockly.Python.COLOUR['int'] = '#FF8C00' ;
-Blockly.Python.COLOUR['float'] = '#0080FF';
-Blockly.Python.COLOUR['bool'] = '#00CC33';
-Blockly.Python.RAINBOW = ['str', 'int', 'float', 'bool', 'range', 'str'];
+Blockly.Python.COLOUR['str'] = red;
+// none = yellow
+Blockly.Python.COLOUR['int'] = green;
+Blockly.Python.COLOUR['range'] = orange;
+Blockly.Python.COLOUR['float'] = blue;
+Blockly.Python.COLOUR['bool'] = magenta;
+Blockly.Python.RAINBOW = [red, yellow, green, cyan, blue, magenta, red];
+
+
+// Temporary colours
+Blockly.Python.COLOUR['nonnegint'] = green;
+Blockly.Python.COLOUR['negint'] = green;
+
+Blockly.Python.SUBTYPES = {
+  'int': ['negint', 'nonnegint']
+};
+
+Blockly.Python.CENTRED_SUBTYPE_SYMBOLS = {
+  'nonnegint': '>=0'
+};
+
+Blockly.Python.PATTERNED_SUBTYPE_SYMBOLS = {
+  'negint': '-',
+};
+
+Blockly.Python.SUPERTYPES = {
+  'negint': 'int',
+  'nonnegint': 'int'
+};
+
+Blockly.Python.SUPTYPE_CHECK = {
+  'negint': function(block) {
+    if (block.type != 'python_int_const') {
+      return false;
+    }
+    var value = block.getFieldValue("VALUE");
+    return (Number(value) < 0);
+  },
+
+  'nonnegint': function(block) {
+    if (block.type == 'python_abs') {
+      return true;
+    }
+    if (block.type != 'python_int_const') {
+      return false;
+    }
+    var value = block.getFieldValue("VALUE");
+      return (Number(value) >= 0);
+  }
+};
+
+// deal with subtypes in a list of types
+Blockly.Python.mergeSubtypes = function(typeList) {
+
+  // if int is not here but both subtypes are, add int
+  var intIndex = typeList.indexOf('int');
+  if (intIndex == -1) {
+    var allSubtypes = true;
+    for (var subType in Blockly.Python.SUPERTYPES) {
+      if (typeList.indexOf(subType) == -1) {
+        allSubtypes = false;
+        break;
+      }
+    }
+    if (allSubtypes) {
+      console.log("MERGEST all subtypes so adding int");
+      typeList.push('int');
+    }
+  }
+
+  // if int (or *int) is here, remove the subtypes
+  var intIndex = typeList.indexOf('int');
+  if (intIndex != -1) {
+    for (var subType in Blockly.Python.SUPERTYPES) {
+      var pos = typeList.indexOf(subType);
+      if (pos != -1) {
+        console.log("MERGEST int present so removing " + subType);
+        typeList.splice(pos, 1);
+      }
+    }
+  }
+  console.log("MERGEST finished " + typeList);
+  return typeList;
+};
 
 Blockly.Python.NEW_VARS = [
     {name: "newIntVariable", type: 'int'},

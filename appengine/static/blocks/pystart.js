@@ -33,8 +33,7 @@ Blockly.Blocks['python_start'] = {
 
   init: function() {
     Blockly.BlockSvg.START_HAT = true;
-    // Josef -
-    this.appendDummyInput().appendField('   ').appendField(new Blockly.FieldImage('../../media/play_icon.png', 32, 32, '*'));
+    this.appendDummyInput().appendField(new Blockly.FieldImage('../../media/play_icon.png', 32, 32, '*'));
     this.setNextStatement(true);
     this.setTooltip('The start block is not a true Python block and is only\
     there to indicate which blocks will be executed when "Run full" is\
@@ -44,12 +43,17 @@ Blockly.Blocks['python_start'] = {
 
   customContextMenu: function(options) {
     var optionMath = {enabled: true};
-    optionMath.text = "Add/remove import math";
+    if (this.imports.indexOf('math') >= 0) {
+      optionMath.text = "Remove import math";
+    } else {
+      optionMath.text = "Add import math";
+    }
     optionMath.callback = Blockly.ContextMenu.modifyMathInputCallback(this);
-    var optionTurtle = {enabled: true};
-    optionTurtle.text = "Add/remove import turtle";
-    optionTurtle.callback = Blockly.ContextMenu.modifyTurtleInputCallback(this);
-    options.unshift(optionMath, optionTurtle);
+
+    // var optionTurtle = {enabled: true};
+    // optionTurtle.text = "Add/remove import turtle";
+    // optionTurtle.callback = Blockly.ContextMenu.modifyTurtleInputCallback(this);
+    options.unshift(optionMath);
   },
 
   mutationToDom: function() {

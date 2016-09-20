@@ -236,6 +236,22 @@
     <block type="python_numeric_max"></block>
     <block type="python_sum"></block>
   </category>
+  <category name="Math constants & functions">
+    <block type="python_math_ceil"></block>
+    <block type="python_math_floor"></block>
+    <block type="python_math_factorial"></block>
+    <block type="python_math_pow"></block>
+    <block type="python_math_sqrt"></block>
+    <block type="python_math_pi"></block>
+    <block type="python_math_e"></block>
+  </category>
+  <category name="Math logs & trigs">
+    <block type="python_math_log"></block>
+    <block type="python_math_log10"></block>
+    <block type="python_math_cos"></block>
+    <block type="python_math_sin"></block>
+    <block type="python_math_tan"></block>
+  </category>
   <sep gap="4"></sep>
   <category name="String values & operators">
     <block type="python_string_const"></block>
@@ -342,20 +358,7 @@
 </category>
 </category>
 <sep gap="4"></sep>
-<category name="Mathematical functions">
-  <block type="python_math_ceil"></block>
-  <block type="python_math_floor"></block>
-  <block type="python_math_factorial"></block>
-  <block type="python_math_log"></block>
-  <block type="python_math_log10"></block>
-  <block type="python_math_pow"></block>
-  <block type="python_math_sqrt"></block>
-  <block type="python_math_cos"></block>
-  <block type="python_math_sin"></block>
-  <block type="python_math_tan"></block>
-  <block type="python_math_pi"></block>
-  <block type="python_math_e"></block>
-</category>
+
 <!-- <category name="Theoretic & respresentation functions">
 <block type="python_math_ceil"></block>
 <block type="python_math_copysign"></block>
@@ -472,8 +475,10 @@ var workspace = Blockly.inject(blocklyDiv,
   // Blockly.Python.workspaceToCode(workspace);
   checkWorkspace();
 
-  goog.events.listen(document.getElementById('blocklyDiv'),
-  'dblclick', function() { runeval(Blockly.selected); });
+
+    goog.events.listen(document.getElementById('blocklyDiv'),
+    'dblclick', function() { if (Blockly.selected != null && Blockly.selected.type != 'python_start') {runeval(Blockly.selected)} });
+
 
   function popupwindow(url, title, win, w, h) {
     var y = window.top.outerHeight / 2 + window.top.screenY - ( h / 2)

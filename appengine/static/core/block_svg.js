@@ -116,7 +116,7 @@ Blockly.BlockSvg.prototype.initSvg = function() {
   if (this.mutator) {
     this.mutator.createIcon();
   }
-  this.updateColour();
+  //this.updateColour();
   this.updateMovable();
   if (!this.workspace.options.readOnly && !this.eventsInit_) {
     Blockly.bindEvent_(this.getSvgRoot(), 'mousedown', this,
@@ -233,7 +233,9 @@ Blockly.BlockSvg.terminateDrag_ = function() {
       selected.moveConnections_(dxy.x, dxy.y);
       delete selected.draggedBubbles_;
       selected.setDragging_(false);
-      selected.render();
+      //  console.log("RENTEST - terminateDrag calls renders");
+//    selected.render();  ---- why is this here?
+  //selected.updateColour();
       goog.Timer.callOnce(
           selected.snapToGrid, Blockly.BUMP_DELAY / 2, selected);
       goog.Timer.callOnce(
@@ -556,11 +558,11 @@ Blockly.BlockSvg.prototype.onMouseUp_ = function(e) {
               previousBlock = previousConnection.targetBlock();
           }
       }
-      else { // this is an expression
-        //console.log("DROPPED INTO INPUT ", this_.outputConnection.targetConnection.inputNumber_);
-        this_.checkParentheses();
-        this_.reType();
-      }
+      //  else { // this is an expression
+      //    console.log("DROPPED INTO INPUT ", this_.outputConnection.targetConnection.inputNumber_);
+      //    this_.checkParentheses();
+      //    this_.reType(true);
+      //  }
 
       if (this_.rendered) {
         // Trigger a connection animation.
@@ -597,19 +599,20 @@ Blockly.BlockSvg.prototype.onMouseUp_ = function(e) {
   });
 };
 
-Blockly.Block.prototype.reType = function() {
+Blockly.Block.prototype.reType = function(opt_render) {
+  console.log("RENTEST - Entering retype on ", this.type);
   if (!this.workspace) {
     // don't bother if not on workspace
     return;
   }
   var topLevel = this.getTopLevel();
-  console.log("RETYPE, top level: ", topLevel.type);
+  console.log("RENTEST - toplevel type is ", topLevel.type);
   topLevel.restoreFullTypes();
-  console.log("UCOL 1: ", topLevel.typeVecs);
   topLevel.unifyUp();
-  console.log("UCOL 2: ", topLevel.typeVecs);
   topLevel.unifyDown();
-  console.log("UCOL 3: ", topLevel.typeVecs);
+  if (opt_render) {
+  this.renderNoColour();
+}
   topLevel.updateColourDown();
 };
 
@@ -995,7 +998,7 @@ Blockly.BlockSvg.SEP_SPACE_X = 0; // MJP
  * Horizontal space for empty slots
  * @const
  */
-Blockly.BlockSvg.SLOT_WIDTH = 50; // MJP
+Blockly.BlockSvg.SLOT_WIDTH = 54; // MJP
 /**
  * Horizontal space for empty wide slots
  * @const
@@ -1044,13 +1047,13 @@ Blockly.BlockSvg.MIN_BLOCK_Y = 24;
 * Height of type indicator.
 * @const
 */
-Blockly.BlockSvg.INDICATOR_HEIGHT = 15;
+Blockly.BlockSvg.INDICATOR_HEIGHT = 18;
 
 /**
 * Width of type indicator.
 * @const
 */
-Blockly.BlockSvg.INDICATOR_WIDTH = 30;
+Blockly.BlockSvg.INDICATOR_WIDTH = 36;
 
 /**
 * Gap underneath type indicator.
@@ -1509,6 +1512,8 @@ Blockly.BlockSvg.prototype.updateColourDown = function() {
  * Change the colour of a block.
  */
 Blockly.BlockSvg.prototype.updateColour = function() {
+  console.log("RENTEST - Entering updateColour on ", this.type);
+  console.log("RENTEST - this.indicators ", this.indicators);
   if (this.disabled) {
     // Disabled blocks don't have colour.
     return;
@@ -1523,6 +1528,8 @@ Blockly.BlockSvg.prototype.updateColour = function() {
     if (this.outputsAList()) {
       this.svgBlockPath_.setAttribute('fill', "white");
       var listTypes = this.getOutputTypesByKind().list;
+      listTypes = Blockly.Python.mergeSubtypes(listTypes);
+      console.log("MERGED for ", this.type, " is", listTypes);
       if (listTypes[0] == "any" || listTypes[0] == "matching") {
         fillText = 'url(#' + this.workspace.options.anyTypePatternLargeId + ')';
       }
@@ -1533,7 +1540,6 @@ Blockly.BlockSvg.prototype.updateColour = function() {
         listTypes.sort();
         var typeString = listTypes.join('');
         var fillUrl = this.workspace.options[typeString + 'TypePatternLargeId'];
-        console.log("FILLNUMTEXT1 " + typeString);
         fillText = 'url(#' + fillUrl  + ')';
       }
       for (var i=0; i<3; i++) {
@@ -1542,18 +1548,20 @@ Blockly.BlockSvg.prototype.updateColour = function() {
     }
     else {
       var outputTypes = this.getOutputTypesByKind().basic;
+      outputTypes = Blockly.Python.mergeSubtypes(outputTypes);
+
+      console.log("MERGED for ", this.type, " is", outputTypes);
       if (outputTypes[0] == "any" || outputTypes[0] == "matching") {
         fillText = 'url(#' + this.workspace.options.anyTypePatternLargeId + ')';
       }
-      else if (outputTypes.length == 2) { // should be list of int/float
+      else if (outputTypes.length == 1) { // should be list of int/float
+        fillText = Blockly.Python.COLOUR[outputTypes[0]];
+      } else {
         outputTypes.sort();
         var typeString = outputTypes.join('');
         var fillUrl = this.workspace.options[typeString + 'TypePatternLargeId'];
         console.log("FILLNUMTEXT1 " + typeString);
         fillText = 'url(#' + fillUrl  + ')';
-      }
-      else { // should be just one type
-        fillText = Blockly.Python.COLOUR[outputTypes[0]];
       }
       this.svgBlockPath_.setAttribute('fill', fillText);
     }
@@ -1570,28 +1578,34 @@ Blockly.BlockSvg.prototype.updateColour = function() {
     var indicatorPair = this.indicators[emptySlotNumber];
     if (indicatorPair.basic) {
       var basicTypes = this.getInputTypesByKind(emptySlotNumber).basic;
-      console.log("UCOL position ", emptySlotNumber, basicTypes);
+      basicTypes = Blockly.Python.mergeSubtypes(basicTypes);
+
+      for (var type in indicatorPair.subtypeLabels) {
+        if (basicTypes.length == 1 && basicTypes[0] == type) {
+          indicatorPair.subtypeLabels[type].setAttribute("display", "inline");
+        }
+        else {
+          indicatorPair.subtypeLabels[type].setAttribute("display", "none");
+        }
+      }
+
       if (basicTypes[0] == "any" || basicTypes[0] == "matching") {
         fillText = 'url(#' + this.workspace.options.anyTypePatternSmallId + ')';
       }
-      else if (basicTypes.length == 2) {
+      else if (basicTypes.length == 1) {
+      fillText = Blockly.Python.COLOUR[basicTypes[0]];
+      }
+      else {
         basicTypes.sort();
         var typeString = basicTypes.join('');
         var fillUrl = this.workspace.options[typeString + 'TypePatternSmallId'];
-        console.log("FILLNUMTEXT1 " + typeString);
         fillText = 'url(#' + fillUrl  + ')';
-        console.log("FILLNUMTEXT2 " + fillText);
-      }
-      else if (basicTypes.length == 3) {
-        fillText = 'url(#' + this.workspace.options.floatintstrTypePatternSmallId + ')';
-      }
-      else {
-        fillText = Blockly.Python.COLOUR[basicTypes[0]];
       }
       indicatorPair.basic.setAttribute('fill', fillText);
     }
     if (indicatorPair.list) {
      var pListTypes = this.getInputTypesByKind(emptySlotNumber).list;
+     pListTypes = Blockly.Python.mergeSubtypes(pListTypes);
      if (pListTypes[0] == "any" || pListTypes[0] == "matching") {
        fillText = 'url(#' + this.workspace.options.anyTypePatternSmallId + ')';
      }
@@ -1605,10 +1619,11 @@ Blockly.BlockSvg.prototype.updateColour = function() {
        // should be just one type
       fillText = Blockly.Python.COLOUR[pListTypes[0]];
      }
-     for (var j=1; j<4; j++) {
-       var rect = indicatorPair.list[j];
+     // ========================
+     // for (var j=1; j<4; j++) {
+        var rect = indicatorPair.list[0];
        rect.setAttribute('fill', fillText);
-     }
+     //}
    }
  }
 
@@ -1854,13 +1869,19 @@ Blockly.BlockSvg.prototype.removeDragging = function() {
                        'blocklyDragging');
 };
 
+Blockly.BlockSvg.prototype.render = function(opt_bubble) {
+  this.renderNoColour(opt_bubble);
+  this.updateColour();
+};
+
 /**
  * Render the block.
  * Lays out and reflows a block based on its contents and settings.
  * @param {boolean=} opt_bubble If false, just render this block.
  *   If true, also render block's parent, grandparent, etc.  Defaults to true.
  */
-Blockly.BlockSvg.prototype.render = function(opt_bubble) {
+ Blockly.BlockSvg.prototype.renderNoColour = function(opt_bubble) {
+   console.log("RENTEST - Entering renderNoColour on ", this.type);
   Blockly.Field.startCache();
   this.rendered = true;
 
@@ -1875,19 +1896,20 @@ Blockly.BlockSvg.prototype.render = function(opt_bubble) {
   // width that the first label needs to move over by.
 
   // MJP HACK TO GET COLOURS RIGHT
-  this.reType();
+  //this.reType();
 
   var inputRows = this.renderCompute_(cursorX);
   this.renderDraw_(cursorX, inputRows);
 
   // MJP HACK TO GET COLOURS RIGHT
-  this.updateColour();
+  //this.updateColour();
 
   if (opt_bubble !== false) {
+
     // Render all blocks above this one (propagate a reflow).
     var parentBlock = this.getParent();
     if (parentBlock) {
-      parentBlock.render(true);
+      parentBlock.renderNoColour(true);
     } else {
       // Top-most block.  Fire an event to allow scrollbars to resize.
       Blockly.fireUiEvent(window, 'resize');
@@ -2221,18 +2243,24 @@ Blockly.BlockSvg.prototype.renderDraw_ = function(iconWidth, inputRows) {
          this.svgIndicatorGroup.appendChild(ind);
       }
     }
+    if (indicatorPair.subtypeLabels) {
+  for (var type in indicatorPair.subtypeLabels) {
+    console.log("SUBTYPE adding to group" + indicatorPair.subtypeLabels[type]);
+     this.svgIndicatorGroup.appendChild(indicatorPair.subtypeLabels[type]);
   }
-
+}
+  }
+  // =================
   if (this.outputConnection && this.outputsAList()) {
-    var tempListRectWidth = 0.24 * (this.width - 1);
+    var tempListRectWidth = 0.28 * (this.width - 1);
     var tempListGapWidth = (this.width - 1 - tempListRectWidth * 3) / 2;
     for (var i=0; i<3; i++) {
-      this.svgListRects[i].setAttribute('x',0);
+      this.svgListRects[i].setAttribute('x', (0.5 + i * (tempListRectWidth + tempListGapWidth)).toString());
       this.svgListRects[i].setAttribute('y', 0.5);
       this.svgListRects[i].setAttribute('width', tempListRectWidth);
       this.svgListRects[i].setAttribute('height', this.height-1);
-      this.svgListRects[i].setAttribute('transform', 'translate('+
-         (0.5 + i * (tempListRectWidth + tempListGapWidth)).toString() + ',0)');
+      // this.svgListRects[i].setAttribute('transform', 'translate('+
+      //    (0.5 + i * (tempListRectWidth + tempListGapWidth)).toString() + ',0)');
     }
   }
 };
@@ -2280,6 +2308,15 @@ Blockly.BlockSvg.prototype.renderDrawTop_ =
   this.width = rightEdge;
 };
 
+Blockly.BlockSvg.addIndicatorLabel = function(x, y, label) {
+  var text = Blockly.createSvgElement('text', {});
+  text.setAttribute('class', 'blocklyIndicatorText');
+  text.setAttribute('x', x + Blockly.BlockSvg.INDICATOR_WIDTH / 2);
+  text.setAttribute('y', y + Blockly.BlockSvg.INDICATOR_HEIGHT - 3);
+  text.appendChild(document.createTextNode(label));
+  return text;
+};
+
 /**
  * Render the right edge of the block.
  * @param {!Array.<string>} steps Path of block outline.
@@ -2294,15 +2331,6 @@ Blockly.BlockSvg.prototype.renderDrawTop_ =
  */
 Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, holeSteps,
     indicatorSteps, connectionsXY, inputRows, iconWidth) {
-
-  var addVarIndicator = function(x, y) {
-    var text = Blockly.createSvgElement('text', {});
-    text.setAttribute('class', 'blocklyIndicatorText');
-    text.setAttribute('x', x + Blockly.BlockSvg.INDICATOR_WIDTH / 2);
-    text.setAttribute('y', y + Blockly.BlockSvg.INDICATOR_HEIGHT - 3);
-    text.appendChild(document.createTextNode("var"));
-    return text;
-  };
 
   var cursorX;
   var cursorY = 0;
@@ -2404,7 +2432,8 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, holeSteps,
             var indicatorPair = {
               'basic': null,
               'list': null,
-              'varInd': []
+              'varInd': [],
+              'subtypeLabels': {},
             };
             // Draw basic type indicator
 
@@ -2427,9 +2456,24 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, holeSteps,
               indicatorPair.basic = indicator;
 
               if (slotNumber === 0 && this.lhsVarOnly) {
-                  var varInd = addVarIndicator(indicatorX, indicatorY);
+                  var varInd = Blockly.BlockSvg.addIndicatorLabel(indicatorX, indicatorY, "var");
                   indicatorPair.varInd.push(varInd);
               }
+              var types = this.getInputTypes(slotNumber);
+              console.log("SUBTYPE checking " + JSON.stringify(types));
+              for (var subtype in Blockly.Python.CENTRED_SUBTYPE_SYMBOLS) {
+                if (goog.array.contains(types, subtype)) {
+                  console.log("SUBTYPE found", subtype);
+                  var subtypeLabel =
+                    Blockly.BlockSvg.addIndicatorLabel(indicatorX, indicatorY,
+                       Blockly.Python.CENTRED_SUBTYPE_SYMBOLS[subtype]);
+                       console.log("SUBTYPE symbol added", Blockly.Python.CENTRED_SUBTYPE_SYMBOLS[subtype]);
+
+                  subtypeLabel.setAttribute("display", "none");
+                  indicatorPair.subtypeLabels[subtype] = subtypeLabel;
+                }
+              }
+
               indicatorX += Blockly.BlockSvg.INDICATOR_WIDTH +
                   Blockly.BlockSvg.INDICATOR_GAP_X;
             }
@@ -2437,31 +2481,33 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, holeSteps,
             // draw list type indicator
             if (params.list) {
               var background = createBasicIndicator(indicatorX, indicatorY);
-              background.setAttribute('fill', 'white');
+              //background.setAttribute('fill', 'white');
               indicatorPair.list = [background];
               //var group = Blockly.createSvgElement('g',{});
-              var tempListRectWidth = 0.24 *
+              var tempListRectWidth = 0.30 *
                   (Blockly.BlockSvg.INDICATOR_WIDTH);
               var tempListGapWidth = (Blockly.BlockSvg.INDICATOR_WIDTH -
                   tempListRectWidth * 3) / 2;
-              for (var i=0; i<3; i++) {
+              for (var i=0; i<2; i++) {
                 var stripe = Blockly.createSvgElement('rect',{},
                   this.svgGroup_);
                   //this.indicatorGroup);
                 //stripe.setAttribute('x', i * (tempListRectWidth + tempListGapWidth));
-                stripe.setAttribute('x', 0);
-                stripe.setAttribute('y', 0);
-                stripe.setAttribute('width', tempListRectWidth);
+                stripe.setAttribute('x', (indicatorX + tempListRectWidth + i *
+  (tempListRectWidth + tempListGapWidth)));
+                stripe.setAttribute('y', indicatorY);
+                stripe.setAttribute('width', tempListGapWidth);
                 stripe.setAttribute('height', Blockly.BlockSvg.INDICATOR_HEIGHT);
-                stripe.setAttribute('transform', 'translate('+
-                    (indicatorX + i * (tempListRectWidth + tempListGapWidth))
-                       + ', '  + indicatorY + ')');
+                stripe.setAttribute("fill", "white");
+                // stripe.setAttribute('transform', 'translate('+
+                //     (indicatorX + i * (tempListRectWidth + tempListGapWidth))
+                //        + ', '  + indicatorY + ')');
                 //stripe.setAttribute('transform', 'translate('+
                 //    (0.5 + indicatorX) + ', '  + indicatorY + ')');
                 indicatorPair.list.push(stripe);
               }
               if (slotNumber === 0 && this.lhsVarOnly) {
-                  var varInd = addVarIndicator(indicatorX, indicatorY);
+                  var varInd = Blockly.BlockSvg.addIndicatorLabel(indicatorX, indicatorY, "var");
                   indicatorPair.varInd.push(varInd);
               }
               //indicatorPair.list = ;
@@ -2673,6 +2719,7 @@ Blockly.BlockSvg.prototype.renderDrawLeft_ =
   steps.push('z');
 };
 
+// returns true if parameters added or deleted
 Blockly.Block.prototype.checkParentheses = function() {
   var operator = this.operator;
   if (operator) {
@@ -2700,14 +2747,26 @@ Blockly.Block.prototype.checkParentheses = function() {
           return;
         }
       }
+      // highest precedence operators don't have LPAR and RPAR fields
+      var lpar = this.getField("LPAR");
+      var rpar = this.getField("RPAR");
       // add parentheses
-      this.setFieldValue("(", "LPAR");
-      this.setFieldValue(")", "RPAR");
+      // add parentheses if not present
+      if (lpar && lpar.getValue() == "") {
+        lpar.setValue("(");
+        rpar.setValue(")");
+        return true;
+      }
     }
     else {
-      // remove parentheses which may or may not be present
-      this.setFieldValue("", "LPAR");
-      this.setFieldValue("", "RPAR");
+      // remove parentheses if present
+      var lpar = this.getField("LPAR");
+      var rpar = this.getField("RPAR");
+      if (lpar && lpar.getValue() == "(") {
+        lpar.setValue("");
+        rpar.setValue("");
+        return true;
+      }
     }
   }
 };

@@ -878,6 +878,9 @@ Blockly.Block.prototype.restoreFullTypes = function() {
   this.typeVecs = Array(this.fullTypeVecs.length);
   for (var i=0; i<this.fullTypeVecs.length; i++) {
     this.typeVecs[i] = this.fullTypeVecs[i].slice(0);
+    if (this.restrictTypes) {
+      this.restrictTypes();
+}
   }
   for (var i=0, child; child=this.childBlocks_[i]; i++) {
     if (child.outputConnection) {
@@ -1556,8 +1559,23 @@ Blockly.Block.prototype.legalDrop = function(holeTypes, requiresVariable) {
   }
   for (var i=0; i<outputTypes.length; i++) {
     var elem = outputTypes[i];
-    if (holeTypes.indexOf(elem) != -1) {
-       return true;
+    console.log("SUBTC holetypes " + holeTypes);
+  for (var j=0; j < holeTypes.length; j++) {
+    var holeType = holeTypes[j];
+    console.log("SUBTC Checking block type " + elem + " against hole " + holeType);
+    if (holeType == elem)  {
+      return true;
+    }
+  //  if () {
+  //    return true;
+  //  }
+  //  if (Blockly.Python.SUPERTYPES[holeType] == elem) {
+  //    console.log("SUBTC checking its a subtype");
+  //    if (Blockly.Python.SUPTYPE_CHECK[holeType](this)) {
+  //      return true;
+  //    }
+      console.log("SUBTC its not!");
+  //  }
     }
   }
   return false;

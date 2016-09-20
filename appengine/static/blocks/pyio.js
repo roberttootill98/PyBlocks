@@ -219,6 +219,7 @@ Blockly.Blocks['python_format'] = {
       ["str", "float", "str"],
       ["str", "str", "str"]
     ]);
+    this.setOperator(16);
     this.setOutput(true);
     this.parameterCount = 1;
   },

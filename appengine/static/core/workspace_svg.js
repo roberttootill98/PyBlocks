@@ -290,8 +290,16 @@ Blockly.WorkspaceSvg.prototype.addFlyout_ = function() {
     intstrTypePatternSmallId: this.options.intstrTypePatternSmallId,
     intstrTypePatternLargeId: this.options.intstrTypePatternLargeId,
     floatintstrTypePatternSmallId: this.options.floatintstrTypePatternSmallId,
+    floatintstrTypePatternLargeId: this.options.floatintstrTypePatternLargeId,
+    rangestrTypePatternLargeId: this.options.rangestrTypePatternLargeId,
     rangestrTypePatternSmallId: this.options.rangestrTypePatternSmallId,
     floatintTypePatternLargeId: this.options.floatintTypePatternLargeId,
+
+   //temporary
+   floatnegintTypePatternSmallId: this.options.floatnegintTypePatternSmallId,
+   floatnonnegintTypePatternSmallId: this.options.floatnonnegintTypePatternSmallId,
+
+
     //  anyTypeGradientId: this.options.anyTypeGradientId,
     //  numericalTypeGradient2Id: this.options.numericalTypeGradient2Id,
       //numericalTypeGradientId: this.options.numericalTypeGradientId,

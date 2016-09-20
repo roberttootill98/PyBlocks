@@ -327,9 +327,13 @@ Blockly.Xml.domToBlock = function(workspace, xmlBlock, opt_reuseBlock) {
     // Render each block.
     for (var i = blocks.length - 1; i >= 0; i--) {
       blocks[i].initSvg();
+      //blocks[i].updateColour();
+
     }
     for (var i = blocks.length - 1; i >= 0; i--) {
+      //blocks[i].reType();
       blocks[i].render(false);
+      //blocks[i].updateColour();
     }
     // Populating the connection database may be defered until after the blocks
     // have renderend.

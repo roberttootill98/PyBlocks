@@ -8,7 +8,7 @@ var canRetainGlobals = true;
 
 function outf(text) {
   var mypre = document.getElementById("output");
-  mypre.innerHTML = mypre.innerHTML + '>>> ' + text;
+  mypre.innerHTML = mypre.innerHTML + '>> ' + text;
 }
 
 function outfhidden(text) {

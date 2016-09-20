@@ -85,6 +85,13 @@ Blockly.FieldTextInput.prototype.setText = function(text) {
   }
   if (this.sourceBlock_ && this.changeHandler_) {
     var validated = this.changeHandler_(text);
+
+    // Additional checking for PyBlocks values
+    if (this.sourceBlock_.checkValue) {
+       if(!this.sourceBlock_.checkValue(validated)) {
+         return;
+       }
+    }
     // If the new text is invalid, validation returns null.
     // In this case we still want to display the illegal result.
     if (validated !== null && validated !== undefined) {

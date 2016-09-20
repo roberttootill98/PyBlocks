@@ -36,7 +36,6 @@ Blockly.Blocks['python_true'] = {
       ["bool"]
     ]);
     this.setOutput(true);
-    this.setTooltip('Returns the boolean value True');
   }
 };
 
@@ -48,7 +47,6 @@ Blockly.Blocks['python_false'] = {
       ["bool"]
     ]);
     this.setOutput(true);
-    this.setTooltip('Returns the boolean value False');
   }
 };
 
