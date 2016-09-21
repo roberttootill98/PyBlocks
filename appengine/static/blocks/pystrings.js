@@ -104,7 +104,7 @@ Blockly.Blocks['python_string_index'] = {
         .appendField("[");
     this.appendDummyInput()
         .appendField("]");
-        this.setOperator(16);
+    this.setOperator(16);
     this.setInputsInline(true);
     this.setTypeVecs([
       ["str", "int", "str"],
@@ -163,6 +163,7 @@ Blockly.Blocks['python_string_slice1'] = {
         .appendField(":");
     this.appendDummyInput()
         .appendField("]");
+    this.setOperator(16);
     this.setInputsInline(true);
     this.setTypeVecs([
       ["str", "int", "str"],
@@ -191,6 +192,7 @@ Blockly.Blocks['python_string_slice2'] = {
         .appendField(":");
     this.appendDummyInput()
         .appendField("]");
+    this.setOperator(16);
     this.setInputsInline(true);
     this.setTypeVecs([
       ["str", "int", "str"],
@@ -269,6 +271,7 @@ Blockly.Blocks['python_isdigit'] = {
     this.appendValueInput("ARG");
     this.appendDummyInput()
         .appendField(".isdigit()");
+    this.setOperator(16);
     this.setInputsInline(true);
     this.setTypeVecs([
       ["str", "bool"]
@@ -292,6 +295,7 @@ Blockly.Blocks['python_isalpha'] = {
     this.appendValueInput("ARG");
     this.appendDummyInput()
         .appendField(".isalpha()");
+    this.setOperator(16);
     this.setInputsInline(true);
     this.setTypeVecs([
       ["str", "bool"]
@@ -316,6 +320,7 @@ Blockly.Blocks['python_isspace'] = {
     this.appendValueInput("ARG");
     this.appendDummyInput()
         .appendField(".isspace()");
+    this.setOperator(16);
     this.setInputsInline(true);
     this.setTypeVecs([
       ["str", "bool"]
@@ -339,6 +344,7 @@ Blockly.Blocks['python_lower'] = {
     this.appendValueInput("ARG");
     this.appendDummyInput()
         .appendField(".lower()");
+    this.setOperator(16);
     this.setInputsInline(true);
     this.setTypeVecs([
       ["str", "str"]
@@ -362,6 +368,7 @@ Blockly.Blocks['python_upper'] = {
     this.appendValueInput("ARG");
     this.appendDummyInput()
         .appendField(".upper()");
+    this.setOperator(16);
     this.setInputsInline(true);
     this.setTypeVecs([
       ["str", "str"]
@@ -387,6 +394,7 @@ Blockly.Blocks['python_find'] = {
         .appendField(".find(");
     this.appendDummyInput()
         .appendField(")");
+    this.setOperator(16);
     this.setInputsInline(true);
     this.setTypeVecs([
       ["str", "str", "int"]
@@ -414,6 +422,7 @@ Blockly.Blocks['python_index_method'] = {
         .appendField(".index(");
     this.appendDummyInput()
         .appendField(")");
+    this.setOperator(16);
     this.setInputsInline(true);
     this.setTypeVecs([
       ["str", "str", "int"]
@@ -441,6 +450,7 @@ Blockly.Blocks['python_string_count'] = {
         .appendField(".count(");
     this.appendDummyInput()
         .appendField(")");
+    this.setOperator(16);
     this.setInputsInline(true);
     this.setTypeVecs([
       ["str", "str", "int"]
@@ -467,6 +477,7 @@ Blockly.Blocks['python_split'] = {
         .appendField(".split(");
     this.appendDummyInput("CLOSE")
         .appendField(")");
+    this.setOperator(16);
     this.setInputsInline(true);
     this.setTypeVecs([
       ["str", "*str"]
