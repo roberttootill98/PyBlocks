@@ -46,18 +46,17 @@ function normaliseDate(i) {
 }
 
 function initInterpreter() {
-  var d = new Date();
-  var year = d.getFullYear();
-  var month = normaliseDate(d.getMonth());
-  var day = normaliseDate(d.getDate());
-  var hour = d.getHours();
-  var minute = normaliseDate(d.getMinutes());
-  var second = normaliseDate(d.getSeconds());
+  // var d = new Date();
+  // var year = d.getFullYear();
+  // var month = normaliseDate(d.getMonth());
+  // var day = normaliseDate(d.getDate());
+  // var hour = d.getHours();
+  // var minute = normaliseDate(d.getMinutes());
+  // var second = normaliseDate(d.getSeconds());
 
 
   var interpreter = document.getElementById("output");
-  initVal = 'PythonBlocks | Python 3 Interpreter (' + day + '/' + month + '/'
-  + year + ', ' + hour + ':' + minute + ':' + second + ')\n\n';
+  initVal = 'PythonBlocks - Python 3 Interpreter\n\n';
   interpreter.innerHTML = initVal;
   if (interpreter.innerHTML == initVal) {
     return true;
@@ -198,9 +197,13 @@ function copyToClipboard() {
 
 }
 
-function clr() {
+function restart() {
   canRetainGlobals = false;
   workspace.vars = '';
+  initInterpreter();
+}
+
+function clr() {
   initInterpreter();
 }
 

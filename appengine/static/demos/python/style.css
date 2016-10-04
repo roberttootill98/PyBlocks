@@ -32,6 +32,22 @@ table {
   table-layout: auto;
 }
 
+table#type {
+  font-family: sans-serif;
+  font-size: 16px;
+  text-shadow: 1px 0px 2px rgba(150, 150, 150, 1);
+  color: white;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+  text-align: center;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  cursor: default;
+}
+
 #blocklyArea {
   height: 100%;
 }
@@ -46,10 +62,10 @@ table {
   cursor: default;
 }
 
-.interpreterdiv {
+/*.interpreterdiv {
   display: inline-block;
   position: relative;
-}
+}*/
 
 #helpbuttonsdiv {
   position: fixed;
@@ -117,7 +133,7 @@ table {
   overflow: hidden;
   resize: none;
   transition: all 0.3s ease;
-  width: 40em;
+  width: 99%;
   height: 2em;
   opacity: 0.48;
   text-align: center;
@@ -137,7 +153,6 @@ table {
   font-size: 18px;
   opacity:0.95;
   text-align: left;
-  width: 99%;
   overflow-y: visible;
   z-index: 1;
 }
@@ -177,31 +192,39 @@ table {
   outline:0 !important;
 }
 
-.fancybuttons#run{
+.fancybuttons#run {
   background: #efefef url('../../media/play_icon.png') no-repeat right;
   padding-right: 28px;
 }
 
-.fancybuttons#clear{
+.fancybuttons#clear {
   /*float: top;*/
   position: absolute;
   bottom: 15px;
-  right: 50px;
+  right: 88px;
   z-index: 2;
 }
 
-.right{
+.fancybuttons#restart {
+  /*float: top;*/
+  position: absolute;
+  bottom: 15px;
+  right: 20px;
+  z-index: 2;
+}
+
+.right {
   float:right;
   margin-right: 16px;
   margin-top: 5px;
 }
 
-.left{
+.left {
   float:left;
   margin-left: 16px;
 }
 
-.top{
+.top {
   float:top;
   vertical-align:top;
   margin-top: 16px;

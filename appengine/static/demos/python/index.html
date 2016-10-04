@@ -60,6 +60,7 @@
           <button type="button" class="fancybuttons" onclick="reset()">Reset</button>
           <button type="button" class="fancybuttons">Sample programs</button>
           <button type="button" class="fancybuttons" onclick="popupwindow('help.html', 'PythonBlocks Help', 'window', '835', '565')">Help</button>
+          <button type="button" class="fancybuttons" onclick="popupwindow('about.html', 'About', 'window', '400', 300)">About</button>
         </span>
       </td>
     </tr>
@@ -69,16 +70,47 @@
       </td>
     </tr>
     <tr>
-      <td style="vertical-align:top;text-align:center">
-        <div id="interpreterdiv">
+      <td>
+
+      <table>
+        <td>
+          <table id="type">
+            <tr>
+              <td bgcolor="#00CC33">
+                Integer
+              </td>
+              <td bgcolor="#0080FF">
+                Float
+              </td>
+              <td bgcolor="#FF3010">
+                String
+              </td>
+            </tr>
+            <tr>
+              <td bgcolor="#FF29FF">
+                Boolean
+              </td>
+              <td bgcolor="#ffaa00">
+                Range
+              </td>
+              <td bgcolor="#8B7D6B">
+                Statement
+              </td>
+            </tr>
+          </table>
+
+        </td>
+        <td rowspan="2">
           <textarea id="output" class="codearea" rows="15" cols="75" readonly="true"></textarea>
-          <button id="clear"type="button" class="fancybuttons"  onclick="clr()">Clear</button>
-        </div>
+          <button id="clear" type="button" class="fancybuttons"  onclick="clr()">Clear</button>
+          <button id="restart" type="button" class="fancybuttons" onclick="restart()">Restart</button>
         <div id="mycanvas"></div>
         <textarea id="hiddenoutput" cols="20" rows="7" hidden="true"></textarea>
         <textarea id="hiddenoutput2" cols="20" rows="7" hidden="true"></textarea>
         <textarea id="pycode" class="codearea" rows="12" cols="100" readonly="true" hidden="true"></textarea>
       </td>
+      </table>
+    </td>
     </tr>
   </table>
 
@@ -465,7 +497,7 @@ var workspace = Blockly.inject(blocklyDiv,
   if ('BlocklyStorage' in window && window.location.hash.length > 1) {
     BlocklyStorage.retrieveXml(window.location.hash.substring(1));
   } else {
-    var xml = '<xml><block id="startBlock" type="python_start" deletable="false" movable="false" x="0" y="0"></block></xml>';
+    var xml = '<xml><block id="startBlock" type="python_start" deletable="false" movable="false" x="5" y="25"></block></xml>';
     Blockly.Xml.domToWorkspace(workspace, Blockly.Xml.textToDom(xml));
   }
 
@@ -477,7 +509,7 @@ var workspace = Blockly.inject(blocklyDiv,
 
 
     goog.events.listen(document.getElementById('blocklyDiv'),
-    'dblclick', function() { if (Blockly.selected != null && Blockly.selected.type != 'python_start') {runeval(Blockly.selected)} });
+    'dblclick', function() { if (Blockly.selected != null && Blockly.selected.type != 'python_start') { runeval(Blockly.selected) } });
 
 
   function popupwindow(url, title, win, w, h) {
