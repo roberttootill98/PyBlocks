@@ -50,9 +50,16 @@ Blockly.Blocks['python_start'] = {
     }
     optionMath.callback = Blockly.ContextMenu.modifyMathInputCallback(this);
 
-    // var optionTurtle = {enabled: true};
-    // optionTurtle.text = "Add/remove import turtle";
-    // optionTurtle.callback = Blockly.ContextMenu.modifyTurtleInputCallback(this);
+    var optionTurtle = {enabled: true};
+    if (this.imports.indexOf('turtle') >= 0) {
+      optionTurtle.text = "Remove import turtle";
+    } else {
+      optionTurtle.text = "Add import turtle";
+    }
+
+    optionTurtle.callback = Blockly.ContextMenu.modifyTurtleInputCallback(this);
+
+    options.unshift(optionTurtle);
     options.unshift(optionMath);
   },
 
@@ -78,16 +85,24 @@ Blockly.Blocks['python_start'] = {
       this.appendDummyInput(importName)
           .appendField('import ' + importName);
 
-      if (this.imports.indexOf('math') > -1) {
-        workspace.updateToolbox(document.getElementById('toolboxmaths'));
+      if (this.imports.indexOf('math') > -1 && this.imports.indexOf('turtle') > -1) {
+        workspace.updateToolbox(document.getElementById('toolboxmathturtle'));
+      } else if (this.imports.indexOf('math') > -1) {
+        workspace.updateToolbox(document.getElementById('toolboxmath'));
+      } else if (this.imports.indexOf('turtle') > -1) {
+        workspace.updateToolbox(document.getElementById('toolboxturtle'));
       }
 
     } else {
       this.removeInput(importName);
       this.imports.splice(this.imports.indexOf(importName), 1);
 
-      if (this.imports.indexOf('math') == -1) {
+      if (this.imports.indexOf('math') == -1 && this.imports.indexOf('turtle') == -1) {
         workspace.updateToolbox(document.getElementById('toolbox'));
+      } else if (this.imports.indexOf('math') > -1) {
+        workspace.updateToolbox(document.getElementById('toolboxmath'));
+      } else if (this.imports.indexOf('turtle') > -1) {
+        workspace.updateToolbox(document.getElementById('toolboxturtle'));
       }
 
     }

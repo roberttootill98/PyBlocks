@@ -241,6 +241,37 @@ table#type {
   margin-right: auto;
 }
 
+#turtlecanvas {
+  position: fixed;
+  background-color: white;
+  top:50%;
+  left:50%;
+  z-index:1002;
+  overflow:auto;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  cursor: default;
+}
+
+/*#turtlecanvas {
+  position: absolute;
+  background-color: white;
+  top:50%;
+  left:50%;
+  z-index:1002;
+  width: 0px;
+  height: 0px;
+  overflow:auto;
+  -webkit-transform: translate(-50%, -50%);
+   transform: translate(-50%, -50%);
+}*/
+
 #blocklyDiv {
   border-radius: 15px;
   position: absolute;
