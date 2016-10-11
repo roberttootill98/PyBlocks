@@ -72,37 +72,36 @@
       </td>
     </tr>
     <tr>
-      <td>
 
-      <table>
         <td>
-          <table id="type">
-            <tr>
-              <td bgcolor="#00CC33">
-                Integer
-              </td>
-              <td bgcolor="#0080FF">
-                Float
-              </td>
-              <td bgcolor="#FF3010">
-                String
-              </td>
-            </tr>
-            <tr>
-              <td bgcolor="#FF29FF">
-                Boolean
-              </td>
-              <td bgcolor="#ffaa00">
-                Range
-              </td>
-              <td bgcolor="#8B7D6B">
-                Statement
-              </td>
-            </tr>
-          </table>
-
-        </td>
-        <td rowspan="2">
+          <table>
+            <td id="type">
+                <table id="type">
+                  <tr>
+                    <td bgcolor="#00CC33">
+                      int
+                  </td>
+                    <td bgcolor="#0080FF">
+                      float
+                    </td>
+                    <td bgcolor="#FF3010">
+                      str
+                    </td>
+                  </tr>
+                  <tr>
+                    <td bgcolor="#FF29FF">
+                      boolean
+                    </td>
+                    <td bgcolor="#ffaa00">
+                      range
+                    </td>
+                    <td bgcolor="#8B7D6B">
+                      none
+                    </td>
+                  </tr>
+                </table>
+</td>
+<td>
           <textarea id="output" class="codearea" rows="15" cols="75" readonly="true"></textarea>
           <button id="clear" type="button" class="fancybuttons"  onclick="clr()">Clear</button>
           <button id="restart" type="button" class="fancybuttons" onclick="restart()">Restart</button>
@@ -110,11 +109,14 @@
         <textarea id="hiddenoutput" cols="20" rows="7" hidden="true"></textarea>
         <textarea id="hiddenoutput2" cols="20" rows="7" hidden="true"></textarea>
         <textarea id="pycode" class="codearea" rows="12" cols="100" readonly="true" hidden="true"></textarea>
-      </td>
+</td>
       </table>
-    </td>
+      </td>
+
     </tr>
   </table>
+
+
 
   <!-- Blockly workspace -->
   <div id="blocklyDiv" style="position: absolute"></div>
@@ -582,9 +584,22 @@
 <sep gap="4"></sep>
 <category name="Turtle graphics">
   <block type="python_turtle_new"></block>
+  <block type="python_turtle_getscreen"></block>
   <block type="python_turtle_color"></block>
+  <block type="python_turtle_pencolor"></block>
+  <block type="python_turtle_fillcolor"></block>
+  <block type="python_turtle_bgcolor"></block>
+  <block type="python_turtle_fill"></block>
   <block type="python_turtle_forward"></block>
+  <block type="python_turtle_backward"></block>
   <block type="python_turtle_left"></block>
+  <block type="python_turtle_right"></block>
+  <block type="python_turtle_circle"></block>
+  <block type="python_turtle_position"></block>
+  <block type="python_turtle_setposition"></block>
+  <block type="python_turtle_pendown"></block>
+  <block type="python_turtle_penup"></block>
+  <block type="python_turtle_isdown"></block>
 </category>
 <sep gap="4"></sep>
 </xml>
@@ -736,8 +751,20 @@
 <category name="Turtle graphics">
   <block type="python_turtle_new"></block>
   <block type="python_turtle_color"></block>
+  <block type="python_turtle_pencolor"></block>
+  <block type="python_turtle_fillcolor"></block>
+  <block type="python_turtle_bgcolor"></block>
+  <block type="python_turtle_fill"></block>
   <block type="python_turtle_forward"></block>
+  <block type="python_turtle_backward"></block>
   <block type="python_turtle_left"></block>
+  <block type="python_turtle_right"></block>
+  <block type="python_turtle_circle"></block>
+  <block type="python_turtle_position"></block>
+  <block type="python_turtle_setposition"></block>
+  <block type="python_turtle_pendown"></block>
+  <block type="python_turtle_penup"></block>
+  <block type="python_turtle_isdown"></block>
 </category>
 <sep gap="4"></sep>
 </xml>

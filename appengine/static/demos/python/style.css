@@ -33,6 +33,9 @@ table {
 }
 
 table#type {
+  table-layout: fixed;
+  width: 200px;
+  height: 50px;
   font-family: sans-serif;
   font-size: 16px;
   text-shadow: 1px 0px 2px rgba(150, 150, 150, 1);
@@ -46,6 +49,13 @@ table#type {
   -ms-user-select: none;
   user-select: none;
   cursor: default;
+
+}
+
+td#type {
+overflow: hidden;
+width: 1px;
+vertical-align: bottom;
 }
 
 #blocklyArea {
@@ -61,6 +71,7 @@ table#type {
   user-select: none;
   cursor: default;
 }
+
 
 /*.interpreterdiv {
   display: inline-block;
@@ -136,7 +147,6 @@ table#type {
   width: 99%;
   height: 2em;
   opacity: 0.48;
-  text-align: center;
   position: relative;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -150,11 +160,9 @@ table#type {
 .codearea:focus {
   outline:0 !important;
   height: 10em;
-  font-size: 18px;
   opacity:0.95;
   text-align: left;
   overflow-y: visible;
-  z-index: 1;
 }
 
 .codearea:hover {
@@ -273,10 +281,5 @@ table#type {
 }*/
 
 #blocklyDiv {
-  border-radius: 15px;
   position: absolute;
-}
-
-#toolbox {
-  border-radius: 15px;
 }

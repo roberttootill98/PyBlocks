@@ -9,7 +9,7 @@ var canRetainGlobals = true;
 
 function outf(text) {
   var mypre = document.getElementById("output");
-  mypre.innerHTML = mypre.innerHTML + '>> ' + text;
+  mypre.innerHTML = mypre.innerHTML + ' ' + text;
 }
 
 function outfhidden(text) {
@@ -57,7 +57,7 @@ function initInterpreter() {
 
 
   var interpreter = document.getElementById("output");
-  initVal = 'PythonBlocks - Python 3 Interpreter\n\n';
+  initVal = ' PythonBlocks - Python 3 Interpreter\n\n';
   interpreter.innerHTML = initVal;
   if (interpreter.innerHTML == initVal) {
     return true;
@@ -121,6 +121,7 @@ function runeval(block) {
 
     Sk.pre = "output";
     Sk.configure({output:outf, read:builtinRead, inputfunTakesPrompt: true, retainglobals: canRetainGlobals});
+    (Sk.TurtleGraphics || (Sk.TurtleGraphics = {})).target = 'turtlecanvas';
     var myPromise = Sk.misceval.asyncToPromise(function() {
       return Sk.importMainWithBody("<stdin>", false, code, true);
     });
