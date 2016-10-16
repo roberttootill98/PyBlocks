@@ -5,7 +5,7 @@ Sk.inputfun = function(prompt) {
 };
 
 var canRetainGlobals = true;
-
+var initVal = ' PythonBlocks - Python 3 Interpreter\n\n';
 
 function outf(text) {
   var mypre = document.getElementById("output");
@@ -57,7 +57,6 @@ function initInterpreter() {
 
 
   var interpreter = document.getElementById("output");
-  initVal = ' PythonBlocks - Python 3 Interpreter\n\n';
   interpreter.innerHTML = initVal;
   if (interpreter.innerHTML == initVal) {
     return true;
@@ -75,6 +74,9 @@ function runfull() {
   if (initInterpreter() && generateCode() && workspace.generatorSuccess) {
 
     var prog = document.getElementById("pycode").textContent;
+    if (prog.indexOf('turtle.Turtle()') != -1) {
+      toggleTurtle();
+    }
     var mypre = document.getElementById("output");
     Sk.pre = "output";
     Sk.configure({output:outf, read:builtinRead, inputfunTakesPrompt: true});
@@ -93,7 +95,10 @@ function runfull() {
       console.log(err.toString());
     });
 
-    mypre.focus();
+    if (mypre.textContent != initVal) {
+      mypre.focus();
+    }
+
     mypre.scrollTop = mypre.scrollHeight;
 
   } else if (!generateCode()) {
@@ -110,6 +115,10 @@ function runeval(block) {
   workspace.generatorSuccess = true;
 
   var code = Blockly.Python.blockToCode(block);
+
+    if (code.indexOf('turtle.Turtle()') != -1) {
+      toggleTurtle();
+    }
 
   if (workspace.generatorSuccess) {
 
@@ -134,7 +143,11 @@ function runeval(block) {
       mypre.innerHTML = mypre.innerHTML + err.toString() + "\n";
       console.log(err.toString());
     });
-    mypre.focus();
+
+    if (mypre.textContent != initVal) {
+      mypre.focus();
+    }
+    
     mypre.scrollTop = mypre.scrollHeight;
   } else {
     alert('Errors found! Please look for the warning symbols for more information.');
@@ -207,6 +220,15 @@ function restart() {
 
 function clr() {
   initInterpreter();
+}
+
+function toggleTurtle() {
+  var turtleDiv = document.getElementById('turtlecanvas');
+  if (turtleDiv.style.display == 'block') {
+    turtleDiv.style.display = 'none';
+  } else {
+    turtleDiv.style.display = 'block';
+  }
 }
 
 function checkWorkspace(event) {

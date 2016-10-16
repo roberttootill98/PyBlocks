@@ -85,7 +85,7 @@ var magenta = '#FF29FF';
 Blockly.Python.COLOUR = {};
 Blockly.Python.COLOUR['notype'] = '#8B7D6B';
 Blockly.Python.COLOUR['str'] = red;
-// none = yellow
+Blockly.Python.COLOUR['turtle'] = yellow;
 Blockly.Python.COLOUR['int'] = green;
 Blockly.Python.COLOUR['range'] = orange;
 Blockly.Python.COLOUR['float'] = blue;
@@ -173,7 +173,8 @@ Blockly.Python.NEW_VARS = [
     {name: "newIntVariable", type: 'int'},
     {name: "newFloatVariable", type: 'float'},
     {name: "newStringVariable", type: 'str'},
-    {name: "newBoolVariable", type: 'bool'}
+    {name: "newBoolVariable", type: 'bool'},
+    {name: "newTurtleVariable", type: 'turtle'}
   ];
 
 Blockly.Python.NEW_LIST_VARS = [

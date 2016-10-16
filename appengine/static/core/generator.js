@@ -218,7 +218,8 @@ if (block.type.indexOf('math') >= 0 && workspace.imports.indexOf('import math') 
 
   } else if (workspace.running && !block.isInFlyout && block.type == 'variables_get' &&
   block.getSurroundParent().type != 'variables_set' &&
-  workspace.vars.indexOf(block.getFieldValue("VAR")) == -1) {
+  workspace.vars.indexOf(block.getFieldValue("VAR")) == -1 &&
+  block.getSurroundParent().type != 'python_for') {
 
     block.setWarningText('Undeclared variable')
     workspace.generatorSuccess = false;

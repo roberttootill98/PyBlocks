@@ -528,7 +528,7 @@ Blockly.Css.CONTENT = [
     'font-size: 16px;',
     'padding: 0 3px;',
     'vertical-align: middle;',
-    'color: 001f3f;',
+    'text-rendering: optimizeLegibility;',
     '-webkit-touch-callout: none;',
     '-webkit-user-select: none;',
     '-khtml-user-select: none;',
