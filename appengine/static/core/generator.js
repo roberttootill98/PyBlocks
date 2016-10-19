@@ -206,9 +206,14 @@ Blockly.Generator.prototype.blockToCode = function(block) {
 
 
 
-if (block.type.indexOf('math') >= 0 && workspace.imports.indexOf('import math') == -1) {
+  if (block.type.indexOf('math') >= 0 && workspace.imports.indexOf('import math') == -1 && startImports.indexOf('math') == -1) {
 
     block.setWarningText('You have not imported the math module');
+    workspace.generatorSuccess = false;
+
+  } else if (block.type.indexOf('turtle') >= 0 && workspace.imports.indexOf('import turtle') == -1 && startImports.indexOf('turtle') == -1) {
+
+    block.setWarningText('You have not imported the turtle module');
     workspace.generatorSuccess = false;
 
   } else if (workspace.running && !block.holesFilled) {
@@ -238,7 +243,7 @@ if (block.type.indexOf('math') >= 0 && workspace.imports.indexOf('import math') 
 
     block.setWarningText('Variable was altered in a control statement and may contain unpredictable values');
 
-} else if (workspace.generatorSuccess) {
+  } else if (workspace.generatorSuccess) {
     block.setWarningText(null);
   }
 
@@ -248,9 +253,8 @@ if (block.type.indexOf('math') >= 0 && workspace.imports.indexOf('import math') 
 
   if (block.type == 'python_start') {
 
-    for (var i = 0; i < block.imports.length; i++) {
-      workspace.imports += 'import ' + block.imports[i] + '\n';
-      console.log('IMPORTSS', workspace.imports);
+    for (var i = 0; i < startImports.length; i++) {
+      workspace.imports += 'import ' + startImports[i] + '\n';
     }
   }
 

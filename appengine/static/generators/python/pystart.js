@@ -32,8 +32,8 @@ goog.require('Blockly.Python');
 Blockly.Python['python_start'] = function(block) {
   var code;
   
-  for (var i = 0, code = ''; i < block.imports.length; i++) {
-    code += 'import ' + block.imports[i] + '\n';
+  for (var i = 0, code = ''; i < startImports.length; i++) {
+    code += 'import ' + startImports[i] + '\n';
   }
 
   return code;

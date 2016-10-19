@@ -74,8 +74,8 @@
     </tr>
   </table>
   <div id="typediv">
-     	 <table id="type">
-                  <tr>
+     	 <table id="typetable">
+                  <!--<tr id="typetr1">
                     <td bgcolor="#00CC33">
                       int
                   </td>
@@ -86,17 +86,17 @@
                       str
                     </td>
                   </tr>
-                  <tr>
+                  <tr id="typetr2">
                     <td bgcolor="#FF29FF">
                       bool
                     </td>
                     <td bgcolor="#ffaa00">
                       range
                     </td>
-                    <td bgcolor="#dfdf20">
+		    <td bgcolor="#dfdf20">
                       turtle
-                    </td>
-                  </tr>
+	      </td>
+      </tr>-->
 	  </table>
   </div>
 
@@ -829,7 +829,7 @@ var workspace = Blockly.inject(blocklyDiv,
   }
 
   function mouseDbl(e){
-    $('#turtlecanvas').empty();
+    toggleTurtle();
   }
 
   function divMove(e){
@@ -839,7 +839,7 @@ var workspace = Blockly.inject(blocklyDiv,
 
 
   //workspace.addChangeListener(checkWorkspace);
-
+  //workspace.addChangeListener(generateTypeTable);
   if ('BlocklyStorage' in window && window.location.hash.length > 1) {
     BlocklyStorage.retrieveXml(window.location.hash.substring(1));
   } else {
@@ -852,10 +852,10 @@ var workspace = Blockly.inject(blocklyDiv,
   // Needed to init values for variable blocks
   // Blockly.Python.workspaceToCode(workspace);
   checkWorkspace();
+  generateTypeTable();
 
-
-    goog.events.listen(document.getElementById('blocklyDiv'),
-    'dblclick', function() { if (Blockly.selected != null && Blockly.selected.type != 'python_start') { runeval(Blockly.selected) } });
+  goog.events.listen(document.getElementById('blocklyDiv'),
+  'dblclick', function() { if (Blockly.selected != null && Blockly.selected.type != 'python_start') { runeval(Blockly.selected) } });
 
 
   function popupwindow(url, title, win, w, h) {

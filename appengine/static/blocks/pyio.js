@@ -200,7 +200,8 @@ Blockly.Blocks['python_print'] = {
     } else {
       this.holesFilled = false;
     }
-
+    this.reType();
+    this.render();
   }
 };
 
@@ -283,6 +284,7 @@ Blockly.Blocks['python_format'] = {
       this.holesFilled = false;
       this.setTooltip('Returns a list of elements');
     }
-
+    this.reType();
+    this.render();
   }
 };

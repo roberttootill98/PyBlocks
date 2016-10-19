@@ -167,7 +167,7 @@ Blockly.ContextMenu.finalInputCallback = function(block, inputExists) {
 
 Blockly.ContextMenu.modifyMathInputCallback = function(block) {
   return function() {
-    if (block.imports.indexOf('math') > -1) {
+    if (startImports.indexOf('math') > -1) {
       block.modify('math', 'remove');
     } else {
       block.modify('math', 'add');
@@ -177,10 +177,11 @@ Blockly.ContextMenu.modifyMathInputCallback = function(block) {
 
 Blockly.ContextMenu.modifyTurtleInputCallback = function(block) {
   return function() {
-    if (block.imports.indexOf('turtle') > -1) {
+    if (startImports.indexOf('turtle') > -1) {
       block.modify('turtle', 'remove');
     } else {
       block.modify('turtle', 'add');
     }
+    generateTypeTable();
   };
 };

@@ -41,30 +41,6 @@ function builtinRead(x) {
   return file;
 }
 
-function normaliseDate(i) {
-    if (i < 10) {i = "0" + i};  // add zero in front of numbers < 10
-    return i;
-}
-
-function initInterpreter() {
-  // var d = new Date();
-  // var year = d.getFullYear();
-  // var month = normaliseDate(d.getMonth());
-  // var day = normaliseDate(d.getDate());
-  // var hour = d.getHours();
-  // var minute = normaliseDate(d.getMinutes());
-  // var second = normaliseDate(d.getSeconds());
-
-
-  var interpreter = document.getElementById("output");
-  interpreter.innerHTML = initVal;
-  if (interpreter.innerHTML == initVal) {
-    return true;
-  } else {
-    return false;
-  }
-
-}
 function runfull() {
   workspace.running = true;
   workspace.generatorSuccess = true;
@@ -107,6 +83,7 @@ function runfull() {
     alert('Errors found! Please look for the warning symbols for more information.');
   }
   workspace.running = false;
+  generateTypeTable();
 }
 
 function runeval(block) {
@@ -153,6 +130,7 @@ function runeval(block) {
     alert('Errors found! Please look for the warning symbols for more information.');
   }
   workspace.running = false;
+  generateTypeTable();
 }
 
 function runtooltip(code) {
@@ -180,29 +158,31 @@ function runtooltip(code) {
   return mypre.innerHTML;
 }
 
-// function runassigncheck(code) {
-//   // if (code.indexOf('input(') >= 0) {
-//   //   return;
-//   // }
-//
-//   document.getElementById("hiddenoutput2").innerHTML = '';
-//   var mypre = document.getElementById("hiddenoutput2");
-//
-//   Sk.pre = "hiddenoutput2";
-//   Sk.configure({output:outfhidden2, read:builtinRead});
-//   var myPromise = Sk.misceval.asyncToPromise(function() {
-//     return Sk.importMainWithBody("<stdin>", false, code, true);
-//   });
-//   myPromise.then(function(mod) {
-//     console.log('success');
-//   },
-//   function(err) {
-//     var mypre = document.getElementById("hiddenoutput2");
-//     mypre.innerHTML = mypre.innerHTML + err.toString() + "\n";
-//     console.log(err.toString());
-//   });
-//   return mypre.innerHTML;
-// }
+
+function normaliseDate(i) {
+    if (i < 10) {i = "0" + i};  // add zero in front of numbers < 10
+    return i;
+}
+
+function initInterpreter() {
+  // var d = new Date();
+  // var year = d.getFullYear();
+  // var month = normaliseDate(d.getMonth());
+  // var day = normaliseDate(d.getDate());
+  // var hour = d.getHours();
+  // var minute = normaliseDate(d.getMinutes());
+  // var second = normaliseDate(d.getSeconds());
+
+
+  var interpreter = document.getElementById("output");
+  interpreter.innerHTML = initVal;
+  if (interpreter.innerHTML == initVal) {
+    return true;
+  } else {
+    return false;
+  }
+
+}
 
 function copyToClipboard() {
   if (generateCode()) {
@@ -214,8 +194,12 @@ function copyToClipboard() {
 
 function restart() {
   canRetainGlobals = false;
+  workspace.imports = '';
   workspace.vars = '';
-  initInterpreter();
+  var interpreter = document.getElementById("output");
+  interpreter.innerHTML = interpreter.innerHTML + '\n === RESTART ====\n';
+  interpreter.scrollTop = interpreter.scrollHeight;
+  generateTypeTable();
 }
 
 function clr() {
@@ -231,9 +215,40 @@ function toggleTurtle() {
   }
 }
 
+function generateTypeTable() {
+  var types = ['int', 'float', 'str', 'bool', 'range'];
+  var colours = ['#00CC33', '#0080FF', '#FF3010', '#FF29FF', '#FFAA00']
+  var table = document.getElementById('typetable');
+  table.innerHTML = '';
+  var currRow = 0;
+
+  if (workspace.imports.indexOf('import turtle') > -1 || startImports.indexOf('turtle') > -1) {
+    types.push('turtle');
+    colours.push('#DFDF20');
+  }
+
+  for (i = 0; i < types.length; i++) {
+
+    if (table.rows.length == 0) {
+      table.insertRow(currRow);
+    }
+  
+    if (table.rows[currRow].cells.length >= 3) {
+      currRow++;
+      table.insertRow(currRow);
+    }  
+    
+    table.rows[currRow].insertCell(-1);
+    table.rows[currRow].cells[table.rows[currRow].cells.length - 1].innerHTML = types[i];
+    table.rows[currRow].cells[table.rows[currRow].cells.length - 1].style.backgroundColor = colours[i];
+
+  }
+}
+
 function checkWorkspace(event) {
   Blockly.Python.workspaceToCode(workspace);
 }
+
 
 function generateCode(event) {
   var content = document.getElementById('pycode');
