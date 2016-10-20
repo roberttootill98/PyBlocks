@@ -29,71 +29,75 @@ goog.provide('Blockly.Blocks.pycomments');
 goog.require('Blockly.Blocks');
 
 Blockly.Blocks['python_linespace'] = {
-  init: function() {
-    this.appendDummyInput()
-        .appendField("  ");
-    this.setPreviousStatement(true);
-    this.setNextStatement(true);
-    this.setTooltip('An empty line');
-  }
+    init: function() {
+        this.appendDummyInput()
+            .appendField("  ");
+        this.setPreviousStatement(true);
+        this.setNextStatement(true);
+        this.setTooltip('An empty line');
+    }
 };
 
 Blockly.Blocks['python_comment'] = {
-  /**
-   * Block for numeric value.
-   * @this Blockly.Block
-   */
-  init: function() {
-    this.appendDummyInput("LINE1")
-        .appendField("# ")
-        .appendField(new Blockly.FieldTextInput('Comment here ...'), "COMMENT1")
-        .appendField(" ");
-    this.getField('COMMENT1').setChangeHandler(
-          Blockly.FieldTextInput.commentValidator);
-    this.setPreviousStatement(true);
-    this.setNextStatement(true);
-    this.setTooltip('Comments are used to describe ambiguous code, they have no effect on execution');
-    this.lineCount = 1;
+    /**
+     * Block for numeric value.
+     * @this Blockly.Block
+     */
+    init: function() {
+        this.appendDummyInput("LINE1")
+            .appendField("# ")
+            .appendField(new Blockly.FieldTextInput('Comment here ...'), "COMMENT1")
+            .appendField(" ");
+        this.getField('COMMENT1').setChangeHandler(
+            Blockly.FieldTextInput.commentValidator);
+        this.setPreviousStatement(true);
+        this.setNextStatement(true);
+        this.setTooltip('Comments are used to describe ambiguous code, they have no effect on execution');
+        this.lineCount = 1;
 
-  },
+    },
 
-  customContextMenu: function(options) {
-    var optionRemove = {enabled: this.lineCount > 1};
-    optionRemove.text = "Remove line";
-    optionRemove.callback = Blockly.ContextMenu.removeInputCallback(this);
-    var optionAdd = {enabled: true};
-    optionAdd.text = "Add line";
-    optionAdd.callback = Blockly.ContextMenu.addInputCallback(this);
-    options.unshift(optionAdd, optionRemove);
-  },
+    customContextMenu: function(options) {
+        var optionRemove = {
+            enabled: this.lineCount > 1
+        };
+        optionRemove.text = "Remove line";
+        optionRemove.callback = Blockly.ContextMenu.removeInputCallback(this);
+        var optionAdd = {
+            enabled: true
+        };
+        optionAdd.text = "Add line";
+        optionAdd.callback = Blockly.ContextMenu.addInputCallback(this);
+        options.unshift(optionAdd, optionRemove);
+    },
 
-  mutationToDom: function() {
-    var container = document.createElement('mutation');
-    container.setAttribute('line_count', this.lineCount);
-    return container;
-  },
+    mutationToDom: function() {
+        var container = document.createElement('mutation');
+        container.setAttribute('line_count', this.lineCount);
+        return container;
+    },
 
-  domToMutation: function(xmlElement) {
-    var lines = parseInt(xmlElement.getAttribute('line_count'));
-    for (var i = 1; i < lines; i++) {
-      this.add();
+    domToMutation: function(xmlElement) {
+        var lines = parseInt(xmlElement.getAttribute('line_count'));
+        for (var i = 1; i < lines; i++) {
+            this.add();
+        }
+    },
+
+    add: function() {
+        this.lineCount++;
+        this.appendDummyInput('LINE' + this.lineCount)
+            .appendField("# ")
+            .appendField(new Blockly.FieldTextInput('     '),
+                "COMMENT" + this.lineCount)
+            .appendField(" ");
+        this.getField('COMMENT' + this.lineCount).setChangeHandler(
+            Blockly.FieldTextInput.commentValidator);
+    },
+
+    remove: function() {
+        this.removeInput('LINE' + this.lineCount);
+        this.lineCount--;
     }
-  },
-
-  add: function() {
-    this.lineCount++;
-    this.appendDummyInput('LINE' + this.lineCount)
-        .appendField("# ")
-        .appendField(new Blockly.FieldTextInput('     '),
-            "COMMENT" + this.lineCount)
-        .appendField(" ");
-    this.getField('COMMENT' + this.lineCount).setChangeHandler(
-              Blockly.FieldTextInput.commentValidator);
-  },
-
-  remove: function() {
-    this.removeInput('LINE' + this.lineCount);
-    this.lineCount--;
-  }
 
 };

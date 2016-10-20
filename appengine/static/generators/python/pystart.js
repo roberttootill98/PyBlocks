@@ -18,10 +18,10 @@
  * limitations under the License.
  */
 
- /**
-  * @fileoverview Start block for PythonBlocks
-  * @author up649230@myport.ac.uk
-  */
+/**
+ * @fileoverview Start block for PythonBlocks
+ * @author up649230@myport.ac.uk
+ */
 
 'use strict';
 
@@ -30,11 +30,11 @@ goog.provide('Blockly.Python.pystart');
 goog.require('Blockly.Python');
 
 Blockly.Python['python_start'] = function(block) {
-  var code;
-  
-  for (var i = 0, code = ''; i < startImports.length; i++) {
-    code += 'import ' + startImports[i] + '\n';
-  }
+    var code;
 
-  return code;
+    for (var i = 0, code = ''; i < startImports.length; i++) {
+        code += 'import ' + startImports[i] + '\n';
+    }
+
+    return code;
 };

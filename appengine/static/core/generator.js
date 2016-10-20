@@ -37,9 +37,9 @@ goog.require('goog.asserts');
  * @constructor
  */
 Blockly.Generator = function(name) {
-  this.name_ = name;
-  this.FUNCTION_NAME_PLACEHOLDER_REGEXP_ =
-      new RegExp(this.FUNCTION_NAME_PLACEHOLDER_, 'g');
+    this.name_ = name;
+    this.FUNCTION_NAME_PLACEHOLDER_REGEXP_ =
+        new RegExp(this.FUNCTION_NAME_PLACEHOLDER_, 'g');
 };
 
 /**
@@ -69,50 +69,50 @@ Blockly.Generator.prototype.STATEMENT_PREFIX = null;
  * @return {string} Generated code.
  */
 Blockly.Generator.prototype.workspaceToCode = function(workspace) {
-  if (!workspace) {
-    // Backwards compatability from before there could be multiple workspaces.
-    console.warn('No workspace specified in workspaceToCode call.  Guessing.');
-    workspace = Blockly.getMainWorkspace();
-  }
-  var code = [];
-  this.init(workspace);
-  var blocks = workspace.getTopBlocks(true);
-  for (var x = 0, block; block = blocks[x]; x++) {
-
-    // Josef - make sure at least one statement block is attached to the start
-    // block
-    // if (block.type == 'python_start' && block.getNextBlock() == null) {
-    //   return 0;
-    // }
-
-    // Josef - only convert the blocks which has the root type of python_start
-    // to code
-    // if (block.getRootBlock().type == 'python_start') {
-      var line = this.blockToCode(block);
-
-    if (goog.isArray(line)) {
-      // Value blocks return tuples of code and operator order.
-      // Top-level blocks don't care about operator order.
-      line = line[0];
+    if (!workspace) {
+        // Backwards compatability from before there could be multiple workspaces.
+        console.warn('No workspace specified in workspaceToCode call.  Guessing.');
+        workspace = Blockly.getMainWorkspace();
     }
+    var code = [];
+    this.init(workspace);
+    var blocks = workspace.getTopBlocks(true);
+    for (var x = 0, block; block = blocks[x]; x++) {
 
-    if (line) {
-      if (block.outputConnection && this.scrubNakedValue) {
-        // This block is a naked value.  Ask the language's code generator if
-        // it wants to append a semicolon, or something.
-        line = this.scrubNakedValue(line);
-      }
-      code.push(line);
-      }
-    // }
-  }
-  code = code.join('\n');  // Blank line between each section.
-  code = this.finish(code);
-  // Final scrubbing of whitespace.
-  code = code.replace(/^\s+\n/, '');
-  code = code.replace(/\n\s+$/, '\n');
-  code = code.replace(/[ \t]+\n/g, '\n');
-  return code;
+        // Josef - make sure at least one statement block is attached to the start
+        // block
+        // if (block.type == 'python_start' && block.getNextBlock() == null) {
+        //   return 0;
+        // }
+
+        // Josef - only convert the blocks which has the root type of python_start
+        // to code
+        // if (block.getRootBlock().type == 'python_start') {
+        var line = this.blockToCode(block);
+
+        if (goog.isArray(line)) {
+            // Value blocks return tuples of code and operator order.
+            // Top-level blocks don't care about operator order.
+            line = line[0];
+        }
+
+        if (line) {
+            if (block.outputConnection && this.scrubNakedValue) {
+                // This block is a naked value.  Ask the language's code generator if
+                // it wants to append a semicolon, or something.
+                line = this.scrubNakedValue(line);
+            }
+            code.push(line);
+        }
+        // }
+    }
+    code = code.join('\n'); // Blank line between each section.
+    code = this.finish(code);
+    // Final scrubbing of whitespace.
+    code = code.replace(/^\s+\n/, '');
+    code = code.replace(/\n\s+$/, '\n');
+    code = code.replace(/[ \t]+\n/g, '\n');
+    return code;
 };
 
 // The following are some helpful functions which can be used by multiple
@@ -125,7 +125,7 @@ Blockly.Generator.prototype.workspaceToCode = function(workspace) {
  * @return {string} The prefixed lines of code.
  */
 Blockly.Generator.prototype.prefixLines = function(text, prefix) {
-  return prefix + text.replace(/\n(.)/g, '\n' + prefix + '$1');
+    return prefix + text.replace(/\n(.)/g, '\n' + prefix + '$1');
 };
 
 /**
@@ -134,19 +134,19 @@ Blockly.Generator.prototype.prefixLines = function(text, prefix) {
  * @return {string} Concatenated list of comments.
  */
 Blockly.Generator.prototype.allNestedComments = function(block) {
-  var comments = [];
-  var blocks = block.getDescendants();
-  for (var x = 0; x < blocks.length; x++) {
-    var comment = blocks[x].getCommentText();
-    if (comment) {
-      comments.push(comment);
+    var comments = [];
+    var blocks = block.getDescendants();
+    for (var x = 0; x < blocks.length; x++) {
+        var comment = blocks[x].getCommentText();
+        if (comment) {
+            comments.push(comment);
+        }
     }
-  }
-  // Append an empty string to create a trailing line break when joined.
-  if (comments.length) {
-    comments.push('');
-  }
-  return comments.join('\n');
+    // Append an empty string to create a trailing line break when joined.
+    if (comments.length) {
+        comments.push('');
+    }
+    return comments.join('\n');
 };
 
 
@@ -158,105 +158,105 @@ Blockly.Generator.prototype.allNestedComments = function(block) {
  *     operator order value.  Returns '' if block is null.
  */
 Blockly.Generator.prototype.blockToCode = function(block) {
-  if (!block) {
-    return '';
-  }
-  if (block.disabled) {
-    // Skip past this block if it is disabled.
-    return this.blockToCode(block.getNextBlock());
-  }
-
-  // Josef - save variable blocks and imports to simulate interactive mode
-  // if (block != '???' && (block.type == 'python_start') || (block.type == 'variables_set' &&
-  // block.getParent() != null && block.getSurroundParent().type != 'python_if' &&
-  // block.getSurroundParent().type != 'python_while' & block.getSurroundParent().type != 'python_for')) {
-  //   workspace.permaBlocks += block + '\n';
-  // }
-
-  // if (block != '???' && block.type == 'python_if') {
-  //   if (runassigncheck('print(' + block, 'CONDITION0', Blockly.Python.ORDER_NONE) + ')') == 'True\n') {
-  //
-  //   }
-  // }
-//   if (block != '???' && block.getParent() != null && block.getSurroundParent().type == 'python_if' && block.type == 'variables_set') {
-//
-//       if (block.getSurroundParent().poisoned == false && runassigncheck('print(' + block.getSurroundParent(), 'CONDITION0', Blockly.Python.ORDER_NONE) + ')') == 'True\n') {
-//         workspace.permaBlocks += block + '\n';
-//         block.getSurroundParent().poisoned = true;
-//         console.log('TRAXIS', workspace.permaBlocks);
-//         console.log('TRAXIS', block.getSurroundParent());
-//       }
-//
-//       if (block.getSurroundParent().poisoned == false && block.getSurroundParent().hasElse) {
-//         workspace.permaBlocks += block + '\n';
-//       }
-//
-// }
-
-
-  var func = this[block.type];
-  goog.asserts.assertFunction(func,
-      'Language "%s" does not know how to generate code for block type "%s".',
-      this.name_, block.type);
-  // First argument to func.call is the value of 'this' in the generator.
-  // Prior to 24 September 2013 'this' was the only way to access the block.
-  // The current prefered method of accessing the block is through the second
-  // argument to func.call, which becomes the first parameter to the generator.
-  var code = func.call(block, block);
-
-
-
-  if (block.type.indexOf('math') >= 0 && workspace.imports.indexOf('import math') == -1 && startImports.indexOf('math') == -1) {
-
-    block.setWarningText('You have not imported the math module');
-    workspace.generatorSuccess = false;
-
-  } else if (block.type.indexOf('turtle') >= 0 && workspace.imports.indexOf('import turtle') == -1 && startImports.indexOf('turtle') == -1) {
-
-    block.setWarningText('You have not imported the turtle module');
-    workspace.generatorSuccess = false;
-
-  } else if (workspace.running && !block.holesFilled) {
-
-    block.setWarningText('Missing parameters');
-    workspace.generatorSuccess = false;
-
-  } else if (workspace.running && !block.isInFlyout && block.type == 'variables_get' &&
-  block.getSurroundParent().type != 'variables_set' &&
-  workspace.vars.indexOf(block.getFieldValue("VAR")) == -1 &&
-  block.getSurroundParent().type != 'python_for') {
-
-    block.setWarningText('Undeclared variable')
-    workspace.generatorSuccess = false;
-
-  } else if (workspace.running && !block.isInFlyout && block.type == 'variables_get' &&
-  block.getSurroundParent().type != 'variables_set' &&
-  workspace.vars.indexOf(block.getFieldValue("VAR") + '_CTRL') >= 0 &&
-  workspace.vars.indexOf(block.getFieldValue("VAR") + '_NOCTRL') == -1) {
-
-    block.setWarningText('Potentially undeclared variable');
-
-
-  } else if (workspace.running && !block.isInFlyout && block.type == 'variables_get' &&
-  block.getSurroundParent().type != 'variables_set' &&
-  workspace.vars.indexOf(block.getFieldValue("VAR") + '_CTRL') >= 0) {
-
-    block.setWarningText('Variable was altered in a control statement and may contain unpredictable values');
-
-  } else if (workspace.generatorSuccess) {
-    block.setWarningText(null);
-  }
-
-  if (block.type == 'variables_set' && workspace.generatorSuccess) {
-    workspace.vars += block.declaredVar + '\n';
-  }
-
-  if (block.type == 'python_start') {
-
-    for (var i = 0; i < startImports.length; i++) {
-      workspace.imports += 'import ' + startImports[i] + '\n';
+    if (!block) {
+        return '';
     }
-  }
+    if (block.disabled) {
+        // Skip past this block if it is disabled.
+        return this.blockToCode(block.getNextBlock());
+    }
+
+    // Josef - save variable blocks and imports to simulate interactive mode
+    // if (block != '???' && (block.type == 'python_start') || (block.type == 'variables_set' &&
+    // block.getParent() != null && block.getSurroundParent().type != 'python_if' &&
+    // block.getSurroundParent().type != 'python_while' & block.getSurroundParent().type != 'python_for')) {
+    //   workspace.permaBlocks += block + '\n';
+    // }
+
+    // if (block != '???' && block.type == 'python_if') {
+    //   if (runassigncheck('print(' + block, 'CONDITION0', Blockly.Python.ORDER_NONE) + ')') == 'True\n') {
+    //
+    //   }
+    // }
+    //   if (block != '???' && block.getParent() != null && block.getSurroundParent().type == 'python_if' && block.type == 'variables_set') {
+    //
+    //       if (block.getSurroundParent().poisoned == false && runassigncheck('print(' + block.getSurroundParent(), 'CONDITION0', Blockly.Python.ORDER_NONE) + ')') == 'True\n') {
+    //         workspace.permaBlocks += block + '\n';
+    //         block.getSurroundParent().poisoned = true;
+    //         console.log('TRAXIS', workspace.permaBlocks);
+    //         console.log('TRAXIS', block.getSurroundParent());
+    //       }
+    //
+    //       if (block.getSurroundParent().poisoned == false && block.getSurroundParent().hasElse) {
+    //         workspace.permaBlocks += block + '\n';
+    //       }
+    //
+    // }
+
+
+    var func = this[block.type];
+    goog.asserts.assertFunction(func,
+        'Language "%s" does not know how to generate code for block type "%s".',
+        this.name_, block.type);
+    // First argument to func.call is the value of 'this' in the generator.
+    // Prior to 24 September 2013 'this' was the only way to access the block.
+    // The current prefered method of accessing the block is through the second
+    // argument to func.call, which becomes the first parameter to the generator.
+    var code = func.call(block, block);
+
+
+
+    if (block.type.indexOf('math') >= 0 && workspace.imports.indexOf('import math') == -1 && startImports.indexOf('math') == -1) {
+
+        block.setWarningText('You have not imported the math module');
+        workspace.generatorSuccess = false;
+
+    } else if (block.type.indexOf('turtle') >= 0 && workspace.imports.indexOf('import turtle') == -1 && startImports.indexOf('turtle') == -1) {
+
+        block.setWarningText('You have not imported the turtle module');
+        workspace.generatorSuccess = false;
+
+    } else if (workspace.running && !block.holesFilled) {
+
+        block.setWarningText('Missing parameters');
+        workspace.generatorSuccess = false;
+
+    } else if (workspace.running && !block.isInFlyout && block.type == 'variables_get' &&
+        block.getSurroundParent().type != 'variables_set' &&
+        workspace.vars.indexOf(block.getFieldValue("VAR")) == -1 &&
+        block.getSurroundParent().type != 'python_for') {
+
+        block.setWarningText('Undeclared variable')
+        workspace.generatorSuccess = false;
+
+    } else if (workspace.running && !block.isInFlyout && block.type == 'variables_get' &&
+        block.getSurroundParent().type != 'variables_set' &&
+        workspace.vars.indexOf(block.getFieldValue("VAR") + '_CTRL') >= 0 &&
+        workspace.vars.indexOf(block.getFieldValue("VAR") + '_NOCTRL') == -1) {
+
+        block.setWarningText('Potentially undeclared variable');
+
+
+    } else if (workspace.running && !block.isInFlyout && block.type == 'variables_get' &&
+        block.getSurroundParent().type != 'variables_set' &&
+        workspace.vars.indexOf(block.getFieldValue("VAR") + '_CTRL') >= 0) {
+
+        block.setWarningText('Variable was altered in a control statement and may contain unpredictable values');
+
+    } else if (workspace.generatorSuccess) {
+        block.setWarningText(null);
+    }
+
+    if (block.type == 'variables_set' && workspace.generatorSuccess) {
+        workspace.vars += block.declaredVar + '\n';
+    }
+
+    if (block.type == 'python_start') {
+
+        for (var i = 0; i < startImports.length; i++) {
+            workspace.imports += 'import ' + startImports[i] + '\n';
+        }
+    }
 
     //
     // } else if (workspace.running && !block.isInFlyout && block.type == 'variables_get' && block.getTopLevel().type != 'variables_set' && block.findVariable() == 'nocontrol') {
@@ -265,21 +265,21 @@ Blockly.Generator.prototype.blockToCode = function(block) {
     //
     // } else if (workspace.running && !block.isInFlyout && block.type == 'variables_get' && block.getTopLevel().type != 'variables_set' && block.findVariable() == 'control') {
     //  block.setWarningText('This variable is potentially undeclared');
-  if (goog.isArray(code)) {
-    // Value blocks return tuples of code and operator order.
-    return [this.scrub_(block, code[0]), code[1]];
-  } else if (goog.isString(code)) {
-    if (this.STATEMENT_PREFIX) {
-      code = this.STATEMENT_PREFIX.replace(/%1/g, '\'' + block.id + '\'') +
-          code;
+    if (goog.isArray(code)) {
+        // Value blocks return tuples of code and operator order.
+        return [this.scrub_(block, code[0]), code[1]];
+    } else if (goog.isString(code)) {
+        if (this.STATEMENT_PREFIX) {
+            code = this.STATEMENT_PREFIX.replace(/%1/g, '\'' + block.id + '\'') +
+                code;
+        }
+        return this.scrub_(block, code);
+    } else if (code === null) {
+        // Block has handled code generation itself.
+        return '';
+    } else {
+        goog.asserts.fail('Invalid code generated: %s', code);
     }
-    return this.scrub_(block, code);
-  } else if (code === null) {
-    // Block has handled code generation itself.
-    return '';
-  } else {
-    goog.asserts.fail('Invalid code generated: %s', code);
-  }
 
 };
 
@@ -293,44 +293,44 @@ Blockly.Generator.prototype.blockToCode = function(block) {
  *     specified input does not exist.
  */
 Blockly.Generator.prototype.valueToCode = function(block, name, order) {
-  if (isNaN(order)) {
-    goog.asserts.fail('Expecting valid order from block "%s".', block.type);
-  }
-  var targetBlock = block.getInputTargetBlock(name);
-  if (!targetBlock) {
-    return '';
-  }
-  var tuple = this.blockToCode(targetBlock);
-  if (tuple === '') {
-    // Disabled block.
-    return '';
-  }
-  // Value blocks must return code and order of operations info.
-  // Statement blocks must only return code.
-  goog.asserts.assertArray(tuple,
-      'Expecting tuple from value block "%s".', targetBlock.type);
-  var code = tuple[0];
-  var innerOrder = tuple[1];
-  if (isNaN(innerOrder)) {
-    goog.asserts.fail('Expecting valid order from value block "%s".',
-        targetBlock.type);
-  }
-  if (code && order <= innerOrder) {
-    if (order == innerOrder && (order == 0 || order == 99)) {
-      // Don't generate parens around NONE-NONE and ATOMIC-ATOMIC pairs.
-      // 0 is the atomic order, 99 is the none order.  No parentheses needed.
-      // In all known languages multiple such code blocks are not order
-      // sensitive.  In fact in Python ('a' 'b') 'c' would fail.
-    } else {
-      // The operators outside this code are stonger than the operators
-      // inside this code.  To prevent the code from being pulled apart,
-      // wrap the code in parentheses.
-      // Technically, this should be handled on a language-by-language basis.
-      // However all known (sane) languages use parentheses for grouping.
-      code = '(' + code + ')';
+    if (isNaN(order)) {
+        goog.asserts.fail('Expecting valid order from block "%s".', block.type);
     }
-  }
-  return code;
+    var targetBlock = block.getInputTargetBlock(name);
+    if (!targetBlock) {
+        return '';
+    }
+    var tuple = this.blockToCode(targetBlock);
+    if (tuple === '') {
+        // Disabled block.
+        return '';
+    }
+    // Value blocks must return code and order of operations info.
+    // Statement blocks must only return code.
+    goog.asserts.assertArray(tuple,
+        'Expecting tuple from value block "%s".', targetBlock.type);
+    var code = tuple[0];
+    var innerOrder = tuple[1];
+    if (isNaN(innerOrder)) {
+        goog.asserts.fail('Expecting valid order from value block "%s".',
+            targetBlock.type);
+    }
+    if (code && order <= innerOrder) {
+        if (order == innerOrder && (order == 0 || order == 99)) {
+            // Don't generate parens around NONE-NONE and ATOMIC-ATOMIC pairs.
+            // 0 is the atomic order, 99 is the none order.  No parentheses needed.
+            // In all known languages multiple such code blocks are not order
+            // sensitive.  In fact in Python ('a' 'b') 'c' would fail.
+        } else {
+            // The operators outside this code are stonger than the operators
+            // inside this code.  To prevent the code from being pulled apart,
+            // wrap the code in parentheses.
+            // Technically, this should be handled on a language-by-language basis.
+            // However all known (sane) languages use parentheses for grouping.
+            code = '(' + code + ')';
+        }
+    }
+    return code;
 };
 
 /**
@@ -340,17 +340,17 @@ Blockly.Generator.prototype.valueToCode = function(block, name, order) {
  * @return {string} Generated code or '' if no blocks are connected.
  */
 Blockly.Generator.prototype.statementToCode = function(block, name) {
-  var targetBlock = block.getInputTargetBlock(name);
-  var code = this.blockToCode(targetBlock);
-  // Value blocks must return code and order of operations info.
-  // Statement blocks must only return code.
-  goog.asserts.assertString(code,
-      'Expecting code from statement block "%s".',
-      targetBlock && targetBlock.type);
-  if (code) {
-    code = this.prefixLines(/** @type {string} */ (code), this.INDENT);
-  }
-  return code;
+    var targetBlock = block.getInputTargetBlock(name);
+    var code = this.blockToCode(targetBlock);
+    // Value blocks must return code and order of operations info.
+    // Statement blocks must only return code.
+    goog.asserts.assertString(code,
+        'Expecting code from statement block "%s".',
+        targetBlock && targetBlock.type);
+    if (code) {
+        code = this.prefixLines( /** @type {string} */ (code), this.INDENT);
+    }
+    return code;
 };
 
 /**
@@ -361,14 +361,14 @@ Blockly.Generator.prototype.statementToCode = function(block, name) {
  * @return {string} Loop contents, with infinite loop trap added.
  */
 Blockly.Generator.prototype.addLoopTrap = function(branch, id) {
-  if (this.INFINITE_LOOP_TRAP) {
-    branch = this.INFINITE_LOOP_TRAP.replace(/%1/g, '\'' + id + '\'') + branch;
-  }
-  if (this.STATEMENT_PREFIX) {
-    branch += this.prefixLines(this.STATEMENT_PREFIX.replace(/%1/g,
-        '\'' + id + '\''), this.INDENT);
-  }
-  return branch;
+    if (this.INFINITE_LOOP_TRAP) {
+        branch = this.INFINITE_LOOP_TRAP.replace(/%1/g, '\'' + id + '\'') + branch;
+    }
+    if (this.STATEMENT_PREFIX) {
+        branch += this.prefixLines(this.STATEMENT_PREFIX.replace(/%1/g,
+            '\'' + id + '\''), this.INDENT);
+    }
+    return branch;
 };
 
 /**
@@ -391,7 +391,7 @@ Blockly.Generator.prototype.RESERVED_WORDS_ = '';
  *     No spaces.  Duplicates are ok.
  */
 Blockly.Generator.prototype.addReservedWords = function(words) {
-  this.RESERVED_WORDS_ += words + ',';
+    this.RESERVED_WORDS_ += words + ',';
 };
 
 /**
@@ -422,12 +422,12 @@ Blockly.Generator.prototype.FUNCTION_NAME_PLACEHOLDER_ = '{leCUI8hutHZI4480Dc}';
  * @private
  */
 Blockly.Generator.prototype.provideFunction_ = function(desiredName, code) {
-  if (!this.definitions_[desiredName]) {
-    var functionName =
-        this.variableDB_.getDistinctName(desiredName, this.NAME_TYPE);
-    this.functionNames_[desiredName] = functionName;
-    this.definitions_[desiredName] = code.join('\n').replace(
-        this.FUNCTION_NAME_PLACEHOLDER_REGEXP_, functionName);
-  }
-  return this.functionNames_[desiredName];
+    if (!this.definitions_[desiredName]) {
+        var functionName =
+            this.variableDB_.getDistinctName(desiredName, this.NAME_TYPE);
+        this.functionNames_[desiredName] = functionName;
+        this.definitions_[desiredName] = code.join('\n').replace(
+            this.FUNCTION_NAME_PLACEHOLDER_REGEXP_, functionName);
+    }
+    return this.functionNames_[desiredName];
 };

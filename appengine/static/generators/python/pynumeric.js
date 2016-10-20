@@ -18,10 +18,10 @@
  * limitations under the License.
  */
 
- /**
-  * @fileoverview Numeric blocks for PythonBlocks
-  * @author up649230@myport.ac.uk
-  */
+/**
+ * @fileoverview Numeric blocks for PythonBlocks
+ * @author up649230@myport.ac.uk
+ */
 
 'use strict';
 
@@ -30,91 +30,91 @@ goog.provide('Blockly.Python.pynumeric');
 goog.require('Blockly.Python');
 
 Blockly.Python['python_int_const'] = function(block) {
-  var code = block.getFieldValue('VALUE');
-  return [code, Blockly.Python.ORDER_ATOMIC];
+    var code = block.getFieldValue('VALUE');
+    return [code, Blockly.Python.ORDER_ATOMIC];
 };
 
 Blockly.Python['python_float_const'] = function(block) {
-  var code = block.getFieldValue('VALUE');
-  return [code, Blockly.Python.ORDER_ATOMIC];
+    var code = block.getFieldValue('VALUE');
+    return [code, Blockly.Python.ORDER_ATOMIC];
 };
 
 Blockly.Python['python_plus'] = function(block) {
-  var block1 = Blockly.Python.valueToCode(block, 'LHS', Blockly.Python.ORDER_ADDITIVE);
-  var block2 = Blockly.Python.valueToCode(block, 'RHS', Blockly.Python.ORDER_ADDITIVE);
-  return [block1 + ' + ' + block2, Blockly.Python.ORDER_ADDITIVE];
+    var block1 = Blockly.Python.valueToCode(block, 'LHS', Blockly.Python.ORDER_ADDITIVE);
+    var block2 = Blockly.Python.valueToCode(block, 'RHS', Blockly.Python.ORDER_ADDITIVE);
+    return [block1 + ' + ' + block2, Blockly.Python.ORDER_ADDITIVE];
 };
 
 Blockly.Python['python_minus'] = function(block) {
-  var block1 = Blockly.Python.valueToCode(block, 'LHS', Blockly.Python.ORDER_ADDITIVE);
-  var block2 = Blockly.Python.valueToCode(block, 'RHS', Blockly.Python.ORDER_ADDITIVE);
-  return [block1 + ' - ' + block2, Blockly.Python.ORDER_ADDITIVE];
+    var block1 = Blockly.Python.valueToCode(block, 'LHS', Blockly.Python.ORDER_ADDITIVE);
+    var block2 = Blockly.Python.valueToCode(block, 'RHS', Blockly.Python.ORDER_ADDITIVE);
+    return [block1 + ' - ' + block2, Blockly.Python.ORDER_ADDITIVE];
 };
 
 Blockly.Python['python_multiply'] = function(block) {
-  var block1 = Blockly.Python.valueToCode(block, 'LHS', Blockly.Python.ORDER_MULTIPLICATIVE);
-  var block2 = Blockly.Python.valueToCode(block, 'RHS', Blockly.Python.ORDER_MULTIPLICATIVE);
-  return [block1 + ' * ' + block2, Blockly.Python.ORDER_MULTIPLICATIVE];
+    var block1 = Blockly.Python.valueToCode(block, 'LHS', Blockly.Python.ORDER_MULTIPLICATIVE);
+    var block2 = Blockly.Python.valueToCode(block, 'RHS', Blockly.Python.ORDER_MULTIPLICATIVE);
+    return [block1 + ' * ' + block2, Blockly.Python.ORDER_MULTIPLICATIVE];
 };
 
 Blockly.Python['python_divide'] = function(block) {
-  var block1 = Blockly.Python.valueToCode(block, 'LHS', Blockly.Python.ORDER_MULTIPLICATIVE);
-  var block2 = Blockly.Python.valueToCode(block, 'RHS', Blockly.Python.ORDER_MULTIPLICATIVE);
-  return [block1 + ' / ' + block2, Blockly.Python.ORDER_MULTIPLICATIVE];
+    var block1 = Blockly.Python.valueToCode(block, 'LHS', Blockly.Python.ORDER_MULTIPLICATIVE);
+    var block2 = Blockly.Python.valueToCode(block, 'RHS', Blockly.Python.ORDER_MULTIPLICATIVE);
+    return [block1 + ' / ' + block2, Blockly.Python.ORDER_MULTIPLICATIVE];
 };
 
 Blockly.Python['python_int_divide'] = function(block) {
-  var block1 = Blockly.Python.valueToCode(block, 'LHS', Blockly.Python.ORDER_MULTIPLICATIVE);
-  var block2 = Blockly.Python.valueToCode(block, 'RHS', Blockly.Python.ORDER_MULTIPLICATIVE);
-  return [block1 + ' // ' + block2, Blockly.Python.ORDER_MULTIPLICATIVE];
+    var block1 = Blockly.Python.valueToCode(block, 'LHS', Blockly.Python.ORDER_MULTIPLICATIVE);
+    var block2 = Blockly.Python.valueToCode(block, 'RHS', Blockly.Python.ORDER_MULTIPLICATIVE);
+    return [block1 + ' // ' + block2, Blockly.Python.ORDER_MULTIPLICATIVE];
 };
 
 Blockly.Python['python_int_modulo'] = function(block) {
-  var block1 = Blockly.Python.valueToCode(block, 'LHS', Blockly.Python.ORDER_MULTIPLICATIVE);
-  var block2 = Blockly.Python.valueToCode(block, 'RHS', Blockly.Python.ORDER_MULTIPLICATIVE);
-  return [block1 + ' % ' + block2, Blockly.Python.ORDER_MULTIPLICATIVE];
+    var block1 = Blockly.Python.valueToCode(block, 'LHS', Blockly.Python.ORDER_MULTIPLICATIVE);
+    var block2 = Blockly.Python.valueToCode(block, 'RHS', Blockly.Python.ORDER_MULTIPLICATIVE);
+    return [block1 + ' % ' + block2, Blockly.Python.ORDER_MULTIPLICATIVE];
 };
 
 Blockly.Python['python_pow_op'] = function(block) {
-  var block1 = Blockly.Python.valueToCode(block, 'LHS', Blockly.Python.ORDER_EXPONENTIATION);
-  var block2 = Blockly.Python.valueToCode(block, 'RHS', Blockly.Python.ORDER_EXPONENTIATION);
-  return [block1 + ' ** ' + block2, Blockly.Python.ORDER_EXPONENTIATION];
+    var block1 = Blockly.Python.valueToCode(block, 'LHS', Blockly.Python.ORDER_EXPONENTIATION);
+    var block2 = Blockly.Python.valueToCode(block, 'RHS', Blockly.Python.ORDER_EXPONENTIATION);
+    return [block1 + ' ** ' + block2, Blockly.Python.ORDER_EXPONENTIATION];
 };
 
 Blockly.Python['python_unary_minus'] = function(block) {
-  var code = Blockly.Python.valueToCode(block, 'ARG', Blockly.Python.ORDER_UNARY_SIGN);
-  return ['-' + code, Blockly.Python.ORDER_UNARY_SIGN];
+    var code = Blockly.Python.valueToCode(block, 'ARG', Blockly.Python.ORDER_UNARY_SIGN);
+    return ['-' + code, Blockly.Python.ORDER_UNARY_SIGN];
 };
 
 Blockly.Python['python_round'] = function(block) {
-  var code = Blockly.Python.valueToCode(block, 'ARG', Blockly.Python.ORDER_NONE);
-  return ['round(' + code + ')', Blockly.Python.ORDER_FUNCTION_CALL];
+    var code = Blockly.Python.valueToCode(block, 'ARG', Blockly.Python.ORDER_NONE);
+    return ['round(' + code + ')', Blockly.Python.ORDER_FUNCTION_CALL];
 };
 
 Blockly.Python['python_abs'] = function(block) {
-  var code = Blockly.Python.valueToCode(block, 'ARG', Blockly.Python.ORDER_NONE);
-  return ['abs(' + code + ')', Blockly.Python.ORDER_FUNCTION_CALL];
+    var code = Blockly.Python.valueToCode(block, 'ARG', Blockly.Python.ORDER_NONE);
+    return ['abs(' + code + ')', Blockly.Python.ORDER_FUNCTION_CALL];
 };
 
 Blockly.Python['python_pow'] = function(block) {
-  var block1 = Blockly.Python.valueToCode(block, 'ARG1', Blockly.Python.ORDER_NONE);
-  var block2 = Blockly.Python.valueToCode(block, 'ARG2', Blockly.Python.ORDER_NONE);
-  return ['pow(' + block1 + ', ' + block2 + ')', Blockly.Python.ORDER_FUNCTION_CALL];
+    var block1 = Blockly.Python.valueToCode(block, 'ARG1', Blockly.Python.ORDER_NONE);
+    var block2 = Blockly.Python.valueToCode(block, 'ARG2', Blockly.Python.ORDER_NONE);
+    return ['pow(' + block1 + ', ' + block2 + ')', Blockly.Python.ORDER_FUNCTION_CALL];
 };
 
 Blockly.Python['python_numeric_min'] = function(block) {
-  var block1 = Blockly.Python.valueToCode(block, 'ARG1', Blockly.Python.ORDER_NONE);
-  var block2 = Blockly.Python.valueToCode(block, 'ARG2', Blockly.Python.ORDER_NONE);
-  return ['min(' + block1 + ', ' + block2 + ')', Blockly.Python.ORDER_FUNCTION_CALL];
+    var block1 = Blockly.Python.valueToCode(block, 'ARG1', Blockly.Python.ORDER_NONE);
+    var block2 = Blockly.Python.valueToCode(block, 'ARG2', Blockly.Python.ORDER_NONE);
+    return ['min(' + block1 + ', ' + block2 + ')', Blockly.Python.ORDER_FUNCTION_CALL];
 };
 
 Blockly.Python['python_numeric_max'] = function(block) {
-  var block1 = Blockly.Python.valueToCode(block, 'ARG1', Blockly.Python.ORDER_NONE);
-  var block2 = Blockly.Python.valueToCode(block, 'ARG2', Blockly.Python.ORDER_NONE);
-  return ['max(' + block1 + ', ' + block2 + ')', Blockly.Python.ORDER_FUNCTION_CALL];
+    var block1 = Blockly.Python.valueToCode(block, 'ARG1', Blockly.Python.ORDER_NONE);
+    var block2 = Blockly.Python.valueToCode(block, 'ARG2', Blockly.Python.ORDER_NONE);
+    return ['max(' + block1 + ', ' + block2 + ')', Blockly.Python.ORDER_FUNCTION_CALL];
 };
 
 Blockly.Python['python_sum'] = function(block) {
-  var code = Blockly.Python.valueToCode(block, 'ARG', Blockly.Python.ORDER_NONE);
-  return ['sum(' + code + ')', Blockly.Python.ORDER_FUNCTION_CALL];
+    var code = Blockly.Python.valueToCode(block, 'ARG', Blockly.Python.ORDER_NONE);
+    return ['sum(' + code + ')', Blockly.Python.ORDER_FUNCTION_CALL];
 };

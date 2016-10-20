@@ -18,10 +18,10 @@
  * limitations under the License.
  */
 
- /**
-  * @fileoverview Boolean blocks for PythonBlocks
-  * @author up649230@myport.ac.uk
-  */
+/**
+ * @fileoverview Boolean blocks for PythonBlocks
+ * @author up649230@myport.ac.uk
+ */
 'use strict';
 
 goog.provide('Blockly.Python.pybooleans');
@@ -29,27 +29,27 @@ goog.provide('Blockly.Python.pybooleans');
 goog.require('Blockly.Python');
 
 Blockly.Python['python_true'] = function(block) {
-  return ['True', Blockly.Python.ORDER_ATOMIC];
+    return ['True', Blockly.Python.ORDER_ATOMIC];
 };
 
 Blockly.Python['python_false'] = function(block) {
-  var code = block.getFieldValue('False');
-  return ['False', Blockly.Python.ORDER_ATOMIC];
+    var code = block.getFieldValue('False');
+    return ['False', Blockly.Python.ORDER_ATOMIC];
 };
 
 Blockly.Python['python_and'] = function(block) {
-  var block1 = Blockly.Python.valueToCode(block, 'LHS', Blockly.Python.ORDER_LOGICAL_AND);
-  var block2 = Blockly.Python.valueToCode(block, 'RHS', Blockly.Python.ORDER_LOGICAL_AND);
-  return [block1 + ' and ' + block2, Blockly.Python.ORDER_LOGICAL_AND];
+    var block1 = Blockly.Python.valueToCode(block, 'LHS', Blockly.Python.ORDER_LOGICAL_AND);
+    var block2 = Blockly.Python.valueToCode(block, 'RHS', Blockly.Python.ORDER_LOGICAL_AND);
+    return [block1 + ' and ' + block2, Blockly.Python.ORDER_LOGICAL_AND];
 };
 
 Blockly.Python['python_or'] = function(block) {
-  var block1 = Blockly.Python.valueToCode(block, 'LHS', Blockly.Python.ORDER_LOGICAL_OR);
-  var block2 = Blockly.Python.valueToCode(block, 'RHS', Blockly.Python.ORDER_LOGICAL_OR);
-  return [block1 + ' or ' + block2, Blockly.Python.ORDER_LOGICAL_OR];
+    var block1 = Blockly.Python.valueToCode(block, 'LHS', Blockly.Python.ORDER_LOGICAL_OR);
+    var block2 = Blockly.Python.valueToCode(block, 'RHS', Blockly.Python.ORDER_LOGICAL_OR);
+    return [block1 + ' or ' + block2, Blockly.Python.ORDER_LOGICAL_OR];
 };
 
 Blockly.Python['python_not'] = function(block) {
-  var code = Blockly.Python.valueToCode(block, 'ARG', Blockly.Python.ORDER_LOGICAL_NOT);
-  return ['not ' + code, Blockly.Python.ORDER_LOGICAL_NOT];
+    var code = Blockly.Python.valueToCode(block, 'ARG', Blockly.Python.ORDER_LOGICAL_NOT);
+    return ['not ' + code, Blockly.Python.ORDER_LOGICAL_NOT];
 };

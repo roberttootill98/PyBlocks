@@ -31,12 +31,12 @@ goog.require('Blockly.Names');
 
 
 Blockly.Python['variables_set'] = function(block) {
-  // var variable = block.getFieldValue(block, 'VAR', Blockly.Python.ORDER_NONE);
-  // var value = block.getFieldValue(block, 'VALUE', Blockly.Python.ORDER_NONE);
+    // var variable = block.getFieldValue(block, 'VAR', Blockly.Python.ORDER_NONE);
+    // var value = block.getFieldValue(block, 'VALUE', Blockly.Python.ORDER_NONE);
 
-  var variable = Blockly.Python.valueToCode(block, 'VAR', Blockly.Python.ORDER_NONE);
-  var value = Blockly.Python.valueToCode(block, 'VALUE', Blockly.Python.ORDER_NONE);
-  return variable + ' = ' + value + '\n';
+    var variable = Blockly.Python.valueToCode(block, 'VAR', Blockly.Python.ORDER_NONE);
+    var value = Blockly.Python.valueToCode(block, 'VALUE', Blockly.Python.ORDER_NONE);
+    return variable + ' = ' + value + '\n';
 };
 
 

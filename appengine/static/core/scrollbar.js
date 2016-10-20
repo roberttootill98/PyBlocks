@@ -37,14 +37,15 @@ goog.require('goog.events');
  * @constructor
  */
 Blockly.ScrollbarPair = function(workspace) {
-  this.workspace_ = workspace;
-  this.hScroll = new Blockly.Scrollbar(workspace, true, true);
-  this.vScroll = new Blockly.Scrollbar(workspace, false, true);
-  this.corner_ = Blockly.createSvgElement('rect',
-      {'height': Blockly.Scrollbar.scrollbarThickness,
-      'width': Blockly.Scrollbar.scrollbarThickness,
-      'class': 'blocklyScrollbarBackground'}, null);
-  Blockly.Scrollbar.insertAfter_(this.corner_, workspace.getBubbleCanvas());
+    this.workspace_ = workspace;
+    this.hScroll = new Blockly.Scrollbar(workspace, true, true);
+    this.vScroll = new Blockly.Scrollbar(workspace, false, true);
+    this.corner_ = Blockly.createSvgElement('rect', {
+        'height': Blockly.Scrollbar.scrollbarThickness,
+        'width': Blockly.Scrollbar.scrollbarThickness,
+        'class': 'blocklyScrollbarBackground'
+    }, null);
+    Blockly.Scrollbar.insertAfter_(this.corner_, workspace.getBubbleCanvas());
 };
 
 /**
@@ -59,14 +60,14 @@ Blockly.ScrollbarPair.prototype.oldHostMetrics_ = null;
  * Unlink from all DOM elements to prevent memory leaks.
  */
 Blockly.ScrollbarPair.prototype.dispose = function() {
-  goog.dom.removeNode(this.corner_);
-  this.corner_ = null;
-  this.workspace_ = null;
-  this.oldHostMetrics_ = null;
-  this.hScroll.dispose();
-  this.hScroll = null;
-  this.vScroll.dispose();
-  this.vScroll = null;
+    goog.dom.removeNode(this.corner_);
+    this.corner_ = null;
+    this.workspace_ = null;
+    this.oldHostMetrics_ = null;
+    this.hScroll.dispose();
+    this.hScroll = null;
+    this.vScroll.dispose();
+    this.vScroll = null;
 };
 
 /**
@@ -74,60 +75,60 @@ Blockly.ScrollbarPair.prototype.dispose = function() {
  * Also reposition the corner rectangle.
  */
 Blockly.ScrollbarPair.prototype.resize = function() {
-  // Look up the host metrics once, and use for both scrollbars.
-  var hostMetrics = this.workspace_.getMetrics();
-  if (!hostMetrics) {
-    // Host element is likely not visible.
-    return;
-  }
+    // Look up the host metrics once, and use for both scrollbars.
+    var hostMetrics = this.workspace_.getMetrics();
+    if (!hostMetrics) {
+        // Host element is likely not visible.
+        return;
+    }
 
-  // Only change the scrollbars if there has been a change in metrics.
-  var resizeH = false;
-  var resizeV = false;
-  if (!this.oldHostMetrics_ ||
-      this.oldHostMetrics_.viewWidth != hostMetrics.viewWidth ||
-      this.oldHostMetrics_.viewHeight != hostMetrics.viewHeight ||
-      this.oldHostMetrics_.absoluteTop != hostMetrics.absoluteTop ||
-      this.oldHostMetrics_.absoluteLeft != hostMetrics.absoluteLeft) {
-    // The window has been resized or repositioned.
-    resizeH = true;
-    resizeV = true;
-  } else {
-    // Has the content been resized or moved?
+    // Only change the scrollbars if there has been a change in metrics.
+    var resizeH = false;
+    var resizeV = false;
     if (!this.oldHostMetrics_ ||
-        this.oldHostMetrics_.contentWidth != hostMetrics.contentWidth ||
-        this.oldHostMetrics_.viewLeft != hostMetrics.viewLeft ||
-        this.oldHostMetrics_.contentLeft != hostMetrics.contentLeft) {
-      resizeH = true;
+        this.oldHostMetrics_.viewWidth != hostMetrics.viewWidth ||
+        this.oldHostMetrics_.viewHeight != hostMetrics.viewHeight ||
+        this.oldHostMetrics_.absoluteTop != hostMetrics.absoluteTop ||
+        this.oldHostMetrics_.absoluteLeft != hostMetrics.absoluteLeft) {
+        // The window has been resized or repositioned.
+        resizeH = true;
+        resizeV = true;
+    } else {
+        // Has the content been resized or moved?
+        if (!this.oldHostMetrics_ ||
+            this.oldHostMetrics_.contentWidth != hostMetrics.contentWidth ||
+            this.oldHostMetrics_.viewLeft != hostMetrics.viewLeft ||
+            this.oldHostMetrics_.contentLeft != hostMetrics.contentLeft) {
+            resizeH = true;
+        }
+        if (!this.oldHostMetrics_ ||
+            this.oldHostMetrics_.contentHeight != hostMetrics.contentHeight ||
+            this.oldHostMetrics_.viewTop != hostMetrics.viewTop ||
+            this.oldHostMetrics_.contentTop != hostMetrics.contentTop) {
+            resizeV = true;
+        }
+    }
+    if (resizeH) {
+        this.hScroll.resize(hostMetrics);
+    }
+    if (resizeV) {
+        this.vScroll.resize(hostMetrics);
+    }
+
+    // Reposition the corner square.
+    if (!this.oldHostMetrics_ ||
+        this.oldHostMetrics_.viewWidth != hostMetrics.viewWidth ||
+        this.oldHostMetrics_.absoluteLeft != hostMetrics.absoluteLeft) {
+        this.corner_.setAttribute('x', this.vScroll.xCoordinate);
     }
     if (!this.oldHostMetrics_ ||
-        this.oldHostMetrics_.contentHeight != hostMetrics.contentHeight ||
-        this.oldHostMetrics_.viewTop != hostMetrics.viewTop ||
-        this.oldHostMetrics_.contentTop != hostMetrics.contentTop) {
-      resizeV = true;
+        this.oldHostMetrics_.viewHeight != hostMetrics.viewHeight ||
+        this.oldHostMetrics_.absoluteTop != hostMetrics.absoluteTop) {
+        this.corner_.setAttribute('y', this.hScroll.yCoordinate);
     }
-  }
-  if (resizeH) {
-    this.hScroll.resize(hostMetrics);
-  }
-  if (resizeV) {
-    this.vScroll.resize(hostMetrics);
-  }
 
-  // Reposition the corner square.
-  if (!this.oldHostMetrics_ ||
-      this.oldHostMetrics_.viewWidth != hostMetrics.viewWidth ||
-      this.oldHostMetrics_.absoluteLeft != hostMetrics.absoluteLeft) {
-    this.corner_.setAttribute('x', this.vScroll.xCoordinate);
-  }
-  if (!this.oldHostMetrics_ ||
-      this.oldHostMetrics_.viewHeight != hostMetrics.viewHeight ||
-      this.oldHostMetrics_.absoluteTop != hostMetrics.absoluteTop) {
-    this.corner_.setAttribute('y', this.hScroll.yCoordinate);
-  }
-
-  // Cache the current metrics to potentially short-cut the next resize event.
-  this.oldHostMetrics_ = hostMetrics;
+    // Cache the current metrics to potentially short-cut the next resize event.
+    this.oldHostMetrics_ = hostMetrics;
 };
 
 /**
@@ -136,8 +137,8 @@ Blockly.ScrollbarPair.prototype.resize = function() {
  * @param {number} y Vertical scroll value.
  */
 Blockly.ScrollbarPair.prototype.set = function(x, y) {
-  this.hScroll.set(x);
-  this.vScroll.set(y);
+    this.hScroll.set(x);
+    this.vScroll.set(y);
 };
 
 // --------------------------------------------------------------------
@@ -152,30 +153,30 @@ Blockly.ScrollbarPair.prototype.set = function(x, y) {
  * @constructor
  */
 Blockly.Scrollbar = function(workspace, horizontal, opt_pair) {
-  this.workspace_ = workspace;
-  this.pair_ = opt_pair || false;
-  this.horizontal_ = horizontal;
+    this.workspace_ = workspace;
+    this.pair_ = opt_pair || false;
+    this.horizontal_ = horizontal;
 
-  this.createDom_();
+    this.createDom_();
 
-  if (horizontal) {
-    this.svgBackground_.setAttribute('height',
-        Blockly.Scrollbar.scrollbarThickness);
-    this.svgKnob_.setAttribute('height',
-        Blockly.Scrollbar.scrollbarThickness - 5);
-    this.svgKnob_.setAttribute('y', 2.5);
-  } else {
-    this.svgBackground_.setAttribute('width',
-        Blockly.Scrollbar.scrollbarThickness);
-    this.svgKnob_.setAttribute('width',
-        Blockly.Scrollbar.scrollbarThickness - 5);
-    this.svgKnob_.setAttribute('x', 2.5);
-  }
-  var scrollbar = this;
-  this.onMouseDownBarWrapper_ = Blockly.bindEvent_(this.svgBackground_,
-      'mousedown', scrollbar, scrollbar.onMouseDownBar_);
-  this.onMouseDownKnobWrapper_ = Blockly.bindEvent_(this.svgKnob_,
-      'mousedown', scrollbar, scrollbar.onMouseDownKnob_);
+    if (horizontal) {
+        this.svgBackground_.setAttribute('height',
+            Blockly.Scrollbar.scrollbarThickness);
+        this.svgKnob_.setAttribute('height',
+            Blockly.Scrollbar.scrollbarThickness - 5);
+        this.svgKnob_.setAttribute('y', 2.5);
+    } else {
+        this.svgBackground_.setAttribute('width',
+            Blockly.Scrollbar.scrollbarThickness);
+        this.svgKnob_.setAttribute('width',
+            Blockly.Scrollbar.scrollbarThickness - 5);
+        this.svgKnob_.setAttribute('x', 2.5);
+    }
+    var scrollbar = this;
+    this.onMouseDownBarWrapper_ = Blockly.bindEvent_(this.svgBackground_,
+        'mousedown', scrollbar, scrollbar.onMouseDownBar_);
+    this.onMouseDownKnobWrapper_ = Blockly.bindEvent_(this.svgKnob_,
+        'mousedown', scrollbar, scrollbar.onMouseDownKnob_);
 };
 
 /**
@@ -185,7 +186,7 @@ Blockly.Scrollbar = function(workspace, horizontal, opt_pair) {
  */
 Blockly.Scrollbar.scrollbarThickness = 15;
 if (goog.events.BrowserFeature.TOUCH_ENABLED) {
-  Blockly.Scrollbar.scrollbarThickness = 25;
+    Blockly.Scrollbar.scrollbarThickness = 25;
 }
 
 /**
@@ -193,17 +194,17 @@ if (goog.events.BrowserFeature.TOUCH_ENABLED) {
  * Unlink from all DOM elements to prevent memory leaks.
  */
 Blockly.Scrollbar.prototype.dispose = function() {
-  this.onMouseUpKnob_();
-  Blockly.unbindEvent_(this.onMouseDownBarWrapper_);
-  this.onMouseDownBarWrapper_ = null;
-  Blockly.unbindEvent_(this.onMouseDownKnobWrapper_);
-  this.onMouseDownKnobWrapper_ = null;
+    this.onMouseUpKnob_();
+    Blockly.unbindEvent_(this.onMouseDownBarWrapper_);
+    this.onMouseDownBarWrapper_ = null;
+    Blockly.unbindEvent_(this.onMouseDownKnobWrapper_);
+    this.onMouseDownKnobWrapper_ = null;
 
-  goog.dom.removeNode(this.svgGroup_);
-  this.svgGroup_ = null;
-  this.svgBackground_ = null;
-  this.svgKnob_ = null;
-  this.workspace_ = null;
+    goog.dom.removeNode(this.svgGroup_);
+    this.svgGroup_ = null;
+    this.svgBackground_ = null;
+    this.svgKnob_ = null;
+    this.workspace_ = null;
 };
 
 /**
@@ -213,89 +214,89 @@ Blockly.Scrollbar.prototype.dispose = function() {
  * object.
  */
 Blockly.Scrollbar.prototype.resize = function(opt_metrics) {
-  // Determine the location, height and width of the host element.
-  var hostMetrics = opt_metrics;
-  if (!hostMetrics) {
-    hostMetrics = this.workspace_.getMetrics();
+    // Determine the location, height and width of the host element.
+    var hostMetrics = opt_metrics;
     if (!hostMetrics) {
-      // Host element is likely not visible.
-      return;
+        hostMetrics = this.workspace_.getMetrics();
+        if (!hostMetrics) {
+            // Host element is likely not visible.
+            return;
+        }
     }
-  }
-  /* hostMetrics is an object with the following properties.
-   * .viewHeight: Height of the visible rectangle,
-   * .viewWidth: Width of the visible rectangle,
-   * .contentHeight: Height of the contents,
-   * .contentWidth: Width of the content,
-   * .viewTop: Offset of top edge of visible rectangle from parent,
-   * .viewLeft: Offset of left edge of visible rectangle from parent,
-   * .contentTop: Offset of the top-most content from the y=0 coordinate,
-   * .contentLeft: Offset of the left-most content from the x=0 coordinate,
-   * .absoluteTop: Top-edge of view.
-   * .absoluteLeft: Left-edge of view.
-   */
-  if (this.horizontal_) {
-    var outerLength = hostMetrics.viewWidth - 1;
-    if (this.pair_) {
-      // Shorten the scrollbar to make room for the corner square.
-      outerLength -= Blockly.Scrollbar.scrollbarThickness;
+    /* hostMetrics is an object with the following properties.
+     * .viewHeight: Height of the visible rectangle,
+     * .viewWidth: Width of the visible rectangle,
+     * .contentHeight: Height of the contents,
+     * .contentWidth: Width of the content,
+     * .viewTop: Offset of top edge of visible rectangle from parent,
+     * .viewLeft: Offset of left edge of visible rectangle from parent,
+     * .contentTop: Offset of the top-most content from the y=0 coordinate,
+     * .contentLeft: Offset of the left-most content from the x=0 coordinate,
+     * .absoluteTop: Top-edge of view.
+     * .absoluteLeft: Left-edge of view.
+     */
+    if (this.horizontal_) {
+        var outerLength = hostMetrics.viewWidth - 1;
+        if (this.pair_) {
+            // Shorten the scrollbar to make room for the corner square.
+            outerLength -= Blockly.Scrollbar.scrollbarThickness;
+        } else {
+            // Only show the scrollbar if needed.
+            // Ideally this would also apply to scrollbar pairs, but that's a bigger
+            // headache (due to interactions with the corner square).
+            this.setVisible(outerLength < hostMetrics.contentHeight);
+        }
+        this.ratio_ = outerLength / hostMetrics.contentWidth;
+        if (this.ratio_ === -Infinity || this.ratio_ === Infinity ||
+            isNaN(this.ratio_)) {
+            this.ratio_ = 0;
+        }
+        var innerLength = hostMetrics.viewWidth * this.ratio_;
+        var innerOffset = (hostMetrics.viewLeft - hostMetrics.contentLeft) *
+            this.ratio_;
+        this.svgKnob_.setAttribute('width', Math.max(0, innerLength));
+        this.xCoordinate = hostMetrics.absoluteLeft + 0.5;
+        if (this.pair_ && this.workspace_.RTL) {
+            this.xCoordinate += hostMetrics.absoluteLeft +
+                Blockly.Scrollbar.scrollbarThickness;
+        }
+        this.yCoordinate = hostMetrics.absoluteTop + hostMetrics.viewHeight -
+            Blockly.Scrollbar.scrollbarThickness - 0.5;
+        this.svgGroup_.setAttribute('transform',
+            'translate(' + this.xCoordinate + ',' + this.yCoordinate + ')');
+        this.svgBackground_.setAttribute('width', Math.max(0, outerLength));
+        this.svgKnob_.setAttribute('x', this.constrainKnob_(innerOffset));
     } else {
-      // Only show the scrollbar if needed.
-      // Ideally this would also apply to scrollbar pairs, but that's a bigger
-      // headache (due to interactions with the corner square).
-      this.setVisible(outerLength < hostMetrics.contentHeight);
+        var outerLength = hostMetrics.viewHeight - 1;
+        if (this.pair_) {
+            // Shorten the scrollbar to make room for the corner square.
+            outerLength -= Blockly.Scrollbar.scrollbarThickness;
+        } else {
+            // Only show the scrollbar if needed.
+            this.setVisible(outerLength < hostMetrics.contentHeight);
+        }
+        this.ratio_ = outerLength / hostMetrics.contentHeight;
+        if (this.ratio_ === -Infinity || this.ratio_ === Infinity ||
+            isNaN(this.ratio_)) {
+            this.ratio_ = 0;
+        }
+        var innerLength = hostMetrics.viewHeight * this.ratio_;
+        var innerOffset = (hostMetrics.viewTop - hostMetrics.contentTop) *
+            this.ratio_;
+        this.svgKnob_.setAttribute('height', Math.max(0, innerLength));
+        this.xCoordinate = hostMetrics.absoluteLeft + 0.5;
+        if (!this.workspace_.RTL) {
+            this.xCoordinate += hostMetrics.viewWidth -
+                Blockly.Scrollbar.scrollbarThickness - 1;
+        }
+        this.yCoordinate = hostMetrics.absoluteTop + 0.5;
+        this.svgGroup_.setAttribute('transform',
+            'translate(' + this.xCoordinate + ',' + this.yCoordinate + ')');
+        this.svgBackground_.setAttribute('height', Math.max(0, outerLength));
+        this.svgKnob_.setAttribute('y', this.constrainKnob_(innerOffset));
     }
-    this.ratio_ = outerLength / hostMetrics.contentWidth;
-    if (this.ratio_ === -Infinity || this.ratio_ === Infinity ||
-        isNaN(this.ratio_)) {
-      this.ratio_ = 0;
-    }
-    var innerLength = hostMetrics.viewWidth * this.ratio_;
-    var innerOffset = (hostMetrics.viewLeft - hostMetrics.contentLeft) *
-        this.ratio_;
-    this.svgKnob_.setAttribute('width', Math.max(0, innerLength));
-    this.xCoordinate = hostMetrics.absoluteLeft + 0.5;
-    if (this.pair_ && this.workspace_.RTL) {
-      this.xCoordinate += hostMetrics.absoluteLeft +
-          Blockly.Scrollbar.scrollbarThickness;
-    }
-    this.yCoordinate = hostMetrics.absoluteTop + hostMetrics.viewHeight -
-        Blockly.Scrollbar.scrollbarThickness - 0.5;
-    this.svgGroup_.setAttribute('transform',
-        'translate(' + this.xCoordinate + ',' + this.yCoordinate + ')');
-    this.svgBackground_.setAttribute('width', Math.max(0, outerLength));
-    this.svgKnob_.setAttribute('x', this.constrainKnob_(innerOffset));
-  } else {
-    var outerLength = hostMetrics.viewHeight - 1;
-    if (this.pair_) {
-      // Shorten the scrollbar to make room for the corner square.
-      outerLength -= Blockly.Scrollbar.scrollbarThickness;
-    } else {
-      // Only show the scrollbar if needed.
-      this.setVisible(outerLength < hostMetrics.contentHeight);
-    }
-    this.ratio_ = outerLength / hostMetrics.contentHeight;
-    if (this.ratio_ === -Infinity || this.ratio_ === Infinity ||
-        isNaN(this.ratio_)) {
-      this.ratio_ = 0;
-    }
-    var innerLength = hostMetrics.viewHeight * this.ratio_;
-    var innerOffset = (hostMetrics.viewTop - hostMetrics.contentTop) *
-        this.ratio_;
-    this.svgKnob_.setAttribute('height', Math.max(0, innerLength));
-    this.xCoordinate = hostMetrics.absoluteLeft + 0.5;
-    if (!this.workspace_.RTL) {
-      this.xCoordinate += hostMetrics.viewWidth -
-          Blockly.Scrollbar.scrollbarThickness - 1;
-    }
-    this.yCoordinate = hostMetrics.absoluteTop + 0.5;
-    this.svgGroup_.setAttribute('transform',
-        'translate(' + this.xCoordinate + ',' + this.yCoordinate + ')');
-    this.svgBackground_.setAttribute('height', Math.max(0, outerLength));
-    this.svgKnob_.setAttribute('y', this.constrainKnob_(innerOffset));
-  }
-  // Resizing may have caused some scrolling.
-  this.onScroll_();
+    // Resizing may have caused some scrolling.
+    this.onScroll_();
 };
 
 /**
@@ -304,23 +305,29 @@ Blockly.Scrollbar.prototype.resize = function(opt_metrics) {
  * @private
  */
 Blockly.Scrollbar.prototype.createDom_ = function() {
-  /* Create the following DOM:
-  <g class="blocklyScrollbarHorizontal">
-    <rect class="blocklyScrollbarBackground" />
-    <rect class="blocklyScrollbarKnob" rx="8" ry="8" />
-  </g>
-  */
-  var className = 'blocklyScrollbar' +
-      (this.horizontal_ ? 'Horizontal' : 'Vertical');
-  this.svgGroup_ = Blockly.createSvgElement('g', {'class': className}, null);
-  this.svgBackground_ = Blockly.createSvgElement('rect',
-      {'class': 'blocklyScrollbarBackground'}, this.svgGroup_);
-  var radius = Math.floor((Blockly.Scrollbar.scrollbarThickness - 5) / 2);
-  this.svgKnob_ = Blockly.createSvgElement('rect',
-      {'class': 'blocklyScrollbarKnob', 'rx': radius, 'ry': radius},
-      this.svgGroup_);
-  Blockly.Scrollbar.insertAfter_(this.svgGroup_,
-                                 this.workspace_.getBubbleCanvas());
+    /* Create the following DOM:
+    <g class="blocklyScrollbarHorizontal">
+      <rect class="blocklyScrollbarBackground" />
+      <rect class="blocklyScrollbarKnob" rx="8" ry="8" />
+    </g>
+    */
+    var className = 'blocklyScrollbar' +
+        (this.horizontal_ ? 'Horizontal' : 'Vertical');
+    this.svgGroup_ = Blockly.createSvgElement('g', {
+        'class': className
+    }, null);
+    this.svgBackground_ = Blockly.createSvgElement('rect', {
+        'class': 'blocklyScrollbarBackground'
+    }, this.svgGroup_);
+    var radius = Math.floor((Blockly.Scrollbar.scrollbarThickness - 5) / 2);
+    this.svgKnob_ = Blockly.createSvgElement('rect', {
+            'class': 'blocklyScrollbarKnob',
+            'rx': radius,
+            'ry': radius
+        },
+        this.svgGroup_);
+    Blockly.Scrollbar.insertAfter_(this.svgGroup_,
+        this.workspace_.getBubbleCanvas());
 };
 
 /**
@@ -329,7 +336,7 @@ Blockly.Scrollbar.prototype.createDom_ = function() {
  * @return {boolean} True if visible.
  */
 Blockly.Scrollbar.prototype.isVisible = function() {
-  return this.svgGroup_.getAttribute('display') != 'none';
+    return this.svgGroup_.getAttribute('display') != 'none';
 };
 
 /**
@@ -338,21 +345,24 @@ Blockly.Scrollbar.prototype.isVisible = function() {
  * @param {boolean} visible True if visible.
  */
 Blockly.Scrollbar.prototype.setVisible = function(visible) {
-  if (visible == this.isVisible()) {
-    return;
-  }
-  // Ideally this would also apply to scrollbar pairs, but that's a bigger
-  // headache (due to interactions with the corner square).
-  if (this.pair_) {
-    throw 'Unable to toggle visibility of paired scrollbars.';
-  }
-  if (visible) {
-    this.svgGroup_.setAttribute('display', 'block');
-  } else {
-    // Hide the scrollbar.
-    this.workspace_.setMetrics({x: 0, y: 0});
-    this.svgGroup_.setAttribute('display', 'none');
-  }
+    if (visible == this.isVisible()) {
+        return;
+    }
+    // Ideally this would also apply to scrollbar pairs, but that's a bigger
+    // headache (due to interactions with the corner square).
+    if (this.pair_) {
+        throw 'Unable to toggle visibility of paired scrollbars.';
+    }
+    if (visible) {
+        this.svgGroup_.setAttribute('display', 'block');
+    } else {
+        // Hide the scrollbar.
+        this.workspace_.setMetrics({
+            x: 0,
+            y: 0
+        });
+        this.svgGroup_.setAttribute('display', 'none');
+    }
 };
 
 /**
@@ -362,35 +372,35 @@ Blockly.Scrollbar.prototype.setVisible = function(visible) {
  * @private
  */
 Blockly.Scrollbar.prototype.onMouseDownBar_ = function(e) {
-  this.onMouseUpKnob_();
-  if (Blockly.isRightButton(e)) {
-    // Right-click.
-    // Scrollbars have no context menu.
+    this.onMouseUpKnob_();
+    if (Blockly.isRightButton(e)) {
+        // Right-click.
+        // Scrollbars have no context menu.
+        e.stopPropagation();
+        return;
+    }
+    var mouseXY = Blockly.mouseToSvg(e, this.workspace_.options.svg);
+    var mouseLocation = this.horizontal_ ? mouseXY.x : mouseXY.y;
+
+    var knobXY = Blockly.getSvgXY_(this.svgKnob_, this.workspace_);
+    var knobStart = this.horizontal_ ? knobXY.x : knobXY.y;
+    var knobLength = parseFloat(
+        this.svgKnob_.getAttribute(this.horizontal_ ? 'width' : 'height'));
+    var knobValue = parseFloat(
+        this.svgKnob_.getAttribute(this.horizontal_ ? 'x' : 'y'));
+
+    var pageLength = knobLength * 0.95;
+    if (mouseLocation <= knobStart) {
+        // Decrease the scrollbar's value by a page.
+        knobValue -= pageLength;
+    } else if (mouseLocation >= knobStart + knobLength) {
+        // Increase the scrollbar's value by a page.
+        knobValue += pageLength;
+    }
+    this.svgKnob_.setAttribute(this.horizontal_ ? 'x' : 'y',
+        this.constrainKnob_(knobValue));
+    this.onScroll_();
     e.stopPropagation();
-    return;
-  }
-  var mouseXY = Blockly.mouseToSvg(e, this.workspace_.options.svg);
-  var mouseLocation = this.horizontal_ ? mouseXY.x : mouseXY.y;
-
-  var knobXY = Blockly.getSvgXY_(this.svgKnob_, this.workspace_);
-  var knobStart = this.horizontal_ ? knobXY.x : knobXY.y;
-  var knobLength = parseFloat(
-      this.svgKnob_.getAttribute(this.horizontal_ ? 'width' : 'height'));
-  var knobValue = parseFloat(
-      this.svgKnob_.getAttribute(this.horizontal_ ? 'x' : 'y'));
-
-  var pageLength = knobLength * 0.95;
-  if (mouseLocation <= knobStart) {
-    // Decrease the scrollbar's value by a page.
-    knobValue -= pageLength;
-  } else if (mouseLocation >= knobStart + knobLength) {
-    // Increase the scrollbar's value by a page.
-    knobValue += pageLength;
-  }
-  this.svgKnob_.setAttribute(this.horizontal_ ? 'x' : 'y',
-                             this.constrainKnob_(knobValue));
-  this.onScroll_();
-  e.stopPropagation();
 };
 
 /**
@@ -400,23 +410,23 @@ Blockly.Scrollbar.prototype.onMouseDownBar_ = function(e) {
  * @private
  */
 Blockly.Scrollbar.prototype.onMouseDownKnob_ = function(e) {
-  this.onMouseUpKnob_();
-  if (Blockly.isRightButton(e)) {
-    // Right-click.
-    // Scrollbars have no context menu.
+    this.onMouseUpKnob_();
+    if (Blockly.isRightButton(e)) {
+        // Right-click.
+        // Scrollbars have no context menu.
+        e.stopPropagation();
+        return;
+    }
+    // Look up the current translation and record it.
+    this.startDragKnob = parseFloat(
+        this.svgKnob_.getAttribute(this.horizontal_ ? 'x' : 'y'));
+    // Record the current mouse position.
+    this.startDragMouse = this.horizontal_ ? e.clientX : e.clientY;
+    Blockly.Scrollbar.onMouseUpWrapper_ = Blockly.bindEvent_(document,
+        'mouseup', this, this.onMouseUpKnob_);
+    Blockly.Scrollbar.onMouseMoveWrapper_ = Blockly.bindEvent_(document,
+        'mousemove', this, this.onMouseMoveKnob_);
     e.stopPropagation();
-    return;
-  }
-  // Look up the current translation and record it.
-  this.startDragKnob = parseFloat(
-      this.svgKnob_.getAttribute(this.horizontal_ ? 'x' : 'y'));
-  // Record the current mouse position.
-  this.startDragMouse = this.horizontal_ ? e.clientX : e.clientY;
-  Blockly.Scrollbar.onMouseUpWrapper_ = Blockly.bindEvent_(document,
-      'mouseup', this, this.onMouseUpKnob_);
-  Blockly.Scrollbar.onMouseMoveWrapper_ = Blockly.bindEvent_(document,
-      'mousemove', this, this.onMouseMoveKnob_);
-  e.stopPropagation();
 };
 
 /**
@@ -425,13 +435,13 @@ Blockly.Scrollbar.prototype.onMouseDownKnob_ = function(e) {
  * @private
  */
 Blockly.Scrollbar.prototype.onMouseMoveKnob_ = function(e) {
-  var currentMouse = this.horizontal_ ? e.clientX : e.clientY;
-  var mouseDelta = currentMouse - this.startDragMouse;
-  var knobValue = this.startDragKnob + mouseDelta;
-  // Position the bar.
-  this.svgKnob_.setAttribute(this.horizontal_ ? 'x' : 'y',
-                             this.constrainKnob_(knobValue));
-  this.onScroll_();
+    var currentMouse = this.horizontal_ ? e.clientX : e.clientY;
+    var mouseDelta = currentMouse - this.startDragMouse;
+    var knobValue = this.startDragKnob + mouseDelta;
+    // Position the bar.
+    this.svgKnob_.setAttribute(this.horizontal_ ? 'x' : 'y',
+        this.constrainKnob_(knobValue));
+    this.onScroll_();
 };
 
 /**
@@ -439,16 +449,16 @@ Blockly.Scrollbar.prototype.onMouseMoveKnob_ = function(e) {
  * @private
  */
 Blockly.Scrollbar.prototype.onMouseUpKnob_ = function() {
-  Blockly.removeAllRanges();
-  Blockly.hideChaff(true);
-  if (Blockly.Scrollbar.onMouseUpWrapper_) {
-    Blockly.unbindEvent_(Blockly.Scrollbar.onMouseUpWrapper_);
-    Blockly.Scrollbar.onMouseUpWrapper_ = null;
-  }
-  if (Blockly.Scrollbar.onMouseMoveWrapper_) {
-    Blockly.unbindEvent_(Blockly.Scrollbar.onMouseMoveWrapper_);
-    Blockly.Scrollbar.onMouseMoveWrapper_ = null;
-  }
+    Blockly.removeAllRanges();
+    Blockly.hideChaff(true);
+    if (Blockly.Scrollbar.onMouseUpWrapper_) {
+        Blockly.unbindEvent_(Blockly.Scrollbar.onMouseUpWrapper_);
+        Blockly.Scrollbar.onMouseUpWrapper_ = null;
+    }
+    if (Blockly.Scrollbar.onMouseMoveWrapper_) {
+        Blockly.unbindEvent_(Blockly.Scrollbar.onMouseMoveWrapper_);
+        Blockly.Scrollbar.onMouseMoveWrapper_ = null;
+    }
 };
 
 /**
@@ -459,15 +469,15 @@ Blockly.Scrollbar.prototype.onMouseUpKnob_ = function() {
  * @private
  */
 Blockly.Scrollbar.prototype.constrainKnob_ = function(value) {
-  if (value <= 0 || isNaN(value)) {
-    value = 0;
-  } else {
-    var axis = this.horizontal_ ? 'width' : 'height';
-    var barLength = parseFloat(this.svgBackground_.getAttribute(axis));
-    var knobLength = parseFloat(this.svgKnob_.getAttribute(axis));
-    value = Math.min(value, barLength - knobLength);
-  }
-  return value;
+    if (value <= 0 || isNaN(value)) {
+        value = 0;
+    } else {
+        var axis = this.horizontal_ ? 'width' : 'height';
+        var barLength = parseFloat(this.svgBackground_.getAttribute(axis));
+        var knobLength = parseFloat(this.svgKnob_.getAttribute(axis));
+        value = Math.min(value, barLength - knobLength);
+    }
+    return value;
 };
 
 /**
@@ -475,21 +485,21 @@ Blockly.Scrollbar.prototype.constrainKnob_ = function(value) {
  * @private
  */
 Blockly.Scrollbar.prototype.onScroll_ = function() {
-  var knobValue = parseFloat(
-      this.svgKnob_.getAttribute(this.horizontal_ ? 'x' : 'y'));
-  var barLength = parseFloat(
-      this.svgBackground_.getAttribute(this.horizontal_ ? 'width' : 'height'));
-  var ratio = knobValue / barLength;
-  if (isNaN(ratio)) {
-    ratio = 0;
-  }
-  var xyRatio = {};
-  if (this.horizontal_) {
-    xyRatio.x = ratio;
-  } else {
-    xyRatio.y = ratio;
-  }
-  this.workspace_.setMetrics(xyRatio);
+    var knobValue = parseFloat(
+        this.svgKnob_.getAttribute(this.horizontal_ ? 'x' : 'y'));
+    var barLength = parseFloat(
+        this.svgBackground_.getAttribute(this.horizontal_ ? 'width' : 'height'));
+    var ratio = knobValue / barLength;
+    if (isNaN(ratio)) {
+        ratio = 0;
+    }
+    var xyRatio = {};
+    if (this.horizontal_) {
+        xyRatio.x = ratio;
+    } else {
+        xyRatio.y = ratio;
+    }
+    this.workspace_.setMetrics(xyRatio);
 };
 
 /**
@@ -497,9 +507,9 @@ Blockly.Scrollbar.prototype.onScroll_ = function() {
  * @param {number} value The distance from the top/left end of the bar.
  */
 Blockly.Scrollbar.prototype.set = function(value) {
-  // Move the scrollbar slider.
-  this.svgKnob_.setAttribute(this.horizontal_ ? 'x' : 'y', value * this.ratio_);
-  this.onScroll_();
+    // Move the scrollbar slider.
+    this.svgKnob_.setAttribute(this.horizontal_ ? 'x' : 'y', value * this.ratio_);
+    this.onScroll_();
 };
 
 /**
@@ -510,14 +520,14 @@ Blockly.Scrollbar.prototype.set = function(value) {
  * @private
  */
 Blockly.Scrollbar.insertAfter_ = function(newNode, refNode) {
-  var siblingNode = refNode.nextSibling;
-  var parentNode = refNode.parentNode;
-  if (!parentNode) {
-    throw 'Reference node has no parent.';
-  }
-  if (siblingNode) {
-    parentNode.insertBefore(newNode, siblingNode);
-  } else {
-    parentNode.appendChild(newNode);
-  }
+    var siblingNode = refNode.nextSibling;
+    var parentNode = refNode.parentNode;
+    if (!parentNode) {
+        throw 'Reference node has no parent.';
+    }
+    if (siblingNode) {
+        parentNode.insertBefore(newNode, siblingNode);
+    } else {
+        parentNode.appendChild(newNode);
+    }
 };

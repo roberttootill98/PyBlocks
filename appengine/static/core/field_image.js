@@ -42,14 +42,14 @@ goog.require('goog.userAgent');
  * @constructor
  */
 Blockly.FieldImage = function(src, width, height, opt_alt) {
-  this.sourceBlock_ = null;
-  // Ensure height and width are numbers.  Strings are bad at math.
-  this.height_ = Number(height);
-  this.width_ = Number(width);
-  this.size_ = new goog.math.Size(this.width_,
-      this.height_ + 2 * Blockly.BlockSvg.INLINE_PADDING_Y);
-  this.text_ = opt_alt || '';
-  this.setValue(src);
+    this.sourceBlock_ = null;
+    // Ensure height and width are numbers.  Strings are bad at math.
+    this.height_ = Number(height);
+    this.width_ = Number(width);
+    this.size_ = new goog.math.Size(this.width_,
+        this.height_ + 2 * Blockly.BlockSvg.INLINE_PADDING_Y);
+    this.text_ = opt_alt || '';
+    this.setValue(src);
 };
 goog.inherits(Blockly.FieldImage, Blockly.Field);
 
@@ -70,43 +70,47 @@ Blockly.FieldImage.prototype.EDITABLE = false;
  * @param {!Blockly.Block} block The block containing this text.
  */
 Blockly.FieldImage.prototype.init = function(block) {
-  if (this.sourceBlock_) {
-    // Image has already been initialized once.
-    return;
-  }
-  this.sourceBlock_ = block;
-  // Build the DOM.
-  /** @type {SVGElement} */
-  this.fieldGroup_ = Blockly.createSvgElement('g', {}, null);
-  if (!this.visible_) {
-    this.fieldGroup_.style.display = 'none';
-  }
-  /** @type {SVGElement} */
-  this.imageElement_ = Blockly.createSvgElement('image',
-      {'height': this.height_ + 'px',
-       'width': this.width_ + 'px'}, this.fieldGroup_);
-  this.setValue(this.src_);
-  if (goog.userAgent.GECKO) {
-    /**
-     * Due to a Firefox bug which eats mouse events on image elements,
-     * a transparent rectangle needs to be placed on top of the image.
-     * @type {SVGElement}
-     */
-    this.rectElement_ = Blockly.createSvgElement('rect',
-        {'height': this.height_ + 'px',
-         'width': this.width_ + 'px',
-         'fill-opacity': 0}, this.fieldGroup_);
-  }
-  block.getSvgRoot().appendChild(this.fieldGroup_);
+    if (this.sourceBlock_) {
+        // Image has already been initialized once.
+        return;
+    }
+    this.sourceBlock_ = block;
+    // Build the DOM.
+    /** @type {SVGElement} */
+    this.fieldGroup_ = Blockly.createSvgElement('g', {}, null);
+    if (!this.visible_) {
+        this.fieldGroup_.style.display = 'none';
+    }
+    /** @type {SVGElement} */
+    this.imageElement_ = Blockly.createSvgElement('image', {
+        'height': this.height_ + 'px',
+        'width': this.width_ + 'px'
+    }, this.fieldGroup_);
+    this.setValue(this.src_);
+    if (goog.userAgent.GECKO) {
+        /**
+         * Due to a Firefox bug which eats mouse events on image elements,
+         * a transparent rectangle needs to be placed on top of the image.
+         * @type {SVGElement}
+         */
+        this.rectElement_ = Blockly.createSvgElement('rect', {
+            'height': this.height_ + 'px',
+            'width': this.width_ + 'px',
+            'fill-opacity': 0
+        }, this.fieldGroup_);
+    }
+    block.getSvgRoot().appendChild(this.fieldGroup_);
 
-  // Configure the field to be transparent with respect to tooltips.
-  var topElement = this.rectElement_ || this.imageElement_;
-  topElement.tooltip = this.sourceBlock_;
-  Blockly.Tooltip.bindMouseEvents(topElement);
+    // Configure the field to be transparent with respect to tooltips.
+    var topElement = this.rectElement_ || this.imageElement_;
+    topElement.tooltip = this.sourceBlock_;
+    Blockly.Tooltip.bindMouseEvents(topElement);
 
- if (this.sourceBlock_.type == 'python_start') {
-   Blockly.bindEvent_(this.fieldGroup_, 'dblclick', this, function(e) { runfull() });
- }
+    if (this.sourceBlock_.type == 'python_start') {
+        Blockly.bindEvent_(this.fieldGroup_, 'dblclick', this, function(e) {
+            runfull()
+        });
+    }
 
 };
 
@@ -114,10 +118,10 @@ Blockly.FieldImage.prototype.init = function(block) {
  * Dispose of all DOM objects belonging to this text.
  */
 Blockly.FieldImage.prototype.dispose = function() {
-  goog.dom.removeNode(this.fieldGroup_);
-  this.fieldGroup_ = null;
-  this.imageElement_ = null;
-  this.rectElement_ = null;
+    goog.dom.removeNode(this.fieldGroup_);
+    this.fieldGroup_ = null;
+    this.imageElement_ = null;
+    this.rectElement_ = null;
 };
 
 /**
@@ -126,8 +130,8 @@ Blockly.FieldImage.prototype.dispose = function() {
  *     link to for its tooltip.
  */
 Blockly.FieldImage.prototype.setTooltip = function(newTip) {
-  var topElement = this.rectElement_ || this.imageElement_;
-  topElement.tooltip = newTip;
+    var topElement = this.rectElement_ || this.imageElement_;
+    topElement.tooltip = newTip;
 };
 
 /**
@@ -136,7 +140,7 @@ Blockly.FieldImage.prototype.setTooltip = function(newTip) {
  * @override
  */
 Blockly.FieldImage.prototype.getValue = function() {
-  return this.src_;
+    return this.src_;
 };
 
 /**
@@ -145,15 +149,15 @@ Blockly.FieldImage.prototype.getValue = function() {
  * @override
  */
 Blockly.FieldImage.prototype.setValue = function(src) {
-  if (src === null) {
-    // No change if null.
-    return;
-  }
-  this.src_ = src;
-  if (this.imageElement_) {
-    this.imageElement_.setAttributeNS('http://www.w3.org/1999/xlink',
-        'xlink:href', goog.isString(src) ? src : '');
-  }
+    if (src === null) {
+        // No change if null.
+        return;
+    }
+    this.src_ = src;
+    if (this.imageElement_) {
+        this.imageElement_.setAttributeNS('http://www.w3.org/1999/xlink',
+            'xlink:href', goog.isString(src) ? src : '');
+    }
 };
 
 /**
@@ -162,11 +166,11 @@ Blockly.FieldImage.prototype.setValue = function(src) {
  * @override
  */
 Blockly.FieldImage.prototype.setText = function(alt) {
-  if (alt === null) {
-    // No change if null.
-    return;
-  }
-  this.text_ = alt;
+    if (alt === null) {
+        // No change if null.
+        return;
+    }
+    this.text_ = alt;
 };
 
 /**
@@ -174,5 +178,5 @@ Blockly.FieldImage.prototype.setText = function(alt) {
  * @private
  */
 Blockly.FieldImage.prototype.render_ = function() {
-  // NOP
+    // NOP
 };

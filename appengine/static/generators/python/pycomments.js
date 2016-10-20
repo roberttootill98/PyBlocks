@@ -30,17 +30,17 @@ goog.require('Blockly.Python');
 
 
 Blockly.Python['python_linespace'] = function() {
-  return '\n';
+    return '\n';
 };
 
 Blockly.Python['python_comment'] = function(block) {
 
-  var code;
-  var lines;
+    var code;
+    var lines;
 
-  for (var i = 1, code = '', lines = block.lineCount; i <= lines; i++) {
-      code += '# ' + block.getFieldValue('COMMENT' + i) + '\n';
-  }
+    for (var i = 1, code = '', lines = block.lineCount; i <= lines; i++) {
+        code += '# ' + block.getFieldValue('COMMENT' + i) + '\n';
+    }
 
-  return code;
+    return code;
 };

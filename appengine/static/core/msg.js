@@ -47,16 +47,16 @@ goog.getMsgOrig = goog.getMsg;
  * @suppress {duplicate}
  */
 goog.getMsg = function(str, opt_values) {
-  var key = goog.getMsg.blocklyMsgMap[str];
-  if (key) {
-    str = Blockly.Msg[key];
-  }
-  return goog.getMsgOrig(str, opt_values);
+    var key = goog.getMsg.blocklyMsgMap[str];
+    if (key) {
+        str = Blockly.Msg[key];
+    }
+    return goog.getMsgOrig(str, opt_values);
 };
 
 /**
  * Mapping of Closure messages to Blockly.Msg names.
  */
 goog.getMsg.blocklyMsgMap = {
-  'Today': 'TODAY'
+    'Today': 'TODAY'
 };

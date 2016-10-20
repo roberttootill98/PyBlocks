@@ -37,10 +37,10 @@ goog.require('Blockly.Icon');
  * @constructor
  */
 Blockly.Warning = function(block) {
-  Blockly.Warning.superClass_.constructor.call(this, block);
-  this.createIcon();
-  // The text_ object can contain multiple warnings.
-  this.text_ = {};
+    Blockly.Warning.superClass_.constructor.call(this, block);
+    this.createIcon();
+    // The text_ object can contain multiple warnings.
+    this.text_ = {};
 };
 goog.inherits(Blockly.Warning, Blockly.Icon);
 
@@ -64,19 +64,22 @@ Blockly.Warning.prototype.png_ = 'data:image/svg+xml;charset=UTF-8,<?xml version
  * @private
  */
 Blockly.Warning.textToDom_ = function(text) {
-  var paragraph = /** @type {!SVGTextElement} */ (
-      Blockly.createSvgElement('text',
-          {'class': 'blocklyText blocklyBubbleText',
-           'y': Blockly.Bubble.BORDER_WIDTH},
-          null));
-  var lines = text.split('\n');
-  for (var i = 0; i < lines.length; i++) {
-    var tspanElement = Blockly.createSvgElement('tspan',
-        {'dy': '1em', 'x': Blockly.Bubble.BORDER_WIDTH}, paragraph);
-    var textNode = document.createTextNode(lines[i]);
-    tspanElement.appendChild(textNode);
-  }
-  return paragraph;
+    var paragraph = /** @type {!SVGTextElement} */ (
+        Blockly.createSvgElement('text', {
+                'class': 'blocklyText blocklyBubbleText',
+                'y': Blockly.Bubble.BORDER_WIDTH
+            },
+            null));
+    var lines = text.split('\n');
+    for (var i = 0; i < lines.length; i++) {
+        var tspanElement = Blockly.createSvgElement('tspan', {
+            'dy': '1em',
+            'x': Blockly.Bubble.BORDER_WIDTH
+        }, paragraph);
+        var textNode = document.createTextNode(lines[i]);
+        tspanElement.appendChild(textNode);
+    }
+    return paragraph;
 };
 
 /**
@@ -84,36 +87,37 @@ Blockly.Warning.textToDom_ = function(text) {
  * @param {boolean} visible True if the bubble should be visible.
  */
 Blockly.Warning.prototype.setVisible = function(visible) {
-  if (visible == this.isVisible()) {
-    // No change.
-    return;
-  }
-  if (visible) {
-    // Create the bubble to display all warnings.
-    var paragraph = Blockly.Warning.textToDom_(this.getText());
-    this.bubble_ = new Blockly.Bubble(
-        /** @type {!Blockly.Workspace} */ (this.block_.workspace),
-        paragraph, this.block_.svgBlockPath_,
-        this.iconX_, this.iconY_, null, null);
-    if (this.block_.RTL) {
-      // Right-align the paragraph.
-      // This cannot be done until the bubble is rendered on screen.
-      var maxWidth = paragraph.getBBox().width;
-      for (var i = 0, textElement; textElement = paragraph.childNodes[i]; i++) {
-        textElement.setAttribute('text-anchor', 'end');
-        textElement.setAttribute('x', maxWidth + Blockly.Bubble.BORDER_WIDTH);
-      }
+    if (visible == this.isVisible()) {
+        // No change.
+        return;
     }
-    this.updateColour();
-    // Bump the warning into the right location.
-    var size = this.bubble_.getBubbleSize();
-    this.bubble_.setBubbleSize(size.width, size.height);
-  } else {
-    // Dispose of the bubble.
-    this.bubble_.dispose();
-    this.bubble_ = null;
-    this.body_ = null;
-  }
+    if (visible) {
+        // Create the bubble to display all warnings.
+        var paragraph = Blockly.Warning.textToDom_(this.getText());
+        this.bubble_ = new Blockly.Bubble(
+            /** @type {!Blockly.Workspace} */
+            (this.block_.workspace),
+            paragraph, this.block_.svgBlockPath_,
+            this.iconX_, this.iconY_, null, null);
+        if (this.block_.RTL) {
+            // Right-align the paragraph.
+            // This cannot be done until the bubble is rendered on screen.
+            var maxWidth = paragraph.getBBox().width;
+            for (var i = 0, textElement; textElement = paragraph.childNodes[i]; i++) {
+                textElement.setAttribute('text-anchor', 'end');
+                textElement.setAttribute('x', maxWidth + Blockly.Bubble.BORDER_WIDTH);
+            }
+        }
+        this.updateColour();
+        // Bump the warning into the right location.
+        var size = this.bubble_.getBubbleSize();
+        this.bubble_.setBubbleSize(size.width, size.height);
+    } else {
+        // Dispose of the bubble.
+        this.bubble_.dispose();
+        this.bubble_ = null;
+        this.body_ = null;
+    }
 };
 
 /**
@@ -122,7 +126,7 @@ Blockly.Warning.prototype.setVisible = function(visible) {
  * @private
  */
 Blockly.Warning.prototype.bodyFocus_ = function(e) {
-  this.bubble_.promote_();
+    this.bubble_.promote_();
 };
 
 /**
@@ -132,18 +136,18 @@ Blockly.Warning.prototype.bodyFocus_ = function(e) {
  *     multiple warnings.
  */
 Blockly.Warning.prototype.setText = function(text, id) {
-  if (this.text_[id] == text) {
-    return;
-  }
-  if (text) {
-    this.text_[id] = text;
-  } else {
-    delete this.text_[id];
-  }
-  if (this.isVisible()) {
-    this.setVisible(false);
-    this.setVisible(true);
-  }
+    if (this.text_[id] == text) {
+        return;
+    }
+    if (text) {
+        this.text_[id] = text;
+    } else {
+        delete this.text_[id];
+    }
+    if (this.isVisible()) {
+        this.setVisible(false);
+        this.setVisible(true);
+    }
 };
 
 /**
@@ -151,17 +155,17 @@ Blockly.Warning.prototype.setText = function(text, id) {
  * @return {string} All texts concatenated into one string.
  */
 Blockly.Warning.prototype.getText = function() {
-  var allWarnings = [];
-  for (var id in this.text_) {
-    allWarnings.push(this.text_[id]);
-  }
-  return allWarnings.join('\n');
+    var allWarnings = [];
+    for (var id in this.text_) {
+        allWarnings.push(this.text_[id]);
+    }
+    return allWarnings.join('\n');
 };
 
 /**
  * Dispose of this warning.
  */
 Blockly.Warning.prototype.dispose = function() {
-  this.block_.warning = null;
-  Blockly.Icon.prototype.dispose.call(this);
+    this.block_.warning = null;
+    Blockly.Icon.prototype.dispose.call(this);
 };

@@ -30,31 +30,31 @@ goog.require('Blockly.Blocks');
 
 
 Blockly.Blocks['python_math_ceil'] = {
-  init: function() {
-    this.appendValueInput("ARG")
-        .appendField("math.ceil(");
-    this.appendDummyInput()
-        .appendField(")");
-    this.setInputsInline(true);
-    this.setTypeVecs([
-      ["float", "float"],
-      ["int", "float"],
-    ]);
-    this.setOutput(true);
-  },
-  onchange: function(ev) {
-    if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '' && workspace.imports.indexOf('import math') >= 0) {
-      this.holesFilled = true;
-      runtooltip(workspace.imports + 'print( ' + Blockly.Python.blockToCode(this)[0] + ')');
-      this.setTooltip(document.getElementById("hiddenoutput").textContent);
-    } else if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '') {
-      this.holesFilled = true;  
-      this.setTooltip('Returns the ceiling of a number');
-    } else {
-      this.holesFilled = false;
-      this.setTooltip('Returns the ceiling of a number');
+    init: function() {
+        this.appendValueInput("ARG")
+            .appendField("math.ceil(");
+        this.appendDummyInput()
+            .appendField(")");
+        this.setInputsInline(true);
+        this.setTypeVecs([
+            ["float", "float"],
+            ["int", "float"],
+        ]);
+        this.setOutput(true);
+    },
+    onchange: function(ev) {
+        if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '' && workspace.imports.indexOf('import math') >= 0) {
+            this.holesFilled = true;
+            runtooltip(workspace.imports + 'print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+            this.setTooltip(document.getElementById("hiddenoutput").textContent);
+        } else if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '') {
+            this.holesFilled = true;
+            this.setTooltip('Returns the ceiling of a number');
+        } else {
+            this.holesFilled = false;
+            this.setTooltip('Returns the ceiling of a number');
+        }
     }
-  }
 };
 
 // Blockly.Blocks['python_math_copysign'] = {
@@ -96,59 +96,59 @@ Blockly.Blocks['python_math_ceil'] = {
 // };
 
 Blockly.Blocks['python_math_factorial'] = {
-  init: function() {
-    this.appendValueInput("ARG")
-        .appendField("math.factorial(");
-    this.appendDummyInput()
-        .appendField(")");
-    this.setInputsInline(true);
-    this.setTypeVecs([
-      ["float", "float"],
-      ["int", "float"],
-    ]);
-    this.setOutput(true);
-  },
-  onchange: function(ev) {
-    if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '' && workspace.imports.indexOf('import math') >= 0) {
-      this.holesFilled = true;
-      runtooltip(workspace.imports + 'print( ' + Blockly.Python.blockToCode(this)[0] + ')');
-      this.setTooltip(document.getElementById("hiddenoutput").textContent);
-    } else if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '') {
-      this.holesFilled = true;
-      this.setTooltip('Returns the factorial of a number');
-    } else {
-      this.holesFilled = false;
-      this.setTooltip('Returns the factorial of a number');
+    init: function() {
+        this.appendValueInput("ARG")
+            .appendField("math.factorial(");
+        this.appendDummyInput()
+            .appendField(")");
+        this.setInputsInline(true);
+        this.setTypeVecs([
+            ["float", "float"],
+            ["int", "float"],
+        ]);
+        this.setOutput(true);
+    },
+    onchange: function(ev) {
+        if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '' && workspace.imports.indexOf('import math') >= 0) {
+            this.holesFilled = true;
+            runtooltip(workspace.imports + 'print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+            this.setTooltip(document.getElementById("hiddenoutput").textContent);
+        } else if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '') {
+            this.holesFilled = true;
+            this.setTooltip('Returns the factorial of a number');
+        } else {
+            this.holesFilled = false;
+            this.setTooltip('Returns the factorial of a number');
+        }
     }
-  }
 };
 
 Blockly.Blocks['python_math_floor'] = {
-  init: function() {
-    this.appendValueInput("ARG")
-        .appendField("math.floor(");
-    this.appendDummyInput()
-        .appendField(")");
-    this.setInputsInline(true);
-    this.setTypeVecs([
-      ["float", "float"],
-      ["int", "float"],
-    ]);
-    this.setOutput(true);
-  },
-  onchange: function(ev) {
-    if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '' && workspace.imports.indexOf('import math') >= 0) {
-      this.holesFilled = true;
-      runtooltip(workspace.imports + 'print( ' + Blockly.Python.blockToCode(this)[0] + ')');
-      this.setTooltip(document.getElementById("hiddenoutput").textContent);
-    } else if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '') {
-      this.holesFilled = true;
-      this.setTooltip('Returns the floor of a number');
-    } else {
-      this.holesFilled = false;
-      this.setTooltip('Returns the floor of a number');
+    init: function() {
+        this.appendValueInput("ARG")
+            .appendField("math.floor(");
+        this.appendDummyInput()
+            .appendField(")");
+        this.setInputsInline(true);
+        this.setTypeVecs([
+            ["float", "float"],
+            ["int", "float"],
+        ]);
+        this.setOutput(true);
+    },
+    onchange: function(ev) {
+        if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '' && workspace.imports.indexOf('import math') >= 0) {
+            this.holesFilled = true;
+            runtooltip(workspace.imports + 'print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+            this.setTooltip(document.getElementById("hiddenoutput").textContent);
+        } else if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '') {
+            this.holesFilled = true;
+            this.setTooltip('Returns the floor of a number');
+        } else {
+            this.holesFilled = false;
+            this.setTooltip('Returns the floor of a number');
+        }
     }
-  }
 };
 
 // Blockly.Blocks['python_math_fmod'] = {
@@ -332,31 +332,31 @@ Blockly.Blocks['python_math_floor'] = {
 
 // Not finished, requires an option argument for base (default is e)
 Blockly.Blocks['python_math_log'] = {
-  init: function() {
-    this.appendValueInput("ARG")
-        .appendField("math.log(");
-    this.appendDummyInput()
-        .appendField(")");
-    this.setInputsInline(true);
-    this.setTypeVecs([
-      ["float", "float"],
-      ["int", "float"],
-    ]);
-    this.setOutput(true);
-  },
-  onchange: function(ev) {
-    if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '' && workspace.imports.indexOf('import math') >= 0) {
-      this.holesFilled = true;
-      runtooltip(workspace.imports + 'print( ' + Blockly.Python.blockToCode(this)[0] + ')');
-      this.setTooltip(document.getElementById("hiddenoutput").textContent);
-    } else if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '') {
-      this.holesFilled = true;
-      this.setTooltip('Returns the logarithm of a number');
-    } else {
-      this.holesFilled = false;
-      this.setTooltip('Returns the logarithm of a number');
+    init: function() {
+        this.appendValueInput("ARG")
+            .appendField("math.log(");
+        this.appendDummyInput()
+            .appendField(")");
+        this.setInputsInline(true);
+        this.setTypeVecs([
+            ["float", "float"],
+            ["int", "float"],
+        ]);
+        this.setOutput(true);
+    },
+    onchange: function(ev) {
+        if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '' && workspace.imports.indexOf('import math') >= 0) {
+            this.holesFilled = true;
+            runtooltip(workspace.imports + 'print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+            this.setTooltip(document.getElementById("hiddenoutput").textContent);
+        } else if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '') {
+            this.holesFilled = true;
+            this.setTooltip('Returns the logarithm of a number');
+        } else {
+            this.holesFilled = false;
+            this.setTooltip('Returns the logarithm of a number');
+        }
     }
-  }
 };
 
 // Blockly.Blocks['python_math_log1p'] = {
@@ -377,91 +377,91 @@ Blockly.Blocks['python_math_log'] = {
 // };
 
 Blockly.Blocks['python_math_log10'] = {
-  init: function() {
-    this.appendValueInput("ARG")
-        .appendField("math.log10(");
-    this.appendDummyInput()
-        .appendField(")");
-    this.setInputsInline(true);
-    this.setTypeVecs([
-      ["float", "float"],
-      ["int", "float"],
-    ]);
-    this.setOutput(true);
-  },
-  onchange: function(ev) {
-    if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '' && workspace.imports.indexOf('import math') >= 0) {
-      this.holesFilled = true;
-      runtooltip(workspace.imports + 'print( ' + Blockly.Python.blockToCode(this)[0] + ')');
-      this.setTooltip(document.getElementById("hiddenoutput").textContent);
-    } else if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '') {
-      this.holesFilled = true;
-      this.setTooltip('Returns the log10 of a number');
-    } else {
-      this.holesFilled = false;
-      this.setTooltip('Returns the log10 of a number');
+    init: function() {
+        this.appendValueInput("ARG")
+            .appendField("math.log10(");
+        this.appendDummyInput()
+            .appendField(")");
+        this.setInputsInline(true);
+        this.setTypeVecs([
+            ["float", "float"],
+            ["int", "float"],
+        ]);
+        this.setOutput(true);
+    },
+    onchange: function(ev) {
+        if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '' && workspace.imports.indexOf('import math') >= 0) {
+            this.holesFilled = true;
+            runtooltip(workspace.imports + 'print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+            this.setTooltip(document.getElementById("hiddenoutput").textContent);
+        } else if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '') {
+            this.holesFilled = true;
+            this.setTooltip('Returns the log10 of a number');
+        } else {
+            this.holesFilled = false;
+            this.setTooltip('Returns the log10 of a number');
+        }
     }
-  }
 };
 
 Blockly.Blocks['python_math_pow'] = {
-  init: function() {
-    this.appendValueInput("ARG1")
-        .appendField("math.pow(");
-    this.appendValueInput("ARG2")
-        .appendField(", ");
-    this.appendDummyInput()
-        .appendField(")");
-    this.setInputsInline(true);
-    this.setTypeVecs([
-      ["float", "float", "float"],
-      ["int", "float", "float"],
-      ["float", "int", "float"],
-      ["int", "int", "float"],
-    ]);
-    this.setOutput(true);
-  },
-  onchange: function(ev) {
-    if (Blockly.Python.valueToCode(this, 'ARG1', Blockly.Python.ORDER_NONE) != '' && Blockly.Python.valueToCode(this, 'ARG2', Blockly.Python.ORDER_NONE) != '' && workspace.imports.indexOf('import math') >= 0) {
-      this.holesFilled = true;
-      runtooltip(workspace.imports + 'print( ' + Blockly.Python.blockToCode(this)[0] + ')');
-      this.setTooltip(document.getElementById("hiddenoutput").textContent);
-    } else if (Blockly.Python.valueToCode(this, 'ARG1', Blockly.Python.ORDER_NONE) != '' && Blockly.Python.valueToCode(this, 'ARG2', Blockly.Python.ORDER_NONE) != '') {
-      this.holesFilled = true;
-      this.setTooltip('Returns the power of two numbers');
-    } else {
-      this.holesFilled = false;
-      this.setTooltip('Returns the power of two numbers');
+    init: function() {
+        this.appendValueInput("ARG1")
+            .appendField("math.pow(");
+        this.appendValueInput("ARG2")
+            .appendField(", ");
+        this.appendDummyInput()
+            .appendField(")");
+        this.setInputsInline(true);
+        this.setTypeVecs([
+            ["float", "float", "float"],
+            ["int", "float", "float"],
+            ["float", "int", "float"],
+            ["int", "int", "float"],
+        ]);
+        this.setOutput(true);
+    },
+    onchange: function(ev) {
+        if (Blockly.Python.valueToCode(this, 'ARG1', Blockly.Python.ORDER_NONE) != '' && Blockly.Python.valueToCode(this, 'ARG2', Blockly.Python.ORDER_NONE) != '' && workspace.imports.indexOf('import math') >= 0) {
+            this.holesFilled = true;
+            runtooltip(workspace.imports + 'print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+            this.setTooltip(document.getElementById("hiddenoutput").textContent);
+        } else if (Blockly.Python.valueToCode(this, 'ARG1', Blockly.Python.ORDER_NONE) != '' && Blockly.Python.valueToCode(this, 'ARG2', Blockly.Python.ORDER_NONE) != '') {
+            this.holesFilled = true;
+            this.setTooltip('Returns the power of two numbers');
+        } else {
+            this.holesFilled = false;
+            this.setTooltip('Returns the power of two numbers');
+        }
     }
-  }
 };
 
 Blockly.Blocks['python_math_sqrt'] = {
-  init: function() {
-    this.appendValueInput("ARG")
-        .appendField("math.sqrt(");
-    this.appendDummyInput()
-        .appendField(")");
-    this.setInputsInline(true);
-    this.setTypeVecs([
-      ["float", "float"],
-      ["int", "float"],
-    ]);
-    this.setOutput(true);
-  },
-  onchange: function(ev) {
-    if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '' && workspace.imports.indexOf('import math') >= 0) {
-      this.holesFilled = true;
-      runtooltip(workspace.imports + 'print( ' + Blockly.Python.blockToCode(this)[0] + ')');
-      this.setTooltip(document.getElementById("hiddenoutput").textContent);
-    } else if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '') {
-      this.holesFilled = true;
-      this.setTooltip('Returns the square root of a number');
-    } else {
-      this.holesFilled = false;
-      this.setTooltip('Returns the square root of a number');
+    init: function() {
+        this.appendValueInput("ARG")
+            .appendField("math.sqrt(");
+        this.appendDummyInput()
+            .appendField(")");
+        this.setInputsInline(true);
+        this.setTypeVecs([
+            ["float", "float"],
+            ["int", "float"],
+        ]);
+        this.setOutput(true);
+    },
+    onchange: function(ev) {
+        if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '' && workspace.imports.indexOf('import math') >= 0) {
+            this.holesFilled = true;
+            runtooltip(workspace.imports + 'print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+            this.setTooltip(document.getElementById("hiddenoutput").textContent);
+        } else if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '') {
+            this.holesFilled = true;
+            this.setTooltip('Returns the square root of a number');
+        } else {
+            this.holesFilled = false;
+            this.setTooltip('Returns the square root of a number');
+        }
     }
-  }
 };
 
 // Blockly.Blocks['python_math_acos'] = {
@@ -537,31 +537,31 @@ Blockly.Blocks['python_math_sqrt'] = {
 // };
 
 Blockly.Blocks['python_math_cos'] = {
-  init: function() {
-    this.appendValueInput("ARG")
-        .appendField("math.cos(");
-    this.appendDummyInput()
-        .appendField(")");
-    this.setInputsInline(true);
-    this.setTypeVecs([
-      ["float", "float"],
-      ["int", "float"],
-    ]);
-    this.setOutput(true);
-  },
-  onchange: function(ev) {
-    if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '' && workspace.imports.indexOf('import math') >= 0) {
-      this.holesFilled = true;
-      runtooltip(workspace.imports + 'print( ' + Blockly.Python.blockToCode(this)[0] + ')');
-      this.setTooltip(document.getElementById("hiddenoutput").textContent);
-    } else if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '') {
-      this.holesFilled = true;
-      this.setTooltip('Returns the cosine of the specified radians');
-    } else {
-      this.holesFilled = false;
-      this.setTooltip('Returns the cosine of the specified radians');
+    init: function() {
+        this.appendValueInput("ARG")
+            .appendField("math.cos(");
+        this.appendDummyInput()
+            .appendField(")");
+        this.setInputsInline(true);
+        this.setTypeVecs([
+            ["float", "float"],
+            ["int", "float"],
+        ]);
+        this.setOutput(true);
+    },
+    onchange: function(ev) {
+        if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '' && workspace.imports.indexOf('import math') >= 0) {
+            this.holesFilled = true;
+            runtooltip(workspace.imports + 'print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+            this.setTooltip(document.getElementById("hiddenoutput").textContent);
+        } else if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '') {
+            this.holesFilled = true;
+            this.setTooltip('Returns the cosine of the specified radians');
+        } else {
+            this.holesFilled = false;
+            this.setTooltip('Returns the cosine of the specified radians');
+        }
     }
-  }
 };
 
 // Blockly.Blocks['python_math_hypot'] = {
@@ -586,59 +586,59 @@ Blockly.Blocks['python_math_cos'] = {
 // };
 
 Blockly.Blocks['python_math_sin'] = {
-  init: function() {
-    this.appendValueInput("ARG")
-        .appendField("math.sin(");
-    this.appendDummyInput()
-        .appendField(")");
-    this.setInputsInline(true);
-    this.setTypeVecs([
-      ["float", "float"],
-      ["int", "float"],
-    ]);
-    this.setOutput(true);
-  },
-  onchange: function(ev) {
-    if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '' && workspace.imports.indexOf('import math') >= 0) {
-      this.holesFilled = true;
-      runtooltip(workspace.imports + 'print( ' + Blockly.Python.blockToCode(this)[0] + ')');
-      this.setTooltip(document.getElementById("hiddenoutput").textContent);
-    } else if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '') {
-      this.holesFilled = true;
-      this.setTooltip('Returns the sine of the specified radians');
-    } else {
-      this.holesFilled = false;
-      this.setTooltip('Returns the sine of the specified radians');
+    init: function() {
+        this.appendValueInput("ARG")
+            .appendField("math.sin(");
+        this.appendDummyInput()
+            .appendField(")");
+        this.setInputsInline(true);
+        this.setTypeVecs([
+            ["float", "float"],
+            ["int", "float"],
+        ]);
+        this.setOutput(true);
+    },
+    onchange: function(ev) {
+        if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '' && workspace.imports.indexOf('import math') >= 0) {
+            this.holesFilled = true;
+            runtooltip(workspace.imports + 'print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+            this.setTooltip(document.getElementById("hiddenoutput").textContent);
+        } else if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '') {
+            this.holesFilled = true;
+            this.setTooltip('Returns the sine of the specified radians');
+        } else {
+            this.holesFilled = false;
+            this.setTooltip('Returns the sine of the specified radians');
+        }
     }
-  }
 };
 
 Blockly.Blocks['python_math_tan'] = {
-  init: function() {
-    this.appendValueInput("ARG")
-        .appendField("math.tan(");
-    this.appendDummyInput()
-        .appendField(")");
-    this.setInputsInline(true);
-    this.setTypeVecs([
-      ["float", "float"],
-      ["int", "float"],
-    ]);
-    this.setOutput(true);
-  },
-  onchange: function(ev) {
-    if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '' && workspace.imports.indexOf('import math') >= 0) {
-      this.holesFilled = true;
-      runtooltip(workspace.imports + 'print( ' + Blockly.Python.blockToCode(this)[0] + ')');
-      this.setTooltip(document.getElementById("hiddenoutput").textContent);
-    } else if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '') {
-      this.holesFilled = true;
-      this.setTooltip('Returns the tangent of the specified radians');
-    } else {
-      this.holesFilled = false;
-      this.setTooltip('Returns the tangent of the specified radians');
+    init: function() {
+        this.appendValueInput("ARG")
+            .appendField("math.tan(");
+        this.appendDummyInput()
+            .appendField(")");
+        this.setInputsInline(true);
+        this.setTypeVecs([
+            ["float", "float"],
+            ["int", "float"],
+        ]);
+        this.setOutput(true);
+    },
+    onchange: function(ev) {
+        if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '' && workspace.imports.indexOf('import math') >= 0) {
+            this.holesFilled = true;
+            runtooltip(workspace.imports + 'print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+            this.setTooltip(document.getElementById("hiddenoutput").textContent);
+        } else if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '') {
+            this.holesFilled = true;
+            this.setTooltip('Returns the tangent of the specified radians');
+        } else {
+            this.holesFilled = false;
+            this.setTooltip('Returns the tangent of the specified radians');
+        }
     }
-  }
 };
 
 // Blockly.Blocks['python_math_degrees'] = {
@@ -846,38 +846,42 @@ Blockly.Blocks['python_math_tan'] = {
 // };
 
 Blockly.Blocks['python_math_pi'] = {
-  init: function() {
-    this.appendDummyInput()
-        .appendField("math.pi");
-    this.setInputsInline(true);
-    this.setTypeVecs([["float"]]);
-    this.setOutput(true);
-  },
-  onchange: function(ev) {
-    if (workspace.imports.indexOf('import math') >= 0) {
-      runtooltip(workspace.imports + 'print( ' + Blockly.Python.blockToCode(this)[0] + ')');
-      this.setTooltip(document.getElementById("hiddenoutput").textContent);
-    } else {
-      this.setTooltip('Returns the pi mathematical constant');
+    init: function() {
+        this.appendDummyInput()
+            .appendField("math.pi");
+        this.setInputsInline(true);
+        this.setTypeVecs([
+            ["float"]
+        ]);
+        this.setOutput(true);
+    },
+    onchange: function(ev) {
+        if (workspace.imports.indexOf('import math') >= 0) {
+            runtooltip(workspace.imports + 'print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+            this.setTooltip(document.getElementById("hiddenoutput").textContent);
+        } else {
+            this.setTooltip('Returns the pi mathematical constant');
+        }
     }
-  }
 };
 
 Blockly.Blocks['python_math_e'] = {
-  init: function() {
-    this.appendDummyInput()
-        .appendField("math.e");
-    this.setInputsInline(true);
-    this.setTypeVecs([["float"]]);
-    this.setOutput(true);
+    init: function() {
+        this.appendDummyInput()
+            .appendField("math.e");
+        this.setInputsInline(true);
+        this.setTypeVecs([
+            ["float"]
+        ]);
+        this.setOutput(true);
 
-  },
-  onchange: function(ev) {
-    if (workspace.imports.indexOf('import math') >= 0) {
-      runtooltip(workspace.imports + 'print( ' + Blockly.Python.blockToCode(this)[0] + ')');
-      this.setTooltip(document.getElementById("hiddenoutput").textContent);
-    } else {
-      this.setTooltip('Returns the e mathematical constant');
+    },
+    onchange: function(ev) {
+        if (workspace.imports.indexOf('import math') >= 0) {
+            runtooltip(workspace.imports + 'print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+            this.setTooltip(document.getElementById("hiddenoutput").textContent);
+        } else {
+            this.setTooltip('Returns the e mathematical constant');
+        }
     }
-  }
 };

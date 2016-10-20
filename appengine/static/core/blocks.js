@@ -39,10 +39,10 @@ Blockly.Blocks.uidCounter_ = 0;
  * @return {string}
  */
 Blockly.Blocks.genUid = function() {
-  var uid = (++Blockly.Blocks.uidCounter_).toString();
-  if (Blockly.Realtime.isEnabled()) {
-    return Blockly.Realtime.genUid(uid);
-  } else {
-    return uid;
-  }
+    var uid = (++Blockly.Blocks.uidCounter_).toString();
+    if (Blockly.Realtime.isEnabled()) {
+        return Blockly.Realtime.genUid(uid);
+    } else {
+        return uid;
+    }
 };

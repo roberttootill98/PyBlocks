@@ -18,10 +18,10 @@
  * limitations under the License.
  */
 
- /**
-  * @fileoverview Conversion blocks for PythonBlocks
-  * @author up649230@myport.ac.uk
-  */
+/**
+ * @fileoverview Conversion blocks for PythonBlocks
+ * @author up649230@myport.ac.uk
+ */
 
 'use strict';
 
@@ -31,8 +31,8 @@ goog.require('Blockly.Python');
 
 
 Blockly.Python['python_math_ceil'] = function(block) {
-  var code = Blockly.Python.valueToCode(block, 'ARG', Blockly.Python.ORDER_NONE);
-  return ['math.ceil(' + code + ')', Blockly.Python.ORDER_ATOMIC];
+    var code = Blockly.Python.valueToCode(block, 'ARG', Blockly.Python.ORDER_NONE);
+    return ['math.ceil(' + code + ')', Blockly.Python.ORDER_ATOMIC];
 };
 
 // Blockly.Python['python_math_copysign'] = function(block) {
@@ -47,13 +47,13 @@ Blockly.Python['python_math_ceil'] = function(block) {
 // };
 
 Blockly.Python['python_math_factorial'] = function(block) {
-  var code = Blockly.Python.valueToCode(block, 'ARG', Blockly.Python.ORDER_NONE);
-  return ['math.factorial(' + code + ')', Blockly.Python.ORDER_ATOMIC];
+    var code = Blockly.Python.valueToCode(block, 'ARG', Blockly.Python.ORDER_NONE);
+    return ['math.factorial(' + code + ')', Blockly.Python.ORDER_ATOMIC];
 };
 
 Blockly.Python['python_math_floor'] = function(block) {
-  var code = Blockly.Python.valueToCode(block, 'ARG', Blockly.Python.ORDER_NONE);
-  return ['math.floor(' + code + ')', Blockly.Python.ORDER_ATOMIC];
+    var code = Blockly.Python.valueToCode(block, 'ARG', Blockly.Python.ORDER_NONE);
+    return ['math.floor(' + code + ')', Blockly.Python.ORDER_ATOMIC];
 };
 
 // Blockly.Python['python_math_fmod'] = function(block) {
@@ -108,8 +108,8 @@ Blockly.Python['python_math_floor'] = function(block) {
 // };
 
 Blockly.Python['python_math_log'] = function(block) {
-  var code = Blockly.Python.valueToCode(block, 'ARG', Blockly.Python.ORDER_NONE);
-  return ['math.log(' + code + ')', Blockly.Python.ORDER_ATOMIC];
+    var code = Blockly.Python.valueToCode(block, 'ARG', Blockly.Python.ORDER_NONE);
+    return ['math.log(' + code + ')', Blockly.Python.ORDER_ATOMIC];
 };
 
 // Blockly.Python['python_math_log1p'] = function(block) {
@@ -118,19 +118,19 @@ Blockly.Python['python_math_log'] = function(block) {
 // };
 
 Blockly.Python['python_math_log10'] = function(block) {
-  var code = Blockly.Python.valueToCode(block, 'ARG', Blockly.Python.ORDER_NONE);
-  return ['math.log10(' + code + ')', Blockly.Python.ORDER_ATOMIC];
+    var code = Blockly.Python.valueToCode(block, 'ARG', Blockly.Python.ORDER_NONE);
+    return ['math.log10(' + code + ')', Blockly.Python.ORDER_ATOMIC];
 };
 
 Blockly.Python['python_math_pow'] = function(block) {
-  var block1 = Blockly.Python.valueToCode(block, 'ARG1', Blockly.Python.ORDER_NONE);
-  var block2 = Blockly.Python.valueToCode(block, 'ARG2', Blockly.Python.ORDER_NONE);
-  return ['math.pow(' + block1 + ', ' + block2 + ')', Blockly.Python.ORDER_ATOMIC];
+    var block1 = Blockly.Python.valueToCode(block, 'ARG1', Blockly.Python.ORDER_NONE);
+    var block2 = Blockly.Python.valueToCode(block, 'ARG2', Blockly.Python.ORDER_NONE);
+    return ['math.pow(' + block1 + ', ' + block2 + ')', Blockly.Python.ORDER_ATOMIC];
 };
 
 Blockly.Python['python_math_sqrt'] = function(block) {
-  var code = Blockly.Python.valueToCode(block, 'ARG', Blockly.Python.ORDER_NONE);
-  return ['math.sqrt(' + code + ')', Blockly.Python.ORDER_ATOMIC];
+    var code = Blockly.Python.valueToCode(block, 'ARG', Blockly.Python.ORDER_NONE);
+    return ['math.sqrt(' + code + ')', Blockly.Python.ORDER_ATOMIC];
 };
 
 // Blockly.Python['python_math_acos'] = function(block) {
@@ -155,8 +155,8 @@ Blockly.Python['python_math_sqrt'] = function(block) {
 // };
 
 Blockly.Python['python_math_cos'] = function(block) {
-  var code = Blockly.Python.valueToCode(block, 'ARG', Blockly.Python.ORDER_NONE);
-  return ['math.cos(' + code + ')', Blockly.Python.ORDER_ATOMIC];
+    var code = Blockly.Python.valueToCode(block, 'ARG', Blockly.Python.ORDER_NONE);
+    return ['math.cos(' + code + ')', Blockly.Python.ORDER_ATOMIC];
 };
 
 // Blockly.Python['python_math_hypot'] = function(block) {
@@ -166,13 +166,13 @@ Blockly.Python['python_math_cos'] = function(block) {
 // };
 
 Blockly.Python['python_math_sin'] = function(block) {
-  var code = Blockly.Python.valueToCode(block, 'ARG', Blockly.Python.ORDER_NONE);
-  return ['math.sin(' + code + ')', Blockly.Python.ORDER_ATOMIC];
+    var code = Blockly.Python.valueToCode(block, 'ARG', Blockly.Python.ORDER_NONE);
+    return ['math.sin(' + code + ')', Blockly.Python.ORDER_ATOMIC];
 };
 
 Blockly.Python['python_math_tan'] = function(block) {
-  var code = Blockly.Python.valueToCode(block, 'ARG', Blockly.Python.ORDER_NONE);
-  return ['math.tan(' + code + ')', Blockly.Python.ORDER_ATOMIC];
+    var code = Blockly.Python.valueToCode(block, 'ARG', Blockly.Python.ORDER_NONE);
+    return ['math.tan(' + code + ')', Blockly.Python.ORDER_ATOMIC];
 };
 
 // Blockly.Python['python_math_degrees'] = function(block) {
@@ -236,9 +236,9 @@ Blockly.Python['python_math_tan'] = function(block) {
 // };
 
 Blockly.Python['python_math_pi'] = function(block) {
-  return ['math.pi', Blockly.Python.ORDER_ATOMIC];
+    return ['math.pi', Blockly.Python.ORDER_ATOMIC];
 };
 
 Blockly.Python['python_math_e'] = function(block) {
-  return ['math.e', Blockly.Python.ORDER_ATOMIC];
+    return ['math.e', Blockly.Python.ORDER_ATOMIC];
 };
