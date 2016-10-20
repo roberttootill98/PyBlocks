@@ -149,6 +149,28 @@ Blockly.Generator.prototype.allNestedComments = function(block) {
     return comments.join('\n');
 };
 
+ /**
+ * Check whether the appropriate module has been
+ * imported for a given block requiring an an imported
+ * module. Checks both stored imports from previous runs
+ * and imported modules in the start block.
+ * @param {string} module The name of the module
+ * @return {int} Returns 0 if the module has not been imported
+ *               or 1 if it has.
+ */
+Blockly.Generator.prototype.chkImport = function(module) {
+    
+    if (workspace.imports.indexOf('import' + module) == -1 && startImports.indexOf(module) == -1) {
+    
+        return 0;
+    
+    } else {
+
+        return 1;
+
+    }
+
+}
 
 /**
  * Generate code for the specified block (and attached blocks).
@@ -166,34 +188,6 @@ Blockly.Generator.prototype.blockToCode = function(block) {
         return this.blockToCode(block.getNextBlock());
     }
 
-    // Josef - save variable blocks and imports to simulate interactive mode
-    // if (block != '???' && (block.type == 'python_start') || (block.type == 'variables_set' &&
-    // block.getParent() != null && block.getSurroundParent().type != 'python_if' &&
-    // block.getSurroundParent().type != 'python_while' & block.getSurroundParent().type != 'python_for')) {
-    //   workspace.permaBlocks += block + '\n';
-    // }
-
-    // if (block != '???' && block.type == 'python_if') {
-    //   if (runassigncheck('print(' + block, 'CONDITION0', Blockly.Python.ORDER_NONE) + ')') == 'True\n') {
-    //
-    //   }
-    // }
-    //   if (block != '???' && block.getParent() != null && block.getSurroundParent().type == 'python_if' && block.type == 'variables_set') {
-    //
-    //       if (block.getSurroundParent().poisoned == false && runassigncheck('print(' + block.getSurroundParent(), 'CONDITION0', Blockly.Python.ORDER_NONE) + ')') == 'True\n') {
-    //         workspace.permaBlocks += block + '\n';
-    //         block.getSurroundParent().poisoned = true;
-    //         console.log('TRAXIS', workspace.permaBlocks);
-    //         console.log('TRAXIS', block.getSurroundParent());
-    //       }
-    //
-    //       if (block.getSurroundParent().poisoned == false && block.getSurroundParent().hasElse) {
-    //         workspace.permaBlocks += block + '\n';
-    //       }
-    //
-    // }
-
-
     var func = this[block.type];
     goog.asserts.assertFunction(func,
         'Language "%s" does not know how to generate code for block type "%s".',
@@ -204,14 +198,12 @@ Blockly.Generator.prototype.blockToCode = function(block) {
     // argument to func.call, which becomes the first parameter to the generator.
     var code = func.call(block, block);
 
-
-
-    if (block.type.indexOf('math') >= 0 && workspace.imports.indexOf('import math') == -1 && startImports.indexOf('math') == -1) {
+    if (block.type.indexOf('math') >= 0 && !Blockly.Python.chkImport('math')) {
 
         block.setWarningText('You have not imported the math module');
         workspace.generatorSuccess = false;
 
-    } else if (block.type.indexOf('turtle') >= 0 && workspace.imports.indexOf('import turtle') == -1 && startImports.indexOf('turtle') == -1) {
+    } else if (block.type.indexOf('turtle') >= 0 && !Blockly.Python.chkImport('turtle')) {
 
         block.setWarningText('You have not imported the turtle module');
         workspace.generatorSuccess = false;
@@ -222,9 +214,13 @@ Blockly.Generator.prototype.blockToCode = function(block) {
         workspace.generatorSuccess = false;
 
     } else if (workspace.running && !block.isInFlyout && block.type == 'variables_get' &&
+        block.getSurroundParent().type == 'python_for') {
+
+        workspace.vars += block.getFieldValue("VAR") + '_FOR' + '\n';        
+
+    } else if (workspace.running && !block.isInFlyout && block.type == 'variables_get' &&
         block.getSurroundParent().type != 'variables_set' &&
-        workspace.vars.indexOf(block.getFieldValue("VAR")) == -1 &&
-        block.getSurroundParent().type != 'python_for') {
+        workspace.vars.indexOf(block.getFieldValue("VAR")) == -1) {
 
         block.setWarningText('Undeclared variable')
         workspace.generatorSuccess = false;
@@ -244,11 +240,15 @@ Blockly.Generator.prototype.blockToCode = function(block) {
         block.setWarningText('Variable was altered in a control statement and may contain unpredictable values');
 
     } else if (workspace.generatorSuccess) {
+
         block.setWarningText(null);
+
     }
 
     if (block.type == 'variables_set' && workspace.generatorSuccess) {
+
         workspace.vars += block.declaredVar + '\n';
+
     }
 
     if (block.type == 'python_start') {
@@ -256,15 +256,9 @@ Blockly.Generator.prototype.blockToCode = function(block) {
         for (var i = 0; i < startImports.length; i++) {
             workspace.imports += 'import ' + startImports[i] + '\n';
         }
+
     }
 
-    //
-    // } else if (workspace.running && !block.isInFlyout && block.type == 'variables_get' && block.getTopLevel().type != 'variables_set' && block.findVariable() == 'nocontrol') {
-    //   block.setWarningText('You have not declared this variable yet');
-    //  workspace.generatorSuccess = false;
-    //
-    // } else if (workspace.running && !block.isInFlyout && block.type == 'variables_get' && block.getTopLevel().type != 'variables_set' && block.findVariable() == 'control') {
-    //  block.setWarningText('This variable is potentially undeclared');
     if (goog.isArray(code)) {
         // Value blocks return tuples of code and operator order.
         return [this.scrub_(block, code[0]), code[1]];
