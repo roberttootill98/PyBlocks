@@ -24,14 +24,19 @@ The latest release can be accessed via [*the official PythonBlocks website*](htt
 # Credit
 
 [*Blockly*](https://github.com/google/blockly)
+
 [*Skulpt*](https://github.com/skulpt/skulpt)
+
 [*Google Drive API*](https://developers.google.com/drive/)
+
 [*Google Cloud/App Engine*](https://cloud.google.com/appengine/)
+
 [*Nivardus' Promise-based Google Picker API wrapper*](https://github.com/nivardus/google-drive-picker)
 
 # Contributors
 
 Dr. Matthew Poole
+
 Josef Abbasikadijani
 
 # License
