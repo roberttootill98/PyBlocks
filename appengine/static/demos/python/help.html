@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>PythonBlocks Help</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="help.js"></script>
+</head>
+
+<body onload="readFile('helpassets/1.txt')">
+
+    <div id="helptitlediv">
+        <h1 id="title">PythonBlocks Tutorial (1/11)</h1>
+    </div>
+
+    <div id="helptextdiv">
+        <textarea id="helptext" class="helptext" readonly="true"></textarea>
+        <img id="helpimage" src="helpassets/1.png" style="align:center"></img>
+    </div>
+
+    <div id="helpbuttonsdiv">
+        <button id="backbutton" class="fancybuttons" onclick="page--;traversePage()">Back</button>
+        <button id="nextbutton" class="fancybuttons" onclick="page++;traversePage()">Next</button>
+        <button id="exitbutton" class="fancybuttons" onclick="window.close()">Exit</button>
+    </div>
+    <script>
+        var page = 1;
+        var title = document.getElementById('title');
+        var helptext_ = document.getElementById('helptext');
+        var image = document.getElementById('helpimage');
+    </script>
+</body>
+
+</html>
