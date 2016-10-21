@@ -18,3 +18,27 @@ To run the app locally on \*nix, run the 'dev_appserver.py' program, passing you
 To deploy the app on \*nix, run 'gcloud app deploy \<path_to_app.yaml>. Please note that gcloud must be initialised according to the installation instructions prior to deployment.
 
 If run locally, PythonBlocks can be accessed through 'localhost:8080'. Saving/loading of programs does not work locally. To access PythonBlocks after deployment on the Google App Engine platform, refer to your individual details as setup in step 1 of the installation instructions.
+
+The latest release can be accessed via [*the official PythonBlocks website*](https://pythonblocks-1362.appspot.com/static/demos/python/index.html).
+
+# Credit
+
+[*Blockly*](https://github.com/google/blockly)
+
+[*Skulpt*](https://github.com/skulpt/skulpt)
+
+[*Google Drive API*](https://developers.google.com/drive/)
+
+[*Google Cloud/App Engine*](https://cloud.google.com/appengine/)
+
+[*Nivardus' Promise-based Google Picker API wrapper*](https://github.com/nivardus/google-drive-picker)
+
+# Contributors
+
+Dr. Matthew Poole
+
+Josef Abbasikadijani
+
+# License
+
+Apache License v2.0
