@@ -43,6 +43,7 @@ function builtinRead(x) {
 }
 
 function runfull() {
+
     workspace.running = true;
     workspace.generatorSuccess = true;
     workspace.vars = '';
@@ -52,7 +53,7 @@ function runfull() {
 
         var prog = document.getElementById("pycode").textContent;
         if (prog.indexOf('turtle.Turtle()') != -1) {
-            toggleTurtle();
+            toggleTurtle('run');
         }
         var mypre = document.getElementById("output");
         Sk.pre = "output";
@@ -100,7 +101,7 @@ function runeval(block) {
     var code = Blockly.Python.blockToCode(block);
 
     if (code.indexOf('turtle.Turtle()') != -1) {
-        toggleTurtle();
+        toggleTurtle('run');
     }
 
     if (workspace.generatorSuccess) {
@@ -145,9 +146,11 @@ function runeval(block) {
 }
 
 function runtooltip(code) {
+
     if (code.indexOf('input(') >= 0) {
         return;
     }
+
     document.getElementById("hiddenoutput").innerHTML = '';
     var mypre = document.getElementById("hiddenoutput");
 
@@ -158,7 +161,6 @@ function runtooltip(code) {
         retainglobals: canRetainGlobals
     });
     var myPromise = Sk.misceval.asyncToPromise(function() {
-        // Sk.globals = savedGlobals;
         return Sk.importMainWithBody("<stdin>", false, code, true);
     });
     myPromise.then(function(mod) {
@@ -223,9 +225,11 @@ function clr() {
     initInterpreter();
 }
 
-function toggleTurtle() {
+function toggleTurtle(calledBy) {
     var turtleDiv = document.getElementById('turtlecanvas');
-    if (turtleDiv.style.display == 'block') {
+    if (calledBy == 'run') {
+        turtleDiv.style.display = 'block';
+    } else if (turtleDiv.style.display == 'block') {
         turtleDiv.style.display = 'none';
     } else {
         turtleDiv.style.display = 'block';
@@ -233,15 +237,17 @@ function toggleTurtle() {
 }
 
 function generateTypeTable() {
-    var types = ['int', 'float', 'str', 'bool', 'range'];
-    var colours = ['#00CC33', '#0080FF', '#FF3010', '#FF29FF', '#FFAA00']
+    var types = ['int', 'float', 'str', 'bool', 'range', 'vec2d'];
+    var colours = ['#00CC33', '#0080FF', '#FF3010', '#FF29FF', '#FFAA00', '#DFDF20']
     var table = document.getElementById('typetable');
     table.innerHTML = '';
     var currRow = 0;
 
     if (workspace.imports.indexOf('import turtle') > -1 || startImports.indexOf('turtle') > -1) {
         types.push('turtle');
-        colours.push('#DFDF20');
+        colours.push('#00EEEE');
+        types.push('screen');
+        colours.push('#EEC0CB');
     }
 
     for (i = 0; i < types.length; i++) {
