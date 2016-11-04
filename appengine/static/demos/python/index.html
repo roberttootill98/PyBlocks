@@ -62,7 +62,7 @@
           <button type="button" class="fancybuttons" onclick="initLoad(createPicker)">Load</button>
           <button type="button" class="fancybuttons" onclick="copyToClipboard()">Copy</button>
           <button type="button" class="fancybuttons" onclick="reset()">Reset</button>
-	  <button type="button" class="fancybuttons" onclick="toggleTurtle()">Show/hide Turtle</button>
+	  <button type="button" class="fancybuttons" onclick="toggleTurtle()">Toggle Turtle</button>
 	  <button type="button" class="fancybuttons" onclick="popupwindow('help.html', 'PythonBlocks Help', 'window', '835', '565')">Help</button>
           <button type="button" class="fancybuttons" onclick="popupwindow('about.html', 'About', 'window', '400', 300)">About</button>
         </span>
@@ -102,7 +102,7 @@
     </div>
 
     <div id="outputdiv">
-        <textarea id="output" class="codearea" rows="15" cols="75" readonly="true"></textarea>
+        <textarea id="codearea" class="collapsed" rows="15" cols="75" readonly="true"></textarea>
     </div>
 
     <div id="turtlecanvas"></div>
@@ -110,6 +110,7 @@
     <div id="hiddenstuff">
         <button id="clear" type="button" class="fancybuttons" onclick="clr()">Clear</button>
         <button id="restart" type="button" class="fancybuttons" onclick="restart()">Restart</button>
+        <button id="interpreter" type="button" class="fancybuttons" onclick="toggleInterpreter()">Toggle Interpreter</button>
         <textarea id="hiddenoutput" cols="20" rows="7" hidden="true"></textarea>
         <textarea id="hiddenoutput2" cols="20" rows="7" hidden="true"></textarea>
         <textarea id="pycode" class="codearea" rows="12" cols="100" readonly="true" hidden="true"></textarea>
@@ -789,7 +790,7 @@
     <script>
         var blocklyArea = document.getElementById('blocklyArea');
         var blocklyDiv = document.getElementById('blocklyDiv');
-        var output = document.getElementById('output');
+        var output = document.getElementById('codearea');
         var workspace = Blockly.inject(blocklyDiv,
         {
             media: '../../media/',

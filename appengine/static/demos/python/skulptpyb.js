@@ -9,7 +9,7 @@ var canRetainGlobals = true;
 var initVal = ' PythonBlocks - Python 3 Interpreter\n\n';
 
 function outf(text) {
-    var mypre = document.getElementById("output");
+    var mypre = document.getElementById("codearea");
     mypre.innerHTML = mypre.innerHTML + ' ' + text;
 }
 
@@ -55,7 +55,7 @@ function runfull() {
         if (prog.indexOf('turtle.Turtle()') != -1) {
             toggleTurtle('run');
         }
-        var mypre = document.getElementById("output");
+        var mypre = document.getElementById("codearea");
         Sk.pre = "output";
         Sk.configure({
             output: outf,
@@ -72,7 +72,7 @@ function runfull() {
                 console.log('success');
             },
             function(err) {
-                var mypre = document.getElementById("output");
+                var mypre = document.getElementById("codearea");
                 mypre.innerHTML = mypre.innerHTML + err.toString() + "\n";
                 console.log(err.toString());
             });
@@ -88,8 +88,8 @@ function runfull() {
     workspace.running = false;
     generateTypeTable();
 
-    if (mypre.textContent != initVal) {
-        mypre.focus();
+    if (mypre.textContent != initVal && mypre.className != 'collapsed expanded') {
+        toggleInterpreter();
     }
 }
 
@@ -110,7 +110,7 @@ function runeval(block) {
             code = 'print(' + code[0] + ')';
         }
 
-        var mypre = document.getElementById("output");
+        var mypre = document.getElementById("codearea");
 
         Sk.pre = "output";
         Sk.configure({
@@ -128,7 +128,7 @@ function runeval(block) {
                 canRetainGlobals = true;
             },
             function(err) {
-                var mypre = document.getElementById("output");
+                var mypre = document.getElementById("codearea");
                 mypre.innerHTML = mypre.innerHTML + err.toString() + "\n";
                 console.log(err.toString());
             });
@@ -140,8 +140,8 @@ function runeval(block) {
     }
     workspace.running = false;
     generateTypeTable();
-    if (mypre.textContent != initVal) {
-        mypre.focus();
+    if (mypre.textContent != initVal && mypre.className != 'collapsed expanded') {
+        toggleInterpreter();
     }
 }
 
@@ -193,7 +193,7 @@ function initInterpreter() {
     // var second = normaliseDate(d.getSeconds());
 
 
-    var interpreter = document.getElementById("output");
+    var interpreter = document.getElementById("codearea");
     interpreter.innerHTML = initVal;
     if (interpreter.innerHTML == initVal) {
         return true;
@@ -215,7 +215,7 @@ function restart() {
     canRetainGlobals = false;
     workspace.imports = '';
     workspace.vars = '';
-    var interpreter = document.getElementById("output");
+    var interpreter = document.getElementById("codearea");
     interpreter.innerHTML = interpreter.innerHTML + '\n === RESTART ====\n';
     interpreter.scrollTop = interpreter.scrollHeight;
     generateTypeTable();
@@ -223,6 +223,15 @@ function restart() {
 
 function clr() {
     initInterpreter();
+}
+
+function toggleInterpreter() {
+    var interpreter = document.getElementById("codearea");
+    if (interpreter.className == 'collapsed') {
+        interpreter.className += ' expanded';
+    } else {
+        interpreter.className = 'collapsed';
+    }
 }
 
 function toggleTurtle(calledBy) {
