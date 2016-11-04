@@ -44,7 +44,7 @@ Blockly.Python.COLOUR['str'] = '#0080FF' ; // blue
 var red = '#FF3010'; // '#FF4500';
 var orange = '#FFAA00';
 var yellow = '#DFDF20';
-var pink = '#EEC0CB'; 
+var pink = '#FFC0CB'; 
 var green = '#00CC33';
 var cyan = '#00EEEE';
 var blue = '#0080FF';
@@ -155,6 +155,9 @@ Blockly.Python.NEW_VARS = [{
 }, {
     name: "newTurtleVariable",
     type: 'turtle'
+}, {
+    name: "newScreenVariable",
+    type: 'screen'
 }];
 
 Blockly.Python.NEW_LIST_VARS = [{

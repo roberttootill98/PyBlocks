@@ -34,6 +34,11 @@ Blockly.Python['python_turtle_new'] = function(block) {
     return ['turtle.Turtle()', Blockly.Python.ORDER_ATOMIC];
 };
 
+Blockly.Python['python_screen_new'] = function(block) {
+    var code = Blockly.Python.valueToCode(block, 'ARG', Blockly.Python.ORDER_MEMBER);
+    return [code + '.getscreen()', Blockly.Python.ORDER_ATOMIC];
+};
+
 // Blockly.Python['python_turtle_getscreen'] = function(block) {
 //   return 's = t.getscreen()\n';
 // };
@@ -54,6 +59,12 @@ Blockly.Python['python_turtle_fillcolor'] = function(block) {
     var block1 = Blockly.Python.valueToCode(block, 'ARG1', Blockly.Python.ORDER_MEMBER);
     var block2 = Blockly.Python.valueToCode(block, 'ARG2', Blockly.Python.ORDER_NONE);
     return block1 + '.fillcolor(' + block2 + ')\n';
+};
+
+Blockly.Python['python_turtle_bgcolor'] = function(block) {
+    var block1 = Blockly.Python.valueToCode(block, 'ARG1', Blockly.Python.ORDER_MEMBER);
+    var block2 = Blockly.Python.valueToCode(block, 'ARG2', Blockly.Python.ORDER_NONE);
+    return block1 + '.bgcolor(' + block2 + ')\n';
 };
 
 // Blockly.Python['python_turtle_bgcolor'] = function(block) {

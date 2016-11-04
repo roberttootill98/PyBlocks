@@ -256,7 +256,7 @@ function generateTypeTable() {
         types.push('turtle');
         colours.push('#00EEEE');
         types.push('screen');
-        colours.push('#EEC0CB');
+        colours.push('#FFC0CB');
     }
 
     for (i = 0; i < types.length; i++) {
