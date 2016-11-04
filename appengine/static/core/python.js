@@ -42,10 +42,11 @@ Blockly.Python.COLOUR['str'] = '#0080FF' ; // blue
 
 
 var red = '#FF3010'; // '#FF4500';
-var orange = '#ffaa00';
-var yellow = '#dfdf20';
+var orange = '#FFAA00';
+var yellow = '#DFDF20';
+var pink = '#FFC0CB'; 
 var green = '#00CC33';
-var cyan = '#40E0D0';
+var cyan = '#00EEEE';
 var blue = '#0080FF';
 var magenta = '#FF29FF';
 
@@ -53,7 +54,9 @@ var magenta = '#FF29FF';
 Blockly.Python.COLOUR = {};
 Blockly.Python.COLOUR['notype'] = '#8B7D6B';
 Blockly.Python.COLOUR['str'] = red;
-Blockly.Python.COLOUR['turtle'] = yellow;
+Blockly.Python.COLOUR['turtle'] = cyan;
+Blockly.Python.COLOUR['vec2d'] = yellow;
+Blockly.Python.COLOUR['screen'] = pink; 
 Blockly.Python.COLOUR['int'] = green;
 Blockly.Python.COLOUR['range'] = orange;
 Blockly.Python.COLOUR['float'] = blue;
@@ -152,6 +155,9 @@ Blockly.Python.NEW_VARS = [{
 }, {
     name: "newTurtleVariable",
     type: 'turtle'
+}, {
+    name: "newScreenVariable",
+    type: 'screen'
 }];
 
 Blockly.Python.NEW_LIST_VARS = [{

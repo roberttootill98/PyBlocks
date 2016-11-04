@@ -43,6 +43,21 @@ Blockly.Blocks['python_turtle_new'] = {
     }
 };
 
+Blockly.Blocks['python_screen_new'] = {
+    init: function() {
+        this.appendValueInput("ARG");
+        this.appendDummyInput()
+            .appendField(".getscreen()");
+        this.setInputsInline(true);
+        this.setTooltip('An instance of a Screen object');
+        this.setOutput(true);
+        this.setTypeVecs([
+            ["turtle", "screen"]
+        ]);
+        this.setLhsVarOnly(true);
+    }
+};
+
 // Blockly.Blocks['python_turtle_getscreen'] = {
 //   init: function() {
 //     this.appendDummyInput()
@@ -133,6 +148,30 @@ Blockly.Blocks['python_turtle_fillcolor'] = {
     }
 };
 
+Blockly.Blocks['python_turtle_bgcolor'] = {
+    init: function() {
+        this.appendValueInput("ARG1");
+        this.appendValueInput("ARG2")
+            .appendField(".bgcolor(");
+        this.appendDummyInput()
+            .appendField(")");
+        this.setInputsInline(true);
+        this.setTypeVecs([
+            ["screen", "str", "none"]
+        ]);
+        this.setLhsVarOnly(true);
+        this.setPreviousStatement(true);
+        this.setNextStatement(true);
+        this.setTooltip('Sets the background colour of a Screen object');
+    },
+    onchange: function(ev) {
+        if (Blockly.Python.valueToCode(this, 'ARG1', Blockly.Python.ORDER_NONE) != '' && Blockly.Python.valueToCode(this, 'ARG2', Blockly.Python.ORDER_NONE) != '') {
+            this.holesFilled = true;
+        } else {
+            this.holesFilled = false;
+        }
+    }
+};
 // Blockly.Blocks['python_turtle_bgcolor'] = {
 //   init: function() {
 //     this.appendValueInput("ARG")

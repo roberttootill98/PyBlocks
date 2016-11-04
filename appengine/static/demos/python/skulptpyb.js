@@ -9,7 +9,7 @@ var canRetainGlobals = true;
 var initVal = ' PythonBlocks - Python 3 Interpreter\n\n';
 
 function outf(text) {
-    var mypre = document.getElementById("output");
+    var mypre = document.getElementById("codearea");
     mypre.innerHTML = mypre.innerHTML + ' ' + text;
 }
 
@@ -43,6 +43,7 @@ function builtinRead(x) {
 }
 
 function runfull() {
+
     workspace.running = true;
     workspace.generatorSuccess = true;
     workspace.vars = '';
@@ -52,9 +53,9 @@ function runfull() {
 
         var prog = document.getElementById("pycode").textContent;
         if (prog.indexOf('turtle.Turtle()') != -1) {
-            toggleTurtle();
+            toggleTurtle('run');
         }
-        var mypre = document.getElementById("output");
+        var mypre = document.getElementById("codearea");
         Sk.pre = "output";
         Sk.configure({
             output: outf,
@@ -71,7 +72,7 @@ function runfull() {
                 console.log('success');
             },
             function(err) {
-                var mypre = document.getElementById("output");
+                var mypre = document.getElementById("codearea");
                 mypre.innerHTML = mypre.innerHTML + err.toString() + "\n";
                 console.log(err.toString());
             });
@@ -87,8 +88,8 @@ function runfull() {
     workspace.running = false;
     generateTypeTable();
 
-    if (mypre.textContent != initVal) {
-        mypre.focus();
+    if (mypre.textContent != initVal && mypre.className != 'collapsed expanded') {
+        toggleInterpreter();
     }
 }
 
@@ -100,7 +101,7 @@ function runeval(block) {
     var code = Blockly.Python.blockToCode(block);
 
     if (code.indexOf('turtle.Turtle()') != -1) {
-        toggleTurtle();
+        toggleTurtle('run');
     }
 
     if (workspace.generatorSuccess) {
@@ -109,7 +110,7 @@ function runeval(block) {
             code = 'print(' + code[0] + ')';
         }
 
-        var mypre = document.getElementById("output");
+        var mypre = document.getElementById("codearea");
 
         Sk.pre = "output";
         Sk.configure({
@@ -127,7 +128,7 @@ function runeval(block) {
                 canRetainGlobals = true;
             },
             function(err) {
-                var mypre = document.getElementById("output");
+                var mypre = document.getElementById("codearea");
                 mypre.innerHTML = mypre.innerHTML + err.toString() + "\n";
                 console.log(err.toString());
             });
@@ -139,15 +140,17 @@ function runeval(block) {
     }
     workspace.running = false;
     generateTypeTable();
-    if (mypre.textContent != initVal) {
-        mypre.focus();
+    if (mypre.textContent != initVal && mypre.className != 'collapsed expanded') {
+        toggleInterpreter();
     }
 }
 
 function runtooltip(code) {
+
     if (code.indexOf('input(') >= 0) {
         return;
     }
+
     document.getElementById("hiddenoutput").innerHTML = '';
     var mypre = document.getElementById("hiddenoutput");
 
@@ -158,7 +161,6 @@ function runtooltip(code) {
         retainglobals: canRetainGlobals
     });
     var myPromise = Sk.misceval.asyncToPromise(function() {
-        // Sk.globals = savedGlobals;
         return Sk.importMainWithBody("<stdin>", false, code, true);
     });
     myPromise.then(function(mod) {
@@ -191,7 +193,7 @@ function initInterpreter() {
     // var second = normaliseDate(d.getSeconds());
 
 
-    var interpreter = document.getElementById("output");
+    var interpreter = document.getElementById("codearea");
     interpreter.innerHTML = initVal;
     if (interpreter.innerHTML == initVal) {
         return true;
@@ -213,7 +215,7 @@ function restart() {
     canRetainGlobals = false;
     workspace.imports = '';
     workspace.vars = '';
-    var interpreter = document.getElementById("output");
+    var interpreter = document.getElementById("codearea");
     interpreter.innerHTML = interpreter.innerHTML + '\n === RESTART ====\n';
     interpreter.scrollTop = interpreter.scrollHeight;
     generateTypeTable();
@@ -223,9 +225,20 @@ function clr() {
     initInterpreter();
 }
 
-function toggleTurtle() {
+function toggleInterpreter() {
+    var interpreter = document.getElementById("codearea");
+    if (interpreter.className == 'collapsed') {
+        interpreter.className += ' expanded';
+    } else {
+        interpreter.className = 'collapsed';
+    }
+}
+
+function toggleTurtle(calledBy) {
     var turtleDiv = document.getElementById('turtlecanvas');
-    if (turtleDiv.style.display == 'block') {
+    if (calledBy == 'run') {
+        turtleDiv.style.display = 'block';
+    } else if (turtleDiv.style.display == 'block') {
         turtleDiv.style.display = 'none';
     } else {
         turtleDiv.style.display = 'block';
@@ -233,15 +246,17 @@ function toggleTurtle() {
 }
 
 function generateTypeTable() {
-    var types = ['int', 'float', 'str', 'bool', 'range'];
-    var colours = ['#00CC33', '#0080FF', '#FF3010', '#FF29FF', '#FFAA00']
+    var types = ['int', 'float', 'str', 'bool', 'range', 'vec2d'];
+    var colours = ['#00CC33', '#0080FF', '#FF3010', '#FF29FF', '#FFAA00', '#DFDF20']
     var table = document.getElementById('typetable');
     table.innerHTML = '';
     var currRow = 0;
 
     if (workspace.imports.indexOf('import turtle') > -1 || startImports.indexOf('turtle') > -1) {
         types.push('turtle');
-        colours.push('#DFDF20');
+        colours.push('#00EEEE');
+        types.push('screen');
+        colours.push('#FFC0CB');
     }
 
     for (i = 0; i < types.length; i++) {
