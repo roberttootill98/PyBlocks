@@ -247,9 +247,11 @@ function toggleInterpreter() {
 
     if (interpreter.className == 'collapsed') {
         interpreter.className += ' expanded';
+        interpreter.scrollTop = interpreter.scrollHeight;
         interpreterButton.innerHTML = 'Hide';
     } else {
         interpreter.className = 'collapsed';
+        interpreter.scrollTop = 0;
         interpreterButton.innerHTML = 'Show';
     }
 }
