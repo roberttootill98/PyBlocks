@@ -6,7 +6,7 @@ Sk.inputfun = function(prompt) {
 };
 
 var canRetainGlobals = true;
-var initVal = ' PythonBlocks - Python 3 Interpreter\n\n';
+var initVal = ' Python 3 Interpreter\n\n';
 
 function outf(text) {
     var mypre = document.getElementById("codearea");

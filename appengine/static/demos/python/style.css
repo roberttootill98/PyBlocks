@@ -135,6 +135,7 @@ table#typetable {
     right: 25px;
     bottom: 20px;
     z-index: 1001;
+    width: 45%;
 }
 
 #typediv {
@@ -154,7 +155,7 @@ table#typetable {
     resize: none;
     transition: all 0.3s ease;
     width: 99%;
-    height: 2em;
+    height: 3em;
     opacity: 0.48;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
