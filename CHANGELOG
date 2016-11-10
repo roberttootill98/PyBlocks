@@ -1,5 +1,8 @@
-v1.0.1 - ??/??/??:
-- Stuff
+v1.0.1 - 04/11/16:
+- Turtle and interpreter UI changes, visibility is now toggled manually
+- Range error checking bug fix
+- Screen type added with appropriate blocks
+- Vec2D type added to type table
 
 v1.0.0 - 21/10/16:
 - First non-experimental version
