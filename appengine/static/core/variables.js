@@ -39,7 +39,7 @@ Blockly.Variables.CAT_EXISTING = 'VARIABLE';
 Blockly.Variables.CAT_EXISTING_LIST = 'LIST_VAR'; // unused at present
 Blockly.Variables.CAT_NEW_BASIC = 'NEW_VARIABLE';
 Blockly.Variables.CAT_NEW_LIST = 'NEW_LIST_VAR';
-
+Blockly.Variables.CAT_NEW_TURTLE = 'NEW_TURTLE_VAR';
 
 /**
  * Find user-created variables.
@@ -107,6 +107,11 @@ Blockly.Variables.renameVariable = function(oldName, newName, workspace) {
 Blockly.Variables.newFlyoutCategory = function(workspace) {
     return Blockly.Variables.flyoutCategory(workspace,
         Blockly.Python.NEW_VARS);
+};
+
+Blockly.Variables.newTurtleFlyoutCategory = function(workspace) {
+    return Blockly.Variables.flyoutCategory(workspace,
+        Blockly.Python.NEW_TURTLE_VARS);
 };
 
 Blockly.Variables.newListFlyoutCategory = function(workspace) {

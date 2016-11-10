@@ -53,19 +53,19 @@
         <tr>
             <td>
                 <span class="left">
-          <h1>PythonBlocks</h1>
-        </span>
+                    <h1>PythonBlocks</h1>
+                </span>
 
-                <span id="buttonarea" class="right">
-          <button type="button" class="fancybuttons" id="run" onclick="runfull()">Run</button>
-          <button type="button" class="fancybuttons" onclick="saveBlocks()">Save</button>
-          <button type="button" class="fancybuttons" onclick="initLoad(createPicker)">Load</button>
-          <button type="button" class="fancybuttons" onclick="copyToClipboard()">Copy</button>
-          <button type="button" class="fancybuttons" onclick="reset()">Reset</button>
-	  <button type="button" class="fancybuttons" onclick="toggleTurtle()">Toggle Turtle</button>
-	  <button type="button" class="fancybuttons" onclick="popupwindow('help.html', 'PythonBlocks Help', 'window', '835', '565')">Help</button>
-          <button type="button" class="fancybuttons" onclick="popupwindow('about.html', 'About', 'window', '400', 300)">About</button>
-        </span>
+                <div id="buttonarea" class="right">
+                    <button type="button" class="fancybuttons" id="run" onclick="runfull()">Run</button>
+                    <button type="button" class="fancybuttons" onclick="saveBlocks()">Save</button>
+                    <button type="button" class="fancybuttons" onclick="initLoad(createPicker)">Load</button>
+                    <button type="button" class="fancybuttons" onclick="copyToClipboard()">Copy</button>
+                    <button type="button" class="fancybuttons" onclick="reset()">Reset</button>
+	            <button type="button" class="fancybuttons" onclick="popupwindow('help.html', 'PythonBlocks Help', 'window', '835', '565')">Help</button>
+                    <button type="button" class="fancybuttons" onclick="popupwindow('about.html', 'About', 'window', '400', 300)">About</button>
+	            <button id="turtlebutton" type="button" class="fancybuttons" onclick="toggleTurtle()"></button>
+                </div>
             </td>
         </tr>
 
@@ -110,7 +110,7 @@
     <div id="hiddenstuff">
         <button id="clear" type="button" class="fancybuttons" onclick="clr()">Clear</button>
         <button id="restart" type="button" class="fancybuttons" onclick="restart()">Restart</button>
-        <button id="interpreter" type="button" class="fancybuttons" onclick="toggleInterpreter()">Toggle Interpreter</button>
+        <button id="interpreter" type="button" class="fancybuttons" onclick="toggleInterpreter()">Show</button>
         <textarea id="hiddenoutput" cols="20" rows="7" hidden="true"></textarea>
         <textarea id="hiddenoutput2" cols="20" rows="7" hidden="true"></textarea>
         <textarea id="pycode" class="codearea" rows="12" cols="100" readonly="true" hidden="true"></textarea>
@@ -582,14 +582,11 @@
         </category>
         </category>
         <sep gap="4"></sep>
-        <category name="Turtle graphics">
+        <category name="Turtle variable creation" custom="NEW_TURTLE_VAR">
+        </category>
+        <category name="Turtle objects & movement">
             <block type="python_turtle_new"></block>
             <block type="python_screen_new"></block>
-            <block type="python_turtle_color"></block>
-            <block type="python_turtle_pencolor"></block>
-            <block type="python_turtle_fillcolor"></block>
-            <block type="python_turtle_bgcolor"></block>
-            <block type="python_turtle_fill"></block>
             <block type="python_turtle_forward"></block>
             <block type="python_turtle_backward"></block>
             <block type="python_turtle_left"></block>
@@ -600,6 +597,13 @@
             <block type="python_turtle_pendown"></block>
             <block type="python_turtle_penup"></block>
             <block type="python_turtle_isdown"></block>
+        </category>
+        <category name="Turtle colours">
+            <block type="python_turtle_color"></block>
+            <block type="python_turtle_pencolor"></block>
+            <block type="python_turtle_fillcolor"></block>
+            <block type="python_turtle_bgcolor"></block>
+            <block type="python_turtle_fill"></block>
         </category>
         <sep gap="4"></sep>
     </xml>
@@ -748,14 +752,11 @@
         </category>
         </category>
         <sep gap="4"></sep>
-        <category name="Turtle graphics">
+        <category name="Turtle variable creation" custom="NEW_TURTLE_VAR">
+        </category>
+        <category name="Turtle objects & movement">
             <block type="python_turtle_new"></block>
             <block type="python_screen_new"></block>
-            <block type="python_turtle_color"></block>
-            <block type="python_turtle_pencolor"></block>
-            <block type="python_turtle_fillcolor"></block>
-            <block type="python_turtle_bgcolor"></block>
-            <block type="python_turtle_fill"></block>
             <block type="python_turtle_forward"></block>
             <block type="python_turtle_backward"></block>
             <block type="python_turtle_left"></block>
@@ -766,6 +767,13 @@
             <block type="python_turtle_pendown"></block>
             <block type="python_turtle_penup"></block>
             <block type="python_turtle_isdown"></block>
+        </category>
+        <category name="Turtle colours">
+            <block type="python_turtle_color"></block>
+            <block type="python_turtle_pencolor"></block>
+            <block type="python_turtle_fillcolor"></block>
+            <block type="python_turtle_bgcolor"></block>
+            <block type="python_turtle_fill"></block>
         </category>
         <sep gap="4"></sep>
     </xml>

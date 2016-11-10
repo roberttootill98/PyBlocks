@@ -388,6 +388,9 @@ Blockly.Flyout.prototype.show = function(xmlList) {
         case Blockly.Variables.CAT_NEW_LIST:
             xmlList = Blockly.Variables.newListFlyoutCategory(this.workspace_.targetWorkspace);
             break;
+        case Blockly.Variables.CAT_NEW_TURTLE:
+            xmlList = Blockly.Variables.newTurtleFlyoutCategory(this.workspace_.targetWorkspace);
+            break;
     }
 
     var margin = this.CORNER_RADIUS;

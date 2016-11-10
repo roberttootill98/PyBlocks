@@ -52,9 +52,15 @@ function runfull() {
     if (initInterpreter() && generateCode() && workspace.generatorSuccess) {
 
         var prog = document.getElementById("pycode").textContent;
+        var turtleBtn = document.getElementById("turtlebutton");
+
         if (prog.indexOf('turtle.Turtle()') != -1) {
             toggleTurtle('run');
+        } else {
+            turtleBtn.innerHTML = '';
+            turtleBtn.style.display = 'none';
         }
+
         var mypre = document.getElementById("codearea");
         Sk.pre = "output";
         Sk.configure({
@@ -80,17 +86,19 @@ function runfull() {
 
         mypre.scrollTop = mypre.scrollHeight;
 
+        if (mypre.textContent != initVal && mypre.className != 'collapsed expanded') {
+            toggleInterpreter();
+        }
+
     } else if (!generateCode()) {
         alert('You need to have at least one statement block attached to the start block.')
     } else {
         alert('Errors found! Please look for the warning symbols for more information.');
     }
+
     workspace.running = false;
     generateTypeTable();
 
-    if (mypre.textContent != initVal && mypre.className != 'collapsed expanded') {
-        toggleInterpreter();
-    }
 }
 
 function runeval(block) {
@@ -99,9 +107,14 @@ function runeval(block) {
     workspace.generatorSuccess = true;
 
     var code = Blockly.Python.blockToCode(block);
+    var prog = document.getElementById("pycode").textContent;
+    var turtleBtn = document.getElementById("turtlebutton");
 
-    if (code.indexOf('turtle.Turtle()') != -1) {
+    if (prog.indexOf('turtle.Turtle()') != -1) {
         toggleTurtle('run');
+    } else {
+        turtleBtn.innerHTML = '';
+        turtleBtn.style.display = 'none';
     }
 
     if (workspace.generatorSuccess) {
@@ -133,16 +146,17 @@ function runeval(block) {
                 console.log(err.toString());
             });
 
+        if (mypre.textContent != initVal && mypre.className != 'collapsed expanded') {
+            toggleInterpreter();
+        }
 
         mypre.scrollTop = mypre.scrollHeight;
     } else {
         alert('Errors found! Please look for the warning symbols for more information.');
     }
+
     workspace.running = false;
     generateTypeTable();
-    if (mypre.textContent != initVal && mypre.className != 'collapsed expanded') {
-        toggleInterpreter();
-    }
 }
 
 function runtooltip(code) {
@@ -227,27 +241,37 @@ function clr() {
 
 function toggleInterpreter() {
     var interpreter = document.getElementById("codearea");
+    var interpreterButton = document.getElementById("interpreter");
+
     if (interpreter.className == 'collapsed') {
         interpreter.className += ' expanded';
+        interpreterButton.innerHTML = 'Hide';
     } else {
         interpreter.className = 'collapsed';
+        interpreterButton.innerHTML = 'Show';
     }
 }
 
 function toggleTurtle(calledBy) {
     var turtleDiv = document.getElementById('turtlecanvas');
+    var turtleBtn = document.getElementById('turtlebutton');
+
     if (calledBy == 'run') {
         turtleDiv.style.display = 'block';
+        turtleBtn.innerHTML = 'Hide Turtle';
+        turtleBtn.style.display = 'inline';
     } else if (turtleDiv.style.display == 'block') {
         turtleDiv.style.display = 'none';
+        turtleBtn.innerHTML = 'Show Turtle';
     } else {
         turtleDiv.style.display = 'block';
+        turtleBtn.innerHTML = 'Hide Turtle';
     }
 }
 
 function generateTypeTable() {
-    var types = ['int', 'float', 'str', 'bool', 'range', 'vec2d'];
-    var colours = ['#00CC33', '#0080FF', '#FF3010', '#FF29FF', '#FFAA00', '#DFDF20']
+    var types = ['int', 'float', 'str', 'bool', 'range'];
+    var colours = ['#00CC33', '#0080FF', '#FF3010', '#FF29FF', '#FFAA00'];
     var table = document.getElementById('typetable');
     table.innerHTML = '';
     var currRow = 0;
@@ -257,6 +281,8 @@ function generateTypeTable() {
         colours.push('#00EEEE');
         types.push('screen');
         colours.push('#FFC0CB');
+        types.push('vec2d');
+        colours.push('#DFDF20');
     }
 
     for (i = 0; i < types.length; i++) {
