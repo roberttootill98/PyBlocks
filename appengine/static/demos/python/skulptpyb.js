@@ -78,6 +78,9 @@ function runfull() {
                 console.log('success');
                 if (mypre.textContent != initVal && mypre.className != 'collapsed expanded') {
                     toggleInterpreter();
+                    mypre.scrollTop = mypre.scrollHeight;
+                } else {
+                    mypre.scrollTop = 0;
                 }
             },
             function(err) {
@@ -86,7 +89,6 @@ function runfull() {
                 console.log(err.toString());
             });
 
-        mypre.scrollTop = mypre.scrollHeight;
 
     } else if (!generateCode()) {
         alert('You need to have at least one statement block attached to the start block.')
@@ -138,6 +140,9 @@ function runeval(block) {
                 console.log('success');
                 if (mypre.textContent != initVal && mypre.className != 'collapsed expanded') {
                     toggleInterpreter();
+                    mypre.scrollTop = mypre.scrollHeight;
+                } else {
+                    mypre.scrollTop = 0;
                 }
                 canRetainGlobals = true;
             },
@@ -148,7 +153,6 @@ function runeval(block) {
             });
 
 
-        mypre.scrollTop = mypre.scrollHeight;
     } else {
         alert('Errors found! Please look for the warning symbols for more information.');
     }
