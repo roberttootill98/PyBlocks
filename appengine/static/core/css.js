@@ -289,8 +289,13 @@ Blockly.Css.CONTENT = [
 
     '.blocklyBubbleText {',
     'fill: #000;',
+    'background-color: #001f3f;',
     'font-family: sans-serif;',
     'font-size: 16px;',
+    '}',
+
+    '.blocklyBubbleCanvas {',
+    'background-color: #001f3f;',
     '}',
 
     /*

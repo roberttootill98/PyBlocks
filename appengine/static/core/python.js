@@ -152,7 +152,9 @@ Blockly.Python.NEW_VARS = [{
 }, {
     name: "newBoolVariable",
     type: 'bool'
-}, {
+}];
+
+Blockly.Python.NEW_TURTLE_VARS = [{
     name: "newTurtleVariable",
     type: 'turtle'
 }, {

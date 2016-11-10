@@ -27,6 +27,7 @@
 goog.provide('Blockly.Blocks.pystart');
 
 goog.require('Blockly.Blocks');
+goog.require('Blockly.Icon');
 
 var startImports = [];
 
@@ -34,7 +35,10 @@ Blockly.Blocks['python_start'] = {
 
     init: function() {
         Blockly.BlockSvg.START_HAT = true;
-        this.appendDummyInput().appendField(new Blockly.FieldImage('../../media/play_icon.png', 32, 32, '*'));
+        this.appendDummyInput().appendField('   ').appendField(new Blockly.FieldImage('../../media/play_icon.png', 32, 32, '*'));
+        //var runIcon = new Blockly.Icon(this);
+        //runIcon.createIcon();
+        //this.appendDummyInput().appendField(new Blockly.Warning(this));
         this.setNextStatement(true);
         this.setTooltip('The start block is not a true Python block and is only\
     there to indicate which blocks will be executed when "Run full" is\
@@ -87,7 +91,7 @@ Blockly.Blocks['python_start'] = {
         if (op == 'add') {
             startImports.push(importName);
             this.appendDummyInput(importName)
-                .appendField('import ' + importName);
+                .appendField('import ' + importName + ' ');
 
             if (startImports.indexOf('math') > -1 && startImports.indexOf('turtle') > -1) {
                 workspace.updateToolbox(document.getElementById('toolboxmathturtle'));

@@ -49,8 +49,7 @@ Blockly.Blocks['variables_get'] = {
         this.setTypeVecs([
             ["none"]
         ]);
-        this.setTooltip(Blockly.Msg.VARIABLES_GET_TOOLTIP);
-        this.contextMenuMsg_ = Blockly.Msg.VARIABLES_GET_CREATE_SET;
+                this.contextMenuMsg_ = Blockly.Msg.VARIABLES_GET_CREATE_SET;
         console.log("VARS at end init", this.type, this.getFieldValue("VAR"));
     },
     /**
@@ -89,7 +88,12 @@ Blockly.Blocks['variables_get'] = {
         rename.text = "Rename variable ...";
         rename.callback = Blockly.Python.renameVariableCallback(this);
         options.unshift(rename);
+    },
+    onchange: function(ev) {
+
+    this.setTooltip(this.getFieldValue("VAR"));
     }
+
 };
 
 Blockly.Blocks['variables_set'] = {

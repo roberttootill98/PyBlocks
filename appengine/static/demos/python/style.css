@@ -64,6 +64,7 @@ table#typetable {
     -ms-user-select: none;
     user-select: none;
     cursor: default;
+    resize: inherit;
 }
 
 
@@ -205,6 +206,11 @@ table#typetable {
 
 .fancybuttons:focus {
     outline: 0 !important;
+}
+
+.fancybuttons#turtlebutton {
+    display: none;
+
 }
 
 .fancybuttons#run {

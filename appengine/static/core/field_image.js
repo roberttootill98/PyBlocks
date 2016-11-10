@@ -107,7 +107,7 @@ Blockly.FieldImage.prototype.init = function(block) {
     Blockly.Tooltip.bindMouseEvents(topElement);
 
     if (this.sourceBlock_.type == 'python_start') {
-        Blockly.bindEvent_(this.fieldGroup_, 'dblclick', this, function(e) {
+        Blockly.bindEvent_(this.fieldGroup_, 'click', this, function(e) {
             runfull()
         });
     }
