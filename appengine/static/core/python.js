@@ -24,7 +24,7 @@
  */
 'use strict';
 
-console.log = function() {};
+//console.log = function() {};
 
 goog.require('Blockly.Names');
 

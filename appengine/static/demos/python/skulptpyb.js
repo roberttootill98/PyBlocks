@@ -76,6 +76,9 @@ function runfull() {
 
         myPromise.then(function(mod) {
                 console.log('success');
+                if (mypre.textContent != initVal && mypre.className != 'collapsed expanded') {
+                    toggleInterpreter();
+                }
             },
             function(err) {
                 var mypre = document.getElementById("codearea");
@@ -83,12 +86,7 @@ function runfull() {
                 console.log(err.toString());
             });
 
-
         mypre.scrollTop = mypre.scrollHeight;
-
-        if (mypre.textContent != initVal && mypre.className != 'collapsed expanded') {
-            toggleInterpreter();
-        }
 
     } else if (!generateCode()) {
         alert('You need to have at least one statement block attached to the start block.')
@@ -138,6 +136,9 @@ function runeval(block) {
         });
         myPromise.then(function(mod) {
                 console.log('success');
+                if (mypre.textContent != initVal && mypre.className != 'collapsed expanded') {
+                    toggleInterpreter();
+                }
                 canRetainGlobals = true;
             },
             function(err) {
@@ -146,9 +147,6 @@ function runeval(block) {
                 console.log(err.toString());
             });
 
-        if (mypre.textContent != initVal && mypre.className != 'collapsed expanded') {
-            toggleInterpreter();
-        }
 
         mypre.scrollTop = mypre.scrollHeight;
     } else {
