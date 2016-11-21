@@ -210,7 +210,7 @@ Blockly.Generator.prototype.blockToCode = function(block) {
 
     } else if (workspace.running && !block.holesFilled) {
 
-        block.setWarningText('Missing parameters');
+        block.setWarningText('Missing slot(s)');
         workspace.generatorSuccess = false;
 
     } else if (workspace.running && !block.isInFlyout && block.type == 'variables_get' &&

@@ -568,6 +568,7 @@ Blockly.Bubble.prototype.renderArrow_ = function() {
     }
     steps.push('z');
     this.bubbleArrow_.setAttribute('d', steps.join(' '));
+    this.setColour("#FF0000");
 };
 
 /**

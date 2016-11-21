@@ -296,6 +296,7 @@ Blockly.Css.CONTENT = [
 
     '.blocklyBubbleCanvas {',
     'background-color: #001f3f;',
+    'fill: #FF0000;',
     '}',
 
     /*

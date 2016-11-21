@@ -51,7 +51,7 @@ Blockly.Warning.prototype.collapseHidden = false;
 
 /**
  * Icon in base64 format.
- * Josef - Yellow version, doesn't blend in with text
+ * Josef - Red/white/black version, doesn't blend in with text
  * http://www.onlinewebfonts.com/icon/78843 
  * @private
  */

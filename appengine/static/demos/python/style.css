@@ -216,6 +216,7 @@ table#typetable {
 
 .fancybuttons#run {
     background: #efefef url('../../media/play_icon.png') no-repeat right;
+    background-size: 24px 24px;
     padding-right: 28px;
 }
 
@@ -308,3 +309,28 @@ table#typetable {
 #blocklyDiv {
     position: absolute;
 }
+
+.int {
+    color: #00CC33; 
+}
+
+.float {
+    color: #0080FF;
+}
+
+.str {
+    color: #FF3010;
+}
+
+.bool {
+    color: #FF29FF;
+}
+
+.range {
+    color: #FFAA00;
+}
+
+.turtle {
+    color: #00EEEE;
+}
+
