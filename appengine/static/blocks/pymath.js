@@ -45,7 +45,7 @@ Blockly.Blocks['python_math_ceil'] = {
     onchange: function(ev) {
         if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '' && workspace.imports.indexOf('import math') >= 0) {
             this.holesFilled = true;
-            runtooltip(workspace.imports + 'print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+            runTooltip(workspace.imports + 'print( ' + Blockly.Python.blockToCode(this)[0] + ')');
             this.setTooltip(document.getElementById("hiddenoutput").textContent);
         } else if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '') {
             this.holesFilled = true;
@@ -111,7 +111,7 @@ Blockly.Blocks['python_math_factorial'] = {
     onchange: function(ev) {
         if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '' && workspace.imports.indexOf('import math') >= 0) {
             this.holesFilled = true;
-            runtooltip(workspace.imports + 'print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+            runTooltip(workspace.imports + 'print( ' + Blockly.Python.blockToCode(this)[0] + ')');
             this.setTooltip(document.getElementById("hiddenoutput").textContent);
         } else if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '') {
             this.holesFilled = true;
@@ -139,7 +139,7 @@ Blockly.Blocks['python_math_floor'] = {
     onchange: function(ev) {
         if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '' && workspace.imports.indexOf('import math') >= 0) {
             this.holesFilled = true;
-            runtooltip(workspace.imports + 'print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+            runTooltip(workspace.imports + 'print( ' + Blockly.Python.blockToCode(this)[0] + ')');
             this.setTooltip(document.getElementById("hiddenoutput").textContent);
         } else if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '') {
             this.holesFilled = true;
@@ -347,7 +347,7 @@ Blockly.Blocks['python_math_log'] = {
     onchange: function(ev) {
         if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '' && workspace.imports.indexOf('import math') >= 0) {
             this.holesFilled = true;
-            runtooltip(workspace.imports + 'print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+            runTooltip(workspace.imports + 'print( ' + Blockly.Python.blockToCode(this)[0] + ')');
             this.setTooltip(document.getElementById("hiddenoutput").textContent);
         } else if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '') {
             this.holesFilled = true;
@@ -392,7 +392,7 @@ Blockly.Blocks['python_math_log10'] = {
     onchange: function(ev) {
         if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '' && workspace.imports.indexOf('import math') >= 0) {
             this.holesFilled = true;
-            runtooltip(workspace.imports + 'print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+            runTooltip(workspace.imports + 'print( ' + Blockly.Python.blockToCode(this)[0] + ')');
             this.setTooltip(document.getElementById("hiddenoutput").textContent);
         } else if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '') {
             this.holesFilled = true;
@@ -424,7 +424,7 @@ Blockly.Blocks['python_math_pow'] = {
     onchange: function(ev) {
         if (Blockly.Python.valueToCode(this, 'ARG1', Blockly.Python.ORDER_NONE) != '' && Blockly.Python.valueToCode(this, 'ARG2', Blockly.Python.ORDER_NONE) != '' && workspace.imports.indexOf('import math') >= 0) {
             this.holesFilled = true;
-            runtooltip(workspace.imports + 'print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+            runTooltip(workspace.imports + 'print( ' + Blockly.Python.blockToCode(this)[0] + ')');
             this.setTooltip(document.getElementById("hiddenoutput").textContent);
         } else if (Blockly.Python.valueToCode(this, 'ARG1', Blockly.Python.ORDER_NONE) != '' && Blockly.Python.valueToCode(this, 'ARG2', Blockly.Python.ORDER_NONE) != '') {
             this.holesFilled = true;
@@ -452,7 +452,7 @@ Blockly.Blocks['python_math_sqrt'] = {
     onchange: function(ev) {
         if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '' && workspace.imports.indexOf('import math') >= 0) {
             this.holesFilled = true;
-            runtooltip(workspace.imports + 'print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+            runTooltip(workspace.imports + 'print( ' + Blockly.Python.blockToCode(this)[0] + ')');
             this.setTooltip(document.getElementById("hiddenoutput").textContent);
         } else if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '') {
             this.holesFilled = true;
@@ -552,7 +552,7 @@ Blockly.Blocks['python_math_cos'] = {
     onchange: function(ev) {
         if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '' && workspace.imports.indexOf('import math') >= 0) {
             this.holesFilled = true;
-            runtooltip(workspace.imports + 'print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+            runTooltip(workspace.imports + 'print( ' + Blockly.Python.blockToCode(this)[0] + ')');
             this.setTooltip(document.getElementById("hiddenoutput").textContent);
         } else if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '') {
             this.holesFilled = true;
@@ -601,7 +601,7 @@ Blockly.Blocks['python_math_sin'] = {
     onchange: function(ev) {
         if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '' && workspace.imports.indexOf('import math') >= 0) {
             this.holesFilled = true;
-            runtooltip(workspace.imports + 'print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+            runTooltip(workspace.imports + 'print( ' + Blockly.Python.blockToCode(this)[0] + ')');
             this.setTooltip(document.getElementById("hiddenoutput").textContent);
         } else if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '') {
             this.holesFilled = true;
@@ -629,7 +629,7 @@ Blockly.Blocks['python_math_tan'] = {
     onchange: function(ev) {
         if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '' && workspace.imports.indexOf('import math') >= 0) {
             this.holesFilled = true;
-            runtooltip(workspace.imports + 'print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+            runTooltip(workspace.imports + 'print( ' + Blockly.Python.blockToCode(this)[0] + ')');
             this.setTooltip(document.getElementById("hiddenoutput").textContent);
         } else if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '') {
             this.holesFilled = true;
@@ -857,7 +857,7 @@ Blockly.Blocks['python_math_pi'] = {
     },
     onchange: function(ev) {
         if (workspace.imports.indexOf('import math') >= 0) {
-            runtooltip(workspace.imports + 'print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+            runTooltip(workspace.imports + 'print( ' + Blockly.Python.blockToCode(this)[0] + ')');
             this.setTooltip(document.getElementById("hiddenoutput").textContent);
         } else {
             this.setTooltip('Returns the pi mathematical constant');
@@ -878,7 +878,7 @@ Blockly.Blocks['python_math_e'] = {
     },
     onchange: function(ev) {
         if (workspace.imports.indexOf('import math') >= 0) {
-            runtooltip(workspace.imports + 'print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+            runTooltip(workspace.imports + 'print( ' + Blockly.Python.blockToCode(this)[0] + ')');
             this.setTooltip(document.getElementById("hiddenoutput").textContent);
         } else {
             this.setTooltip('Returns the e mathematical constant');

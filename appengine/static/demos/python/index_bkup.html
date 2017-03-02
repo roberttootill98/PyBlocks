@@ -55,7 +55,7 @@
     #blocklyArea {
       height: 99%;
     }
-    .codearea {
+    .codeArea {
         background-color:#000;
         color:#fff;
         font-family:'Oxygen Mono', Consolas, 'Liberation Mono', 'DejaVu Sans Mono', monospace;
@@ -78,11 +78,11 @@
     </tr>
     <tr>
       <td>
-        <textarea id="codearea" cols="20" rows="7"></textarea>
-        <textarea id="output" class="codearea" rows="9" cols="85" readonly="true">PyBlocks Interpreter
+        <textarea id="codeArea" cols="20" rows="7"></textarea>
+        <textarea id="output" class="codeArea" rows="9" cols="85" readonly="true">PyBlocks Interpreter
 
 </textarea>
-        <button type="button" onclick="runit('codearea', 'output')">Run manual</button>
+        <button type="button" onclick="runit('codeArea', 'output')">Run manual</button>
         <button type="button" onclick="runfull()">Run full</button>
         <button type="button" disabled onclick="runblock()">Run block (disabled)</button>
         <button type="button" onclick="clr()">Clear console</button>
@@ -90,7 +90,7 @@
     </tr>
     <tr>
       <td>
-        <textarea id="pycode" class="codearea" rows="12" cols="100" readonly="true"></textarea>
+        <textarea id="pycode" class="codeArea" rows="12" cols="100" readonly="true"></textarea>
       </td>
     </tr>
   </table>

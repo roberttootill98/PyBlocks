@@ -108,7 +108,7 @@ Blockly.FieldImage.prototype.init = function(block) {
 
     if (this.sourceBlock_.type == 'python_start') {
         Blockly.bindEvent_(this.fieldGroup_, 'click', this, function(e) {
-            runfull()
+            runFull()
         });
     }
 

@@ -62,7 +62,7 @@ Blockly.Blocks['python_string_concat'] = {
         if (Blockly.Python.valueToCode(this, 'LHS', Blockly.Python.ORDER_NONE) != '' &&
             Blockly.Python.valueToCode(this, 'RHS', Blockly.Python.ORDER_NONE) != '') {
             this.holesFilled = true;
-            runtooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+            runTooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
             this.setTooltip(document.getElementById("hiddenoutput").textContent);
         } else {
             this.holesFilled = false;
@@ -92,7 +92,7 @@ Blockly.Blocks['python_string_repeat'] = {
         if (Blockly.Python.valueToCode(this, 'LHS', Blockly.Python.ORDER_NONE) != '' &&
             Blockly.Python.valueToCode(this, 'RHS', Blockly.Python.ORDER_NONE) != '') {
             this.holesFilled = true;
-            runtooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+            runTooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
             this.setTooltip(document.getElementById("hiddenoutput").textContent);
         } else {
             this.holesFilled = false;
@@ -119,7 +119,7 @@ Blockly.Blocks['python_string_index'] = {
         if (Blockly.Python.valueToCode(this, 'ARG1', Blockly.Python.ORDER_NONE) != '' &&
             Blockly.Python.valueToCode(this, 'ARG2', Blockly.Python.ORDER_NONE) != '') {
             this.holesFilled = true;
-            runtooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+            runTooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
             this.setTooltip(document.getElementById("hiddenoutput").textContent);
         } else {
             this.holesFilled = false;
@@ -149,7 +149,7 @@ Blockly.Blocks['python_string_slice12'] = {
             Blockly.Python.valueToCode(this, 'ARG2', Blockly.Python.ORDER_NONE) != '' &&
             Blockly.Python.valueToCode(this, 'ARG3', Blockly.Python.ORDER_NONE) != '') {
             this.holesFilled = true;
-            runtooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+            runTooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
             this.setTooltip(document.getElementById("hiddenoutput").textContent);
         } else {
             this.holesFilled = false;
@@ -178,7 +178,7 @@ Blockly.Blocks['python_string_slice1'] = {
         if (Blockly.Python.valueToCode(this, 'ARG1', Blockly.Python.ORDER_NONE) != '' &&
             Blockly.Python.valueToCode(this, 'ARG2', Blockly.Python.ORDER_NONE) != '') {
             this.holesFilled = true;
-            runtooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+            runTooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
             this.setTooltip(document.getElementById("hiddenoutput").textContent);
         } else {
             this.holesFilled = false;
@@ -207,7 +207,7 @@ Blockly.Blocks['python_string_slice2'] = {
         if (Blockly.Python.valueToCode(this, 'ARG1', Blockly.Python.ORDER_NONE) != '' &&
             Blockly.Python.valueToCode(this, 'ARG2', Blockly.Python.ORDER_NONE) != '') {
             this.holesFilled = true;
-            runtooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+            runTooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
             this.setTooltip(document.getElementById("hiddenoutput").textContent);
         } else {
             this.holesFilled = false;
@@ -232,7 +232,7 @@ Blockly.Blocks['python_string_len'] = {
     onchange: function(ev) {
         if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '') {
             this.holesFilled = true;
-            runtooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+            runTooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
             this.setTooltip(document.getElementById("hiddenoutput").textContent);
         } else {
             this.holesFilled = false;
@@ -261,7 +261,7 @@ Blockly.Blocks['python_string_in'] = {
         if (Blockly.Python.valueToCode(this, 'LHS', Blockly.Python.ORDER_NONE) != '' &&
             Blockly.Python.valueToCode(this, 'RHS', Blockly.Python.ORDER_NONE) != '') {
             this.holesFilled = true;
-            runtooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+            runTooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
             this.setTooltip(document.getElementById("hiddenoutput").textContent);
         } else {
             this.holesFilled = false;
@@ -285,7 +285,7 @@ Blockly.Blocks['python_isdigit'] = {
     onchange: function(ev) {
         if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '') {
             this.holesFilled = true;
-            runtooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+            runTooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
             this.setTooltip(document.getElementById("hiddenoutput").textContent);
         } else {
             this.holesFilled = false;
@@ -309,7 +309,7 @@ Blockly.Blocks['python_isalpha'] = {
     onchange: function(ev) {
         if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '') {
             this.holesFilled = true;
-            runtooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+            runTooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
             this.setTooltip(document.getElementById("hiddenoutput").textContent);
         } else {
             this.holesFilled = false;
@@ -334,7 +334,7 @@ Blockly.Blocks['python_isspace'] = {
     onchange: function(ev) {
         if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '') {
             this.holesFilled = true;
-            runtooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+            runTooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
             this.setTooltip(document.getElementById("hiddenoutput").textContent);
         } else {
             this.holesFilled = false;
@@ -358,7 +358,7 @@ Blockly.Blocks['python_lower'] = {
     onchange: function(ev) {
         if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '') {
             this.holesFilled = true;
-            runtooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+            runTooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
             this.setTooltip(document.getElementById("hiddenoutput").textContent);
         } else {
             this.holesFilled = false;
@@ -382,7 +382,7 @@ Blockly.Blocks['python_upper'] = {
     onchange: function(ev) {
         if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '') {
             this.holesFilled = true;
-            runtooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+            runTooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
             this.setTooltip(document.getElementById("hiddenoutput").textContent);
         } else {
             this.holesFilled = false;
@@ -409,7 +409,7 @@ Blockly.Blocks['python_find'] = {
         if (Blockly.Python.valueToCode(this, 'ARG1', Blockly.Python.ORDER_NONE) != '' &&
             Blockly.Python.valueToCode(this, 'ARG2', Blockly.Python.ORDER_NONE) != '') {
             this.holesFilled = true;
-            runtooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+            runTooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
             this.setTooltip(document.getElementById("hiddenoutput").textContent);
         } else {
             this.holesFilled = false;
@@ -437,7 +437,7 @@ Blockly.Blocks['python_index_method'] = {
         if (Blockly.Python.valueToCode(this, 'ARG1', Blockly.Python.ORDER_NONE) != '' &&
             Blockly.Python.valueToCode(this, 'ARG2', Blockly.Python.ORDER_NONE) != '') {
             this.holesFilled = true;
-            runtooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+            runTooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
             this.setTooltip(document.getElementById("hiddenoutput").textContent);
         } else {
             this.holesFilled = false;
@@ -465,7 +465,7 @@ Blockly.Blocks['python_string_count'] = {
         if (Blockly.Python.valueToCode(this, 'ARG1', Blockly.Python.ORDER_NONE) != '' &&
             Blockly.Python.valueToCode(this, 'ARG2', Blockly.Python.ORDER_NONE) != '') {
             this.holesFilled = true;
-            runtooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+            runTooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
             this.setTooltip(document.getElementById("hiddenoutput").textContent);
         } else {
             this.holesFilled = false;
@@ -498,7 +498,7 @@ Blockly.Blocks['python_split'] = {
                 this.hasSepParameter == false)) {
 
             this.holesFilled = true;
-            runtooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+            runTooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
             this.setTooltip(document.getElementById("hiddenoutput").textContent);
         } else {
             this.holesFilled = false;

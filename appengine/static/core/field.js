@@ -117,7 +117,7 @@ Blockly.Field.prototype.init = function(block) {
     }, this.fieldGroup_, this.sourceBlock_.workspace);
     /** @type {!Element} */
     this.textElement_ = Blockly.createSvgElement('text', {
-            'class': 'blocklyText',
+            'class': 'blocklyText blocklyDraggable',
             'y': 12.5
         }, // MJP: was 12.5
         this.fieldGroup_);

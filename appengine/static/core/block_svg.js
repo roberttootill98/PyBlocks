@@ -668,7 +668,7 @@ Blockly.BlockSvg.prototype.showContextMenu_ = function(e) {
             text: Blockly.Msg.EVAL,
             enabled: true,
             callback: function() {
-                runeval(block);
+                runEval(block);
             }
         };
         menuOptions.push(evaluateOption);

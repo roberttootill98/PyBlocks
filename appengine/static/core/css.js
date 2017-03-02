@@ -243,7 +243,6 @@ Blockly.Css.CONTENT = [
     '}',
 
     '.blocklyText {',
-    'cursor: default;',
     'fill: #000;',
     'font-family: monospace;',
     'font-size: 15pt;',
@@ -307,7 +306,6 @@ Blockly.Css.CONTENT = [
     'user-select: none;',
     '-moz-user-select: none;',
     '-webkit-user-select: none;',
-    'cursor: inherit;',
     '}',
 
     '.blocklyHidden {',
@@ -343,8 +341,9 @@ Blockly.Css.CONTENT = [
     '.blocklyHtmlInput {',
     'border: none;',
     'border-radius: 4px;',
-    'font-family: sans-serif;',
-    'height: 100%;',
+    'font-family: monospace;',
+    'font-size: 20px !important;',
+    'height: 77%;',
     'margin: 0;',
     'outline: none;',
     'padding: 0 1px;',

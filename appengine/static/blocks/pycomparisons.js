@@ -67,7 +67,7 @@ Blockly.Blocks['python_equals'] = {
     onchange: function(ev) {
         if (Blockly.Python.valueToCode(this, 'LHS', Blockly.Python.ORDER_NONE) != '' && Blockly.Python.valueToCode(this, 'RHS', Blockly.Python.ORDER_NONE) != '') {
             this.holesFilled = true;
-            runtooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+            runTooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
             this.setTooltip(document.getElementById("hiddenoutput").textContent);
         } else {
             this.holesFilled = false;
@@ -93,7 +93,7 @@ Blockly.Blocks['python_not_equals'] = {
     onchange: function(ev) {
         if (Blockly.Python.valueToCode(this, 'LHS', Blockly.Python.ORDER_NONE) != '' && Blockly.Python.valueToCode(this, 'RHS', Blockly.Python.ORDER_NONE) != '') {
             this.holesFilled = true;
-            runtooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+            runTooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
             this.setTooltip(document.getElementById("hiddenoutput").textContent);
         } else {
             this.holesFilled = false;
@@ -122,7 +122,7 @@ Blockly.Blocks['python_is'] = {
     onchange: function(ev) {
         if (Blockly.Python.valueToCode(this, 'LHS', Blockly.Python.ORDER_NONE) != '' && Blockly.Python.valueToCode(this, 'RHS', Blockly.Python.ORDER_NONE) != '') {
             this.holesFilled = true;
-            runtooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+            runTooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
             this.setTooltip(document.getElementById("hiddenoutput").textContent);
         } else {
             this.holesFilled = false;
@@ -148,7 +148,7 @@ Blockly.Blocks['python_less_than'] = {
     onchange: function(ev) {
         if (Blockly.Python.valueToCode(this, 'LHS', Blockly.Python.ORDER_NONE) != '' && Blockly.Python.valueToCode(this, 'RHS', Blockly.Python.ORDER_NONE) != '') {
             this.holesFilled = true;
-            runtooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+            runTooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
             this.setTooltip(document.getElementById("hiddenoutput").textContent);
         } else {
             this.holesFilled = false;
@@ -174,7 +174,7 @@ Blockly.Blocks['python_less_than_or_equal'] = {
     onchange: function(ev) {
         if (Blockly.Python.valueToCode(this, 'LHS', Blockly.Python.ORDER_NONE) != '' && Blockly.Python.valueToCode(this, 'RHS', Blockly.Python.ORDER_NONE) != '') {
             this.holesFilled = true;
-            runtooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+            runTooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
             this.setTooltip(document.getElementById("hiddenoutput").textContent);
         } else {
             this.holesFilled = false;
@@ -201,7 +201,7 @@ Blockly.Blocks['python_greater_than'] = {
     onchange: function(ev) {
         if (Blockly.Python.valueToCode(this, 'LHS', Blockly.Python.ORDER_NONE) != '' && Blockly.Python.valueToCode(this, 'RHS', Blockly.Python.ORDER_NONE) != '') {
             this.holesFilled = true;
-            runtooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+            runTooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
             this.setTooltip(document.getElementById("hiddenoutput").textContent);
         } else {
             this.holesFilled = false;
@@ -228,7 +228,7 @@ Blockly.Blocks['python_greater_than_or_equal'] = {
     onchange: function(ev) {
         if (Blockly.Python.valueToCode(this, 'LHS', Blockly.Python.ORDER_NONE) != '' && Blockly.Python.valueToCode(this, 'RHS', Blockly.Python.ORDER_NONE) != '') {
             this.holesFilled = true;
-            runtooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+            runTooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
             this.setTooltip(document.getElementById("hiddenoutput").textContent);
         } else {
             this.holesFilled = false;

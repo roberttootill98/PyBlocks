@@ -9,7 +9,7 @@ var canRetainGlobals = true;
 var initVal = ' Python 3 Interpreter\n\n';
 
 function outf(text) {
-    var mypre = document.getElementById("codearea");
+    var mypre = document.getElementById("codeArea");
     mypre.innerHTML = mypre.innerHTML + ' ' + text;
 }
 
@@ -42,7 +42,7 @@ function builtinRead(x) {
     return file;
 }
 
-function runfull() {
+function runFull() {
 
     workspace.running = true;
     workspace.generatorSuccess = true;
@@ -52,7 +52,7 @@ function runfull() {
     if (initInterpreter() && generateCode() && workspace.generatorSuccess) {
 
         var prog = document.getElementById("pycode").textContent;
-        var turtleBtn = document.getElementById("turtlebutton");
+        var turtleBtn = document.getElementById("turtleButton");
 
         if (prog.indexOf('turtle.Turtle()') != -1) {
             toggleTurtle('run');
@@ -61,14 +61,14 @@ function runfull() {
             turtleBtn.style.display = 'none';
         }
 
-        var mypre = document.getElementById("codearea");
+        var mypre = document.getElementById("codeArea");
         Sk.pre = "output";
         Sk.configure({
             output: outf,
             read: builtinRead,
             inputfunTakesPrompt: true
         });
-        (Sk.TurtleGraphics || (Sk.TurtleGraphics = {})).target = 'turtlecanvas';
+        (Sk.TurtleGraphics || (Sk.TurtleGraphics = {})).target = 'turtleCanvas';
 
         var myPromise = Sk.misceval.asyncToPromise(function() {
             return Sk.importMainWithBody("<stdin>", false, prog, true);
@@ -84,7 +84,7 @@ function runfull() {
                 }
             },
             function(err) {
-                var mypre = document.getElementById("codearea");
+                var mypre = document.getElementById("codeArea");
                 mypre.innerHTML = mypre.innerHTML + err.toString() + "\n";
                 console.log(err.toString());
             });
@@ -101,14 +101,14 @@ function runfull() {
 
 }
 
-function runeval(block) {
+function runEval(block) {
 
     workspace.running = true;
     workspace.generatorSuccess = true;
 
     var code = Blockly.Python.blockToCode(block);
     var prog = document.getElementById("pycode").textContent;
-    var turtleBtn = document.getElementById("turtlebutton");
+    var turtleBtn = document.getElementById("turtleButton");
 
     if (prog.indexOf('turtle.Turtle()') != -1) {
         toggleTurtle('run');
@@ -123,7 +123,7 @@ function runeval(block) {
             code = 'print(' + code[0] + ')';
         }
 
-        var mypre = document.getElementById("codearea");
+        var mypre = document.getElementById("codeArea");
 
         Sk.pre = "output";
         Sk.configure({
@@ -132,7 +132,7 @@ function runeval(block) {
             inputfunTakesPrompt: true,
             retainglobals: canRetainGlobals
         });
-        (Sk.TurtleGraphics || (Sk.TurtleGraphics = {})).target = 'turtlecanvas';
+        (Sk.TurtleGraphics || (Sk.TurtleGraphics = {})).target = 'turtleCanvas';
         var myPromise = Sk.misceval.asyncToPromise(function() {
             return Sk.importMainWithBody("<stdin>", false, code, true);
         });
@@ -147,7 +147,7 @@ function runeval(block) {
                 canRetainGlobals = true;
             },
             function(err) {
-                var mypre = document.getElementById("codearea");
+                var mypre = document.getElementById("codeArea");
                 mypre.innerHTML = mypre.innerHTML + err.toString() + "\n";
                 console.log(err.toString());
             });
@@ -161,7 +161,7 @@ function runeval(block) {
     generateTypeTable();
 }
 
-function runtooltip(code) {
+function runTooltip(code) {
 
     if (code.indexOf('input(') >= 0) {
         return;
@@ -209,7 +209,7 @@ function initInterpreter() {
     // var second = normaliseDate(d.getSeconds());
 
 
-    var interpreter = document.getElementById("codearea");
+    var interpreter = document.getElementById("codeArea");
     interpreter.innerHTML = initVal;
     if (interpreter.innerHTML == initVal) {
         return true;
@@ -231,7 +231,7 @@ function restart() {
     canRetainGlobals = false;
     workspace.imports = '';
     workspace.vars = '';
-    var interpreter = document.getElementById("codearea");
+    var interpreter = document.getElementById("codeArea");
     interpreter.innerHTML = interpreter.innerHTML + '\n === RESTART ====\n';
     interpreter.scrollTop = interpreter.scrollHeight;
     generateTypeTable();
@@ -242,7 +242,7 @@ function clr() {
 }
 
 function toggleInterpreter() {
-    var interpreter = document.getElementById("codearea");
+    var interpreter = document.getElementById("codeArea");
     var interpreterButton = document.getElementById("interpreter");
 
     if (interpreter.className == 'collapsed') {
@@ -257,8 +257,8 @@ function toggleInterpreter() {
 }
 
 function toggleTurtle(calledBy) {
-    var turtleDiv = document.getElementById('turtlecanvas');
-    var turtleBtn = document.getElementById('turtlebutton');
+    var turtleDiv = document.getElementById('turtleCanvas');
+    var turtleBtn = document.getElementById('turtleButton');
 
     if (calledBy == 'run') {
         turtleDiv.style.display = 'block';
@@ -276,7 +276,7 @@ function toggleTurtle(calledBy) {
 function generateTypeTable() {
     var types = ['int', 'float', 'str', 'bool', 'range'];
     var colours = ['#00CC33', '#0080FF', '#FF3010', '#FF29FF', '#FFAA00'];
-    var table = document.getElementById('typetable');
+    var table = document.getElementById('typeTable');
     table.innerHTML = '';
     var currRow = 0;
 
@@ -306,6 +306,14 @@ function generateTypeTable() {
 
     }
 }
+function popupWindow(url, title, win, w, h)
+    {
+        var y = window.top.outerHeight / 2 + window.top.screenY - (h / 2)
+        var x = window.top.outerWidth / 2 + window.top.screenX - (w / 2)
+        return window.open(url, title,
+                'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=' +
+                w + ', height=' + h + ', top=' + y + ', left=' + x);
+    }
 
 function checkWorkspace(event) {
     Blockly.Python.workspaceToCode(workspace);

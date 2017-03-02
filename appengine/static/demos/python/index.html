@@ -56,15 +56,15 @@
                     <h1>Python<span class="int">B</span><span class="float">l</span><span class="str">o</span><span class="bool">c</span><span class="range">k</span><span class="turtle">s</span></h1>
                 </span>
 
-                <div id="buttonarea" class="right">
-                    <button type="button" class="fancybuttons" id="run" onclick="runfull()">Run</button>
-                    <button type="button" class="fancybuttons" onclick="saveBlocks()">Save</button>
-                    <button type="button" class="fancybuttons" onclick="initLoad(createPicker)">Load</button>
-                    <button type="button" class="fancybuttons" onclick="copyToClipboard()">Copy</button>
-                    <button type="button" class="fancybuttons" onclick="reset()">Reset</button>
-	            <button type="button" class="fancybuttons" onclick="popupwindow('help.html', 'PythonBlocks Help', 'window', '835', '565')">Help</button>
-                    <button type="button" class="fancybuttons" onclick="popupwindow('about.html', 'About', 'window', '400', 300)">About</button>
-	            <button id="turtlebutton" type="button" class="fancybuttons" onclick="toggleTurtle()"></button>
+                <div id="buttonArea" class="right">
+                    <button type="button" class="fancyButtons" id="run" onclick="runFull()">Run</button>
+                    <button type="button" class="fancyButtons" onclick="saveBlocks()">Save</button>
+                    <button type="button" class="fancyButtons" onclick="initLoad(createPicker)">Load</button>
+                    <button type="button" class="fancyButtons" onclick="copyToClipboard()">Copy</button>
+                    <button type="button" class="fancyButtons" onclick="reset()">Reset</button>
+	            <button type="button" class="fancyButtons" onclick="popupWindow('help.html', 'PythonBlocks Help', 'window', '835', '565')">Help</button>
+                    <button type="button" class="fancyButtons" onclick="popupWindow('about.html', 'About', 'window', '400', 300)">About</button>
+	            <button id="turtleButton" type="button" class="fancyButtons" onclick="toggleTurtle()"></button>
                 </div>
             </td>
         </tr>
@@ -74,8 +74,8 @@
             </td>
         </tr>
     </table>
-    <div id="typediv">
-        <table id="typetable">
+    <div id="typeDiv">
+        <table id="typeTable">
             <!--<tr id="typetr1">
                     <td bgcolor="#00CC33">
                       int
@@ -101,19 +101,19 @@
         </table>
     </div>
 
-    <div id="outputdiv">
-        <textarea id="codearea" class="collapsed" rows="15" cols="75" readonly="true"></textarea>
+    <div id="outputDiv">
+        <textarea id="codeArea" class="collapsed" rows="15" cols="75" readonly="true"></textarea>
     </div>
 
-    <div id="turtlecanvas"></div>
+    <div id="turtleCanvas"></div>
 
     <div id="hiddenstuff">
-        <button id="clear" type="button" class="fancybuttons" onclick="clr()">Clear</button>
-        <button id="restart" type="button" class="fancybuttons" onclick="restart()">Restart</button>
-        <button id="interpreter" type="button" class="fancybuttons" onclick="toggleInterpreter()">Show</button>
+        <button id="clear" type="button" class="fancyButtons" onclick="clr()">Clear</button>
+        <button id="restart" type="button" class="fancyButtons" onclick="restart()">Restart</button>
+        <button id="interpreter" type="button" class="fancyButtons" onclick="toggleInterpreter()">Show</button>
         <textarea id="hiddenoutput" cols="20" rows="7" hidden="true"></textarea>
         <textarea id="hiddenoutput2" cols="20" rows="7" hidden="true"></textarea>
-        <textarea id="pycode" class="codearea" rows="12" cols="100" readonly="true" hidden="true"></textarea>
+        <textarea id="pycode" class="codeArea" rows="12" cols="100" readonly="true" hidden="true"></textarea>
     </div>
 
 
@@ -800,14 +800,14 @@
     <script>
         var blocklyArea = document.getElementById('blocklyArea');
         var blocklyDiv = document.getElementById('blocklyDiv');
-        var output = document.getElementById('codearea');
+        var output = document.getElementById('codeArea');
         var workspace = Blockly.inject(blocklyDiv,
         {
             media: '../../media/',
             trashcan: false,
             toolbox: document.getElementById('toolbox')
         });
-        var onresize = function(e)
+        var onResize = function(e)
         {
             // Compute the absolute coordinates and dimensions of blocklyArea.
             var element = blocklyArea;
@@ -825,15 +825,25 @@
             blocklyDiv.style.height = blocklyArea.offsetHeight + 'px';
             Blockly.svgResize(workspace);
         };
-        window.addEventListener('resize', onresize, false);
-        output.addEventListener('transitionend', onresize);
-        onresize();
+        window.addEventListener('resize', onResize, false);
+        output.addEventListener('transitionend', onResize);
+        
+        if ('BlocklyStorage' in window && window.location.hash.length > 1)
+        {
+            BlocklyStorage.retrieveXml(window.location.hash.substring(1));
+        } else {
+            var xml =
+                '<xml><block id="startBlock" type="python_start" deletable="false" movable="false" x="2" y="17"></block></xml>';
+            Blockly.Xml.domToWorkspace(workspace, Blockly.Xml.textToDom(xml));
+        }
+        
+        onResize();
         initInterpreter();
 /*
         // Movable turtle canvas code
 
         window.onload = addListeners;
-        var turtleDiv = document.getElementById('turtlecanvas');
+        var turtleDiv = document.getElementById('turtleCanvas');
 
         function addListeners()
         {
@@ -866,16 +876,6 @@
 
         //workspace.addChangeListener(checkWorkspace);
         //workspace.addChangeListener(generateTypeTable);
-        if ('BlocklyStorage' in window && window.location.hash.length > 1)
-        {
-            BlocklyStorage.retrieveXml(window.location.hash.substring(1));
-        }
-        else
-        {
-            var xml =
-                '<xml><block id="startBlock" type="python_start" deletable="false" movable="false" x="5" y="25"></block></xml>';
-            Blockly.Xml.domToWorkspace(workspace, Blockly.Xml.textToDom(xml));
-        }
 
 
 
@@ -891,19 +891,11 @@
                 if (Blockly.selected != null && Blockly.selected.type !=
                     'python_start')
                 {
-                    runeval(Blockly.selected)
+                    runEval(Blockly.selected)
                 }
             });
 
 
-        function popupwindow(url, title, win, w, h)
-        {
-            var y = window.top.outerHeight / 2 + window.top.screenY - (h / 2)
-            var x = window.top.outerWidth / 2 + window.top.screenX - (w / 2)
-            return window.open(url, title,
-                'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=' +
-                w + ', height=' + h + ', top=' + y + ', left=' + x);
-        }
     </script>
 
 

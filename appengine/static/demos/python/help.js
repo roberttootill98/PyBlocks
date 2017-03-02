@@ -36,7 +36,7 @@ function readFile(file) {
         if (rawRead.readyState === 4) {
             if (rawRead.status === 200 || rawRead.status == 0) {
                 var text = rawRead.responseText;
-                helptext_.innerHTML = text;
+                helpText_.innerHTML = text;
             }
         }
     }

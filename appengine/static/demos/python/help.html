@@ -10,24 +10,24 @@
 
 <body onload="readFile('helpassets/1.txt')">
 
-    <div id="helptitlediv">
+    <div id="helpTitleDiv">
         <h1 id="title">PythonBlocks Tutorial (1/11)</h1>
     </div>
 
-    <div id="helptextdiv">
-        <textarea id="helptext" class="helptext" readonly="true"></textarea>
+    <div id="helpTextDiv">
+        <textarea id="helpText" class="helpText" readonly="true"></textarea>
         <img id="helpimage" src="helpassets/1.png" style="align:center"></img>
     </div>
 
-    <div id="helpbuttonsdiv">
-        <button id="backbutton" class="fancybuttons" onclick="page--;traversePage()">Back</button>
-        <button id="nextbutton" class="fancybuttons" onclick="page++;traversePage()">Next</button>
-        <button id="exitbutton" class="fancybuttons" onclick="window.close()">Exit</button>
+    <div id="helpButtonsDiv">
+        <button id="backbutton" class="fancyButtons" onclick="page--;traversePage()">Back</button>
+        <button id="nextbutton" class="fancyButtons" onclick="page++;traversePage()">Next</button>
+        <button id="exitbutton" class="fancyButtons" onclick="window.close()">Exit</button>
     </div>
     <script>
         var page = 1;
         var title = document.getElementById('title');
-        var helptext_ = document.getElementById('helptext');
+        var helpText_ = document.getElementById('helpText');
         var image = document.getElementById('helpimage');
     </script>
 </body>

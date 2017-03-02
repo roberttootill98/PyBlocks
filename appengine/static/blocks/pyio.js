@@ -285,7 +285,7 @@ Blockly.Blocks['python_format'] = {
         }
         if (filledCount == this.parameterCount && Blockly.Python.valueToCode(this, 'ARG0', Blockly.Python.ORDER_NONE) != '') {
             this.holesFilled = true;
-            runtooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+            runTooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
             this.setTooltip(document.getElementById("hiddenoutput").textContent);
         } else {
             this.holesFilled = false;
