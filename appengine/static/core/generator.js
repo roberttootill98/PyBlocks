@@ -172,6 +172,110 @@ Blockly.Generator.prototype.chkImport = function(module) {
 
 }
 
+Blockly.Generator.prototype.chkBlock = function(block) {
+    
+    if (block.type.indexOf('math') >= 0 && !Blockly.Python.chkImport('math')) {
+
+        block.setWarningText('You have not imported the math module');
+        workspace.generatorSuccess = false;
+
+    } else if (block.type.indexOf('turtle') >= 0 && !Blockly.Python.chkImport('turtle')) {
+
+        block.setWarningText('You have not imported the turtle module');
+        workspace.generatorSuccess = false;
+
+    } else if (workspace.running && !block.holesFilled) {
+
+        block.setWarningText('Missing slot(s)');
+        workspace.generatorSuccess = false;
+
+    } else if (workspace.running && !block.isInFlyout && block.type == 'variables_get' &&
+        block.getSurroundParent().type == 'python_for') {
+
+        workspace.vars += block.getFieldValue("VAR") + '_FOR' + '\n';        
+
+    } else if (workspace.running && !block.isInFlyout && block.type == 'variables_get' &&
+        block.getSurroundParent().type != 'variables_set' &&
+        workspace.vars.indexOf(block.getFieldValue("VAR")) == -1) {
+
+        block.setWarningText('Undeclared variable');
+        workspace.generatorSuccess = false;
+
+    } else if (workspace.running && !block.isInFlyout && block.type == 'variables_get' &&
+        block.getSurroundParent().type == 'variables_set' && block.getSurroundParent().childBlocks_[0].tooltip == block.getSurroundParent().childBlocks_[1].tooltip) {
+
+        block.setWarningText('Undeclared variable');
+        workspace.generatorSuccess = false;
+
+    /*} else if (workspace.running && !block.isInFlyout && block.type == 'variables_get' &&
+        block.getSurroundParent().type != 'variables_set' &&
+        workspace.vars.indexOf(block.getFieldValue("VAR") + '_CTRL') >= 0 &&
+        workspace.vars.indexOf(block.getFieldValue("VAR") + '_NOCTRL') == -1) {
+
+        block.setWarningText('Potentially undeclared variable');
+*/
+
+/*    } else if (workspace.running && !block.isInFlyout && block.type == 'variables_get' &&
+        block.getSurroundParent().type != 'variables_set' &&
+        workspace.vars.indexOf(block.getFieldValue("VAR") + '_CTRL') >= 0) {
+
+        block.setWarningText('Variable was altered in a control statement and may contain unpredictable values');
+*/
+    } else if (workspace.running && !block.isInFlyout && (block.type == 'python_for' || block.type == 'python_while') && Blockly.Python.statementToCode(block, 'BODY') == '') {
+        
+        block.setWarningText('Control sequence has no body');
+        workspace.generatorSuccess = false;
+
+    } else if (workspace.running && !block.isInFlyout && block.type == 'python_if') {
+        block.setWarningText(null);
+
+        if ((block.hasElse && Blockly.Python.statementToCode(block, 'ELSE_BODY') == '') || 
+            Blockly.Python.statementToCode(block, 'BODY0') == '') {
+            block.setWarningText('Missing branches');
+            workspace.generatorSuccess = false;
+        }
+
+        for (i = 1; i <= block.elifCount; i++) {
+            if (Blockly.Python.statementToCode(block, 'BODY' + i.toString()) == '') {
+                block.setWarningText('Missing branches');
+                workspace.generatorSuccess = false;
+            }
+        }
+
+    } else if (workspace.running && !block.isInFlyout && block.type == 'variables_set') {
+
+        block.setWarningText(null);
+
+        if (!block.verifyVariable()) {
+            block.setWarningText("Variable declared illegally in control statement");
+            workspace.generatorSuccess = false;
+        }
+        
+    
+    } else if (workspace.generatorSuccess) {
+
+        block.setWarningText(null);
+
+    }
+
+
+    if (workspace.running && block.type == 'variables_set' && block.verifyVariable && workspace.generatorSuccess) {
+
+        workspace.vars += block.declaredVar + '\n';
+
+    }
+
+
+
+    if (workspace.running && !block.isInFlyout && block.type == 'python_start') {
+
+        for (var i = 0; i < startImports.length; i++) {
+            workspace.imports += 'import ' + startImports[i] + '\n';
+        }
+
+    }
+    
+}
 /**
  * Generate code for the specified block (and attached blocks).
  * @param {Blockly.Block} block The block to generate code for.
@@ -197,67 +301,8 @@ Blockly.Generator.prototype.blockToCode = function(block) {
     // The current prefered method of accessing the block is through the second
     // argument to func.call, which becomes the first parameter to the generator.
     var code = func.call(block, block);
-
-    if (block.type.indexOf('math') >= 0 && !Blockly.Python.chkImport('math')) {
-
-        block.setWarningText('You have not imported the math module');
-        workspace.generatorSuccess = false;
-
-    } else if (block.type.indexOf('turtle') >= 0 && !Blockly.Python.chkImport('turtle')) {
-
-        block.setWarningText('You have not imported the turtle module');
-        workspace.generatorSuccess = false;
-
-    } else if (workspace.running && !block.holesFilled) {
-
-        block.setWarningText('Missing slot(s)');
-        workspace.generatorSuccess = false;
-
-    } else if (workspace.running && !block.isInFlyout && block.type == 'variables_get' &&
-        block.getSurroundParent().type == 'python_for') {
-
-        workspace.vars += block.getFieldValue("VAR") + '_FOR' + '\n';        
-
-    } else if (workspace.running && !block.isInFlyout && block.type == 'variables_get' &&
-        block.getSurroundParent().type != 'variables_set' &&
-        workspace.vars.indexOf(block.getFieldValue("VAR")) == -1) {
-
-        block.setWarningText('Undeclared variable')
-        workspace.generatorSuccess = false;
-
-    } else if (workspace.running && !block.isInFlyout && block.type == 'variables_get' &&
-        block.getSurroundParent().type != 'variables_set' &&
-        workspace.vars.indexOf(block.getFieldValue("VAR") + '_CTRL') >= 0 &&
-        workspace.vars.indexOf(block.getFieldValue("VAR") + '_NOCTRL') == -1) {
-
-        block.setWarningText('Potentially undeclared variable');
-
-
-    } else if (workspace.running && !block.isInFlyout && block.type == 'variables_get' &&
-        block.getSurroundParent().type != 'variables_set' &&
-        workspace.vars.indexOf(block.getFieldValue("VAR") + '_CTRL') >= 0) {
-
-        block.setWarningText('Variable was altered in a control statement and may contain unpredictable values');
-
-    } else if (workspace.generatorSuccess) {
-
-        block.setWarningText(null);
-
-    }
-
-    if (block.type == 'variables_set' && workspace.generatorSuccess) {
-
-        workspace.vars += block.declaredVar + '\n';
-
-    }
-
-    if (block.type == 'python_start') {
-
-        for (var i = 0; i < startImports.length; i++) {
-            workspace.imports += 'import ' + startImports[i] + '\n';
-        }
-
-    }
+    
+    this.chkBlock(block);
 
     if (goog.isArray(code)) {
         // Value blocks return tuples of code and operator order.

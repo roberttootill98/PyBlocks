@@ -48,6 +48,13 @@ function saveBlocks() {
     }, 350);
 }
 
+function linkBlocks() {
+    BlocklyStorage.link();
+    setTimeout(function() {
+        window.prompt("Copy the link below to share this PyBlocks program with your peers", window.location.href);
+    }, 350);
+}
+
 function reset() {
     var resetChoice = confirm("Are you sure you want to reset PythonBlocks?");
     if (resetChoice) {

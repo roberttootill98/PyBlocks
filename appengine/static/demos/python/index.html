@@ -3,7 +3,7 @@
 
 <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <title>PythonBlocks</title>
+    <title>PyBlocks</title>
     <link rel="stylesheet" type="text/css" href="style.css">
     <script src="/storage.js"></script>
     <script src="../../blockly_uncompressed.js"></script>
@@ -48,16 +48,61 @@
 </head>
 
 <body>
+<div id="modalBG" class="modal">
+    <div class="modalContent">
+        <span class="close">&times;</span>
+        <h1>Variable creation</h1><br><br>
+        <form name="modalForm">
+        <select id="dropdownVar" onchange="setModalVar()">
+            <option value="int">Integer</option>
+            <option value="float">Float</option>
+            <option value="str">String</option>
+            <option value="bool">Boolean</option>
+        </select>
 
+        <input id="radioStd" type="radio" name="type" value="std" onclick="setModalVar()" checked>Standard
+        <input id="radioList" type="radio" name="type" value="list" onclick="setModalVar()" disabled>List 
+        <input id="radioTuple" type="radio" name="type" value="tuple" onclick="setModalVar()" disabled>Tuple<br><br>
+        Variable name: <input id="varText" type="text" name="name" value="variableName" onchange="setModalVar()"><br><br>
+        <div id="divBoolean" style="display: none;">
+            <form>
+                <input id="radioTrue" type="radio" name="value" value="true" onclick="setModalVar()" checked>True
+                <input id="radioFalse" type="radio" name="value" value="false" onclick="setModalVar()">False 
+                <input id="radioEmpty" type="radio" name="value" value="empty" onclick="setModalVar()">Empty
+            </form><br><br>
+        </div>
+        
+        <input class="fancyButtons" type="submit" value="Create" onclick="spawnVar()"><br>
+        </form><br>
+        
+        
+        <table id="testTable">
+            <tr>
+                <td id="blocklyVarArea">
+                </td>
+            </tr>
+        </table>
+        
+        <div id="blocklyVarDiv" style="position: absolute;"></div>
+        <div>test</div>
+    </div>
+</div>
     <table>
         <tr>
             <td>
                 <span class="left">
-                    <h1>Python<span class="int">B</span><span class="float">l</span><span class="str">o</span><span class="bool">c</span><span class="range">k</span><span class="turtle">s</span></h1>
+                    <h1 id="banner">Py<span class="int">B</span><span class="float">l</span><span class="str">o</span><span class="int">c</span><span class="bool">k</span><span class="float">s</span></h1>
                 </span>
 
                 <div id="buttonArea" class="right">
+                    <select id="difficulty" onchange="setDifficulty()">
+                        <option value="0">Basic</option>
+                        <option value="1">Lists enabled</option>
+                        <option value="2">Everything enabled</option>
+                    </select>
+                    <button type="button" class="fancyButtons" id="modalBtn">Var</button>
                     <button type="button" class="fancyButtons" id="run" onclick="runFull()">Run</button>
+                    <button type="button" class="fancyButtons" onclick="linkBlocks()">Link</button>
                     <button type="button" class="fancyButtons" onclick="saveBlocks()">Save</button>
                     <button type="button" class="fancyButtons" onclick="initLoad(createPicker)">Load</button>
                     <button type="button" class="fancyButtons" onclick="copyToClipboard()">Copy</button>
@@ -76,28 +121,6 @@
     </table>
     <div id="typeDiv">
         <table id="typeTable">
-            <!--<tr id="typetr1">
-                    <td bgcolor="#00CC33">
-                      int
-                  </td>
-                    <td bgcolor="#0080FF">
-                      float
-                    </td>
-                    <td bgcolor="#FF3010">
-                      str
-                    </td>
-                  </tr>
-                  <tr id="typetr2">
-                    <td bgcolor="#FF29FF">
-                      bool
-                    </td>
-                    <td bgcolor="#ffaa00">
-                      range
-                    </td>
-		    <td bgcolor="#dfdf20">
-                      turtle
-	      </td>
-      </tr>-->
         </table>
     </div>
 
@@ -120,664 +143,6 @@
 
     <!-- Blockly workspace -->
     <div id="blocklyDiv" style="position: absolute"></div>
-
-    <xml id="toolbox" style="display: none">
-        <category name="Numeric values & operators">
-            <block type="python_int_const"></block>
-            <block type="python_float_const"></block>
-            <block type="python_plus"></block>
-            <block type="python_minus"></block>
-            <block type="python_multiply"></block>
-            <block type="python_divide"></block>
-            <block type="python_int_divide"></block>
-            <block type="python_int_modulo"></block>
-            <block type="python_pow_op"></block>
-            <block type="python_unary_minus"></block>
-        </category>
-        <category name="Numeric functions">
-            <block type="python_round"></block>
-            <block type="python_abs"></block>
-            <block type="python_pow"></block>
-            <block type="python_numeric_min"></block>
-            <block type="python_numeric_max"></block>
-            <block type="python_sum"></block>
-        </category>
-        <sep gap="4"></sep>
-        <category name="String values & operators">
-            <block type="python_string_const"></block>
-            <block type="python_string_index"></block>
-            <block type="python_string_len"></block>
-            <block type="python_string_in"></block>
-            <block type="python_string_concat"></block>
-            <block type="python_string_repeat"></block>
-            <block type="python_string_slice12"></block>
-            <block type="python_string_slice1"></block>
-            <block type="python_string_slice2"></block>
-        </category>
-        <category name="String methods">
-            <block type="python_isdigit"></block>
-            <block type="python_isalpha"></block>
-            <block type="python_isspace"></block>
-            <block type="python_lower"></block>
-            <block type="python_upper"></block>
-            <block type="python_find"></block>
-            <block type="python_index_method"></block>
-            <block type="python_string_count"></block>
-            <block type="python_split"></block>
-        </category>
-        <sep gap="4"></sep>
-        <category name="Comparison operators">
-            <block type="python_equals"></block>
-            <block type="python_not_equals"></block>
-            <block type="python_less_than"></block>
-            <block type="python_less_than_or_equal"></block>
-            <block type="python_greater_than"></block>
-            <block type="python_greater_than_or_equal"></block>
-            <block type="python_is"></block>
-        </category>
-        <category name="Boolean values & operators">
-            <block type="python_true"></block>
-            <block type="python_false"></block>
-            <block type="python_and"></block>
-            <block type="python_or"></block>
-            <block type="python_not"></block>
-        </category>
-        <sep gap="4"></sep>
-        <category name="List values & operators">
-            <block type="python_list_empty"></block>
-            <block type="python_list_const"></block>
-            <block type="python_list_function"></block>
-            <block type="python_list_index"></block>
-            <block type="python_list_concat"></block>
-            <block type="python_list_repeat"></block>
-            <block type="python_list_slice12"></block>
-            <block type="python_list_slice1"></block>
-            <block type="python_list_slice2"></block>
-        </category>
-        <category name="List modification">
-            <block type="python_append"></block>
-            <block type="python_list_item_modify"></block>
-            <block type="python_extend"></block>
-            <block type="python_insert"></block>
-            <block type="python_remove"></block>
-            <block type="python_pop_statement"></block>
-            <block type="python_sort"></block>
-            <block type="python_reverse"></block>
-        </category>
-        <category name="List queries & tests">
-            <block type="python_list_len"></block>
-            <block type="python_list_in"></block>
-            <block type="python_list_index_method"></block>
-            <block type="python_list_min"></block>
-            <block type="python_list_max"></block>
-            <block type="python_sorted"></block>
-            <block type="python_pop"></block>
-
-        </category>
-        <sep gap="4"></sep>
-        <category name="I/O & type conversions">
-            <block type="python_print"></block>
-            <block type="python_input"></block>
-            <block type="python_format"></block>
-            <block type="python_int"></block>
-            <block type="python_float"></block>
-            <block type="python_str"></block>
-            <block type="python_bool"></block>
-            <block type="python_chr"></block>
-            <block type="python_ord"></block>
-        </category>
-        </category>
-        <category name="Conditionals & loops">
-            <block type="python_if"></block>
-            <block type="python_while"></block>
-            <block type="python_for"></block>
-            <block type="python_range1"></block>
-            <block type="python_range2"></block>
-            <block type="python_range3"></block>
-        </category>
-        <category name="Comments and spacing">
-            <block type="python_linespace"></block>
-            <block type="python_comment"></block>
-        </category>
-        <sep gap="4"></sep>
-        <category name="Program variables" custom="VARIABLE">
-        </category>
-        <category name="Basic variable creation" custom="NEW_VARIABLE">
-        </category>
-        </category>
-        <category name="List variable creation" custom="NEW_LIST_VAR">
-        </category>
-        </category>
-        <sep gap="4"></sep>
-    </xml>
-
-    <xml id="toolboxmath" style="display: none">
-        <category name="Numeric values & operators">
-            <block type="python_int_const"></block>
-            <block type="python_float_const"></block>
-            <block type="python_plus"></block>
-            <block type="python_minus"></block>
-            <block type="python_multiply"></block>
-            <block type="python_divide"></block>
-            <block type="python_int_divide"></block>
-            <block type="python_int_modulo"></block>
-            <block type="python_pow_op"></block>
-            <block type="python_unary_minus"></block>
-        </category>
-        <category name="Numeric functions">
-            <block type="python_round"></block>
-            <block type="python_abs"></block>
-            <block type="python_pow"></block>
-            <block type="python_numeric_min"></block>
-            <block type="python_numeric_max"></block>
-            <block type="python_sum"></block>
-        </category>
-        <category name="Math constants & functions">
-            <block type="python_math_ceil"></block>
-            <block type="python_math_floor"></block>
-            <block type="python_math_factorial"></block>
-            <block type="python_math_pow"></block>
-            <block type="python_math_sqrt"></block>
-            <block type="python_math_pi"></block>
-            <block type="python_math_e"></block>
-        </category>
-        <category name="Math logs & trigonometry">
-            <block type="python_math_log"></block>
-            <block type="python_math_log10"></block>
-            <block type="python_math_cos"></block>
-            <block type="python_math_sin"></block>
-            <block type="python_math_tan"></block>
-        </category>
-        <sep gap="4"></sep>
-        <category name="String values & operators">
-            <block type="python_string_const"></block>
-            <block type="python_string_index"></block>
-            <block type="python_string_len"></block>
-            <block type="python_string_in"></block>
-            <block type="python_string_concat"></block>
-            <block type="python_string_repeat"></block>
-            <block type="python_string_slice12"></block>
-            <block type="python_string_slice1"></block>
-            <block type="python_string_slice2"></block>
-        </category>
-        <category name="String methods">
-            <block type="python_isdigit"></block>
-            <block type="python_isalpha"></block>
-            <block type="python_isspace"></block>
-            <block type="python_lower"></block>
-            <block type="python_upper"></block>
-            <block type="python_find"></block>
-            <block type="python_index_method"></block>
-            <block type="python_string_count"></block>
-            <block type="python_split"></block>
-        </category>
-        <sep gap="4"></sep>
-        <category name="Comparison operators">
-            <block type="python_equals"></block>
-            <block type="python_not_equals"></block>
-            <block type="python_is"></block>
-            <block type="python_less_than"></block>
-            <block type="python_less_than_or_equal"></block>
-            <block type="python_greater_than"></block>
-            <block type="python_greater_than_or_equal"></block>
-        </category>
-        <category name="Boolean values & operators">
-            <block type="python_true"></block>
-            <block type="python_false"></block>
-            <block type="python_and"></block>
-            <block type="python_or"></block>
-            <block type="python_not"></block>
-        </category>
-        <sep gap="4"></sep>
-        <category name="List values & operators">
-            <block type="python_list_empty"></block>
-            <block type="python_list_const"></block>
-            <block type="python_list_index"></block>
-            <block type="python_list_concat"></block>
-            <block type="python_list_repeat"></block>
-            <block type="python_list_slice12"></block>
-            <block type="python_list_slice1"></block>
-            <block type="python_list_slice2"></block>
-        </category>
-        <category name="List modification">
-            <block type="python_append"></block>
-            <block type="python_list_item_modify"></block>
-            <block type="python_extend"></block>
-            <block type="python_insert"></block>
-            <block type="python_remove"></block>
-            <block type="python_pop_statement"></block>
-            <block type="python_sort"></block>
-            <block type="python_reverse"></block>
-        </category>
-        <category name="List queries & tests">
-            <block type="python_list_len"></block>
-            <block type="python_list_in"></block>
-            <block type="python_list_index_method"></block>
-            <block type="python_list_min"></block>
-            <block type="python_list_max"></block>
-            <block type="python_sorted"></block>
-            <block type="python_pop"></block>
-
-        </category>
-        <sep gap="4"></sep>
-        <category name="I/O & type conversions">
-            <block type="python_print"></block>
-            <block type="python_input"></block>
-            <block type="python_format"></block>
-            <block type="python_int"></block>
-            <block type="python_float"></block>
-            <block type="python_str"></block>
-            <block type="python_bool"></block>
-            <block type="python_chr"></block>
-            <block type="python_ord"></block>
-        </category>
-        </category>
-        <category name="Conditionals & loops">
-            <block type="python_if"></block>
-            <block type="python_while"></block>
-            <block type="python_for"></block>
-            <block type="python_range1"></block>
-            <block type="python_range2"></block>
-            <block type="python_range3"></block>
-        </category>
-        <category name="Comments and spacing">
-            <block type="python_linespace"></block>
-            <block type="python_comment"></block>
-        </category>
-        <sep gap="4"></sep>
-        <category name="Program variables" custom="VARIABLE">
-        </category>
-        <category name="Basic variable creation" custom="NEW_VARIABLE">
-        </category>
-        </category>
-        <category name="List variable creation" custom="NEW_LIST_VAR">
-        </category>
-        </category>
-        <sep gap="4"></sep>
-
-        <!-- <category name="Theoretic & respresentation functions">
-<block type="python_math_ceil"></block>
-<block type="python_math_copysign"></block>
-<block type="python_math_fabs"></block>
-<block type="python_math_factorial"></block>
-<block type="python_math_floor"></block>
-<block type="python_math_fmod"></block>
-<block type="python_math_frexp"></block>
-<block type="python_math_fsum"></block>
-<block type="python_math_isinf"></block>
-<block type="python_math_isnan"></block>
-<block type="python_math_ldexp"></block>
-<block type="python_math_modf"></block>
-<block type="python_math_trunc"></block>
-</category>
-<category name="Power & logarithmic functions">
-<block type="python_math_exp"></block>
-<block type="python_math_expm1"></block>
-<block type="python_math_log"></block>
-<block type="python_math_log1p"></block>
-<block type="python_math_log10"></block>
-<block type="python_math_pow"></block>
-<block type="python_math_sqrt"></block>
-</category>
-<category name="Trigonometric functions">
-<block type="python_math_acos"></block>
-<block type="python_math_asin"></block>
-<block type="python_math_atan"></block>
-<block type="python_math_atan2"></block>
-<block type="python_math_cos"></block>
-<block type="python_math_hypot"></block>
-<block type="python_math_sin"></block>
-<block type="python_math_tan"></block>
-</category>
-<category name="Angular conversion">
-<block type="python_math_degrees"></block>
-<block type="python_math_radians"></block>
-</category>
-<category name="Hyperbolic functions">
-<block type="python_math_acosh"></block>
-<block type="python_math_asinh"></block>
-<block type="python_math_atanh"></block>
-<block type="python_math_cosh"></block>
-<block type="python_math_sinh"></block>
-<block type="python_math_tanh"></block>
-</category>
-<category name="Special functions">
-<block type="python_math_erf"></block>
-<block type="python_math_erfc"></block>
-<block type="python_math_gamma"></block>
-<block type="python_math_lgamma"></block>
-</category>
-<category name="Constants">
-<block type="python_math_pi"></block>
-<block type="python_math_e"></block>
-</category>
-</category> -->
-    </xml>
-
-    <xml id="toolboxturtle" style="display: none">
-        <category name="Numeric values & operators">
-            <block type="python_int_const"></block>
-            <block type="python_float_const"></block>
-            <block type="python_plus"></block>
-            <block type="python_minus"></block>
-            <block type="python_multiply"></block>
-            <block type="python_divide"></block>
-            <block type="python_int_divide"></block>
-            <block type="python_int_modulo"></block>
-            <block type="python_pow_op"></block>
-            <block type="python_unary_minus"></block>
-        </category>
-        <category name="Numeric functions">
-            <block type="python_round"></block>
-            <block type="python_abs"></block>
-            <block type="python_pow"></block>
-            <block type="python_numeric_min"></block>
-            <block type="python_numeric_max"></block>
-            <block type="python_sum"></block>
-        </category>
-        <sep gap="4"></sep>
-        <category name="String values & operators">
-            <block type="python_string_const"></block>
-            <block type="python_string_index"></block>
-            <block type="python_string_len"></block>
-            <block type="python_string_in"></block>
-            <block type="python_string_concat"></block>
-            <block type="python_string_repeat"></block>
-            <block type="python_string_slice12"></block>
-            <block type="python_string_slice1"></block>
-            <block type="python_string_slice2"></block>
-        </category>
-        <category name="String methods">
-            <block type="python_isdigit"></block>
-            <block type="python_isalpha"></block>
-            <block type="python_isspace"></block>
-            <block type="python_lower"></block>
-            <block type="python_upper"></block>
-            <block type="python_find"></block>
-            <block type="python_index_method"></block>
-            <block type="python_string_count"></block>
-            <block type="python_split"></block>
-        </category>
-        <sep gap="4"></sep>
-        <category name="Comparison operators">
-            <block type="python_equals"></block>
-            <block type="python_not_equals"></block>
-            <block type="python_less_than"></block>
-            <block type="python_less_than_or_equal"></block>
-            <block type="python_greater_than"></block>
-            <block type="python_greater_than_or_equal"></block>
-            <block type="python_is"></block>
-        </category>
-        <category name="Boolean values & operators">
-            <block type="python_true"></block>
-            <block type="python_false"></block>
-            <block type="python_and"></block>
-            <block type="python_or"></block>
-            <block type="python_not"></block>
-        </category>
-        <sep gap="4"></sep>
-        <category name="List values & operators">
-            <block type="python_list_empty"></block>
-            <block type="python_list_const"></block>
-            <block type="python_list_function"></block>
-            <block type="python_list_index"></block>
-            <block type="python_list_concat"></block>
-            <block type="python_list_repeat"></block>
-            <block type="python_list_slice12"></block>
-            <block type="python_list_slice1"></block>
-            <block type="python_list_slice2"></block>
-        </category>
-        <category name="List modification">
-            <block type="python_append"></block>
-            <block type="python_list_item_modify"></block>
-            <block type="python_extend"></block>
-            <block type="python_insert"></block>
-            <block type="python_remove"></block>
-            <block type="python_pop_statement"></block>
-            <block type="python_sort"></block>
-            <block type="python_reverse"></block>
-        </category>
-        <category name="List queries & tests">
-            <block type="python_list_len"></block>
-            <block type="python_list_in"></block>
-            <block type="python_list_index_method"></block>
-            <block type="python_list_min"></block>
-            <block type="python_list_max"></block>
-            <block type="python_sorted"></block>
-            <block type="python_pop"></block>
-
-        </category>
-        <sep gap="4"></sep>
-        <category name="I/O & type conversions">
-            <block type="python_print"></block>
-            <block type="python_input"></block>
-            <block type="python_format"></block>
-            <block type="python_int"></block>
-            <block type="python_float"></block>
-            <block type="python_str"></block>
-            <block type="python_bool"></block>
-            <block type="python_chr"></block>
-            <block type="python_ord"></block>
-        </category>
-        </category>
-        <category name="Conditionals & loops">
-            <block type="python_if"></block>
-            <block type="python_while"></block>
-            <block type="python_for"></block>
-            <block type="python_range1"></block>
-            <block type="python_range2"></block>
-            <block type="python_range3"></block>
-        </category>
-        <category name="Comments and spacing">
-            <block type="python_linespace"></block>
-            <block type="python_comment"></block>
-        </category>
-        <sep gap="4"></sep>
-        <category name="Program variables" custom="VARIABLE">
-        </category>
-        <category name="Basic variable creation" custom="NEW_VARIABLE">
-        </category>
-        </category>
-        <category name="List variable creation" custom="NEW_LIST_VAR">
-        </category>
-        </category>
-        <sep gap="4"></sep>
-        <category name="Turtle variable creation" custom="NEW_TURTLE_VAR">
-        </category>
-        <category name="Turtle objects & movement">
-            <block type="python_turtle_new"></block>
-            <block type="python_screen_new"></block>
-            <block type="python_turtle_forward"></block>
-            <block type="python_turtle_backward"></block>
-            <block type="python_turtle_left"></block>
-            <block type="python_turtle_right"></block>
-            <block type="python_turtle_circle"></block>
-            <!-- <block type="python_turtle_position"></block> -->
-            <block type="python_turtle_setposition"></block>
-            <block type="python_turtle_pendown"></block>
-            <block type="python_turtle_penup"></block>
-            <block type="python_turtle_isdown"></block>
-        </category>
-        <category name="Turtle colours">
-            <block type="python_turtle_color"></block>
-            <block type="python_turtle_pencolor"></block>
-            <block type="python_turtle_fillcolor"></block>
-            <block type="python_turtle_bgcolor"></block>
-            <block type="python_turtle_fill"></block>
-        </category>
-        <sep gap="4"></sep>
-    </xml>
-
-    <xml id="toolboxmathturtle" style="display: none">
-        <category name="Numeric values & operators">
-            <block type="python_int_const"></block>
-            <block type="python_float_const"></block>
-            <block type="python_plus"></block>
-            <block type="python_minus"></block>
-            <block type="python_multiply"></block>
-            <block type="python_divide"></block>
-            <block type="python_int_divide"></block>
-            <block type="python_int_modulo"></block>
-            <block type="python_pow_op"></block>
-            <block type="python_unary_minus"></block>
-        </category>
-        <category name="Numeric functions">
-            <block type="python_round"></block>
-            <block type="python_abs"></block>
-            <block type="python_pow"></block>
-            <block type="python_numeric_min"></block>
-            <block type="python_numeric_max"></block>
-            <block type="python_sum"></block>
-        </category>
-        <category name="Math constants & functions">
-            <block type="python_math_ceil"></block>
-            <block type="python_math_floor"></block>
-            <block type="python_math_factorial"></block>
-            <block type="python_math_pow"></block>
-            <block type="python_math_sqrt"></block>
-            <block type="python_math_pi"></block>
-            <block type="python_math_e"></block>
-        </category>
-        <category name="Math logs & trigonometry">
-            <block type="python_math_log"></block>
-            <block type="python_math_log10"></block>
-            <block type="python_math_cos"></block>
-            <block type="python_math_sin"></block>
-            <block type="python_math_tan"></block>
-        </category>
-        <sep gap="4"></sep>
-        <category name="String values & operators">
-            <block type="python_string_const"></block>
-            <block type="python_string_index"></block>
-            <block type="python_string_len"></block>
-            <block type="python_string_in"></block>
-            <block type="python_string_concat"></block>
-            <block type="python_string_repeat"></block>
-            <block type="python_string_slice12"></block>
-            <block type="python_string_slice1"></block>
-            <block type="python_string_slice2"></block>
-        </category>
-        <category name="String methods">
-            <block type="python_isdigit"></block>
-            <block type="python_isalpha"></block>
-            <block type="python_isspace"></block>
-            <block type="python_lower"></block>
-            <block type="python_upper"></block>
-            <block type="python_find"></block>
-            <block type="python_index_method"></block>
-            <block type="python_string_count"></block>
-            <block type="python_split"></block>
-        </category>
-        <sep gap="4"></sep>
-        <category name="Comparison operators">
-            <block type="python_equals"></block>
-            <block type="python_not_equals"></block>
-            <block type="python_less_than"></block>
-            <block type="python_less_than_or_equal"></block>
-            <block type="python_greater_than"></block>
-            <block type="python_greater_than_or_equal"></block>
-            <block type="python_is"></block>
-        </category>
-        <category name="Boolean values & operators">
-            <block type="python_true"></block>
-            <block type="python_false"></block>
-            <block type="python_and"></block>
-            <block type="python_or"></block>
-            <block type="python_not"></block>
-        </category>
-        <sep gap="4"></sep>
-        <category name="List values & operators">
-            <block type="python_list_empty"></block>
-            <block type="python_list_const"></block>
-            <block type="python_list_function"></block>
-            <block type="python_list_index"></block>
-            <block type="python_list_concat"></block>
-            <block type="python_list_repeat"></block>
-            <block type="python_list_slice12"></block>
-            <block type="python_list_slice1"></block>
-            <block type="python_list_slice2"></block>
-        </category>
-        <category name="List modification">
-            <block type="python_append"></block>
-            <block type="python_list_item_modify"></block>
-            <block type="python_extend"></block>
-            <block type="python_insert"></block>
-            <block type="python_remove"></block>
-            <block type="python_pop_statement"></block>
-            <block type="python_sort"></block>
-            <block type="python_reverse"></block>
-        </category>
-        <category name="List queries & tests">
-            <block type="python_list_len"></block>
-            <block type="python_list_in"></block>
-            <block type="python_list_index_method"></block>
-            <block type="python_list_min"></block>
-            <block type="python_list_max"></block>
-            <block type="python_sorted"></block>
-            <block type="python_pop"></block>
-
-        </category>
-        <sep gap="4"></sep>
-        <category name="I/O & type conversions">
-            <block type="python_print"></block>
-            <block type="python_input"></block>
-            <block type="python_format"></block>
-            <block type="python_int"></block>
-            <block type="python_float"></block>
-            <block type="python_str"></block>
-            <block type="python_bool"></block>
-            <block type="python_chr"></block>
-            <block type="python_ord"></block>
-        </category>
-        </category>
-        <category name="Conditionals & loops">
-            <block type="python_if"></block>
-            <block type="python_while"></block>
-            <block type="python_for"></block>
-            <block type="python_range1"></block>
-            <block type="python_range2"></block>
-            <block type="python_range3"></block>
-        </category>
-        <category name="Comments and spacing">
-            <block type="python_linespace"></block>
-            <block type="python_comment"></block>
-        </category>
-        <sep gap="4"></sep>
-        <category name="Program variables" custom="VARIABLE">
-        </category>
-        <category name="Basic variable creation" custom="NEW_VARIABLE">
-        </category>
-        </category>
-        <category name="List variable creation" custom="NEW_LIST_VAR">
-        </category>
-        </category>
-        <sep gap="4"></sep>
-        <category name="Turtle variable creation" custom="NEW_TURTLE_VAR">
-        </category>
-        <category name="Turtle objects & movement">
-            <block type="python_turtle_new"></block>
-            <block type="python_screen_new"></block>
-            <block type="python_turtle_forward"></block>
-            <block type="python_turtle_backward"></block>
-            <block type="python_turtle_left"></block>
-            <block type="python_turtle_right"></block>
-            <block type="python_turtle_circle"></block>
-            <!-- <block type="python_turtle_position"></block> -->
-            <block type="python_turtle_setposition"></block>
-            <block type="python_turtle_pendown"></block>
-            <block type="python_turtle_penup"></block>
-            <block type="python_turtle_isdown"></block>
-        </category>
-        <category name="Turtle colours">
-            <block type="python_turtle_color"></block>
-            <block type="python_turtle_pencolor"></block>
-            <block type="python_turtle_fillcolor"></block>
-            <block type="python_turtle_bgcolor"></block>
-            <block type="python_turtle_fill"></block>
-        </category>
-        <sep gap="4"></sep>
-    </xml>
-
     <!-- Blockly storage code -->
     <script>
         if ('BlocklyStorage' in window)
@@ -794,111 +159,9 @@
                 '<p id="sorry">Cloud storage is not available.  PythonBlocks must be hosted on App Engine.</p>'
             );
         }
+    
+    init();
     </script>
-
-    <!-- Blockly code -->
-    <script>
-        var blocklyArea = document.getElementById('blocklyArea');
-        var blocklyDiv = document.getElementById('blocklyDiv');
-        var output = document.getElementById('codeArea');
-        var workspace = Blockly.inject(blocklyDiv,
-        {
-            media: '../../media/',
-            trashcan: false,
-            toolbox: document.getElementById('toolbox')
-        });
-        var onResize = function(e)
-        {
-            // Compute the absolute coordinates and dimensions of blocklyArea.
-            var element = blocklyArea;
-            var x = 0;
-            var y = 0;
-            do {
-                x += element.offsetLeft;
-                y += element.offsetTop;
-                element = element.offsetParent;
-            } while (element);
-            // Position blocklyDiv over blocklyArea.
-            blocklyDiv.style.left = x + 'px';
-            blocklyDiv.style.top = y + 'px';
-            blocklyDiv.style.width = blocklyArea.offsetWidth + 'px';
-            blocklyDiv.style.height = blocklyArea.offsetHeight + 'px';
-            Blockly.svgResize(workspace);
-        };
-        window.addEventListener('resize', onResize, false);
-        output.addEventListener('transitionend', onResize);
-        
-        if ('BlocklyStorage' in window && window.location.hash.length > 1)
-        {
-            BlocklyStorage.retrieveXml(window.location.hash.substring(1));
-        } else {
-            var xml =
-                '<xml><block id="startBlock" type="python_start" deletable="false" movable="false" x="2" y="17"></block></xml>';
-            Blockly.Xml.domToWorkspace(workspace, Blockly.Xml.textToDom(xml));
-        }
-        
-        onResize();
-        initInterpreter();
-/*
-        // Movable turtle canvas code
-
-        window.onload = addListeners;
-        var turtleDiv = document.getElementById('turtleCanvas');
-
-        function addListeners()
-        {
-            turtleDiv.addEventListener('mousedown', mouseDown, false);
-            turtleDiv.addEventListener('dblclick', mouseDbl, false);
-            window.addEventListener('mouseup', mouseUp, false);
-        }
-
-        function mouseUp()
-        {
-            window.removeEventListener('mousemove', divMove, true);
-        }
-
-        function mouseDown(e)
-        {
-            window.addEventListener('mousemove', divMove, true);
-        }
-
-        function mouseDbl(e)
-        {
-            toggleTurtle();
-        }
-
-        function divMove(e)
-        {
-            turtleDiv.style.top = e.clientY + 'px';
-            turtleDiv.style.left = e.clientX + 'px';
-        }
-*/
-
-        //workspace.addChangeListener(checkWorkspace);
-        //workspace.addChangeListener(generateTypeTable);
-
-
-
-        // Needed to init values for variable blocks
-        // Blockly.Python.workspaceToCode(workspace);
-        checkWorkspace();
-        generateTypeTable();
-
-        goog.events.listen(document.getElementById('blocklyDiv'),
-            'dblclick',
-            function()
-            {
-                if (Blockly.selected != null && Blockly.selected.type !=
-                    'python_start')
-                {
-                    runEval(Blockly.selected)
-                }
-            });
-
-
-    </script>
-
-
 </body>
 
 </html>

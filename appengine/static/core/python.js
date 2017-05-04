@@ -24,7 +24,7 @@
  */
 'use strict';
 
-console.log = function() {};
+//console.log = function() {};
 
 goog.require('Blockly.Names');
 
@@ -52,7 +52,7 @@ var magenta = '#FF29FF';
 
 
 Blockly.Python.COLOUR = {};
-Blockly.Python.COLOUR['notype'] = '#8B7D6B';
+Blockly.Python.COLOUR['notype'] = '#706c67';
 Blockly.Python.COLOUR['str'] = red;
 Blockly.Python.COLOUR['turtle'] = cyan;
 Blockly.Python.COLOUR['vec2d'] = yellow;
@@ -139,6 +139,7 @@ Blockly.Python.mergeSubtypes = function(typeList) {
     console.log("MERGEST finished " + typeList);
     return typeList;
 };
+
 
 Blockly.Python.NEW_VARS = [{
     name: "newIntVariable",

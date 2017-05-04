@@ -41,13 +41,14 @@ goog.require('goog.userAgent');
  * @extends {Blockly.Field}
  * @constructor
  */
-Blockly.FieldImage = function(src, width, height, opt_alt) {
+Blockly.FieldImage = function(src, width, height, id, opt_alt) {
     this.sourceBlock_ = null;
     // Ensure height and width are numbers.  Strings are bad at math.
     this.height_ = Number(height);
     this.width_ = Number(width);
     this.size_ = new goog.math.Size(this.width_,
         this.height_ + 2 * Blockly.BlockSvg.INLINE_PADDING_Y);
+    this.id_ = id || null; // May cause problems in the future
     this.text_ = opt_alt || '';
     this.setValue(src);
 };
@@ -84,7 +85,8 @@ Blockly.FieldImage.prototype.init = function(block) {
     /** @type {SVGElement} */
     this.imageElement_ = Blockly.createSvgElement('image', {
         'height': this.height_ + 'px',
-        'width': this.width_ + 'px'
+        'width': this.width_ + 'px',
+        'id': this.id_
     }, this.fieldGroup_);
     this.setValue(this.src_);
     if (goog.userAgent.GECKO) {
@@ -108,7 +110,7 @@ Blockly.FieldImage.prototype.init = function(block) {
 
     if (this.sourceBlock_.type == 'python_start') {
         Blockly.bindEvent_(this.fieldGroup_, 'click', this, function(e) {
-            runFull()
+            runFull();
         });
     }
 

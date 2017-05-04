@@ -411,12 +411,70 @@ Blockly.Block.prototype.getSurroundParent = function() {
     }
 };
 
+Blockly.Block.prototype.isVarInBranch = function(setter) {
+
+    var prevBlock;
+    var block = this;
+
+    do {
+        
+        if (block.declaredVar != 'undefined' && block.declaredVar == setter.declaredVar) {
+            return true;
+        }
+ 
+        prevBlock = block;
+        block = prevBlock.childBlocks_[0];
+
+    } while (block);
+
+    return false;
+};
+
+
+Blockly.Block.prototype.verifyVariable = function() {
+    var prevBlock;
+    var block = this;
+
+        do {
+            
+            if (block.type == 'python_while' || block.type == 'python_for') {
+                return false;
+            
+            } else if (block.type == 'python_if' && (block.elifCount != 0 || block.hasElse)) {
+               
+                for (i = 1; i <= 2 + (block.elifCount * 2) + block.hasElse; i += 2) {
+
+                    if (i != 2 + (block.elifCount * 2) + block.hasElse) {
+
+                        if (block.childBlocks_[i] === undefined || !block.childBlocks_[i].isVarInBranch(this)) { return false; }
+                    }
+                    
+                    if (i == 2 + (block.elifCount * 2) + block.hasElse &&
+                        block.childBlocks_[i - 1] !== undefined && !block.childBlocks_[i - 1].isVarInBranch(this)) {
+                            
+                            return false;
+                    }
+                }
+            }
+                        
+            prevBlock = block;
+            block = prevBlock.getSurroundParent();
+
+        } while (block);
+
+    return true;
+};
+
 /**
  * Return the next statement block directly connected to this block.
  * @return {Blockly.Block} The next statement block or null.
  */
 Blockly.Block.prototype.getNextBlock = function() {
     return this.nextConnection && this.nextConnection.targetBlock();
+};
+
+Blockly.Block.prototype.getPreviousBlock = function() {
+    return this.previousConnection && this.previousConnection.targetBlock(); 
 };
 
 /**

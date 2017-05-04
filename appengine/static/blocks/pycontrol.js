@@ -243,7 +243,6 @@ Blockly.Blocks['python_range1'] = {
     onchange: function(ev) {
         if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '') {
             this.holesFilled = true;
-            runTooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
             this.setTooltip(document.getElementById("hiddenoutput").textContent);
         } else {
             this.holesFilled = false;
@@ -269,7 +268,6 @@ Blockly.Blocks['python_range2'] = {
     onchange: function(ev) {
         if (Blockly.Python.valueToCode(this, 'ARG1', Blockly.Python.ORDER_NONE) != '' && Blockly.Python.valueToCode(this, 'ARG2', Blockly.Python.ORDER_NONE) != '') {
             this.holesFilled = true;
-            runTooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
             this.setTooltip(document.getElementById("hiddenoutput").textContent);
         } else {
             this.holesFilled = false;
@@ -297,7 +295,6 @@ Blockly.Blocks['python_range3'] = {
     onchange: function(ev) {
         if (Blockly.Python.valueToCode(this, 'ARG1', Blockly.Python.ORDER_NONE) != '' && Blockly.Python.valueToCode(this, 'ARG2', Blockly.Python.ORDER_NONE) != '' && Blockly.Python.valueToCode(this, 'ARG3', Blockly.Python.ORDER_NONE) != '') {
             this.holesFilled = true;
-            runTooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
             this.setTooltip(document.getElementById("hiddenoutput").textContent);
         } else {
             this.holesFilled = false;

@@ -27,6 +27,8 @@
 goog.provide('Blockly.Toolbox');
 
 goog.require('Blockly.Flyout');
+goog.require('Blockly.Blocks');
+goog.require('Blockly.inject');
 goog.require('goog.dom');
 goog.require('goog.events');
 goog.require('goog.events.BrowserFeature');
@@ -205,12 +207,18 @@ Blockly.Toolbox.prototype.position = function() {
  * @private
  */
 Blockly.Toolbox.prototype.populate_ = function(newTree) {
+    var workspace = this.workspace_;
     var rootOut = this.tree_;
     rootOut.removeChildren(); // Delete any existing content.
     rootOut.blocks = [];
     var hasColours = false;
 
+    var banner = document.getElementById('banner'); 
+
+    //banner.innerHTML = 'Python<span class="int">B</span><span class="float">l</span><span class="str">o</span><span class="int">c</span><span class="bool">k</span><span class="float">s</span>';
+
     function syncTrees(treeIn, treeOut) {
+        
         for (var i = 0, childIn; childIn = treeIn.childNodes[i]; i++) {
             if (!childIn.tagName) {
                 // Skip over text.
@@ -236,6 +244,7 @@ Blockly.Toolbox.prototype.populate_ = function(newTree) {
                         childOut.hexColour = '';
                     }
                     if (childIn.getAttribute('expanded') == 'true') {
+                        
                         if (childOut.blocks.length) {
                             rootOut.setSelectedItem(childOut);
                         }
@@ -243,6 +252,7 @@ Blockly.Toolbox.prototype.populate_ = function(newTree) {
                     } else {
                         childOut.setExpanded(false);
                     }
+
                     break;
                 case 'SEP':
                     treeOut.add(new Blockly.Toolbox.TreeSeparator());
@@ -250,6 +260,61 @@ Blockly.Toolbox.prototype.populate_ = function(newTree) {
                 case 'BLOCK':
                 case 'SHADOW':
                     treeOut.blocks.push(childIn);
+                    break;
+                case 'PATTERN':
+                    switch (childIn.getAttribute('type')) {
+                        case 'floatint':
+                            var fillText = 'url(#' + workspace.options.floatintTypePatternSmallId + ')';
+                            break;
+                        case 'str':
+                            var fillText = '#FF3010';
+                            break;
+                        case 'bool':
+                            var fillText = '#FF29FF';
+                            break;
+                        case 'floatintstr':
+                            var fillText = 'url(#' + workspace.options.floatintstrTypePatternSmallId + ')';
+                            break;
+                        case 'none':
+                            var fillText = '#706c67';
+                            break;
+                        case 'any':
+                            var fillText = 'url(#' + workspace.options.anyTypePatternSmallId + ')';
+                            break;
+                    }
+                   
+                    
+                    switch (childIn.getAttribute('name')) {
+                        case 'strings':
+                            banner.innerHTML = banner.innerHTML + '<div id="strings" style="position: absolute; left: ' + childIn.getAttribute('x') +  'px; top: ' + childIn.getAttribute('y') + 'px; z-index: 1002;"> <svg width="36" height="18"><rect x="0" y="0" width="36" height="18" fill="' + fillText + '"></rect></svg></div>'; 
+                            break;
+                        case 'booleans':
+                            banner.innerHTML = banner.innerHTML + '<div id="booleans" style="position: absolute; left: ' + childIn.getAttribute('x') +  'px; top: ' + childIn.getAttribute('y') + 'px; z-index: 1002;"> <svg width="36" height="18"><rect x="0" y="0" width="36" height="18" fill="' + fillText + '"></rect></svg></div>'; 
+                            break;
+                        case 'comparisons':
+                            banner.innerHTML = banner.innerHTML + '<div id="comparisons" style="position: absolute; left: ' + childIn.getAttribute('x') +  'px; top: ' + childIn.getAttribute('y') + 'px; z-index: 1002;"> <svg width="36" height="18"><rect x="0" y="0" width="36" height="18" fill="' + fillText + '"></rect></svg></div>'; 
+                            break;
+                        case 'lists':
+                            banner.innerHTML = banner.innerHTML + '<div id="lists" style="position: absolute; left: ' + childIn.getAttribute('x') +  'px; top: ' + childIn.getAttribute('y') + 'px; z-index: 1002;"> <svg width="36" height="18"><rect x="0" y="0" width="36" height="18" fill="' + fillText + '"></rect></svg></div>'; 
+                            break;
+                        case 'conversions':
+                            banner.innerHTML = banner.innerHTML + '<div id="conversions" style="position: absolute; left: ' + childIn.getAttribute('x') +  'px; top: ' + childIn.getAttribute('y') + 'px; z-index: 1002;"> <svg width="36" height="18"><rect x="0" y="0" width="36" height="18" fill="' + fillText + '"></rect></svg></div>'; 
+                            break;
+                        case 'io':
+                            banner.innerHTML = banner.innerHTML + '<div id="io" style="position: absolute; left: ' + childIn.getAttribute('x') +  'px; top: ' + childIn.getAttribute('y') + 'px; z-index: 1002;"> <svg width="36" height="18"><rect x="0" y="0" width="36" height="18" fill="' + fillText + '"></rect></svg></div>'; 
+                            break;
+                        case 'control':
+                            banner.innerHTML = banner.innerHTML + '<div id="control" style="position: absolute; left: ' + childIn.getAttribute('x') +  'px; top: ' + childIn.getAttribute('y') + 'px; z-index: 1002;"> <svg width="36" height="18"><rect x="0" y="0" width="36" height="18" fill="' + fillText + '"></rect></svg></div>'; 
+                            break;
+                        case 'misc':
+                            banner.innerHTML = banner.innerHTML + '<div id="misc" style="position: absolute; left: ' + childIn.getAttribute('x') +  'px; top: ' + childIn.getAttribute('y') + 'px; z-index: 1002;"> <svg width="36" height="18"><rect x="0" y="0" width="36" height="18" fill="' + fillText + '"></rect></svg></div>'; 
+                            break;
+                        case 'variables':
+                            banner.innerHTML = banner.innerHTML + '<div id="variables" style="position: absolute; left: ' + childIn.getAttribute('x') +  'px; top: ' + childIn.getAttribute('y') + 'px; z-index: 1002;"> <svg width="36" height="18"><rect x="0" y="0" width="36" height="18" fill="' + fillText + '"></rect></svg></div>'; 
+                            break;
+                        default:
+                            banner.innerHTML = banner.innerHTML + '<div style="position: absolute; left: ' + childIn.getAttribute('x') +  'px; top: ' + childIn.getAttribute('y') + 'px; z-index: 1002;"> <svg width="36" height="18"><rect x="0" y="0" width="36" height="18" fill="' + fillText + '"></rect></svg></div>'; 
+                    } 
                     break;
             }
         }
@@ -457,14 +522,84 @@ Blockly.Toolbox.TreeNode.prototype.getExpandIconSafeHtml = function() {
  */
 Blockly.Toolbox.TreeNode.prototype.onMouseDown = function(e) {
     // Expand icon.
+    if (this.expanded_ == true) {
+
+        switch (this.id_) {
+            case ':1':
+                document.getElementById('strings').style.top = parseInt(document.getElementById('strings').style.top.slice(0, -2)) - 25 + 'px';
+                document.getElementById('booleans').style.top = parseInt(document.getElementById('booleans').style.top.slice(0, -2)) - 25 + 'px';
+                document.getElementById('comparisons').style.top = parseInt(document.getElementById('comparisons').style.top.slice(0, -2)) - 25 + 'px';
+                document.getElementById('lists').style.top = parseInt(document.getElementById('lists').style.top.slice(0, -2)) - 25 + 'px';
+                document.getElementById('conversions').style.top = parseInt(document.getElementById('conversions').style.top.slice(0, -2)) - 25 + 'px';
+                document.getElementById('io').style.top = parseInt(document.getElementById('io').style.top.slice(0, -2)) - 25 + 'px';
+                document.getElementById('control').style.top = parseInt(document.getElementById('control').style.top.slice(0, -2)) - 25 + 'px';
+                document.getElementById('misc').style.top = parseInt(document.getElementById('misc').style.top.slice(0, -2)) - 25 + 'px';
+                document.getElementById('variables').style.top = parseInt(document.getElementById('variables').style.top.slice(0, -2)) - 25 + 'px';
+                break;
+            case ':3':
+                document.getElementById('booleans').style.top = parseInt(document.getElementById('booleans').style.top.slice(0, -2)) - 25 + 'px';
+                document.getElementById('comparisons').style.top = parseInt(document.getElementById('comparisons').style.top.slice(0, -2)) - 25 + 'px';
+                document.getElementById('lists').style.top = parseInt(document.getElementById('lists').style.top.slice(0, -2)) - 25 + 'px';
+                document.getElementById('conversions').style.top = parseInt(document.getElementById('conversions').style.top.slice(0, -2)) - 25 + 'px';
+                document.getElementById('io').style.top = parseInt(document.getElementById('io').style.top.slice(0, -2)) - 25 + 'px';
+                document.getElementById('control').style.top = parseInt(document.getElementById('control').style.top.slice(0, -2)) - 25 + 'px';
+                document.getElementById('misc').style.top = parseInt(document.getElementById('misc').style.top.slice(0, -2)) - 25 + 'px';
+                document.getElementById('variables').style.top = parseInt(document.getElementById('variables').style.top.slice(0, -2)) - 25 + 'px';
+                break; 
+            case ':7':
+                document.getElementById('conversions').style.top = parseInt(document.getElementById('conversions').style.top.slice(0, -2)) - 50 + 'px';
+                document.getElementById('io').style.top = parseInt(document.getElementById('io').style.top.slice(0, -2)) - 50 + 'px';
+                document.getElementById('control').style.top = parseInt(document.getElementById('control').style.top.slice(0, -2)) - 50 + 'px';
+                document.getElementById('misc').style.top = parseInt(document.getElementById('misc').style.top.slice(0, -2)) - 50 + 'px';
+                document.getElementById('variables').style.top = parseInt(document.getElementById('variables').style.top.slice(0, -2)) - 50 + 'px';
+                break; 
+        }
+
+    } else {
+
+        switch (this.id_) {
+            case ':1':
+                document.getElementById('strings').style.top = parseInt(document.getElementById('strings').style.top.slice(0, -2)) + 25 + 'px';
+                document.getElementById('booleans').style.top = parseInt(document.getElementById('booleans').style.top.slice(0, -2)) + 25 + 'px';
+                document.getElementById('comparisons').style.top = parseInt(document.getElementById('comparisons').style.top.slice(0, -2)) + 25 + 'px';
+                document.getElementById('lists').style.top = parseInt(document.getElementById('lists').style.top.slice(0, -2)) + 25 + 'px';
+                document.getElementById('conversions').style.top = parseInt(document.getElementById('conversions').style.top.slice(0, -2)) + 25 + 'px';
+                document.getElementById('io').style.top = parseInt(document.getElementById('io').style.top.slice(0, -2)) + 25 + 'px';
+                document.getElementById('control').style.top = parseInt(document.getElementById('control').style.top.slice(0, -2)) + 25 + 'px';
+                document.getElementById('misc').style.top = parseInt(document.getElementById('misc').style.top.slice(0, -2)) + 25 + 'px';
+                document.getElementById('variables').style.top = parseInt(document.getElementById('variables').style.top.slice(0, -2)) + 25 + 'px';
+                break;
+            case ':3':
+                document.getElementById('booleans').style.top = parseInt(document.getElementById('booleans').style.top.slice(0, -2)) + 25 + 'px';
+                document.getElementById('comparisons').style.top = parseInt(document.getElementById('comparisons').style.top.slice(0, -2)) + 25 + 'px';
+                document.getElementById('lists').style.top = parseInt(document.getElementById('lists').style.top.slice(0, -2)) + 25 + 'px';
+                document.getElementById('conversions').style.top = parseInt(document.getElementById('conversions').style.top.slice(0, -2)) + 25 + 'px';
+                document.getElementById('io').style.top = parseInt(document.getElementById('io').style.top.slice(0, -2)) + 25 + 'px';
+                document.getElementById('control').style.top = parseInt(document.getElementById('control').style.top.slice(0, -2)) + 25 + 'px';
+                document.getElementById('misc').style.top = parseInt(document.getElementById('misc').style.top.slice(0, -2)) + 25 + 'px';
+                document.getElementById('variables').style.top = parseInt(document.getElementById('variables').style.top.slice(0, -2)) + 25 + 'px';
+                break;
+            case ':7':
+                document.getElementById('conversions').style.top = parseInt(document.getElementById('conversions').style.top.slice(0, -2)) + 50 + 'px';
+                document.getElementById('io').style.top = parseInt(document.getElementById('io').style.top.slice(0, -2)) + 50 + 'px';
+                document.getElementById('control').style.top = parseInt(document.getElementById('control').style.top.slice(0, -2)) + 50 + 'px';
+                document.getElementById('misc').style.top = parseInt(document.getElementById('misc').style.top.slice(0, -2)) + 50 + 'px';
+                document.getElementById('variables').style.top = parseInt(document.getElementById('variables').style.top.slice(0, -2)) + 50 + 'px';
+                break;
+        }
+    }
+
     if (this.hasChildren() && this.isUserCollapsible_) {
         this.toggle();
         this.select();
+        console.log("sack", this);
     } else if (this.isSelected()) {
         this.getTree().setSelectedItem(null);
     } else {
         this.select();
     }
+
+    
     this.updateRow();
 };
 

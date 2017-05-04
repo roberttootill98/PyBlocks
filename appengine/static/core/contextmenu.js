@@ -170,6 +170,7 @@ Blockly.ContextMenu.finalInputCallback = function(block, inputExists) {
 
 Blockly.ContextMenu.modifyMathInputCallback = function(block) {
     return function() {
+
         if (startImports.indexOf('math') > -1) {
             block.modify('math', 'remove');
         } else {

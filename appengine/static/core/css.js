@@ -339,15 +339,19 @@ Blockly.Css.CONTENT = [
     '}',
 
     '.blocklyHtmlInput {',
+    'position: absolute;',
+    'top: -3px;',
+    'left: 0px;',
     'border: none;',
-    'border-radius: 4px;',
+    'border-radius: 0px;',
     'font-family: monospace;',
     'font-size: 20px !important;',
-    'height: 77%;',
+    'height: 100%;',
     'margin: 0;',
     'outline: none;',
-    'padding: 0 1px;',
-    'width: 100%',
+    'padding: 0 0px;',
+    'width: 100%;',
+    'height: 24px;',
     '}',
 
     '.blocklyMainBackground {',
@@ -445,7 +449,7 @@ Blockly.Css.CONTENT = [
 
     /* Category tree in Toolbox. */
     '.blocklyToolboxDiv {',
-    'background-color: #708090;',
+    'background-color: #bac0dd;',
     'overflow-x: visible;',
     'overflow-y: auto;',
     'position: absolute;',
@@ -458,6 +462,7 @@ Blockly.Css.CONTENT = [
     '-webkit-box-shadow: inset 5px 5px 5px rgba(255, 255, 255, .2), 0 10px 6px -6px #777;',
     '-moz-box-shadow: inset 5px 5px 5px rgba(255, 255, 255, .2), 0 10px 6px -6px #777;',
     'box-shadow: inset 0px 1.5px 1px rgba(66, 50, 50, .3), 0 10px 6px -6px #777;',
+    'min-width: 220px;',
     '}',
 
     '.blocklyTreeRoot {',
@@ -492,10 +497,9 @@ Blockly.Css.CONTENT = [
     '}',
 
     '.blocklyTreeIcon {',
-    'background-image: url(<<<PATH>>>/sprites.png);',
-    'height: 16px;',
+    'height: 18px;',
     'vertical-align: middle;',
-    'width: 16px;',
+    'width: 46px;',
     '}',
 
     '.blocklyTreeIconClosedLtr {',
@@ -550,7 +554,8 @@ Blockly.Css.CONTENT = [
     'color: #fff;',
     '}',
 
-
+    '.typePattern{',
+    '}',
 
     /* Copied from: goog/css/colorpicker-simplegrid.css */
     /*

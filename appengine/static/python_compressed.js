@@ -95,7 +95,7 @@ var magenta = '#FF29FF';
 
 
 Blockly.Python.COLOUR = {};
-Blockly.Python.COLOUR['notype'] = '#8B7D6B';
+Blockly.Python.COLOUR['notype'] = '#706c67';
 Blockly.Python.COLOUR['str'] = red;
 Blockly.Python.COLOUR['turtle'] = cyan;
 Blockly.Python.COLOUR['vec2d'] = yellow;

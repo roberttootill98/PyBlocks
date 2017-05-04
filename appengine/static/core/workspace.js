@@ -53,6 +53,8 @@ Blockly.Workspace = function(opt_options) {
     this.vars = '';
 
     this.imports = '';
+    
+    this.difficulty = 0;
 
 };
 

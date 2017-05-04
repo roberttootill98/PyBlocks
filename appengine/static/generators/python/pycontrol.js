@@ -67,6 +67,7 @@ Blockly.Python['python_for'] = function(block) {
 Blockly.Python['python_range1'] = function(block) {
     var block1 = Blockly.Python.valueToCode(block, 'ARG', Blockly.Python.ORDER_NONE);
 
+    return ['range(' + block1 + ')', Blockly.Python.ORDER_ATOMIC]; 
 };
 
 Blockly.Python['python_range2'] = function(block) {

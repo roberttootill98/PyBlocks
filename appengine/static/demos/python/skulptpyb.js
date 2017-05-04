@@ -1,4 +1,9 @@
+var workspace;
+var workspaceVar;
+var varBlock;
+
 Sk.python3 = true;
+
 Sk.inputfun = function(prompt) {
     return new Promise(function(resolve) {
         resolve(window.prompt(prompt));
@@ -44,13 +49,80 @@ function builtinRead(x) {
 
 function runFull() {
 
-    workspace.running = true;
-    workspace.generatorSuccess = true;
-    workspace.vars = '';
-    workspace.imports = '';
+    initInterpreter();
 
-    if (initInterpreter() && generateCode() && workspace.generatorSuccess) {
+    setTimeout(function() {
+        workspace.running = true;
+        workspace.generatorSuccess = true;
+        workspace.vars = '';
+        workspace.imports = '';
 
+        if (generateCode() && workspace.generatorSuccess) {
+
+            var mypre = document.getElementById("codeArea");
+            var prog = document.getElementById("pycode").textContent;
+            var turtleBtn = document.getElementById("turtleButton");
+
+            if (mypre.className != 'collapsed expanded') {
+                toggleInterpreter();
+                mypre.scrollTop = mypre.scrollHeight;
+            } else {
+                mypre.scrollTop = mypre.scrollHeight;
+            }
+
+            if (prog.indexOf('turtle.Turtle()') != -1) {
+                toggleTurtle('run');
+            } else {
+                turtleBtn.innerHTML = '';
+                turtleBtn.style.display = 'none';
+            }
+
+            Sk.pre = "output";
+            Sk.configure({
+                output: outf,
+                read: builtinRead,
+                inputfunTakesPrompt: true
+            });
+            (Sk.TurtleGraphics || (Sk.TurtleGraphics = {})).target = 'turtleCanvas';
+
+            var myPromise = Sk.misceval.asyncToPromise(function() {
+                return Sk.importMainWithBody("<stdin>", false, prog, true);
+            });
+
+            myPromise.then(function(mod) {
+                    console.log('success');
+                    if (mypre.textContent != initVal && mypre.className != 'collapsed expanded') {
+                        toggleInterpreter();
+                        mypre.scrollTop = mypre.scrollHeight;
+                    } else {
+                        mypre.scrollTop = mypre.scrollHeight;
+                    }
+                },
+                function(err) {
+                    var mypre = document.getElementById("codeArea");
+                    mypre.innerHTML = mypre.innerHTML + err.toString() + "\n";
+                    console.log(err.toString());
+                });
+
+
+        } else if (!generateCode()) {
+            alert('You need to have at least one statement block attached to the start block.')
+        } else {
+            alert('Errors found! Please look for the warning symbols for more information.');
+        }
+
+        workspace.running = false;
+        generateTypeTable();
+    }, 500);
+}
+
+function runEval(block) {
+
+    setTimeout(function() {
+        workspace.running = true;
+        workspace.generatorSuccess = true;
+
+        var code = Blockly.Python.blockToCode(block);
         var prog = document.getElementById("pycode").textContent;
         var turtleBtn = document.getElementById("turtleButton");
 
@@ -61,104 +133,49 @@ function runFull() {
             turtleBtn.style.display = 'none';
         }
 
-        var mypre = document.getElementById("codeArea");
-        Sk.pre = "output";
-        Sk.configure({
-            output: outf,
-            read: builtinRead,
-            inputfunTakesPrompt: true
-        });
-        (Sk.TurtleGraphics || (Sk.TurtleGraphics = {})).target = 'turtleCanvas';
+        if (workspace.generatorSuccess) {
 
-        var myPromise = Sk.misceval.asyncToPromise(function() {
-            return Sk.importMainWithBody("<stdin>", false, prog, true);
-        });
+            if (code.constructor === Array) {
+                code = 'print(' + code[0] + ')';
+            }
 
-        myPromise.then(function(mod) {
-                console.log('success');
-                if (mypre.textContent != initVal && mypre.className != 'collapsed expanded') {
-                    toggleInterpreter();
-                    mypre.scrollTop = mypre.scrollHeight;
-                } else {
-                    mypre.scrollTop = 0;
-                }
-            },
-            function(err) {
-                var mypre = document.getElementById("codeArea");
-                mypre.innerHTML = mypre.innerHTML + err.toString() + "\n";
-                console.log(err.toString());
+            var mypre = document.getElementById("codeArea");
+
+            Sk.pre = "output";
+            Sk.configure({
+                output: outf,
+                read: builtinRead,
+                inputfunTakesPrompt: true,
+                retainglobals: canRetainGlobals
             });
+            (Sk.TurtleGraphics || (Sk.TurtleGraphics = {})).target = 'turtleCanvas';
+            var myPromise = Sk.misceval.asyncToPromise(function() {
+                return Sk.importMainWithBody("<stdin>", false, code, true);
+            });
+            myPromise.then(function(mod) {
+                    console.log('success');
+                    if (mypre.textContent != initVal && mypre.className != 'collapsed expanded') {
+                        toggleInterpreter();
+                        mypre.scrollTop = mypre.scrollHeight;
+                    } else {
+                        mypre.scrollTop = mypre.scrollHeight;
+                    }
+                    canRetainGlobals = true;
+                },
+                function(err) {
+                    var mypre = document.getElementById("codeArea");
+                    mypre.innerHTML = mypre.innerHTML + err.toString() + "\n";
+                    console.log(err.toString());
+                });
 
 
-    } else if (!generateCode()) {
-        alert('You need to have at least one statement block attached to the start block.')
-    } else {
-        alert('Errors found! Please look for the warning symbols for more information.');
-    }
-
-    workspace.running = false;
-    generateTypeTable();
-
-}
-
-function runEval(block) {
-
-    workspace.running = true;
-    workspace.generatorSuccess = true;
-
-    var code = Blockly.Python.blockToCode(block);
-    var prog = document.getElementById("pycode").textContent;
-    var turtleBtn = document.getElementById("turtleButton");
-
-    if (prog.indexOf('turtle.Turtle()') != -1) {
-        toggleTurtle('run');
-    } else {
-        turtleBtn.innerHTML = '';
-        turtleBtn.style.display = 'none';
-    }
-
-    if (workspace.generatorSuccess) {
-
-        if (code.constructor === Array) {
-            code = 'print(' + code[0] + ')';
+        } else {
+            alert('Errors found! Please look for the warning symbols for more information.');
         }
 
-        var mypre = document.getElementById("codeArea");
-
-        Sk.pre = "output";
-        Sk.configure({
-            output: outf,
-            read: builtinRead,
-            inputfunTakesPrompt: true,
-            retainglobals: canRetainGlobals
-        });
-        (Sk.TurtleGraphics || (Sk.TurtleGraphics = {})).target = 'turtleCanvas';
-        var myPromise = Sk.misceval.asyncToPromise(function() {
-            return Sk.importMainWithBody("<stdin>", false, code, true);
-        });
-        myPromise.then(function(mod) {
-                console.log('success');
-                if (mypre.textContent != initVal && mypre.className != 'collapsed expanded') {
-                    toggleInterpreter();
-                    mypre.scrollTop = mypre.scrollHeight;
-                } else {
-                    mypre.scrollTop = 0;
-                }
-                canRetainGlobals = true;
-            },
-            function(err) {
-                var mypre = document.getElementById("codeArea");
-                mypre.innerHTML = mypre.innerHTML + err.toString() + "\n";
-                console.log(err.toString());
-            });
-
-
-    } else {
-        alert('Errors found! Please look for the warning symbols for more information.');
-    }
-
-    workspace.running = false;
-    generateTypeTable();
+        workspace.running = false;
+        generateTypeTable();
+    }, 100);
 }
 
 function runTooltip(code) {
@@ -191,23 +208,7 @@ function runTooltip(code) {
     return mypre.innerHTML;
 }
 
-
-function normaliseDate(i) {
-    if (i < 10) {
-        i = "0" + i
-    }; // add zero in front of numbers < 10
-    return i;
-}
-
 function initInterpreter() {
-    // var d = new Date();
-    // var year = d.getFullYear();
-    // var month = normaliseDate(d.getMonth());
-    // var day = normaliseDate(d.getDate());
-    // var hour = d.getHours();
-    // var minute = normaliseDate(d.getMinutes());
-    // var second = normaliseDate(d.getSeconds());
-
 
     var interpreter = document.getElementById("codeArea");
     interpreter.innerHTML = initVal;
@@ -232,9 +233,20 @@ function restart() {
     workspace.imports = '';
     workspace.vars = '';
     var interpreter = document.getElementById("codeArea");
-    interpreter.innerHTML = interpreter.innerHTML + '\n === RESTART ====\n';
+
+    interpreter.innerHTML = interpreter.innerHTML + '\n ==== RESTART ====\n';
     interpreter.scrollTop = interpreter.scrollHeight;
+    interpreter.className = 'collapsed expanded';
     generateTypeTable();
+
+    setTimeout(function() {
+        initInterpreter();
+        setTimeout(function() {
+            toggleInterpreter();
+        }, 350);
+    }, 750);
+
+    return true;
 }
 
 function clr() {
@@ -306,17 +318,25 @@ function generateTypeTable() {
 
     }
 }
-function popupWindow(url, title, win, w, h)
-    {
-        var y = window.top.outerHeight / 2 + window.top.screenY - (h / 2)
-        var x = window.top.outerWidth / 2 + window.top.screenX - (w / 2)
-        return window.open(url, title,
-                'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=' +
-                w + ', height=' + h + ', top=' + y + ', left=' + x);
-    }
+
+function popupWindow(url, title, win, w, h) {
+    var y = window.top.outerHeight / 2 + window.top.screenY - (h / 2);
+    var x = window.top.outerWidth / 2 + window.top.screenX - (w / 2);
+
+    return window.open(url, title,
+        'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=' +
+        w + ', height=' + h + ', top=' + y + ', left=' + x);
+}
+
 
 function checkWorkspace(event) {
     Blockly.Python.workspaceToCode(workspace);
+}
+
+function setDifficulty() {
+    workspace.difficulty = document.getElementById("difficulty").value;
+    console.log(workspace.difficulty);
+    console.log(workspace);
 }
 
 
@@ -333,3 +353,304 @@ function generateCode(event) {
 
 
 };
+
+var block;
+var constBlock;
+var varBlock;
+
+function setModalVar() {
+    var varType;
+    var varMod;
+    var varBool;
+    var varName;
+
+
+    modalSet = document.getElementById("modalSet");
+    modalVarName = document.getElementById("modalVarName");
+    modalValue = document.getElementById("modalValue");
+    modalType = document.getElementById("modalType");
+
+    dropdownVar = document.getElementById("dropdownVar");
+    divBoolean = document.getElementById("divBoolean");
+
+    if (dropdownVar.value == 'bool') {
+        divBoolean.style.display = 'block';
+    } else {
+        divBoolean.style.display = 'none';
+    }
+
+    radioStd = document.getElementById("radioStd");
+    radioList = document.getElementById("radioList");
+    radioTuple = document.getElementById("radioTuple");
+    varText = document.getElementById("varText");
+    varType = dropdownVar.value;
+
+    if (radioStd.checked) {
+        varMod = radioStd.value;
+    } else if (radioList.checked) {
+        varMod = radioList.value;
+    } else if (radioTuple.checked) {
+        varMod = radioTuple.value;
+    }
+
+    if (radioTrue.checked) {
+        varBool = radioTrue.value;
+    } else if (radioFalse.checked) {
+        varBool = radioFalse.value;
+    } else if (radioEmpty.checked) {
+        varBool = radioEmpty.value;
+    }
+
+    varName = varText.value;
+
+    workspaceVar.clear();
+
+    var newVariableBlock = function() {
+        varBlock = goog.dom.createDom('block');
+        varBlock.setAttribute('id', 'varBlock');
+        varBlock.setAttribute('type', 'variables_get');
+        varBlock.setAttribute('deletable', 'false');
+        varBlock.setAttribute('movable', 'false');
+        var field = goog.dom.createDom('field', null, varName);
+        field.setAttribute('name', 'VAR');
+        varBlock.appendChild(field);
+        var pyType = goog.dom.createDom('pytype', null, varType);
+        varBlock.appendChild(pyType);
+        return varBlock;
+    };
+
+    var newConstBlock = function() {
+        constBlock = goog.dom.createDom('block');
+        var field;
+        constBlock.setAttribute('id', 'constBlock');
+        switch (varType) {
+
+            case 'int':
+                constBlock.setAttribute('type', 'python_int_const');
+                field = goog.dom.createDom('field', null, '0');
+                field.setAttribute('name', 'VALUE');
+                constBlock.setAttribute('deletable', 'false');
+                constBlock.setAttribute('movable', 'false');
+                break;
+            case 'float':
+                constBlock.setAttribute('type', 'python_float_const');
+                field = goog.dom.createDom('field', null, '0.0');
+                field.setAttribute('name', 'VALUE');
+                constBlock.setAttribute('deletable', 'false');
+                constBlock.setAttribute('movable', 'false');
+                break;
+            case 'str':
+                constBlock.setAttribute('type', 'python_string_const');
+                field = goog.dom.createDom('field', null, '"a string"');
+                field.setAttribute('name', 'VALUE');
+                constBlock.setAttribute('deletable', 'false');
+                constBlock.setAttribute('movable', 'false');
+                break;
+            case 'bool':
+                switch (varBool) {
+                    case 'true':
+                        constBlock.setAttribute('type', 'python_true');
+                        field = goog.dom.createDom('field', null, 'True');
+                        constBlock.setAttribute('deletable', 'false');
+                        constBlock.setAttribute('movable', 'false');
+                        break;
+                    case 'false':
+                        constBlock.setAttribute('type', 'python_false');
+                        field = goog.dom.createDom('field', null, 'False');
+                        constBlock.setAttribute('deletable', 'false');
+                        constBlock.setAttribute('movable', 'false');
+                        break;
+                }
+                break;
+
+        }
+
+        constBlock.appendChild(field);
+        return constBlock;
+    };
+    block = goog.dom.createDom('block');
+    block.setAttribute('id', 'setterBlock');
+    block.setAttribute('type', 'variables_set');
+    block.setAttribute('editable', 'false');
+    block.setAttribute('deletable', 'false');
+    block.setAttribute('movable', 'false');
+
+    var varValue = goog.dom.createDom('value', null);
+    varValue.setAttribute('type', 'input_value');
+    varValue.setAttribute('name', 'VAR');
+    block.appendChild(varValue);
+
+    var pyType = goog.dom.createDom('pytype', null, varType);
+    block.appendChild(pyType);
+
+    var varConstVal = goog.dom.createDom('value', null);
+    varConstVal.setAttribute('name', 'VALUE');
+    block.appendChild(varConstVal);
+
+    var variable = newVariableBlock();
+    varValue.appendChild(variable);
+
+    if (!(varType == 'bool' && varBool == 'empty')) {
+        var valValue = newConstBlock();
+        varConstVal.appendChild(valValue);
+    }
+
+    Blockly.Xml.domToBlock(workspaceVar, block);
+
+    var blocks = workspaceVar.getAllBlocks();
+    blocks[0].moveBy(15, 15);
+}
+
+
+function spawnVar() {
+    var modal = document.getElementById('modalBG');
+    var blocks = workspaceVar.getAllBlocks();
+
+    blocks[0].moveBy(300, 4);
+
+    for (i = 0; i < blocks.length; i++) {
+        blocks[i].movable_ = true;
+        blocks[i].editable_ = true;
+        blocks[i].deletable_ = true;
+    }
+
+    modal.style.display = 'none';
+
+    var tmpWorkspace = Blockly.Xml.workspaceToDom(workspaceVar);
+
+    Blockly.Xml.domToWorkspace(workspace, tmpWorkspace);
+
+
+}
+window.onbeforeunload = function() {
+    return 'Are you sure?';
+
+}
+
+function init() {
+
+    var blocklyArea = document.getElementById('blocklyArea');
+    var blocklyVarArea = document.getElementById('blocklyVarArea');
+    var blocklyDiv = document.getElementById('blocklyDiv');
+    var blocklyVarDiv = document.getElementById('blocklyVarDiv');
+    var output = document.getElementById('codeArea');
+
+    xmlHttp = new XMLHttpRequest();
+
+    xmlHttp.open("GET", "toolbox.xml", false);
+    xmlHttp.send();
+    xmlDoc = xmlHttp.responseText;
+
+    blocklyDiv.insertAdjacentHTML('afterend', xmlDoc);
+
+    workspace = Blockly.inject(blocklyDiv, {
+        media: '../../media/',
+        trashcan: false,
+        toolbox: document.getElementById('toolbox')
+    });
+
+    workspaceVar = Blockly.inject(blocklyVarDiv, {
+        media: '../../media/',
+        trashcan: false
+    });
+
+    var onResizeVar = function(e) {
+        var elementVar = blocklyVarArea;
+        var xVar = 0;
+        var yVar = 0;
+        do {
+            xVar += elementVar.offsetLeft;
+            yVar += elementVar.offsetTop;
+            elementVar = elementVar.offsetParent;
+        } while (elementVar);
+
+        blocklyVarDiv.style.left = xVar + 'px';
+        blocklyVarDiv.style.top = yVar + 'px';
+        blocklyVarDiv.style.width = blocklyVarArea.offsetWidth + 'px';
+        blocklyVarDiv.style.height = blocklyVarArea.offsetHeight + 'px';
+        Blockly.svgResize(workspaceVar);
+    };
+
+    var onResize = function(e) {
+        // Compute the absolute coordinates and dimensions of blocklyArea.
+        var element = blocklyArea;
+        var x = 0;
+        var y = 0;
+        do {
+            x += element.offsetLeft;
+            y += element.offsetTop;
+            element = element.offsetParent;
+        } while (element);
+        // Position blocklyDiv over blocklyArea.
+        blocklyDiv.style.left = x + 'px';
+        blocklyDiv.style.top = y + 'px';
+        blocklyDiv.style.width = blocklyArea.offsetWidth + 'px';
+        blocklyDiv.style.height = blocklyArea.offsetHeight + 'px';
+        Blockly.svgResize(workspace);
+    };
+
+
+    window.addEventListener('resize', onResize, false);
+    window.addEventListener('resize', onResizeVar, false);
+    output.addEventListener('transitionend', onResize);
+
+    if ('BlocklyStorage' in window && window.location.hash.length > 1) {
+        BlocklyStorage.retrieveXml(window.location.hash.substring(1));
+    } else {
+        var xml =
+            '<xml><block id="startBlock" type="python_start" deletable="false" movable="false" x="2" y="17"></block></xml>';
+        Blockly.Xml.domToWorkspace(workspace, Blockly.Xml.textToDom(xml));
+
+    }
+
+    goog.events.listen(document.getElementById('blocklyDiv'),
+        'dblclick',
+        function() {
+            if (Blockly.selected != null && Blockly.selected.type !=
+                'python_start') {
+                runEval(Blockly.selected)
+            }
+        });
+
+    var modal;
+    var modalBtn;
+    var modalSpan;
+
+    window.onload = function() {
+        var modal = document.getElementById('modalBG');
+        var modalBtn = document.getElementById('modalBtn');
+        var modalSpan = document.getElementsByClassName('close')[0];
+
+        var interpreter = document.getElementById("codeArea");
+        document.getElementById('startIcon').innerHTML = document.getElementById('startIcon').innerHTML + '<span id="startIconSpan">test</span>';
+
+        modalBtn.onclick = function() {
+            modal.style.display = 'block';
+            interpreter.className = 'collapsed';
+            setTimeout(function() {
+                setModalVar();
+                onResizeVar();
+            }, 100);
+
+        }
+
+        modalSpan.onclick = function() {
+            modal.style.display = 'none';
+        }
+    }
+
+
+
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = 'none';
+        }
+    }
+    initInterpreter();
+    //checkWorkspace();
+    generateTypeTable();
+    onResize();
+    onResizeVar();
+
+}

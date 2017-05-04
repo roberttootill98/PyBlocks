@@ -42,6 +42,7 @@ Blockly.Blocks['variables_get'] = {
     init: function() {
         console.log("VARS within var_get init ", this.type, this.getFieldValue("VAR"));
         this.setHelpUrl(Blockly.Msg.VARIABLES_GET_HELPURL);
+        this.setTooltip("Empty variable");
         this.appendDummyInput()
             .appendField(new Blockly.Field(
                 "initname"), 'VAR');
@@ -91,7 +92,8 @@ Blockly.Blocks['variables_get'] = {
     },
     onchange: function(ev) {
 
-    this.setTooltip(this.getFieldValue("VAR"));
+        this.setTooltip(this.getFieldValue("VAR"));
+
     }
 
 };
@@ -103,6 +105,7 @@ Blockly.Blocks['variables_set'] = {
      */
     init: function() {
         this.declaredVar = '';
+        this.verified = false;
         this.permitSetter = true;
         this.jsonInit({
             "message0": "%1 = %2",
