@@ -49,9 +49,7 @@ function builtinRead(x) {
 
 function runFull() {
 
-    initInterpreter();
 
-    setTimeout(function() {
         workspace.running = true;
         workspace.generatorSuccess = true;
         workspace.vars = '';
@@ -59,6 +57,8 @@ function runFull() {
 
         if (generateCode() && workspace.generatorSuccess) {
 
+            initInterpreter();
+        setTimeout(function() {
             var mypre = document.getElementById("codeArea");
             var prog = document.getElementById("pycode").textContent;
             var turtleBtn = document.getElementById("turtleButton");
@@ -105,6 +105,7 @@ function runFull() {
                 });
 
 
+        }, 500);
         } else if (!generateCode()) {
             alert('You need to have at least one statement block attached to the start block.')
         } else {
@@ -113,12 +114,10 @@ function runFull() {
 
         workspace.running = false;
         generateTypeTable();
-    }, 500);
 }
 
 function runEval(block) {
 
-    setTimeout(function() {
         workspace.running = true;
         workspace.generatorSuccess = true;
 
@@ -175,7 +174,6 @@ function runEval(block) {
 
         workspace.running = false;
         generateTypeTable();
-    }, 100);
 }
 
 function runTooltip(code) {
@@ -617,6 +615,7 @@ function init() {
     var modalSpan;
 
     window.onload = function() {
+        var mypre = document.getElementById("codeArea");
         var modal = document.getElementById('modalBG');
         var modalBtn = document.getElementById('modalBtn');
         var modalSpan = document.getElementsByClassName('close')[0];
@@ -626,7 +625,10 @@ function init() {
 
         modalBtn.onclick = function() {
             modal.style.display = 'block';
-            interpreter.className = 'collapsed';
+            if (mypre.className == 'collapsed expanded') {
+                toggleInterpreter();
+                mypre.scrollTop = mypre.scrollHeight;
+            } 
             setTimeout(function() {
                 setModalVar();
                 onResizeVar();
