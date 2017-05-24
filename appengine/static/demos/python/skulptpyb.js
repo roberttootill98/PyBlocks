@@ -50,14 +50,14 @@ function builtinRead(x) {
 function runFull() {
 
 
-        workspace.running = true;
-        workspace.generatorSuccess = true;
-        workspace.vars = '';
-        workspace.imports = '';
+    workspace.running = true;
+    workspace.generatorSuccess = true;
+    workspace.vars = '';
+    workspace.imports = '';
 
-        if (generateCode() && workspace.generatorSuccess) {
+    if (generateCode() && workspace.generatorSuccess) {
 
-            initInterpreter();
+        initInterpreter();
         setTimeout(function() {
             var mypre = document.getElementById("codeArea");
             var prog = document.getElementById("pycode").textContent;
@@ -106,74 +106,74 @@ function runFull() {
 
 
         }, 500);
-        } else if (!generateCode()) {
-            alert('You need to have at least one statement block attached to the start block.')
-        } else {
-            alert('Errors found! Please look for the warning symbols for more information.');
-        }
+    } else if (!generateCode()) {
+        alert('You need to have at least one statement block attached to the start block.')
+    } else {
+        alert('Errors found! Please look for the warning symbols for more information.');
+    }
 
-        workspace.running = false;
-        generateTypeTable();
+    workspace.running = false;
+    generateTypeTable();
 }
 
 function runEval(block) {
 
-        workspace.running = true;
-        workspace.generatorSuccess = true;
+    workspace.running = true;
+    workspace.generatorSuccess = true;
 
-        var code = Blockly.Python.blockToCode(block);
-        var prog = document.getElementById("pycode").textContent;
-        var turtleBtn = document.getElementById("turtleButton");
+    var code = Blockly.Python.blockToCode(block);
+    var prog = document.getElementById("pycode").textContent;
+    var turtleBtn = document.getElementById("turtleButton");
 
-        if (prog.indexOf('turtle.Turtle()') != -1) {
-            toggleTurtle('run');
-        } else {
-            turtleBtn.innerHTML = '';
-            turtleBtn.style.display = 'none';
+    if (prog.indexOf('turtle.Turtle()') != -1) {
+        toggleTurtle('run');
+    } else {
+        turtleBtn.innerHTML = '';
+        turtleBtn.style.display = 'none';
+    }
+
+    if (workspace.generatorSuccess) {
+
+        if (code.constructor === Array) {
+            code = 'print(' + code[0] + ')';
         }
 
-        if (workspace.generatorSuccess) {
+        var mypre = document.getElementById("codeArea");
 
-            if (code.constructor === Array) {
-                code = 'print(' + code[0] + ')';
-            }
-
-            var mypre = document.getElementById("codeArea");
-
-            Sk.pre = "output";
-            Sk.configure({
-                output: outf,
-                read: builtinRead,
-                inputfunTakesPrompt: true,
-                retainglobals: canRetainGlobals
+        Sk.pre = "output";
+        Sk.configure({
+            output: outf,
+            read: builtinRead,
+            inputfunTakesPrompt: true,
+            retainglobals: canRetainGlobals
+        });
+        (Sk.TurtleGraphics || (Sk.TurtleGraphics = {})).target = 'turtleCanvas';
+        var myPromise = Sk.misceval.asyncToPromise(function() {
+            return Sk.importMainWithBody("<stdin>", false, code, true);
+        });
+        myPromise.then(function(mod) {
+                console.log('success');
+                if (mypre.textContent != initVal && mypre.className != 'collapsed expanded') {
+                    toggleInterpreter();
+                    mypre.scrollTop = mypre.scrollHeight;
+                } else {
+                    mypre.scrollTop = mypre.scrollHeight;
+                }
+                canRetainGlobals = true;
+            },
+            function(err) {
+                var mypre = document.getElementById("codeArea");
+                mypre.innerHTML = mypre.innerHTML + err.toString() + "\n";
+                console.log(err.toString());
             });
-            (Sk.TurtleGraphics || (Sk.TurtleGraphics = {})).target = 'turtleCanvas';
-            var myPromise = Sk.misceval.asyncToPromise(function() {
-                return Sk.importMainWithBody("<stdin>", false, code, true);
-            });
-            myPromise.then(function(mod) {
-                    console.log('success');
-                    if (mypre.textContent != initVal && mypre.className != 'collapsed expanded') {
-                        toggleInterpreter();
-                        mypre.scrollTop = mypre.scrollHeight;
-                    } else {
-                        mypre.scrollTop = mypre.scrollHeight;
-                    }
-                    canRetainGlobals = true;
-                },
-                function(err) {
-                    var mypre = document.getElementById("codeArea");
-                    mypre.innerHTML = mypre.innerHTML + err.toString() + "\n";
-                    console.log(err.toString());
-                });
 
 
-        } else {
-            alert('Errors found! Please look for the warning symbols for more information.');
-        }
+    } else {
+        alert('Errors found! Please look for the warning symbols for more information.');
+    }
 
-        workspace.running = false;
-        generateTypeTable();
+    workspace.running = false;
+    generateTypeTable();
 }
 
 function runTooltip(code) {
@@ -369,13 +369,6 @@ function setModalVar() {
     modalType = document.getElementById("modalType");
 
     dropdownVar = document.getElementById("dropdownVar");
-    divBoolean = document.getElementById("divBoolean");
-
-    if (dropdownVar.value == 'bool') {
-        divBoolean.style.display = 'block';
-    } else {
-        divBoolean.style.display = 'none';
-    }
 
     radioStd = document.getElementById("radioStd");
     radioList = document.getElementById("radioList");
@@ -391,16 +384,19 @@ function setModalVar() {
         varMod = radioTuple.value;
     }
 
-    if (radioTrue.checked) {
-        varBool = radioTrue.value;
-    } else if (radioFalse.checked) {
-        varBool = radioFalse.value;
-    } else if (radioEmpty.checked) {
-        varBool = radioEmpty.value;
+    varName = varText.value;
+    
+    newVar = varName;
+
+    newVar = newVar.replace(/^ +| +$/g, '');
+    newVar = newVar.replace(/\W+/g, '_');
+    if ('0123456789'.indexOf(newVar[0]) != -1) {
+        newVar = '_' + newVar;
     }
 
-    varName = varText.value;
-
+    var variables = Blockly.Variables.allVariables(workspace, true, true);
+    varName = Blockly.Python.makeNameUnique(newVar, variables);
+    
     workspaceVar.clear();
 
     var newVariableBlock = function() {
@@ -417,7 +413,7 @@ function setModalVar() {
         return varBlock;
     };
 
-    var newConstBlock = function() {
+    /*var newConstBlock = function() {
         constBlock = goog.dom.createDom('block');
         var field;
         constBlock.setAttribute('id', 'constBlock');
@@ -466,6 +462,9 @@ function setModalVar() {
         constBlock.appendChild(field);
         return constBlock;
     };
+
+    */
+
     block = goog.dom.createDom('block');
     block.setAttribute('id', 'setterBlock');
     block.setAttribute('type', 'variables_set');
@@ -488,12 +487,12 @@ function setModalVar() {
     var variable = newVariableBlock();
     varValue.appendChild(variable);
 
-    if (!(varType == 'bool' && varBool == 'empty')) {
+    /*if (!(varType == 'bool' && varBool == 'empty')) {
         var valValue = newConstBlock();
         varConstVal.appendChild(valValue);
-    }
+    }*/
 
-    Blockly.Xml.domToBlock(workspaceVar, block);
+    Blockly.Xml.domToBlock(workspaceVar, variable);
 
     var blocks = workspaceVar.getAllBlocks();
     blocks[0].moveBy(15, 15);
@@ -501,25 +500,46 @@ function setModalVar() {
 
 
 function spawnVar() {
-    var modal = document.getElementById('modalBG');
-    var blocks = workspaceVar.getAllBlocks();
 
-    blocks[0].moveBy(300, 4);
+    dropdownVar = document.getElementById("dropdownVar").value;
 
-    for (i = 0; i < blocks.length; i++) {
-        blocks[i].movable_ = true;
-        blocks[i].editable_ = true;
-        blocks[i].deletable_ = true;
+    if (dropdownVar != 'nulltype') {
+        var modal = document.getElementById('modalBG');
+
+        workspaceVar.clear();
+        Blockly.Xml.domToBlock(workspaceVar, block);
+
+        var blocks = workspaceVar.getAllBlocks();
+
+        blocks[0].moveBy(300, 4);
+
+
+        for (i = 0; i < blocks.length; i++) {
+            blocks[i].movable_ = true;
+            blocks[i].editable_ = true;
+            blocks[i].deletable_ = true;
+        }
+
+        var finalBlock = Blockly.Xml.workspaceToDom(workspaceVar);
+
+        modal.style.display = 'none';
+
+        Blockly.Xml.domToWorkspace(workspace, finalBlock);
+        console.log("trc", finalBlock);
+
+    } else {
+        window.alert("Pick a variable type");
     }
-
-    modal.style.display = 'none';
-
-    var tmpWorkspace = Blockly.Xml.workspaceToDom(workspaceVar);
-
-    Blockly.Xml.domToWorkspace(workspace, tmpWorkspace);
 
 
 }
+
+function closeModal() {
+
+    var modal = document.getElementById('modalBG');
+    modal.style.display = 'none';
+}
+
 window.onbeforeunload = function() {
     return 'Are you sure?';
 
@@ -628,7 +648,7 @@ function init() {
             if (mypre.className == 'collapsed expanded') {
                 toggleInterpreter();
                 mypre.scrollTop = mypre.scrollHeight;
-            } 
+            }
             setTimeout(function() {
                 setModalVar();
                 onResizeVar();

@@ -48,69 +48,72 @@
 </head>
 
 <body>
-<div id="modalBG" class="modal">
-    <div class="modalContent">
-        <span class="close">&times;</span>
-        <h1>Variable creation</h1><br><br>
-        <form name="modalForm">
-        <select id="dropdownVar" onchange="setModalVar()">
+    <div id="modalBG" class="modal">
+        <div class="modalContent">
+            <span class="close">&times;</span>
+            <h1>Variable creation</h1><br><br>
+            <form name="modalForm">
+                Variable name: <input id="varText" type="text" name="name" value="variableName"
+                    onchange="setModalVar()"><br><br>
+                <select id="dropdownVar" onchange="setModalVar()">
+            <option value="nulltype">Pick a variable type...</option>
             <option value="int">Integer</option>
             <option value="float">Float</option>
             <option value="str">String</option>
             <option value="bool">Boolean</option>
         </select>
 
-        <input id="radioStd" type="radio" name="type" value="std" onclick="setModalVar()" checked>Standard
-        <input id="radioList" type="radio" name="type" value="list" onclick="setModalVar()" disabled>List 
-        <input id="radioTuple" type="radio" name="type" value="tuple" onclick="setModalVar()" disabled>Tuple<br><br>
-        Variable name: <input id="varText" type="text" name="name" value="variableName" onchange="setModalVar()"><br><br>
-        <div id="divBoolean" style="display: none;">
-            <form>
-                <input id="radioTrue" type="radio" name="value" value="true" onclick="setModalVar()" checked>True
-                <input id="radioFalse" type="radio" name="value" value="false" onclick="setModalVar()">False 
-                <input id="radioEmpty" type="radio" name="value" value="empty" onclick="setModalVar()">Empty
-            </form><br><br>
+                <input id="radioStd" type="radio" name="type" value="std" onclick="setModalVar()"
+                    checked>Standard
+                <input id="radioList" type="radio" name="type" value="list" onclick="setModalVar()"
+                    disabled>List
+                <input id="radioTuple" type="radio" name="type" value="tuple" onclick="setModalVar()"
+                    disabled>Tuple<br><br>
+
+                <div class="left">
+                    <button type="button" class="fancyButtons" onclick="spawnVar()">OK</button>
+                    <button type="button" class="fancyButtons" onclick="closeModal()">Cancel</button>
+                </div><br>
+
+            </form><br>
+            <table id="testTable">
+                <tr>
+                    <td id="blocklyVarArea">
+                    </td>
+                </tr>
+            </table>
+
+            <div id="blocklyVarDiv" style="position: absolute;"></div>
         </div>
-        
-        <input class="fancyButtons" type="submit" value="Create" onclick="spawnVar()"><br>
-        </form><br>
-        
-        
-        <table id="testTable">
-            <tr>
-                <td id="blocklyVarArea">
-                </td>
-            </tr>
-        </table>
-        
-        <div id="blocklyVarDiv" style="position: absolute;"></div>
-        <div>test</div>
     </div>
-</div>
     <table>
         <tr>
             <td>
                 <span class="left">
-                    <h1 id="banner">Py<span class="int">B</span><span class="float">l</span><span class="str">o</span><span class="int">c</span><span class="bool">k</span><span class="float">s</span></h1>
-                </span>
+                    <h1 id="banner">Py<span class="int">B</span>
+                <span
+                    class="float">l</span><span class="str">o</span><span class="int">c</span>
+                    <span
+                        class="bool">k</span><span class="float">s</span></h1>
+                        </span>
 
-                <div id="buttonArea" class="right">
-                    <select id="difficulty" onchange="setDifficulty()">
+                        <div id="buttonArea" class="right">
+                            <select id="difficulty" onchange="setDifficulty()">
                         <option value="0">Basic</option>
                         <option value="1">Lists enabled</option>
                         <option value="2">Everything enabled</option>
                     </select>
-                    <button type="button" class="fancyButtons" id="modalBtn">Var</button>
-                    <button type="button" class="fancyButtons" id="run" onclick="runFull()">Run</button>
-                    <button type="button" class="fancyButtons" onclick="linkBlocks()">Link</button>
-                    <button type="button" class="fancyButtons" onclick="saveBlocks()">Save</button>
-                    <button type="button" class="fancyButtons" onclick="initLoad(createPicker)">Load</button>
-                    <button type="button" class="fancyButtons" onclick="copyToClipboard()">Copy</button>
-                    <button type="button" class="fancyButtons" onclick="reset()">Reset</button>
-	            <button type="button" class="fancyButtons" onclick="popupWindow('help.html', 'PythonBlocks Help', 'window', '835', '565')">Help</button>
-                    <button type="button" class="fancyButtons" onclick="popupWindow('about.html', 'About', 'window', '400', 300)">About</button>
-	            <button id="turtleButton" type="button" class="fancyButtons" onclick="toggleTurtle()"></button>
-                </div>
+                            <button type="button" class="fancyButtons" id="modalBtn">Var</button>
+                            <button type="button" class="fancyButtons" id="run" onclick="runFull()">Run</button>
+                            <button type="button" class="fancyButtons" onclick="linkBlocks()">Link</button>
+                            <button type="button" class="fancyButtons" onclick="saveBlocks()">Save</button>
+                            <button type="button" class="fancyButtons" onclick="initLoad(createPicker)">Load</button>
+                            <button type="button" class="fancyButtons" onclick="copyToClipboard()">Copy</button>
+                            <button type="button" class="fancyButtons" onclick="reset()">Reset</button>
+                            <button type="button" class="fancyButtons" onclick="popupWindow('help.html', 'PythonBlocks Help', 'window', '835', '565')">Help</button>
+                            <button type="button" class="fancyButtons" onclick="popupWindow('about.html', 'About', 'window', '400', 300)">About</button>
+                            <button id="turtleButton" type="button" class="fancyButtons" onclick="toggleTurtle()"></button>
+                        </div>
             </td>
         </tr>
 
@@ -159,8 +162,8 @@
                 '<p id="sorry">Cloud storage is not available.  PythonBlocks must be hosted on App Engine.</p>'
             );
         }
-    
-    init();
+
+        init();
     </script>
 </body>
 
