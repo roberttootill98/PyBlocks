@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>PyBlocks</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="/storage.js"></script>
+    <script src="../../blockly_uncompressed.js"></script>
+    <script src="../../python_compressed.js"></script>
+    <script src="pycode.js" type="text/javascript"></script>
+    <script src="../../msg/js/en.js"></script>
+    <script src="../../blocks/pynumeric.js"></script>
+    <script src="../../blocks/pystrings.js"></script>
+    <script src="../../blocks/pyconversions.js"></script>
+    <script src="../../blocks/pycomparisons.js"></script>
+    <script src="../../blocks/pybooleans.js"></script>
+    <script src="../../blocks/pylists.js"></script>
+    <script src="../../blocks/pyio.js"></script>
+    <script src="../../blocks/pycontrol.js"></script>
+    <script src="../../blocks/pyvariables.js"></script>
+    <script src="../../blocks/pycomments.js"></script>
+    <script src="../../blocks/pystart.js"></script>
+    <script src="../../blocks/pymath.js"></script>
+    <script src="../../blocks/pyturtle.js"></script>
+    <script src="../../generators/python/pybooleans.js"></script>
+    <script src="../../generators/python/pycomparisons.js"></script>
+    <script src="../../generators/python/pycontrol.js"></script>
+    <script src="../../generators/python/pyconversions.js"></script>
+    <script src="../../generators/python/pycomments.js"></script>
+    <script src="../../generators/python/pyio.js"></script>
+    <script src="../../generators/python/pylists.js"></script>
+    <script src="../../generators/python/pynumeric.js"></script>
+    <script src="../../generators/python/pystrings.js"></script>
+    <script src="../../generators/python/pystart.js"></script>
+    <script src="../../generators/python/pymath.js"></script>
+    <script src="../../generators/python/pyturtle.js"></script>
+    <script src="../../generators/python/pyvariables.js"></script>
+    <script src="jquery.min.js" type="text/javascript"></script>
+    <script src="skulpt.min.js" type="text/javascript"></script>
+    <script src="skulpt-stdlib.js" type="text/javascript"></script>
+    <script src="skulptpyb.js" type="text/javascript"></script>
+    <script type="text/javascript" src="https://apis.google.com/js/client.js"></script>
+    <script type="text/javascript" src="https://apis.google.com/js/api.js"></script>
+    <script type="text/javascript" src="google-drive-picker.js"></script>
+    <script type="text/javascript" src="persistence.js">
+    </script>
+</head>
+
+<body>
+    <div id="modalBG" class="modal">
+        <div class="modalContent">
+            <span class="close">&times;</span>
+            <h1>Variable creation</h1><br><br>
+            <form name="modalForm">
+                Variable name: <input id="varText" type="text" name="name" value="variableName"
+                    onchange="setModalVar()"><br><br>
+                <select id="dropdownVar" onchange="setModalVar()">
+            <option value="nulltype">Pick a variable type...</option>
+            <option value="int">Integer</option>
+            <option value="float">Float</option>
+            <option value="str">String</option>
+            <option value="bool">Boolean</option>
+        </select>
+
+                <input id="radioStd" type="radio" name="type" value="std" onclick="setModalVar()"
+                    checked>Standard
+                <input id="radioList" type="radio" name="type" value="list" onclick="setModalVar()"
+                    disabled>List
+                <input id="radioTuple" type="radio" name="type" value="tuple" onclick="setModalVar()"
+                    disabled>Tuple<br><br>
+
+                <div class="left">
+                    <button type="button" class="fancyButtons" onclick="spawnVar()">OK</button>
+                    <button type="button" class="fancyButtons" onclick="closeModal()">Cancel</button>
+                </div><br>
+
+            </form><br>
+            <table id="testTable">
+                <tr>
+                    <td id="blocklyVarArea">
+                    </td>
+                </tr>
+            </table>
+
+            <div id="blocklyVarDiv" style="position: absolute;"></div>
+        </div>
+    </div>
+    <table>
+        <tr>
+            <td>
+                <span class="left">
+                    <h1 id="banner">Py<span class="int">B</span>
+                <span
+                    class="float">l</span><span class="str">o</span><span class="int">c</span>
+                    <span
+                        class="bool">k</span><span class="float">s</span></h1>
+                        </span>
+
+                        <div id="buttonArea" class="right">
+                            <select id="difficulty" onchange="setDifficulty()">
+                        <option value="0">Basic</option>
+                        <option value="1">Lists enabled</option>
+                        <option value="2">Everything enabled</option>
+                    </select>
+                            <button type="button" class="fancyButtons" id="modalBtn">Var</button>
+                            <button type="button" class="fancyButtons" id="run" onclick="runFull()">Run</button>
+                            <button type="button" class="fancyButtons" onclick="linkBlocks()">Link</button>
+                            <button type="button" class="fancyButtons" onclick="saveBlocks()">Save</button>
+                            <button type="button" class="fancyButtons" onclick="initLoad(createPicker)">Load</button>
+                            <button type="button" class="fancyButtons" onclick="copyToClipboard()">Copy</button>
+                            <button type="button" class="fancyButtons" onclick="reset()">Reset</button>
+                            <button type="button" class="fancyButtons" onclick="popupWindow('help.html', 'PythonBlocks Help', 'window', '835', '565')">Help</button>
+                            <button type="button" class="fancyButtons" onclick="popupWindow('about.html', 'About', 'window', '400', 300)">About</button>
+                            <button id="turtleButton" type="button" class="fancyButtons" onclick="toggleTurtle()"></button>
+                        </div>
+            </td>
+        </tr>
+
+        <tr>
+            <td id="blocklyArea">
+            </td>
+        </tr>
+    </table>
+    <div id="typeDiv">
+        <table id="typeTable">
+        </table>
+    </div>
+
+    <div id="outputDiv">
+        <textarea id="codeArea" class="collapsed" rows="15" cols="75" readonly="true"></textarea>
+    </div>
+
+    <div id="turtleCanvas"></div>
+
+    <div id="hiddenstuff">
+        <button id="clear" type="button" class="fancyButtons" onclick="clr()">Clear</button>
+        <button id="restart" type="button" class="fancyButtons" onclick="restart()">Restart</button>
+        <button id="interpreter" type="button" class="fancyButtons" onclick="toggleInterpreter()">Show</button>
+        <textarea id="hiddenoutput" cols="20" rows="7" hidden="true"></textarea>
+        <textarea id="hiddenoutput2" cols="20" rows="7" hidden="true"></textarea>
+        <textarea id="pycode" class="codeArea" rows="12" cols="100" readonly="true" hidden="true"></textarea>
+    </div>
+
+
+
+    <!-- Blockly workspace -->
+    <div id="blocklyDiv" style="position: absolute"></div>
+    <!-- Blockly storage code -->
+    <script>
+        if ('BlocklyStorage' in window)
+        {
+            BlocklyStorage.HTTPREQUEST_ERROR =
+                'There was a problem with the request.\n';
+            BlocklyStorage.HASH_ERROR =
+                'Sorry, "%1" doesn\'t correspond with any saved PythonBlocks file.';
+            BlocklyStorage.XML_ERROR = 'Could not load your file.\n';
+        }
+        else
+        {
+            document.write(
+                '<p id="sorry">Cloud storage is not available.  PythonBlocks must be hosted on App Engine.</p>'
+            );
+        }
+
+        init();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,1 @@
+Click on a category and drag blocks onto the workspace. Blocks can be slotted into one another by dragging and dropping, provided the correct data types are used. Colours are used to represent data types. For example, you may only drop a red block into a slot that has red colour in it.
