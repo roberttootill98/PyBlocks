@@ -499,7 +499,7 @@ Blockly.Css.CONTENT = [
     '.blocklyTreeIcon {',
     'height: 18px;',
     'vertical-align: middle;',
-    'width: 46px;',
+    'width: 30px;',
     '}',
 
     '.blocklyTreeIconClosedLtr {',

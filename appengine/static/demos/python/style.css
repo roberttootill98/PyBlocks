@@ -22,8 +22,8 @@
     margin: 15% auto;
     padding: 20px;
     border: 1px solid #888;
-    width: 800px;
-    height: 450px;
+    width: 500px;
+    height: 180px;
 }
 .close {
     color: #aaa;
@@ -96,10 +96,6 @@ table#typeTable {
     height: 100%;
 }
 
-#blocklyVarArea {
-    height: 100px !important;
-    width: 750px !important;
-}
 
 #dropdownVar {
     
@@ -360,8 +356,8 @@ table#typeTable {
 }
 
 #blocklyVarDiv {
-    height: 100px !important;
-    width: 750px !important;
+    height: 60px !important;
+    width: 500px !important;
 }
 
 #startIcon {
