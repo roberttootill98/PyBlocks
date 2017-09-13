@@ -1,5 +1,5 @@
 <xml id="toolbox" style="display: none">
-            <pattern name="numeric" type="floatint" x="5" y="37"></pattern>
+            <pattern name="numeric" type="numeric" x="5" y="38"></pattern>
         <category name="Numeric">
         <category name="Extras">
             <block type="python_round"></block>
@@ -20,7 +20,7 @@
             <block type="python_pow_op"></block>
             <block type="python_unary_minus"></block>
         </category>
-            <pattern name="strings" type="str" x="5" y="62"></pattern>
+            <pattern name="strings" type="string" x="5" y="63"></pattern>
         <category name="Strings">
             <category name="Extras">
             <block type="python_isdigit"></block>
@@ -43,7 +43,7 @@
             <block type="python_string_slice1"></block>
             <block type="python_string_slice2"></block>
         </category>
-        <pattern name="booleans" type="bool" x="5" y="87"></pattern>
+        <pattern name="booleans" type="boolean" x="5" y="88"></pattern>
         <category name="Booleans">
             <block type="python_true"></block>
             <block type="python_false"></block>
@@ -51,17 +51,7 @@
             <block type="python_or"></block>
             <block type="python_not"></block>
         </category>
-        <pattern name="comparisons" type="floatintstr" x="5" y="112"></pattern>
-        <category name="Comparisons">
-            <block type="python_equals"></block>
-            <block type="python_not_equals"></block>
-            <block type="python_less_than"></block>
-            <block type="python_less_than_or_equal"></block>
-            <block type="python_greater_than"></block>
-            <block type="python_greater_than_or_equal"></block>
-            <block type="python_is"></block>
-        </category>
-        <pattern name="lists" type="none" x="5" y="137"></pattern>
+        <pattern name="lists" type="lists" x="5" y="113"></pattern>
         <category name="Lists">
         <category name="Extras - mutate">
             <block type="python_append"></block>
@@ -92,7 +82,7 @@
             <block type="python_list_slice1"></block>
             <block type="python_list_slice2"></block>
         </category>
-        <pattern name="conversions" type="any" x="5" y="162"></pattern>
+        <pattern name="conversions" type="conversions" x="5" y="138"></pattern>
         <category name="Conversions">
             <block type="python_int"></block>
             <block type="python_float"></block>
@@ -101,13 +91,17 @@
             <block type="python_chr"></block>
             <block type="python_ord"></block>
         </category>
-        <pattern name="io" type="none" x="5" y="187"></pattern>
-        <category name="Input/Output">
-            <block type="python_print"></block>
-            <block type="python_input"></block>
-            <block type="python_format"></block>
+        <pattern name="tests" type="tests" x="5" y="163"></pattern>
+        <category name="Tests">
+            <block type="python_equals"></block>
+            <block type="python_not_equals"></block>
+            <block type="python_less_than"></block>
+            <block type="python_less_than_or_equal"></block>
+            <block type="python_greater_than"></block>
+            <block type="python_greater_than_or_equal"></block>
+            <block type="python_is"></block>
         </category>
-        <pattern name="control" type="none" x="5" y="212"></pattern>
+        <pattern name="control" type="statements" x="5" y="188"></pattern>
         <category name="Control">
             <block type="python_if"></block>
             <block type="python_while"></block>
@@ -116,12 +110,18 @@
             <block type="python_range2"></block>
             <block type="python_range3"></block>
         </category>
-        <pattern name="misc" type="none" x="5" y="237"></pattern>
-        <category name="Comments/Spaces">
+        <pattern name="io" type="statements" x="5" y="213"></pattern>
+        <category name="Input/Output">
+            <block type="python_print"></block>
+            <block type="python_input"></block>
+            <block type="python_format"></block>
+        </category>
+        <pattern name="misc" type="none" x="5" y="238"></pattern>
+        <category name="Comments">
             <block type="python_linespace"></block>
             <block type="python_comment"></block>
         </category>
-        <pattern name="variables" type="any" x="5" y="262"></pattern>
+        <pattern name="variables" type="vars" x="5" y="263"></pattern>
         <category name="Variables">
         <category name="Program variables" custom="VARIABLE"></category>
             <category name="New variable" custom="NEW_VARIABLE"></category>
@@ -132,7 +132,7 @@
 
 <xml id="toolboxmath" style="display: none">
 	
-            <pattern name="numeric" type="floatint" x="5" y="37"></pattern>
+            <pattern name="numeric" type="numeric" x="5" y="38"></pattern>
         <category name="Numeric">
         <category name="Extras">
             <block type="python_round"></block>
@@ -165,7 +165,7 @@
             <block type="python_pow_op"></block>
             <block type="python_unary_minus"></block>
         </category>
-            <pattern name="strings" type="str" x="5" y="62"></pattern>
+            <pattern name="strings" type="string" x="5" y="63"></pattern>
         <category name="Strings">
             <category name="Extras">
             <block type="python_isdigit"></block>
@@ -188,7 +188,7 @@
             <block type="python_string_slice1"></block>
             <block type="python_string_slice2"></block>
         </category>
-        <pattern name="booleans" type="bool" x="5" y="87"></pattern>
+        <pattern name="booleans" type="boolean" x="5" y="88"></pattern>
         <category name="Booleans">
             <block type="python_true"></block>
             <block type="python_false"></block>
@@ -196,17 +196,7 @@
             <block type="python_or"></block>
             <block type="python_not"></block>
         </category>
-        <pattern name="comparisons" type="floatintstr" x="5" y="112"></pattern>
-        <category name="Comparisons">
-            <block type="python_equals"></block>
-            <block type="python_not_equals"></block>
-            <block type="python_less_than"></block>
-            <block type="python_less_than_or_equal"></block>
-            <block type="python_greater_than"></block>
-            <block type="python_greater_than_or_equal"></block>
-            <block type="python_is"></block>
-        </category>
-        <pattern name="lists" type="none" x="5" y="137"></pattern>
+        <pattern name="lists" type="lists" x="5" y="113"></pattern>
         <category name="Lists">
         <category name="Extras - mutate">
             <block type="python_append"></block>
@@ -237,7 +227,7 @@
             <block type="python_list_slice1"></block>
             <block type="python_list_slice2"></block>
         </category>
-        <pattern name="conversions" type="any" x="5" y="162"></pattern>
+        <pattern name="conversions" type="conversions" x="5" y="138"></pattern>
         <category name="Conversions">
             <block type="python_int"></block>
             <block type="python_float"></block>
@@ -246,13 +236,17 @@
             <block type="python_chr"></block>
             <block type="python_ord"></block>
         </category>
-        <pattern name="io" type="none" x="5" y="187"></pattern>
-        <category name="Input/Output">
-            <block type="python_print"></block>
-            <block type="python_input"></block>
-            <block type="python_format"></block>
+        <pattern name="tests" type="tests" x="5" y="163"></pattern>
+        <category name="Tests">
+            <block type="python_equals"></block>
+            <block type="python_not_equals"></block>
+            <block type="python_less_than"></block>
+            <block type="python_less_than_or_equal"></block>
+            <block type="python_greater_than"></block>
+            <block type="python_greater_than_or_equal"></block>
+            <block type="python_is"></block>
         </category>
-        <pattern name="control" type="none" x="5" y="212"></pattern>
+        <pattern name="control" type="statements" x="5" y="188"></pattern>
         <category name="Control">
             <block type="python_if"></block>
             <block type="python_while"></block>
@@ -261,12 +255,18 @@
             <block type="python_range2"></block>
             <block type="python_range3"></block>
         </category>
-        <pattern name="misc" type="none" x="5" y="237"></pattern>
-        <category name="Comments/Spaces">
+        <pattern name="io" type="statements" x="5" y="213"></pattern>
+        <category name="Input/Output">
+            <block type="python_print"></block>
+            <block type="python_input"></block>
+            <block type="python_format"></block>
+        </category>
+        <pattern name="misc" type="none" x="5" y="238"></pattern>
+        <category name="Comments">
             <block type="python_linespace"></block>
             <block type="python_comment"></block>
         </category>
-        <pattern name="variables" type="any" x="5" y="262"></pattern>
+        <pattern name="variables" type="vars" x="5" y="263"></pattern>
         <category name="Variables">
         <category name="Program variables" custom="VARIABLE"></category>
             <category name="New variable" custom="NEW_VARIABLE"></category>
@@ -276,7 +276,7 @@
     </xml>
 
 <xml id="toolboxturtle" style="display: none">
-            <pattern name="numeric" type="floatint" x="5" y="37"></pattern>
+            <pattern name="numeric" type="numeric" x="5" y="38"></pattern>
         <category name="Numeric">
         <category name="Extras">
             <block type="python_round"></block>
@@ -297,7 +297,7 @@
             <block type="python_pow_op"></block>
             <block type="python_unary_minus"></block>
         </category>
-            <pattern name="strings" type="str" x="5" y="62"></pattern>
+            <pattern name="strings" type="string" x="5" y="63"></pattern>
         <category name="Strings">
             <category name="Extras">
             <block type="python_isdigit"></block>
@@ -320,7 +320,7 @@
             <block type="python_string_slice1"></block>
             <block type="python_string_slice2"></block>
         </category>
-        <pattern name="booleans" type="bool" x="5" y="87"></pattern>
+        <pattern name="booleans" type="boolean" x="5" y="88"></pattern>
         <category name="Booleans">
             <block type="python_true"></block>
             <block type="python_false"></block>
@@ -328,17 +328,7 @@
             <block type="python_or"></block>
             <block type="python_not"></block>
         </category>
-        <pattern name="comparisons" type="floatintstr" x="5" y="112"></pattern>
-        <category name="Comparisons">
-            <block type="python_equals"></block>
-            <block type="python_not_equals"></block>
-            <block type="python_less_than"></block>
-            <block type="python_less_than_or_equal"></block>
-            <block type="python_greater_than"></block>
-            <block type="python_greater_than_or_equal"></block>
-            <block type="python_is"></block>
-        </category>
-        <pattern name="lists" type="none" x="5" y="137"></pattern>
+        <pattern name="lists" type="lists" x="5" y="113"></pattern>
         <category name="Lists">
         <category name="Extras - mutate">
             <block type="python_append"></block>
@@ -369,7 +359,7 @@
             <block type="python_list_slice1"></block>
             <block type="python_list_slice2"></block>
         </category>
-        <pattern name="conversions" type="any" x="5" y="162"></pattern>
+        <pattern name="conversions" type="conversions" x="5" y="138"></pattern>
         <category name="Conversions">
             <block type="python_int"></block>
             <block type="python_float"></block>
@@ -378,13 +368,17 @@
             <block type="python_chr"></block>
             <block type="python_ord"></block>
         </category>
-        <pattern name="io" type="none" x="5" y="187"></pattern>
-        <category name="Input/Output">
-            <block type="python_print"></block>
-            <block type="python_input"></block>
-            <block type="python_format"></block>
+        <pattern name="tests" type="tests" x="5" y="163"></pattern>
+        <category name="Tests">
+            <block type="python_equals"></block>
+            <block type="python_not_equals"></block>
+            <block type="python_less_than"></block>
+            <block type="python_less_than_or_equal"></block>
+            <block type="python_greater_than"></block>
+            <block type="python_greater_than_or_equal"></block>
+            <block type="python_is"></block>
         </category>
-        <pattern name="control" type="none" x="5" y="212"></pattern>
+        <pattern name="control" type="statements" x="5" y="188"></pattern>
         <category name="Control">
             <block type="python_if"></block>
             <block type="python_while"></block>
@@ -393,19 +387,24 @@
             <block type="python_range2"></block>
             <block type="python_range3"></block>
         </category>
-        <pattern name="misc" type="none" x="5" y="237"></pattern>
-        <category name="Comments/Spaces">
+        <pattern name="io" type="statements" x="5" y="213"></pattern>
+        <category name="Input/Output">
+            <block type="python_print"></block>
+            <block type="python_input"></block>
+            <block type="python_format"></block>
+        </category>
+        <pattern name="misc" type="none" x="5" y="238"></pattern>
+        <category name="Comments">
             <block type="python_linespace"></block>
             <block type="python_comment"></block>
         </category>
-        <pattern name="variables" type="any" x="5" y="262"></pattern>
+        <pattern name="variables" type="vars" x="5" y="263"></pattern>
         <category name="Variables">
         <category name="Program variables" custom="VARIABLE"></category>
             <category name="New variable" custom="NEW_VARIABLE"></category>
             <category name="New list" custom="NEW_LIST_VAR"></category>
-            <category name="New turtle variable" custom="NEW_TURTLE_VAR"></category>
         </category>
-        <pattern name="turtle" type="none" x="5" y="287"></pattern>
+        <pattern name="turtle" type="none" x="5" y="288"></pattern>
         <category name="Turtle">
 			 <category name="Extras">
 			<block type="python_turtle_color"></block>
@@ -433,7 +432,7 @@
     </xml>
     
 <xml id="toolboxmathturtle" style="display: none">
-            <pattern name="numeric" type="floatint" x="5" y="37"></pattern>
+            <pattern name="numeric" type="numeric" x="5" y="38"></pattern>
         <category name="Numeric">
         <category name="Extras">
             <block type="python_round"></block>
@@ -466,7 +465,7 @@
             <block type="python_pow_op"></block>
             <block type="python_unary_minus"></block>
         </category>
-            <pattern name="strings" type="str" x="5" y="62"></pattern>
+            <pattern name="strings" type="string" x="5" y="63"></pattern>
         <category name="Strings">
             <category name="Extras">
             <block type="python_isdigit"></block>
@@ -489,7 +488,7 @@
             <block type="python_string_slice1"></block>
             <block type="python_string_slice2"></block>
         </category>
-        <pattern name="booleans" type="bool" x="5" y="87"></pattern>
+        <pattern name="booleans" type="boolean" x="5" y="88"></pattern>
         <category name="Booleans">
             <block type="python_true"></block>
             <block type="python_false"></block>
@@ -497,17 +496,7 @@
             <block type="python_or"></block>
             <block type="python_not"></block>
         </category>
-        <pattern name="comparisons" type="floatintstr" x="5" y="112"></pattern>
-        <category name="Comparisons">
-            <block type="python_equals"></block>
-            <block type="python_not_equals"></block>
-            <block type="python_less_than"></block>
-            <block type="python_less_than_or_equal"></block>
-            <block type="python_greater_than"></block>
-            <block type="python_greater_than_or_equal"></block>
-            <block type="python_is"></block>
-        </category>
-        <pattern name="lists" type="none" x="5" y="137"></pattern>
+        <pattern name="lists" type="lists" x="5" y="113"></pattern>
         <category name="Lists">
         <category name="Extras - mutate">
             <block type="python_append"></block>
@@ -538,7 +527,7 @@
             <block type="python_list_slice1"></block>
             <block type="python_list_slice2"></block>
         </category>
-        <pattern name="conversions" type="any" x="5" y="162"></pattern>
+        <pattern name="conversions" type="conversions" x="5" y="138"></pattern>
         <category name="Conversions">
             <block type="python_int"></block>
             <block type="python_float"></block>
@@ -547,13 +536,17 @@
             <block type="python_chr"></block>
             <block type="python_ord"></block>
         </category>
-        <pattern name="io" type="none" x="5" y="187"></pattern>
-        <category name="Input/Output">
-            <block type="python_print"></block>
-            <block type="python_input"></block>
-            <block type="python_format"></block>
+        <pattern name="tests" type="tests" x="5" y="163"></pattern>
+        <category name="Tests">
+            <block type="python_equals"></block>
+            <block type="python_not_equals"></block>
+            <block type="python_less_than"></block>
+            <block type="python_less_than_or_equal"></block>
+            <block type="python_greater_than"></block>
+            <block type="python_greater_than_or_equal"></block>
+            <block type="python_is"></block>
         </category>
-        <pattern name="control" type="none" x="5" y="212"></pattern>
+        <pattern name="control" type="statements" x="5" y="188"></pattern>
         <category name="Control">
             <block type="python_if"></block>
             <block type="python_while"></block>
@@ -562,19 +555,24 @@
             <block type="python_range2"></block>
             <block type="python_range3"></block>
         </category>
-        <pattern name="misc" type="none" x="5" y="237"></pattern>
-        <category name="Comments/Spaces">
+        <pattern name="io" type="statements" x="5" y="213"></pattern>
+        <category name="Input/Output">
+            <block type="python_print"></block>
+            <block type="python_input"></block>
+            <block type="python_format"></block>
+        </category>
+        <pattern name="misc" type="none" x="5" y="238"></pattern>
+        <category name="Comments">
             <block type="python_linespace"></block>
             <block type="python_comment"></block>
         </category>
-        <pattern name="variables" type="any" x="5" y="262"></pattern>
+        <pattern name="variables" type="vars" x="5" y="263"></pattern>
         <category name="Variables">
         <category name="Program variables" custom="VARIABLE"></category>
             <category name="New variable" custom="NEW_VARIABLE"></category>
             <category name="New list" custom="NEW_LIST_VAR"></category>
-            <category name="New turtle variable" custom="NEW_TURTLE_VAR"></category>
         </category>
-        <pattern name="turtle" type="none" x="5" y="287"></pattern>
+        <pattern name="turtle" type="none" x="5" y="288"></pattern>
         <category name="Turtle">
 			 <category name="Extras">
 			<block type="python_turtle_color"></block>

@@ -560,6 +560,11 @@ function init() {
     xmlDoc = xmlHttp.responseText;
 
     blocklyDiv.insertAdjacentHTML('afterend', xmlDoc);
+    
+    workspaceVar = Blockly.inject(blocklyVarDiv, {
+        media: '../../media/',
+        trashcan: false
+    });
 
     workspace = Blockly.inject(blocklyDiv, {
         media: '../../media/',
@@ -567,10 +572,6 @@ function init() {
         toolbox: document.getElementById('toolbox')
     });
 
-    workspaceVar = Blockly.inject(blocklyVarDiv, {
-        media: '../../media/',
-        trashcan: false
-    });
 
     var onResizeVar = function(e) {
         var elementVar = blocklyVarArea;
@@ -641,7 +642,10 @@ function init() {
         var modalSpan = document.getElementsByClassName('close')[0];
 
         var interpreter = document.getElementById("codeArea");
-        document.getElementById('startIcon').innerHTML = document.getElementById('startIcon').innerHTML + '<span id="startIconSpan">test</span>';
+        
+        setTimeout(function() {
+            document.getElementById('startIcon').innerHTML = document.getElementById('startIcon').innerHTML + '<span id="startIconSpan">test</span>';
+        }, 150);
 
         modalBtn.onclick = function() {
             modal.style.display = 'block';

@@ -42,17 +42,17 @@ function initSave() {
 }
 
 function saveBlocks() {
-    BlocklyStorage.link();
+    BlocklyStorage.link(workspace);
     setTimeout(function() {
         initSave();
-    }, 350);
+    }, 500);
 }
 
 function linkBlocks() {
-    BlocklyStorage.link();
-    setTimeout(function() {
-        window.prompt("Copy the link below to share this PyBlocks program with your peers", window.location.href);
-    }, 350);
+    var initVal = window.location.href;
+    BlocklyStorage.link(workspace);
+        
+    setTimeout(function() { window.prompt("Copy the link below to share this PyBlocks program with your peers", window.location.href) }, 750);
 }
 
 function reset() {

@@ -214,8 +214,7 @@ Blockly.Toolbox.prototype.populate_ = function(newTree) {
     var hasColours = false;
 
     var banner = document.getElementById('banner'); 
-
-    //banner.innerHTML = 'Python<span class="int">B</span><span class="float">l</span><span class="str">o</span><span class="int">c</span><span class="bool">k</span><span class="float">s</span>';
+    banner.innerHTML = 'PyBlocks'; 
 
     function syncTrees(treeIn, treeOut) {
         
@@ -263,57 +262,63 @@ Blockly.Toolbox.prototype.populate_ = function(newTree) {
                     break;
                 case 'PATTERN':
                     switch (childIn.getAttribute('type')) {
-                        case 'floatint':
-                            var fillText = 'url(#' + workspace.options.floatintTypePatternSmallId + ')';
+                        case 'lists':
+                            var fillText = '../python/svgs/lists.svg';
                             break;
-                        case 'str':
-                            var fillText = '#FF3010';
+                        case 'tests':
+                            var fillText = '../python/svgs/tests.svg';
                             break;
-                        case 'bool':
-                            var fillText = '#FF29FF';
+                        case 'statements':
+                            var fillText = '../python/svgs/statements.svg';
                             break;
-                        case 'floatintstr':
-                            var fillText = 'url(#' + workspace.options.floatintstrTypePatternSmallId + ')';
+                        case 'vars':
+                            var fillText = '../python/svgs/vars.svg';
                             break;
-                        case 'none':
-                            var fillText = '#706c67';
+                        case 'string':
+                            var fillText = '../python/svgs/string.svg';
                             break;
-                        case 'any':
-                            var fillText = 'url(#' + workspace.options.anyTypePatternSmallId + ')';
+                        case 'conversions':
+                            var fillText = '../python/svgs/conversions.svg';
+                            break;
+                        case 'numeric':
+                            var fillText = '../python/svgs/numeric.svg';
+                            break;
+                        case 'boolean':
+                            var fillText = '../python/svgs/boolean.svg';
                             break;
                     }
                    
                     
                     switch (childIn.getAttribute('name')) {
                         case 'strings':
-                            banner.innerHTML = banner.innerHTML + '<div id="strings" style="position: absolute; left: ' + childIn.getAttribute('x') +  'px; top: ' + childIn.getAttribute('y') + 'px; z-index: 1002;"> <svg width="36" height="18"><rect x="0" y="0" width="36" height="18" fill="' + fillText + '"></rect></svg></div>'; 
+                            banner.innerHTML = banner.innerHTML + '<div id="strings" style="position: absolute; left: ' + childIn.getAttribute('x') +  'px; top: ' + childIn.getAttribute('y') + 'px; z-index: 1002;"> <object width="20" height="20" data="' + fillText + '" type="image/svg+xml"></object></div>'; 
                             break;
                         case 'booleans':
-                            banner.innerHTML = banner.innerHTML + '<div id="booleans" style="position: absolute; left: ' + childIn.getAttribute('x') +  'px; top: ' + childIn.getAttribute('y') + 'px; z-index: 1002;"> <svg width="36" height="18"><rect x="0" y="0" width="36" height="18" fill="' + fillText + '"></rect></svg></div>'; 
-                            break;
-                        case 'comparisons':
-                            banner.innerHTML = banner.innerHTML + '<div id="comparisons" style="position: absolute; left: ' + childIn.getAttribute('x') +  'px; top: ' + childIn.getAttribute('y') + 'px; z-index: 1002;"> <svg width="36" height="18"><rect x="0" y="0" width="36" height="18" fill="' + fillText + '"></rect></svg></div>'; 
+                            banner.innerHTML = banner.innerHTML + '<div id="booleans" style="position: absolute; left: ' + childIn.getAttribute('x') +  'px; top: ' + childIn.getAttribute('y') + 'px; z-index: 1002;"> <object width="20" height="20" data="' + fillText + '" type="image/svg+xml"></object></div>'; 
                             break;
                         case 'lists':
-                            banner.innerHTML = banner.innerHTML + '<div id="lists" style="position: absolute; left: ' + childIn.getAttribute('x') +  'px; top: ' + childIn.getAttribute('y') + 'px; z-index: 1002;"> <svg width="36" height="18"><rect x="0" y="0" width="36" height="18" fill="' + fillText + '"></rect></svg></div>'; 
+                            banner.innerHTML = banner.innerHTML + '<div id="lists" style="position: absolute; left: ' + childIn.getAttribute('x') +  'px; top: ' + childIn.getAttribute('y') + 'px; z-index: 1002;"> <object width="20" height="20" data="' + fillText + '" type="image/svg+xml"></object></div>'; 
                             break;
                         case 'conversions':
-                            banner.innerHTML = banner.innerHTML + '<div id="conversions" style="position: absolute; left: ' + childIn.getAttribute('x') +  'px; top: ' + childIn.getAttribute('y') + 'px; z-index: 1002;"> <svg width="36" height="18"><rect x="0" y="0" width="36" height="18" fill="' + fillText + '"></rect></svg></div>'; 
+                            banner.innerHTML = banner.innerHTML + '<div id="conversions" style="position: absolute; left: ' + childIn.getAttribute('x') +  'px; top: ' + childIn.getAttribute('y') + 'px; z-index: 1002;"> <object width="20" height="20" data="' + fillText + '" type="image/svg+xml"></object></div>'; 
                             break;
-                        case 'io':
-                            banner.innerHTML = banner.innerHTML + '<div id="io" style="position: absolute; left: ' + childIn.getAttribute('x') +  'px; top: ' + childIn.getAttribute('y') + 'px; z-index: 1002;"> <svg width="36" height="18"><rect x="0" y="0" width="36" height="18" fill="' + fillText + '"></rect></svg></div>'; 
+                        case 'tests':
+                            banner.innerHTML = banner.innerHTML + '<div id="tests" style="position: absolute; left: ' + childIn.getAttribute('x') +  'px; top: ' + childIn.getAttribute('y') + 'px; z-index: 1002;"> <object width="20" height="20" data="' + fillText + '" type="image/svg+xml"></object></div>'; 
                             break;
                         case 'control':
-                            banner.innerHTML = banner.innerHTML + '<div id="control" style="position: absolute; left: ' + childIn.getAttribute('x') +  'px; top: ' + childIn.getAttribute('y') + 'px; z-index: 1002;"> <svg width="36" height="18"><rect x="0" y="0" width="36" height="18" fill="' + fillText + '"></rect></svg></div>'; 
+                            banner.innerHTML = banner.innerHTML + '<div id="control" style="position: absolute; left: ' + childIn.getAttribute('x') +  'px; top: ' + childIn.getAttribute('y') + 'px; z-index: 1002;"> <object width="20" height="20" data="' + fillText + '" type="image/svg+xml"></object></div>'; 
+                            break;
+                        case 'io':
+                            banner.innerHTML = banner.innerHTML + '<div id="io" style="position: absolute; left: ' + childIn.getAttribute('x') +  'px; top: ' + childIn.getAttribute('y') + 'px; z-index: 1002;"> <object width="20" height="20" data="' + fillText + '" type="image/svg+xml"></object></div>'; 
                             break;
                         case 'misc':
-                            banner.innerHTML = banner.innerHTML + '<div id="misc" style="position: absolute; left: ' + childIn.getAttribute('x') +  'px; top: ' + childIn.getAttribute('y') + 'px; z-index: 1002;"> <svg width="36" height="18"><rect x="0" y="0" width="36" height="18" fill="' + fillText + '"></rect></svg></div>'; 
+                            banner.innerHTML = banner.innerHTML + '<div id="misc" style="position: absolute; left: ' + childIn.getAttribute('x') +  'px; top: ' + childIn.getAttribute('y') + 'px; z-index: 1002;"> <object width="20" height="20" data="' + fillText + '" type="image/svg+xml"></object></div>'; 
                             break;
                         case 'variables':
-                            banner.innerHTML = banner.innerHTML + '<div id="variables" style="position: absolute; left: ' + childIn.getAttribute('x') +  'px; top: ' + childIn.getAttribute('y') + 'px; z-index: 1002;"> <svg width="36" height="18"><rect x="0" y="0" width="36" height="18" fill="' + fillText + '"></rect></svg></div>'; 
+                            banner.innerHTML = banner.innerHTML + '<div id="variables" style="position: absolute; left: ' + childIn.getAttribute('x') +  'px; top: ' + childIn.getAttribute('y') + 'px; z-index: 1002;"> <object width="20" height="20" data="' + fillText + '" type="image/svg+xml"></object></div>'; 
                             break;
-                        default:
-                            banner.innerHTML = banner.innerHTML + '<div style="position: absolute; left: ' + childIn.getAttribute('x') +  'px; top: ' + childIn.getAttribute('y') + 'px; z-index: 1002;"> <svg width="36" height="18"><rect x="0" y="0" width="36" height="18" fill="' + fillText + '"></rect></svg></div>'; 
+                        case 'numeric':
+                            banner.innerHTML = banner.innerHTML + '<div id="numeric" style="position: absolute; left: ' + childIn.getAttribute('x') +  'px; top: ' + childIn.getAttribute('y') + 'px; z-index: 1002;"> <object width="20" height="20" data="' + fillText + '" type="image/svg+xml"></object></div>'; 
                     } 
                     break;
             }
@@ -524,75 +529,82 @@ Blockly.Toolbox.TreeNode.prototype.onMouseDown = function(e) {
     // Expand icon.
     if (this.expanded_ == true) {
 
-        switch (this.id_) {
-            case ':1':
+        if (typeof this.blocks[0] !== 'undefined') {
+
+        switch (this.blocks[0].outerHTML) {
+            case '<block type="python_int_const"></block>':
                 document.getElementById('strings').style.top = parseInt(document.getElementById('strings').style.top.slice(0, -2)) - 25 + 'px';
                 document.getElementById('booleans').style.top = parseInt(document.getElementById('booleans').style.top.slice(0, -2)) - 25 + 'px';
-                document.getElementById('comparisons').style.top = parseInt(document.getElementById('comparisons').style.top.slice(0, -2)) - 25 + 'px';
                 document.getElementById('lists').style.top = parseInt(document.getElementById('lists').style.top.slice(0, -2)) - 25 + 'px';
                 document.getElementById('conversions').style.top = parseInt(document.getElementById('conversions').style.top.slice(0, -2)) - 25 + 'px';
-                document.getElementById('io').style.top = parseInt(document.getElementById('io').style.top.slice(0, -2)) - 25 + 'px';
+                document.getElementById('tests').style.top = parseInt(document.getElementById('tests').style.top.slice(0, -2)) - 25 + 'px';
                 document.getElementById('control').style.top = parseInt(document.getElementById('control').style.top.slice(0, -2)) - 25 + 'px';
+                document.getElementById('io').style.top = parseInt(document.getElementById('io').style.top.slice(0, -2)) - 25 + 'px';
                 document.getElementById('misc').style.top = parseInt(document.getElementById('misc').style.top.slice(0, -2)) - 25 + 'px';
                 document.getElementById('variables').style.top = parseInt(document.getElementById('variables').style.top.slice(0, -2)) - 25 + 'px';
                 break;
-            case ':3':
+            case '<block type="python_string_const"></block>':
                 document.getElementById('booleans').style.top = parseInt(document.getElementById('booleans').style.top.slice(0, -2)) - 25 + 'px';
-                document.getElementById('comparisons').style.top = parseInt(document.getElementById('comparisons').style.top.slice(0, -2)) - 25 + 'px';
                 document.getElementById('lists').style.top = parseInt(document.getElementById('lists').style.top.slice(0, -2)) - 25 + 'px';
                 document.getElementById('conversions').style.top = parseInt(document.getElementById('conversions').style.top.slice(0, -2)) - 25 + 'px';
-                document.getElementById('io').style.top = parseInt(document.getElementById('io').style.top.slice(0, -2)) - 25 + 'px';
+                document.getElementById('tests').style.top = parseInt(document.getElementById('tests').style.top.slice(0, -2)) - 25 + 'px';
                 document.getElementById('control').style.top = parseInt(document.getElementById('control').style.top.slice(0, -2)) - 25 + 'px';
+                document.getElementById('io').style.top = parseInt(document.getElementById('io').style.top.slice(0, -2)) - 25 + 'px';
                 document.getElementById('misc').style.top = parseInt(document.getElementById('misc').style.top.slice(0, -2)) - 25 + 'px';
                 document.getElementById('variables').style.top = parseInt(document.getElementById('variables').style.top.slice(0, -2)) - 25 + 'px';
                 break; 
-            case ':7':
+            case '<block type="python_list_empty"></block>':
                 document.getElementById('conversions').style.top = parseInt(document.getElementById('conversions').style.top.slice(0, -2)) - 50 + 'px';
-                document.getElementById('io').style.top = parseInt(document.getElementById('io').style.top.slice(0, -2)) - 50 + 'px';
+                document.getElementById('tests').style.top = parseInt(document.getElementById('tests').style.top.slice(0, -2)) - 50 + 'px';
                 document.getElementById('control').style.top = parseInt(document.getElementById('control').style.top.slice(0, -2)) - 50 + 'px';
+                document.getElementById('io').style.top = parseInt(document.getElementById('io').style.top.slice(0, -2)) - 50 + 'px';
                 document.getElementById('misc').style.top = parseInt(document.getElementById('misc').style.top.slice(0, -2)) - 50 + 'px';
                 document.getElementById('variables').style.top = parseInt(document.getElementById('variables').style.top.slice(0, -2)) - 50 + 'px';
-                break; 
+                break;
+        }
+
         }
 
     } else {
+        if (typeof this.blocks[0] !== 'undefined') {
 
-        switch (this.id_) {
-            case ':1':
+        switch (this.blocks[0].outerHTML) {
+            case '<block type="python_int_const"></block>':
                 document.getElementById('strings').style.top = parseInt(document.getElementById('strings').style.top.slice(0, -2)) + 25 + 'px';
                 document.getElementById('booleans').style.top = parseInt(document.getElementById('booleans').style.top.slice(0, -2)) + 25 + 'px';
-                document.getElementById('comparisons').style.top = parseInt(document.getElementById('comparisons').style.top.slice(0, -2)) + 25 + 'px';
                 document.getElementById('lists').style.top = parseInt(document.getElementById('lists').style.top.slice(0, -2)) + 25 + 'px';
                 document.getElementById('conversions').style.top = parseInt(document.getElementById('conversions').style.top.slice(0, -2)) + 25 + 'px';
-                document.getElementById('io').style.top = parseInt(document.getElementById('io').style.top.slice(0, -2)) + 25 + 'px';
+                document.getElementById('tests').style.top = parseInt(document.getElementById('tests').style.top.slice(0, -2)) + 25 + 'px';
                 document.getElementById('control').style.top = parseInt(document.getElementById('control').style.top.slice(0, -2)) + 25 + 'px';
+                document.getElementById('io').style.top = parseInt(document.getElementById('io').style.top.slice(0, -2)) + 25 + 'px';
                 document.getElementById('misc').style.top = parseInt(document.getElementById('misc').style.top.slice(0, -2)) + 25 + 'px';
                 document.getElementById('variables').style.top = parseInt(document.getElementById('variables').style.top.slice(0, -2)) + 25 + 'px';
                 break;
-            case ':3':
+            case '<block type="python_string_const"></block>':
                 document.getElementById('booleans').style.top = parseInt(document.getElementById('booleans').style.top.slice(0, -2)) + 25 + 'px';
-                document.getElementById('comparisons').style.top = parseInt(document.getElementById('comparisons').style.top.slice(0, -2)) + 25 + 'px';
                 document.getElementById('lists').style.top = parseInt(document.getElementById('lists').style.top.slice(0, -2)) + 25 + 'px';
                 document.getElementById('conversions').style.top = parseInt(document.getElementById('conversions').style.top.slice(0, -2)) + 25 + 'px';
-                document.getElementById('io').style.top = parseInt(document.getElementById('io').style.top.slice(0, -2)) + 25 + 'px';
+                document.getElementById('tests').style.top = parseInt(document.getElementById('tests').style.top.slice(0, -2)) + 25 + 'px';
                 document.getElementById('control').style.top = parseInt(document.getElementById('control').style.top.slice(0, -2)) + 25 + 'px';
+                document.getElementById('io').style.top = parseInt(document.getElementById('io').style.top.slice(0, -2)) + 25 + 'px';
                 document.getElementById('misc').style.top = parseInt(document.getElementById('misc').style.top.slice(0, -2)) + 25 + 'px';
                 document.getElementById('variables').style.top = parseInt(document.getElementById('variables').style.top.slice(0, -2)) + 25 + 'px';
                 break;
-            case ':7':
+            case '<block type="python_list_empty"></block>':
                 document.getElementById('conversions').style.top = parseInt(document.getElementById('conversions').style.top.slice(0, -2)) + 50 + 'px';
-                document.getElementById('io').style.top = parseInt(document.getElementById('io').style.top.slice(0, -2)) + 50 + 'px';
+                document.getElementById('tests').style.top = parseInt(document.getElementById('tests').style.top.slice(0, -2)) + 50 + 'px';
                 document.getElementById('control').style.top = parseInt(document.getElementById('control').style.top.slice(0, -2)) + 50 + 'px';
+                document.getElementById('io').style.top = parseInt(document.getElementById('io').style.top.slice(0, -2)) + 50 + 'px';
                 document.getElementById('misc').style.top = parseInt(document.getElementById('misc').style.top.slice(0, -2)) + 50 + 'px';
                 document.getElementById('variables').style.top = parseInt(document.getElementById('variables').style.top.slice(0, -2)) + 50 + 'px';
                 break;
         }
     }
+    }
 
     if (this.hasChildren() && this.isUserCollapsible_) {
         this.toggle();
         this.select();
-        console.log("sack", this);
     } else if (this.isSelected()) {
         this.getTree().setSelectedItem(null);
     } else {

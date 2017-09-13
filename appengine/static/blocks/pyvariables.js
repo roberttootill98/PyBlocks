@@ -92,9 +92,13 @@ Blockly.Blocks['variables_get'] = {
     },
     onchange: function(ev) {
 
-        this.setTooltip(this.getFieldValue("VAR"));
-
-    }
+        if (workspace.vars.indexOf(this.getFieldValue("VAR")) > -1) { 
+            runTooltip('print(' + this.getFieldValue("VAR") + ')');
+            this.setTooltip(document.getElementById("hiddenoutput").textContent);
+        } else {
+            this.setTooltip(this.getFieldValue('VAR') + ' (undeclared)');
+        } 
+}
 
 };
 
