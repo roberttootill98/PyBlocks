@@ -132,7 +132,8 @@ Blockly.Css.setCursor = function(cursor) {
  */
 Blockly.Css.CONTENT = [
     '.blocklySvg {',
-    'background-color: #001f3f;',
+    'background-color: #282c34;', // CCCCCCCCCCCC
+  //  'background-color: #ffffff;',
     'outline: none;',
     'overflow: hidden;', /* IE overflows by default. */
     '-webkit-border-radius: 6;',
@@ -208,7 +209,7 @@ Blockly.Css.CONTENT = [
 
 
     '.blocklyHolePath {',
-    'fill: #dddddd;',
+    'fill: #000000;',
     'stroke: #eeeeee;',
     'stroke-width: 1;',
     //    'display: none;',
@@ -366,7 +367,7 @@ Blockly.Css.CONTENT = [
     '}',
 
     '.blocklyFlyoutBackground {',
-    'fill: #181818;',
+    'fill: #3a3c42;',         //CCCCCCCCCCCC
     'fill-opacity: .8;',
     '}',
 
@@ -449,7 +450,9 @@ Blockly.Css.CONTENT = [
 
     /* Category tree in Toolbox. */
     '.blocklyToolboxDiv {',
-    'background-color: #bac0dd;',
+    //'background-color: #bac0dd;',
+    //'background-color: #001F3F;',
+    'background-color: #1B1D23;',   // CCCCCCCCCCCCCCCC
     'overflow-x: visible;',
     'overflow-y: auto;',
     'position: absolute;',
@@ -487,7 +490,7 @@ Blockly.Css.CONTENT = [
     '}',
 
     '.blocklyTreeRow:not(.blocklyTreeSelected):hover {',
-    'background-color: #BBB;',
+    'background-color: #303030;', // CCCCCCCCC
     '}',
 
     '.blocklyTreeSeparator {',
@@ -533,6 +536,7 @@ Blockly.Css.CONTENT = [
 
     '.blocklyTreeLabel {',
     'cursor: default;',
+    'color: #ddd;',  // CCCCCCCC
     'font-family: sans-serif;',
     'font-size: 16px;',
     'padding: 0 3px;',
@@ -547,11 +551,12 @@ Blockly.Css.CONTENT = [
     '}',
 
     '.blocklyTreeSelected {',
-    'background-color: rgba(24, 24, 24, 0.8) !important;',
+  //  'background-color: rgba(24, 24, 24, 0.8) !important;', // CCCCC
+     'background-color: #36393E  !important;',
     '}',
 
     '.blocklyTreeSelected .blocklyTreeLabel {',
-    'color: #fff;',
+    'color: #fff;',  // CCCC
     '}',
 
     '.typePattern{',
