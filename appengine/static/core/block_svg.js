@@ -29,7 +29,7 @@
 
 goog.provide('Blockly.BlockSvg');
 
-goog.require('Blockly.Python');
+goog.require('Blockly.PythonLang');
 goog.require('Blockly.Block');
 goog.require('Blockly.ContextMenu');
 goog.require('goog.Timer');
@@ -1541,12 +1541,12 @@ Blockly.BlockSvg.prototype.updateColour = function() {
         if (this.outputsAList()) {
             this.svgBlockPath_.setAttribute('fill', "white");
             var listTypes = this.getOutputTypesByKind().list;
-            listTypes = Blockly.Python.mergeSubtypes(listTypes);
+            listTypes = Blockly.PythonLang.mergeSubtypes(listTypes);
             console.log("MERGED for ", this.type, " is", listTypes);
             if (listTypes[0] == "any" || listTypes[0] == "matching") {
                 fillText = 'url(#' + this.workspace.options.anyTypePatternLargeId + ')';
             } else if (listTypes.length == 1) {
-                fillText = Blockly.Python.COLOUR[listTypes[0]];
+                fillText = Blockly.PythonLang.COLOUR[listTypes[0]];
             } else { // should be list of int/float
                 listTypes.sort();
                 var typeString = listTypes.join('');
@@ -1558,13 +1558,13 @@ Blockly.BlockSvg.prototype.updateColour = function() {
             }
         } else {
             var outputTypes = this.getOutputTypesByKind().basic;
-            outputTypes = Blockly.Python.mergeSubtypes(outputTypes);
+            outputTypes = Blockly.PythonLang.mergeSubtypes(outputTypes);
 
             console.log("MERGED for ", this.type, " is", outputTypes);
             if (outputTypes[0] == "any" || outputTypes[0] == "matching") {
                 fillText = 'url(#' + this.workspace.options.anyTypePatternLargeId + ')';
             } else if (outputTypes.length == 1) { // should be list of int/float
-                fillText = Blockly.Python.COLOUR[outputTypes[0]];
+                fillText = Blockly.PythonLang.COLOUR[outputTypes[0]];
             } else {
                 outputTypes.sort();
                 var typeString = outputTypes.join('');
@@ -1576,8 +1576,8 @@ Blockly.BlockSvg.prototype.updateColour = function() {
         }
     } else {
         this.svgBlockPath_.setAttribute('fill',
-            Blockly.Python.COLOUR['notype']);
-        //goog.color.rgbArrayToHex(Blockly.Python.COLOUR['notype']));
+            Blockly.PythonLang.COLOUR['notype']);
+        //goog.color.rgbArrayToHex(Blockly.PythonLang.COLOUR['notype']));
     }
 
     //for (var i = 0, indicatorPair; indicatorPair = this.indicators[i]; i++) {
@@ -1586,7 +1586,7 @@ Blockly.BlockSvg.prototype.updateColour = function() {
         var indicatorPair = this.indicators[emptySlotNumber];
         if (indicatorPair.basic) {
             var basicTypes = this.getInputTypesByKind(emptySlotNumber).basic;
-            basicTypes = Blockly.Python.mergeSubtypes(basicTypes);
+            basicTypes = Blockly.PythonLang.mergeSubtypes(basicTypes);
 
             for (var type in indicatorPair.subtypeLabels) {
                 if (basicTypes.length == 1 && basicTypes[0] == type) {
@@ -1599,7 +1599,7 @@ Blockly.BlockSvg.prototype.updateColour = function() {
             if (basicTypes[0] == "any" || basicTypes[0] == "matching") {
                 fillText = 'url(#' + this.workspace.options.anyTypePatternSmallId + ')';
             } else if (basicTypes.length == 1) {
-                fillText = Blockly.Python.COLOUR[basicTypes[0]];
+                fillText = Blockly.PythonLang.COLOUR[basicTypes[0]];
             } else {
                 basicTypes.sort();
                 var typeString = basicTypes.join('');
@@ -1610,7 +1610,7 @@ Blockly.BlockSvg.prototype.updateColour = function() {
         }
         if (indicatorPair.list) {
             var pListTypes = this.getInputTypesByKind(emptySlotNumber).list;
-            pListTypes = Blockly.Python.mergeSubtypes(pListTypes);
+            pListTypes = Blockly.PythonLang.mergeSubtypes(pListTypes);
             if (pListTypes[0] == "any" || pListTypes[0] == "matching") {
                 fillText = 'url(#' + this.workspace.options.anyTypePatternSmallId + ')';
             } else if (pListTypes.length == 3) {
@@ -1619,7 +1619,7 @@ Blockly.BlockSvg.prototype.updateColour = function() {
                 fillText = 'url(#' + this.workspace.options.floatintTypePatternSmallId + ')';
             } else {
                 // should be just one type
-                fillText = Blockly.Python.COLOUR[pListTypes[0]];
+                fillText = Blockly.PythonLang.COLOUR[pListTypes[0]];
             }
             // ========================
             // for (var j=1; j<4; j++) {
@@ -2461,13 +2461,13 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, holeSteps,
                             }
                             var types = this.getInputTypes(slotNumber);
                             console.log("SUBTYPE checking " + JSON.stringify(types));
-                            for (var subtype in Blockly.Python.CENTRED_SUBTYPE_SYMBOLS) {
+                            for (var subtype in Blockly.PythonLang.CENTRED_SUBTYPE_SYMBOLS) {
                                 if (goog.array.contains(types, subtype)) {
                                     console.log("SUBTYPE found", subtype);
                                     var subtypeLabel =
                                         Blockly.BlockSvg.addIndicatorLabel(indicatorX, indicatorY,
-                                            Blockly.Python.CENTRED_SUBTYPE_SYMBOLS[subtype]);
-                                    console.log("SUBTYPE symbol added", Blockly.Python.CENTRED_SUBTYPE_SYMBOLS[subtype]);
+                                            Blockly.PythonLang.CENTRED_SUBTYPE_SYMBOLS[subtype]);
+                                    console.log("SUBTYPE symbol added", Blockly.PythonLang.CENTRED_SUBTYPE_SYMBOLS[subtype]);
 
                                     subtypeLabel.setAttribute("display", "none");
                                     indicatorPair.subtypeLabels[subtype] = subtypeLabel;

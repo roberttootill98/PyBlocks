@@ -189,7 +189,7 @@ Blockly.FieldVariable.dropdownChange = function(text) {
     }
 
     var variables = Blockly.Variables.allVariables(workspace, true, true);
-    newVar = Blockly.Python.makeNameUnique(newVar, variables);
+    newVar = Blockly.PythonLang.makeNameUnique(newVar, variables);
     Blockly.Variables.renameVariable(oldVar, newVar, workspace);
     return newVar;
 };

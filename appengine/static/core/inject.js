@@ -374,14 +374,14 @@ Blockly.createDom_ = function(container, options) {
     //var offsets = [0, 0.06, 0.14, 0.26, 0.34, 0.46, 0.54, 0.66, 0.74, 0.86, 0.94, 1.0];
     var offsets = [0, 0.167, 0.333, 0.5, 0.667, 0.833, 1.0];
     //var colours = ['float', 'range', 'bool', 'str', 'int', 'float'];
-    for (var i in Blockly.Python.RAINBOW) {
+    for (var i in Blockly.PythonLang.RAINBOW) {
         Blockly.createSvgElement('stop', {
-                'stop-color': Blockly.Python.RAINBOW[i],
+                'stop-color': Blockly.PythonLang.RAINBOW[i],
                 'offset': offsets[i]
             },
             anyTypeGradient);
         //  Blockly.createSvgElement('stop',
-        //      {'stop-color': Blockly.Python.COLOUR[Blockly.Python.RAINBOW[i]],
+        //      {'stop-color': Blockly.PythonLang.COLOUR[Blockly.PythonLang.RAINBOW[i]],
         //      'offset': offsets[2*i+1]}, anyTypeGradient);
     }
     options.anyTypeGradientId = anyTypeGradient.id;
@@ -449,13 +449,13 @@ Blockly.createDom_ = function(container, options) {
 
         for (i in colours) {
           var colour = colours[i];
-          //console.log("CREATE: offset ", offsets[2*i], "colour", Blockly.Python.COLOUR[colours[i]] );
+          //console.log("CREATE: offset ", offsets[2*i], "colour", Blockly.PythonLang.COLOUR[colours[i]] );
           Blockly.createSvgElement('stop',
-              {'stop-color': Blockly.Python.COLOUR[colour],
+              {'stop-color': Blockly.PythonLang.COLOUR[colour],
               'offset': offset}, gradient);
           offset += i === 0 || i === colours.length - 1 ? offsetStep / 2 : offsetStep;
           Blockly.createSvgElement('stop',
-              {'stop-color': Blockly.Python.COLOUR[colour],
+              {'stop-color': Blockly.PythonLang.COLOUR[colour],
                'offset': offset}, gradient);
           offset += offsetStep / 2;
           //offset += 0.01;
@@ -516,7 +516,7 @@ Blockly.createDom_ = function(container, options) {
             pathStrings[i] = pathStrings[i].replace(/F/g, basicStep * 6);
 
             var type = types[i];
-            var colour = Blockly.Python.COLOUR[type];
+            var colour = Blockly.PythonLang.COLOUR[type];
             Blockly.createSvgElement('path', {
                     'd': pathStrings[i],
                     //'x': 0, 'y': 0, 'width': dimension, 'height': dimension,
@@ -571,11 +571,11 @@ Blockly.createDom_ = function(container, options) {
 
             var colour;
             var type = types[i];
-            if (type in Blockly.Python.SUPERTYPES) {
-                colour = Blockly.Python.COLOUR[Blockly.Python.SUPERTYPES[type]];
-                subtypeSymbol = Blockly.Python.PATTERNED_SUBTYPE_SYMBOLS[type];
+            if (type in Blockly.PythonLang.SUPERTYPES) {
+                colour = Blockly.PythonLang.COLOUR[Blockly.PythonLang.SUPERTYPES[type]];
+                subtypeSymbol = Blockly.PythonLang.PATTERNED_SUBTYPE_SYMBOLS[type];
             } else {
-                colour = Blockly.Python.COLOUR[type];
+                colour = Blockly.PythonLang.COLOUR[type];
             }
 
             Blockly.createSvgElement('path', {
@@ -657,10 +657,10 @@ Blockly.createDom_ = function(container, options) {
     var colours = ['range', 'str', 'range', 'str', 'range'];
     for (i in colours) {
       Blockly.createSvgElement('stop',
-          {'stop-color': Blockly.Python.COLOUR[colours[i]],
+          {'stop-color': Blockly.PythonLang.COLOUR[colours[i]],
           'offset': offsets[2*i]}, sequenceTypeGradient);
       Blockly.createSvgElement('stop',
-          {'stop-color': Blockly.Python.COLOUR[colours[i]],
+          {'stop-color': Blockly.PythonLang.COLOUR[colours[i]],
            'offset': offsets[2*i+1]}, sequenceTypeGradient);
     }
     options.sequenceTypeGradientId = sequenceTypeGradient.id;

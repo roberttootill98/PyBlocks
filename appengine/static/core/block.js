@@ -500,15 +500,15 @@ Blockly.Block.prototype.findVariable = function() {
         block = variableBlock.parentBlock_;
 
         if ((variableBlock.type == 'variables_set' && this.getFieldValue("VAR") ==
-                Blockly.Python.valueToCode(variableBlock, 'VAR',
-                    Blockly.Python.ORDER_NONE)) && variableBlock.getSurroundParent().type != 'python_if' &&
+                Blockly.PythonLang.valueToCode(variableBlock, 'VAR',
+                    Blockly.PythonLang.ORDER_NONE)) && variableBlock.getSurroundParent().type != 'python_if' &&
             variableBlock.getSurroundParent().type != 'python_while' && variableBlock.getSurroundParent().type != 'python_for') {
 
             return 'nocontrol';
 
         } else if (variableBlock.type == 'variables_set' && this.getFieldValue("VAR") ==
-            Blockly.Python.valueToCode(variableBlock, 'VAR',
-                Blockly.Python.ORDER_NONE)) {
+            Blockly.PythonLang.valueToCode(variableBlock, 'VAR',
+                Blockly.PythonLang.ORDER_NONE)) {
 
             return 'control';
         }
@@ -718,9 +718,9 @@ Blockly.Block.prototype.getColour = function() {
         //return Blockly.Block.COLOUR[this.outputConnection.check_[0]];
         console.log("Block Type: ");
         console.log(this.getOutputTypes());
-        return Blockly.Python.COLOUR[this.getOutputTypes()[0]];
+        return Blockly.PythonLang.COLOUR[this.getOutputTypes()[0]];
     } else {
-        return Blockly.Python.COLOUR['notype'];
+        return Blockly.PythonLang.COLOUR['notype'];
     }
 };
 
@@ -1630,9 +1630,9 @@ Blockly.Block.prototype.legalDrop = function(holeTypes, requiresVariable) {
             //  if () {
             //    return true;
             //  }
-            //  if (Blockly.Python.SUPERTYPES[holeType] == elem) {
+            //  if (Blockly.PythonLang.SUPERTYPES[holeType] == elem) {
             //    console.log("SUBTC checking its a subtype");
-            //    if (Blockly.Python.SUPTYPE_CHECK[holeType](this)) {
+            //    if (Blockly.PythonLang.SUPTYPE_CHECK[holeType](this)) {
             //      return true;
             //    }
             console.log("SUBTC its not!");

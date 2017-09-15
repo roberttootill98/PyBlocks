@@ -302,9 +302,9 @@ Blockly.Generator.prototype.blockToCode = function(block) {
     // argument to func.call, which becomes the first parameter to the generator.
     var code = func.call(block, block);
     
-    if (workspace.running) {
-        this.chkBlock(block);
-    }
+    //if (workspace.running) {
+    //   this.chkBlock(block);
+    //}
 
     if (goog.isArray(code)) {
         // Value blocks return tuples of code and operator order.

@@ -28,65 +28,69 @@
 
 goog.require('Blockly.Names');
 
-goog.provide('Blockly.Python');
+goog.provide('Blockly.PythonLang');
 
 /*
-Blockly.Python.COLOUR['notype'] = '#8B7D6B';
-Blockly.Python.COLOUR['int'] = ;   //yellow
-Blockly.Python.COLOUR['float'] = '#FF1919'; // red
+Blockly.PythonLang.COLOUR['notype'] = '#8B7D6B';
+Blockly.PythonLang.COLOUR['int'] = ;   //yellow
+Blockly.PythonLang.COLOUR['float'] = '#FF1919'; // red
 
-Blockly.Python.COLOUR['range'] = '#00CC33';  // green
-Blockly.Python.COLOUR['bool'] = '#FF29FF'; // magenta
-Blockly.Python.COLOUR['str'] = '#0080FF' ; // blue
+Blockly.PythonLang.COLOUR['range'] = '#00CC33';  // green
+Blockly.PythonLang.COLOUR['bool'] = '#FF29FF'; // magenta
+Blockly.PythonLang.COLOUR['str'] = '#0080FF' ; // blue
 */
 
 
 var red = '#FF3010'; // '#FF4500';
-var orange = '#FFAA00';
+//var orange = '#FFAA00';
 var yellow = '#DFDF20';
-var pink = '#FFC0CB'; 
+var pink = '#FFC0CB';
 var green = '#00CC33';
 var cyan = '#00EEEE';
 var blue = '#0080FF';
 var magenta = '#FF29FF';
 
+var orange = "#FE9E00"; //"#E69900";
+var skyblue = "#00B5EE"; //"#59B3E6";
+var bluegreen = "#009980";
+var vermilion = "#E64D40";
 
-Blockly.Python.COLOUR = {};
-Blockly.Python.COLOUR['nulltype'] = '#504a45';
-Blockly.Python.COLOUR['notype'] = '#706c67';
-Blockly.Python.COLOUR['str'] = red;
-Blockly.Python.COLOUR['turtle'] = cyan;
-Blockly.Python.COLOUR['vec2d'] = yellow;
-Blockly.Python.COLOUR['screen'] = pink; 
-Blockly.Python.COLOUR['int'] = green;
-Blockly.Python.COLOUR['range'] = orange;
-Blockly.Python.COLOUR['float'] = blue;
-Blockly.Python.COLOUR['bool'] = magenta;
-Blockly.Python.RAINBOW = [red, yellow, green, cyan, blue, magenta, red];
+Blockly.PythonLang.COLOUR = {};
+Blockly.PythonLang.COLOUR['nulltype'] = '#504a45';
+Blockly.PythonLang.COLOUR['notype'] = '#afafaf'; //'#a6a6a6'; //'#706c67';
+Blockly.PythonLang.COLOUR['str'] = bluegreen;
+Blockly.PythonLang.COLOUR['turtle'] = cyan;
+Blockly.PythonLang.COLOUR['vec2d'] = yellow;
+Blockly.PythonLang.COLOUR['screen'] = pink;
+Blockly.PythonLang.COLOUR['int'] = orange;
+Blockly.PythonLang.COLOUR['range'] = orange;
+Blockly.PythonLang.COLOUR['float'] = skyblue;
+Blockly.PythonLang.COLOUR['bool'] = vermilion;
+Blockly.PythonLang.RAINBOW = [red, yellow, green, cyan, blue, magenta, red];
 
 
 // Temporary colours
-Blockly.Python.COLOUR['nonnegint'] = green;
-Blockly.Python.COLOUR['negint'] = green;
+Blockly.PythonLang.COLOUR['nonnegint'] = green;
+Blockly.PythonLang.COLOUR['negint'] = green;
 
-Blockly.Python.SUBTYPES = {
+Blockly.PythonLang.SUBTYPES = {
     'int': ['negint', 'nonnegint']
 };
 
-Blockly.Python.CENTRED_SUBTYPE_SYMBOLS = {
+Blockly.PythonLang.CENTRED_SUBTYPE_SYMBOLS = {
     'nonnegint': '>=0'
 };
 
-Blockly.Python.PATTERNED_SUBTYPE_SYMBOLS = {
+Blockly.PythonLang.PATTERNED_SUBTYPE_SYMBOLS = {
     'negint': '-',
 };
 
-Blockly.Python.SUPERTYPES = {
+Blockly.PythonLang.SUPERTYPES = {
     'negint': 'int',
     'nonnegint': 'int'
 };
 
-Blockly.Python.SUPTYPE_CHECK = {
+Blockly.PythonLang.SUPTYPE_CHECK = {
     'negint': function(block) {
         if (block.type != 'python_int_const') {
             return false;
@@ -108,13 +112,13 @@ Blockly.Python.SUPTYPE_CHECK = {
 };
 
 // deal with subtypes in a list of types
-Blockly.Python.mergeSubtypes = function(typeList) {
+Blockly.PythonLang.mergeSubtypes = function(typeList) {
 
     // if int is not here but both subtypes are, add int
     var intIndex = typeList.indexOf('int');
     if (intIndex == -1) {
         var allSubtypes = true;
-        for (var subType in Blockly.Python.SUPERTYPES) {
+        for (var subType in Blockly.PythonLang.SUPERTYPES) {
             if (typeList.indexOf(subType) == -1) {
                 allSubtypes = false;
                 break;
@@ -129,7 +133,7 @@ Blockly.Python.mergeSubtypes = function(typeList) {
     // if int (or *int) is here, remove the subtypes
     var intIndex = typeList.indexOf('int');
     if (intIndex != -1) {
-        for (var subType in Blockly.Python.SUPERTYPES) {
+        for (var subType in Blockly.PythonLang.SUPERTYPES) {
             var pos = typeList.indexOf(subType);
             if (pos != -1) {
                 console.log("MERGEST int present so removing " + subType);
@@ -142,7 +146,7 @@ Blockly.Python.mergeSubtypes = function(typeList) {
 };
 
 
-Blockly.Python.NEW_VARS = [{
+Blockly.PythonLang.NEW_VARS = [{
     name: "newIntVariable",
     type: 'int'
 }, {
@@ -156,7 +160,7 @@ Blockly.Python.NEW_VARS = [{
     type: 'bool'
 }];
 
-Blockly.Python.NEW_TURTLE_VARS = [{
+Blockly.PythonLang.NEW_TURTLE_VARS = [{
     name: "newTurtleVariable",
     type: 'turtle'
 }, {
@@ -164,7 +168,7 @@ Blockly.Python.NEW_TURTLE_VARS = [{
     type: 'screen'
 }];
 
-Blockly.Python.NEW_LIST_VARS = [{
+Blockly.PythonLang.NEW_LIST_VARS = [{
     name: "newIntListVar",
     type: '*int'
 }, {
@@ -178,14 +182,14 @@ Blockly.Python.NEW_LIST_VARS = [{
     type: '*bool'
 }];
 
-Blockly.Python.RESERVED_WORDS = ['False', 'None', 'True', 'and', 'as', 'assert',
+Blockly.PythonLang.RESERVED_WORDS = ['False', 'None', 'True', 'and', 'as', 'assert',
     'break', 'class', 'continue', 'def', 'del', 'elif', 'else', 'except',
     'finally', 'for', 'from', 'global', 'if', 'import', 'in', 'is', 'lambda',
     'nonlocal', 'not', 'or', 'pass', 'raise', 'return', 'try', 'while',
     'with', 'yield'
 ];
 
-Blockly.Python.BUILTIN_MODULES = ['_ast', '_bisect', '_codecs', '_collections',
+Blockly.PythonLang.BUILTIN_MODULES = ['_ast', '_bisect', '_codecs', '_collections',
     '_datetime', '_elementtree', '_functools', '_heapq', '_imp', '_io', '_locale',
     '_md5', '_operator', '_pickle', '_posixsubprocess', '_random', '_sha1',
     '_sha256', '_sha512', '_socket', '_sre', '_stat', '_string', '_struct',
@@ -196,7 +200,7 @@ Blockly.Python.BUILTIN_MODULES = ['_ast', '_bisect', '_codecs', '_collections',
     'xxsubtype', 'zipimport', 'zlib'
 ];
 
-Blockly.Python.BUILIN_FUNCTIONS = ['ArithmeticError', 'AssertionError',
+Blockly.PythonLang.BUILIN_FUNCTIONS = ['ArithmeticError', 'AssertionError',
     'AttributeError', 'BaseException', 'BlockingIOError', 'BrokenPipeError',
     'BufferError', 'BytesWarning', 'ChildProcessError',
     'ConnectionAbortedError', 'ConnectionError', 'ConnectionRefusedError',
@@ -228,11 +232,11 @@ Blockly.Python.BUILIN_FUNCTIONS = ['ArithmeticError', 'AssertionError',
 ];
 
 
-Blockly.Python.RESERVED = Blockly.Python.RESERVED_WORDS.concat(
-    Blockly.Python.BUILTIN_MODULES).concat(
-    Blockly.Python.BUILIN_FUNCTIONS);
+Blockly.PythonLang.RESERVED = Blockly.PythonLang.RESERVED_WORDS.concat(
+    Blockly.PythonLang.BUILTIN_MODULES).concat(
+    Blockly.PythonLang.BUILIN_FUNCTIONS);
 
-Blockly.Python.variableIn = function(variable, variableList) {
+Blockly.PythonLang.variableIn = function(variable, variableList) {
     for (var i = 0; i < variableList.length; i++) {
         if (variable == variableList[i].name) {
             return true;
@@ -241,16 +245,16 @@ Blockly.Python.variableIn = function(variable, variableList) {
     return false;
 };
 
-Blockly.Python.makeNameUnique = function(name, variableList) {
+Blockly.PythonLang.makeNameUnique = function(name, variableList) {
     // Only need to look at new and reserved words once.
     var newName = name;
-    if ((Blockly.Python.RESERVED.indexOf(newName) > -1) ||
-        (Blockly.Python.variableIn(newName, variableList)) ||
-        (Blockly.Python.variableIn(newName, Blockly.Python.NEW_VARS))) {
+    if ((Blockly.PythonLang.RESERVED.indexOf(newName) > -1) ||
+        (Blockly.PythonLang.variableIn(newName, variableList)) ||
+        (Blockly.PythonLang.variableIn(newName, Blockly.PythonLang.NEW_VARS))) {
         var i = 2;
         newName = name + i;
         console.log("NEWNAME adding a ", i, newName);
-        while (Blockly.Python.variableIn(newName, variableList)) {
+        while (Blockly.PythonLang.variableIn(newName, variableList)) {
             i = i + 1;
             newName = name + i;
             console.log("NEWNAME adding a", i, newName);
@@ -259,13 +263,13 @@ Blockly.Python.makeNameUnique = function(name, variableList) {
     return newName;
 };
 
-Blockly.Python.renameVariableCallback = function(block) {
+Blockly.PythonLang.renameVariableCallback = function(block) {
     return function() {
-        Blockly.Python.renameVariable(block.getField("VAR"));
+        Blockly.PythonLang.renameVariable(block.getField("VAR"));
     };
 };
 
-Blockly.Python.renameVariable = function(field) {
+Blockly.PythonLang.renameVariable = function(field) {
     function promptName(promptText, defaultText) {
         Blockly.hideChaff();
         var newVar = window.prompt(promptText, defaultText);
@@ -293,7 +297,7 @@ Blockly.Python.renameVariable = function(field) {
     }
 
     var variables = Blockly.Variables.allVariables(workspace, true, true);
-    newVar = Blockly.Python.makeNameUnique(newVar, variables);
+    newVar = Blockly.PythonLang.makeNameUnique(newVar, variables);
     Blockly.Variables.renameVariable(oldVar, newVar, workspace);
     return newVar;
 };

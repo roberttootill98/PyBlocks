@@ -106,17 +106,17 @@ Blockly.Variables.renameVariable = function(oldName, newName, workspace) {
 
 Blockly.Variables.newFlyoutCategory = function(workspace) {
     return Blockly.Variables.flyoutCategory(workspace,
-        Blockly.Python.NEW_VARS);
+        Blockly.PythonLang.NEW_VARS);
 };
 
 Blockly.Variables.newTurtleFlyoutCategory = function(workspace) {
     return Blockly.Variables.flyoutCategory(workspace,
-        Blockly.Python.NEW_TURTLE_VARS);
+        Blockly.PythonLang.NEW_TURTLE_VARS);
 };
 
 Blockly.Variables.newListFlyoutCategory = function(workspace) {
     return Blockly.Variables.flyoutCategory(workspace,
-        Blockly.Python.NEW_LIST_VARS);
+        Blockly.PythonLang.NEW_LIST_VARS);
 };
 
 Blockly.Variables.existingFlyoutCategory = function(workspace) {
