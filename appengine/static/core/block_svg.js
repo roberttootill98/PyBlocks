@@ -60,10 +60,11 @@ Blockly.BlockSvg = function() {
         this.svgGroup_);
 
     /** @type {Array<!SVGElement>} */
-    this.svgListRects = new Array(3);
-    for (var i = 0; i < 3; i++) {
-        this.svgListRects[i] = Blockly.createSvgElement('rect', {}, this.svgGroup_);
-    }
+    //this.svgListRects = new Array(3);
+    //for (var i = 0; i < 3; i++) {
+    //    this.svgListRects[i] = Blockly.createSvgElement('rect', {}, this.svgGroup_);
+    //}
+    this.svgListSawtooth = Blockly.createSvgElement('path', {}, this.svgGroup_);
 
     //console.log("CREATING BLOCK SVG");
 
@@ -1006,14 +1007,9 @@ Blockly.BlockSvg.SEP_SPACE_X = 0; // MJP
  * Horizontal space for empty slots
  * @const
  */
-Blockly.BlockSvg.SLOT_WIDTH = 54; // MJP
-/**
- * Horizontal space for empty wide slots
- * @const
- */
 
 
-Blockly.BlockSvg.SEP_SPACE_Y = 10; // MJP
+Blockly.BlockSvg.SEP_SPACE_Y = 6; // MJP
 /**
  * Vertical padding around inline elements.
  * @const
@@ -1024,11 +1020,12 @@ Blockly.BlockSvg.TEXT_PADDING_TOP = 5;
  * @const
  */
 Blockly.BlockSvg.STMT_ARGS_PADDING_TOP = 3;
+
 /**
  * Vertical padding around inline elements.
  * @const
  */
-Blockly.BlockSvg.INLINE_PADDING_BOTTOM = 8;
+Blockly.BlockSvg.INLINE_PADDING_BOTTOM = 6;
 
 
 /**
@@ -1045,10 +1042,6 @@ Blockly.BlockSvg.MIN_BLOCK_Y = 24;
  * Minimum height of a statement block.
  * @const
  */
-Blockly.BlockSvg.MIN_STMT_BLOCK_Y =
-    Blockly.BlockSvg.STMT_ARGS_PADDING_TOP +
-    Blockly.BlockSvg.MIN_BLOCK_Y +
-    2 * Blockly.BlockSvg.INLINE_PADDING_BOTTOM;
 
 
 /**
@@ -1067,25 +1060,41 @@ Blockly.BlockSvg.INDICATOR_WIDTH = 36;
  * Gap underneath type indicator.
  * @const
  */
-Blockly.BlockSvg.INDICATOR_GAP_Y = 3;
+Blockly.BlockSvg.INDICATOR_GAP_Y = 6;
+
+Blockly.BlockSvg.LIST_TYPE_SPACE = 6;
 
 /**
- * Gap between type indicators.
+ * Gap between to the left and right of type indicators.
  * @const
  */
-Blockly.BlockSvg.INDICATOR_GAP_X = 10;
+Blockly.BlockSvg.INDICATOR_GAP_X = 6;
 
+Blockly.BlockSvg.SLOT_WIDTH = Blockly.BlockSvg.INDICATOR_WIDTH +
+                              2 * Blockly.BlockSvg.INDICATOR_GAP_X
+
+Blockly.BlockSvg.SLOT_HEIGHT = Blockly.BlockSvg.INDICATOR_HEIGHT +
+                              2 * Blockly.BlockSvg.INDICATOR_GAP_Y;
+
+/**
+ * Horizontal space for empty wide slots
+ * @const
+ */
 
 Blockly.BlockSvg.DOUBLE_SLOT_WIDTH =
     Blockly.BlockSvg.SLOT_WIDTH +
     Blockly.BlockSvg.INDICATOR_WIDTH +
-    Blockly.BlockSvg.INDICATOR_GAP_X;
+    2 * Blockly.BlockSvg.INDICATOR_GAP_X;
 
 /**
  * Vertical space between elements.
  * @const
  */
 
+Blockly.BlockSvg.MIN_STMT_BLOCK_Y =
+     Blockly.BlockSvg.STMT_ARGS_PADDING_TOP +
+     Blockly.BlockSvg.SLOT_HEIGHT +
+     2 * Blockly.BlockSvg.INLINE_PADDING_BOTTOM;
 
 
 Blockly.BlockSvg.TAB_HEIGHT = 0;
@@ -1323,7 +1332,8 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate,
     // Sever JavaScript to DOM connections.
     this.svgGroup_ = null;
     this.svgBlockPath_ = null;
-    this.svgListRects = null;
+    //this.svgListRects = null;
+    this.svgListSawtooth = null;
     this.svgHolePath_ = null;
     this.svgHoleGroup = null;
     this.svgIndicatorGroup = null;
@@ -1539,7 +1549,7 @@ Blockly.BlockSvg.prototype.updateColour = function() {
     var fillText;
     if (this.outputConnection) {
         if (this.outputsAList()) {
-            this.svgBlockPath_.setAttribute('fill', "white");
+            //this.svgBlockPath_.setAttribute('fill', "blue");
             var listTypes = this.getOutputTypesByKind().list;
             listTypes = Blockly.PythonLang.mergeSubtypes(listTypes);
             console.log("MERGED for ", this.type, " is", listTypes);
@@ -1553,9 +1563,10 @@ Blockly.BlockSvg.prototype.updateColour = function() {
                 var fillUrl = this.workspace.options[typeString + 'TypePatternLargeId'];
                 fillText = 'url(#' + fillUrl + ')';
             }
-            for (var i = 0; i < 3; i++) {
-                this.svgListRects[i].setAttribute('fill', fillText);
-            }
+            //for (var i = 0; i < 3; i++) {
+            //    this.svgListRects[i].setAttribute('fill', fillText);
+            //}
+            this.svgBlockPath_.setAttribute('fill', fillText);
         } else {
             var outputTypes = this.getOutputTypesByKind().basic;
             outputTypes = Blockly.PythonLang.mergeSubtypes(outputTypes);
@@ -2014,9 +2025,10 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
             if (kinds.basic && kinds.list) {
                 input.renderWidth = Blockly.BlockSvg.DOUBLE_SLOT_WIDTH;
             } else {
-                input.renderWidth = //Blockly.BlockSvg.TAB_WIDTH +
-                    //Blockly.BlockSvg.SEP_SPACE_X * 1.25;
-                    Blockly.BlockSvg.SLOT_WIDTH; // MJP
+                input.renderWidth = Blockly.BlockSvg.SLOT_WIDTH; // MJP
+            }
+            if (!input.connection.targetConnection) {
+               input.renderHeight = Blockly.BlockSvg.SLOT_HEIGHT;
             }
         } else {
             input.renderWidth = 0;
@@ -2025,7 +2037,7 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
         if (input.connection && input.connection.targetConnection) {
             var linkedBlock = input.connection.targetBlock();
             var bBox = linkedBlock.getHeightWidth();
-            input.renderHeight = Math.max(input.renderHeight, bBox.height);
+            input.renderHeight = Math.max(input.renderHeight, bBox.height); //max->minXXXXXXXXXXXx
             input.renderWidth = bBox.width;
         }
         // Blocks have a one pixel shadow that should sometimes overhang.
@@ -2082,14 +2094,16 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
             for (var z = 0, input; input = row[z]; z++) {
                 if (input.type == Blockly.INPUT_VALUE) {
                     row.height += //Blockly.BlockSvg.INLINE_PADDING_TOP +
-                        Blockly.BlockSvg.INLINE_PADDING_BOTTOM;
+                        Blockly.BlockSvg.INLINE_PADDING_BOTTOM; //
                     // console.log("thicker");
                     row.thicker = true;
                     break;
                 }
             }
         }
-
+        if (this.outputsAList()) {
+          row.height += Blockly.BlockSvg.LIST_TYPE_SPACE;
+        }
     }
 
     // HACK to adjust height of rows in statement blocks
@@ -2252,7 +2266,7 @@ Blockly.BlockSvg.prototype.renderDraw_ = function(iconWidth, inputRows) {
         }
     }
     // =================
-    if (this.outputConnection && this.outputsAList()) {
+    /*if (this.outputConnection && this.outputsAList()) {
         var tempListRectWidth = 0.28 * (this.width - 1);
         var tempListGapWidth = (this.width - 1 - tempListRectWidth * 3) / 2;
         for (var i = 0; i < 3; i++) {
@@ -2263,7 +2277,35 @@ Blockly.BlockSvg.prototype.renderDraw_ = function(iconWidth, inputRows) {
             // this.svgListRects[i].setAttribute('transform', 'translate('+
             //    (0.5 + i * (tempListRectWidth + tempListGapWidth)).toString() + ',0)');
         }
+    }*/
+
+    // =================
+    if (this.outputConnection && this.outputsAList()) {
+      var sawToothSteps = [];
+      sawToothSteps.push('M', 0, this.height);
+      sawToothSteps.push('v',-2);
+      var numTeeth = Math.round(this.width / 12);
+      for (var i = 0; i < numTeeth; i++) {
+        sawToothSteps.push('l 6 -6');
+        sawToothSteps.push('l 6 6');
+      }
+      sawToothSteps.push('v 2');
+      sawToothSteps.push('z');
+      var sawtoothString = sawToothSteps.join(' ');
+      this.svgListSawtooth.setAttribute('d', sawtoothString);
+      this.svgListSawtooth.setAttribute('fill', 'white');
     }
+        //var tempListRectWidth = 0.28 * (this.width - 1);
+        //var tempListGapWidth = (this.width - 1 - tempListRectWidth * 3) / 2;
+        //for (var i = 0; i < 3; i++) {
+        //    this.svgListRects[i].setAttribute('x', (0.5 + i * (tempListRectWidth + tempListGapWidth)).toString());
+        //    this.svgListRects[i].setAttribute('y', 0.5);
+        //    this.svgListRects[i].setAttribute('width', tempListRectWidth);
+        //    this.svgListRects[i].setAttribute('height', this.height - 1);
+        //    // this.svgListRects[i].setAttribute('transform', 'translate('+
+        //    //    (0.5 + i * (tempListRectWidth + tempListGapWidth)).toString() + ',0)');
+        //}
+    //}
 };
 
 /**
@@ -2488,7 +2530,24 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, holeSteps,
                                 (Blockly.BlockSvg.INDICATOR_WIDTH);
                             var tempListGapWidth = (Blockly.BlockSvg.INDICATOR_WIDTH -
                                 tempListRectWidth * 3) / 2;
-                            for (var i = 0; i < 2; i++) {
+
+                            var sawTooth = Blockly.createSvgElement('path', {}, this.svgGroup_);
+                            var sawToothSteps = [];
+                            sawToothSteps.push('M', indicatorX, indicatorY + Blockly.BlockSvg.INDICATOR_HEIGHT);
+                            sawToothSteps.push('v',-2);
+                            for (var i = 0; i < 3; i++) {
+                              sawToothSteps.push('l 6 -6');
+                              sawToothSteps.push('l 6 6');
+                            }
+                            sawToothSteps.push('v 2');
+                            sawToothSteps.push('z');
+                            var sawtoothString = sawToothSteps.join(' ');
+                            sawTooth.setAttribute('d', sawtoothString);
+                            sawTooth.setAttribute('fill', 'white');
+                            indicatorPair.list.push(sawTooth);
+                          //}
+
+                            /*for (var i = 0; i < 2; i++) {
                                 var stripe = Blockly.createSvgElement('rect', {},
                                     this.svgGroup_);
                                 //this.indicatorGroup);
@@ -2505,7 +2564,7 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, holeSteps,
                                 //stripe.setAttribute('transform', 'translate('+
                                 //    (0.5 + indicatorX) + ', '  + indicatorY + ')');
                                 indicatorPair.list.push(stripe);
-                            }
+                            }*/
                             if (slotNumber === 0 && this.lhsVarOnly) {
                                 var varInd = Blockly.BlockSvg.addIndicatorLabel(indicatorX, indicatorY, "var");
                                 indicatorPair.varInd.push(varInd);
