@@ -383,23 +383,23 @@ table#typeTable {
 }
 
 .int {
-    color: #00CC33; 
+    color: #FBBC05; 
 }
 
 .float {
-    color: #0080FF;
+    color: #4285F4;
 }
 
 .str {
-    color: #FF3010;
+    color: #39b55b;
 }
 
 .bool {
-    color: #FF29FF;
+    color: #EA4335;
 }
 
 .range {
-    color: #FFAA00;
+    color: #FF89F7;
 }
 
 .turtle {

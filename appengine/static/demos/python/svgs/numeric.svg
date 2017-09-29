@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="18pt" height="18pt" viewBox="0 0 18 18" version="1.1">
 <g id="surface1">
-<path style=" stroke:none;fill-rule:evenodd;fill:#00B5EE;fill-opacity:1;" d="M 0.0 18.0 L 18.0 18.0 L 18.0 0.0 L 0.0 0.0 Z M 0.0 18.0 "/>
-<path style=" stroke:none;fill-rule:evenodd;fill:#FE9E00;fill-opacity:1;" d="M 0.0 0.0 L 18.0 18.0 L 18.0 8.0 L 10.0 0.0 Z M 0.0 0.0 "/>
-<path style=" stroke:none;fill-rule:evenodd;fill:#FE9E00;fill-opacity:1;" d="M 0.0 18.0 L 8.0 18.0 L 0.0 10.0 Z M 0.0 18.0 "/>
+<path style=" stroke:none;fill-rule:evenodd;fill:#4285F4;fill-opacity:1;" d="M 0.0 18.0 L 18.0 18.0 L 18.0 0.0 L 0.0 0.0 Z M 0.0 18.0 "/>
+<path style=" stroke:none;fill-rule:evenodd;fill:#FBBC05;fill-opacity:1;" d="M 0.0 0.0 L 18.0 18.0 L 18.0 8.0 L 10.0 0.0 Z M 0.0 0.0 "/>
+<path style=" stroke:none;fill-rule:evenodd;fill:#FBBC05;fill-opacity:1;" d="M 0.0 18.0 L 8.0 18.0 L 0.0 10.0 Z M 0.0 18.0 "/>
 </g>
 </svg>

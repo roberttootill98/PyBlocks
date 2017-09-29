@@ -50,20 +50,28 @@ var cyan = '#00EEEE';
 var blue = '#0080FF';
 var magenta = '#FF29FF';
 
-var orange = "#FE9E00"; //"#E69900";
-var skyblue = "#00B5EE"; //"#59B3E6";
-var bluegreen = "#009980";
-var vermilion = "#E64D40";
+// Colour-safe colours
+//var orange = "#FE9E00"; //"#E69900";
+//var skyblue = "#00B5EE"; //"#59B3E6";
+//var bluegreen = "#009980";
+//var vermilion = "#E64D40";
+
+// Google colours
+var orange = "#FBBC05";
+var skyblue = "#4285F4";
+var bluegreen = '#39b55b'; //"#34A853";
+var vermilion = "#EA4335";
+var pink =   "#FF89F7";
 
 Blockly.PythonLang.COLOUR = {};
 Blockly.PythonLang.COLOUR['nulltype'] = '#504a45';
-Blockly.PythonLang.COLOUR['notype'] = '#afafaf'; //'#a6a6a6'; //'#706c67';
+Blockly.PythonLang.COLOUR['notype'] = '#afafaf'; //'#afafaf'; //'#a6a6a6'; //'#706c67';
 Blockly.PythonLang.COLOUR['str'] = bluegreen;
 Blockly.PythonLang.COLOUR['turtle'] = cyan;
 Blockly.PythonLang.COLOUR['vec2d'] = yellow;
 Blockly.PythonLang.COLOUR['screen'] = pink;
 Blockly.PythonLang.COLOUR['int'] = orange;
-Blockly.PythonLang.COLOUR['range'] = orange;
+Blockly.PythonLang.COLOUR['range'] = pink;
 Blockly.PythonLang.COLOUR['float'] = skyblue;
 Blockly.PythonLang.COLOUR['bool'] = vermilion;
 Blockly.PythonLang.RAINBOW = [red, yellow, green, cyan, blue, magenta, red];

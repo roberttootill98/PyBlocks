@@ -285,7 +285,7 @@ function toggleTurtle(calledBy) {
 
 function generateTypeTable() {
     var types = ['int', 'float', 'str', 'bool', 'range'];
-    var colours = ['#00CC33', '#0080FF', '#FF3010', '#FF29FF', '#FFAA00'];
+    var colours = ['#FBBC05', '#4285F4', '#39b55b', '#EA4335', '#FF89F7'];
     var table = document.getElementById('typeTable');
     table.innerHTML = '';
     var currRow = 0;
