@@ -1624,14 +1624,26 @@ Blockly.BlockSvg.prototype.updateColour = function() {
             pListTypes = Blockly.PythonLang.mergeSubtypes(pListTypes);
             if (pListTypes[0] == "any" || pListTypes[0] == "matching") {
                 fillText = 'url(#' + this.workspace.options.anyTypePatternSmallId + ')';
-            } else if (pListTypes.length == 3) {
+            }
+            else if (pListTypes.length == 1) {
+              fillText = Blockly.PythonLang.COLOUR[pListTypes[0]];
+            }
+            else {
+              pListTypes.sort();
+              var typeString = pListTypes.join('');
+              var fillUrl = this.workspace.options[typeString + 'TypePatternSmallId'];
+              fillText = 'url(#' + fillUrl + ')';
+            }
+
+
+/*            } else if (pListTypes.length == 3) {
                 fillText = 'url(#' + this.workspace.options.floatintstrTypePatternSmallId + ')';
             } else if (pListTypes.length == 2) {
                 fillText = 'url(#' + this.workspace.options.floatintTypePatternSmallId + ')';
             } else {
                 // should be just one type
                 fillText = Blockly.PythonLang.COLOUR[pListTypes[0]];
-            }
+            } */
             // ========================
             // for (var j=1; j<4; j++) {
             var rect = indicatorPair.list[0];
