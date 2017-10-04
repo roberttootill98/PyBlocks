@@ -50,7 +50,7 @@ Blockly.Blocks['variables_get'] = {
         this.setTypeVecs([
             ["none"]
         ]);
-                this.contextMenuMsg_ = Blockly.Msg.VARIABLES_GET_CREATE_SET;
+        this.contextMenuMsg_ = Blockly.Msg.VARIABLES_GET_CREATE_SET;
         console.log("VARS at end init", this.type, this.getFieldValue("VAR"));
     },
     /**
@@ -83,21 +83,21 @@ Blockly.Blocks['variables_get'] = {
      * @this Blockly.Block
      */
     customContextMenu: function(options) {
+        console.log("JJJ adding rename to options")
         var rename = {
             enabled: true
         };
         rename.text = "Rename variable ...";
-        rename.callback = Blockly.Python.renameVariableCallback(this);
+        rename.callback = Blockly.PythonLang.renameVariableCallback(this);
         options.unshift(rename);
     },
     onchange: function(ev) {
-
-        if (workspace.vars.indexOf(this.getFieldValue("VAR")) > -1) { 
+            if (workspace.vars.indexOf(this.getFieldValue("VAR")) > -1) {
             runTooltip('print(' + this.getFieldValue("VAR") + ')');
             this.setTooltip(document.getElementById("hiddenoutput").textContent);
         } else {
             this.setTooltip(this.getFieldValue('VAR') + ' (undeclared)');
-        } 
+    }
 }
 
 };
