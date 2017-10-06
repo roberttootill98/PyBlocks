@@ -526,40 +526,29 @@ Blockly.Toolbox.TreeNode.prototype.getExpandIconSafeHtml = function() {
  * @override
  */
 Blockly.Toolbox.TreeNode.prototype.onMouseDown = function(e) {
-    // Expand icon.
+    var typeArrayOne = ['strings', 'booleans', 'lists', 'conversions', 'tests', 'control', 'io', 'misc', 'variables'];
+    var typeArrayTwo = ['booleans', 'lists', 'conversions', 'tests', 'control', 'io', 'misc', 'variables'];
+    var typeArrayThree = ['conversions', 'tests', 'control', 'io', 'misc', 'variables'];
+    
     if (this.expanded_ == true) {
 
         if (typeof this.blocks[0] !== 'undefined') {
 
         switch (this.blocks[0].outerHTML) {
             case '<block type="python_int_const"></block>':
-                document.getElementById('strings').style.top = parseInt(document.getElementById('strings').style.top.slice(0, -2)) - 25 + 'px';
-                document.getElementById('booleans').style.top = parseInt(document.getElementById('booleans').style.top.slice(0, -2)) - 25 + 'px';
-                document.getElementById('lists').style.top = parseInt(document.getElementById('lists').style.top.slice(0, -2)) - 25 + 'px';
-                document.getElementById('conversions').style.top = parseInt(document.getElementById('conversions').style.top.slice(0, -2)) - 25 + 'px';
-                document.getElementById('tests').style.top = parseInt(document.getElementById('tests').style.top.slice(0, -2)) - 25 + 'px';
-                document.getElementById('control').style.top = parseInt(document.getElementById('control').style.top.slice(0, -2)) - 25 + 'px';
-                document.getElementById('io').style.top = parseInt(document.getElementById('io').style.top.slice(0, -2)) - 25 + 'px';
-                document.getElementById('misc').style.top = parseInt(document.getElementById('misc').style.top.slice(0, -2)) - 25 + 'px';
-                document.getElementById('variables').style.top = parseInt(document.getElementById('variables').style.top.slice(0, -2)) - 25 + 'px';
+                for (i = 0; i < typeArrayOne.length; i++) {
+                    document.getElementById(typeArrayOne[i]).style.top = parseInt(document.getElementById(typeArrayOne[i]).style.top.slice(0, -2)) - 25 + 'px';
+                }
                 break;
             case '<block type="python_string_const"></block>':
-                document.getElementById('booleans').style.top = parseInt(document.getElementById('booleans').style.top.slice(0, -2)) - 25 + 'px';
-                document.getElementById('lists').style.top = parseInt(document.getElementById('lists').style.top.slice(0, -2)) - 25 + 'px';
-                document.getElementById('conversions').style.top = parseInt(document.getElementById('conversions').style.top.slice(0, -2)) - 25 + 'px';
-                document.getElementById('tests').style.top = parseInt(document.getElementById('tests').style.top.slice(0, -2)) - 25 + 'px';
-                document.getElementById('control').style.top = parseInt(document.getElementById('control').style.top.slice(0, -2)) - 25 + 'px';
-                document.getElementById('io').style.top = parseInt(document.getElementById('io').style.top.slice(0, -2)) - 25 + 'px';
-                document.getElementById('misc').style.top = parseInt(document.getElementById('misc').style.top.slice(0, -2)) - 25 + 'px';
-                document.getElementById('variables').style.top = parseInt(document.getElementById('variables').style.top.slice(0, -2)) - 25 + 'px';
+                for (i = 0; i < typeArrayTwo.length; i++) {
+                    document.getElementById(typeArrayTwo[i]).style.top = parseInt(document.getElementById(typeArrayTwo[i]).style.top.slice(0, -2)) - 25 + 'px';
+                }
                 break; 
             case '<block type="python_list_empty"></block>':
-                document.getElementById('conversions').style.top = parseInt(document.getElementById('conversions').style.top.slice(0, -2)) - 50 + 'px';
-                document.getElementById('tests').style.top = parseInt(document.getElementById('tests').style.top.slice(0, -2)) - 50 + 'px';
-                document.getElementById('control').style.top = parseInt(document.getElementById('control').style.top.slice(0, -2)) - 50 + 'px';
-                document.getElementById('io').style.top = parseInt(document.getElementById('io').style.top.slice(0, -2)) - 50 + 'px';
-                document.getElementById('misc').style.top = parseInt(document.getElementById('misc').style.top.slice(0, -2)) - 50 + 'px';
-                document.getElementById('variables').style.top = parseInt(document.getElementById('variables').style.top.slice(0, -2)) - 50 + 'px';
+                for (i = 0; i < typeArrayThree.length; i++) {
+                    document.getElementById(typeArrayThree[i]).style.top = parseInt(document.getElementById(typeArrayThree[i]).style.top.slice(0, -2)) - 50 + 'px';
+                }
                 break;
         }
 
@@ -569,34 +558,21 @@ Blockly.Toolbox.TreeNode.prototype.onMouseDown = function(e) {
         if (typeof this.blocks[0] !== 'undefined') {
 
         switch (this.blocks[0].outerHTML) {
+
             case '<block type="python_int_const"></block>':
-                document.getElementById('strings').style.top = parseInt(document.getElementById('strings').style.top.slice(0, -2)) + 25 + 'px';
-                document.getElementById('booleans').style.top = parseInt(document.getElementById('booleans').style.top.slice(0, -2)) + 25 + 'px';
-                document.getElementById('lists').style.top = parseInt(document.getElementById('lists').style.top.slice(0, -2)) + 25 + 'px';
-                document.getElementById('conversions').style.top = parseInt(document.getElementById('conversions').style.top.slice(0, -2)) + 25 + 'px';
-                document.getElementById('tests').style.top = parseInt(document.getElementById('tests').style.top.slice(0, -2)) + 25 + 'px';
-                document.getElementById('control').style.top = parseInt(document.getElementById('control').style.top.slice(0, -2)) + 25 + 'px';
-                document.getElementById('io').style.top = parseInt(document.getElementById('io').style.top.slice(0, -2)) + 25 + 'px';
-                document.getElementById('misc').style.top = parseInt(document.getElementById('misc').style.top.slice(0, -2)) + 25 + 'px';
-                document.getElementById('variables').style.top = parseInt(document.getElementById('variables').style.top.slice(0, -2)) + 25 + 'px';
+                for (i = 0; i < typeArrayOne.length; i++) {
+                    document.getElementById(typeArrayOne[i]).style.top = parseInt(document.getElementById(typeArrayOne[i]).style.top.slice(0, -2)) + 25 + 'px';
+                }
                 break;
             case '<block type="python_string_const"></block>':
-                document.getElementById('booleans').style.top = parseInt(document.getElementById('booleans').style.top.slice(0, -2)) + 25 + 'px';
-                document.getElementById('lists').style.top = parseInt(document.getElementById('lists').style.top.slice(0, -2)) + 25 + 'px';
-                document.getElementById('conversions').style.top = parseInt(document.getElementById('conversions').style.top.slice(0, -2)) + 25 + 'px';
-                document.getElementById('tests').style.top = parseInt(document.getElementById('tests').style.top.slice(0, -2)) + 25 + 'px';
-                document.getElementById('control').style.top = parseInt(document.getElementById('control').style.top.slice(0, -2)) + 25 + 'px';
-                document.getElementById('io').style.top = parseInt(document.getElementById('io').style.top.slice(0, -2)) + 25 + 'px';
-                document.getElementById('misc').style.top = parseInt(document.getElementById('misc').style.top.slice(0, -2)) + 25 + 'px';
-                document.getElementById('variables').style.top = parseInt(document.getElementById('variables').style.top.slice(0, -2)) + 25 + 'px';
+                for (i = 0; i < typeArrayTwo.length; i++) {
+                    document.getElementById(typeArrayTwo[i]).style.top = parseInt(document.getElementById(typeArrayTwo[i]).style.top.slice(0, -2)) + 25 + 'px';
+                }
                 break;
             case '<block type="python_list_empty"></block>':
-                document.getElementById('conversions').style.top = parseInt(document.getElementById('conversions').style.top.slice(0, -2)) + 50 + 'px';
-                document.getElementById('tests').style.top = parseInt(document.getElementById('tests').style.top.slice(0, -2)) + 50 + 'px';
-                document.getElementById('control').style.top = parseInt(document.getElementById('control').style.top.slice(0, -2)) + 50 + 'px';
-                document.getElementById('io').style.top = parseInt(document.getElementById('io').style.top.slice(0, -2)) + 50 + 'px';
-                document.getElementById('misc').style.top = parseInt(document.getElementById('misc').style.top.slice(0, -2)) + 50 + 'px';
-                document.getElementById('variables').style.top = parseInt(document.getElementById('variables').style.top.slice(0, -2)) + 50 + 'px';
+                for (i = 0; i < typeArrayThree.length; i++) {
+                    document.getElementById(typeArrayThree[i]).style.top = parseInt(document.getElementById(typeArrayThree[i]).style.top.slice(0, -2)) + 50 + 'px';
+                }
                 break;
         }
     }

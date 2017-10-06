@@ -361,7 +361,20 @@ function setModalVar() {
     var varMod;
     var varBool;
     var varName;
+    
+    if (workspace.imports.indexOf('import turtle') > -1 || startImports.indexOf('turtle') > -1) {
 
+        document.getElementById('turtleOne').disabled = false;   
+        document.getElementById('turtleTwo').disabled = false;   
+        document.getElementById('screenOne').disabled = false;   
+        document.getElementById('screenTwo').disabled = false;   
+    } else {
+        document.getElementById('turtleOne').disabled = true;   
+        document.getElementById('turtleTwo').disabled = true;   
+        document.getElementById('screenOne').disabled = true;   
+        document.getElementById('screenTwo').disabled = true;   
+
+    }
 
     modalSet = document.getElementById("modalSet");
     modalVarName = document.getElementById("modalVarName");
@@ -369,20 +382,27 @@ function setModalVar() {
     modalType = document.getElementById("modalType");
 
     dropdownVar = document.getElementById("dropdownVar");
+    dropdownVar2 = document.getElementById("dropdownVar2");
+    if (dropdownVar.value == 'list') { 
+        dropdownVar2.style.display = 'inline'; 
+    } else {
+        dropdownVar2.style.display = 'none';
+    }
+    
+    //dropdownVar3 = document.getElementById("dropdownVar3");
 
     radioStd = document.getElementById("radioStd");
     radioList = document.getElementById("radioList");
     radioTuple = document.getElementById("radioTuple");
     varText = document.getElementById("varText");
-    varType = dropdownVar.value;
+    
+    if (dropdownVar.value == 'list') {
 
-    if (radioStd.checked) {
-        varMod = radioStd.value;
-    } else if (radioList.checked) {
-        varMod = radioList.value;
-    } else if (radioTuple.checked) {
-        varMod = radioTuple.value;
+        varType = dropdownVar2.value;
+    } else {
+        varType = dropdownVar.value;
     }
+    
 
     varName = varText.value;
     
@@ -395,7 +415,7 @@ function setModalVar() {
     }
 
     var variables = Blockly.Variables.allVariables(workspace, true, true);
-    varName = Blockly.Python.makeNameUnique(newVar, variables);
+    varName = Blockly.PythonLang.makeNameUnique(newVar, variables);
     
     workspaceVar.clear();
 
@@ -412,58 +432,6 @@ function setModalVar() {
         varBlock.appendChild(pyType);
         return varBlock;
     };
-
-    /*var newConstBlock = function() {
-        constBlock = goog.dom.createDom('block');
-        var field;
-        constBlock.setAttribute('id', 'constBlock');
-        switch (varType) {
-
-            case 'int':
-                constBlock.setAttribute('type', 'python_int_const');
-                field = goog.dom.createDom('field', null, '0');
-                field.setAttribute('name', 'VALUE');
-                constBlock.setAttribute('deletable', 'false');
-                constBlock.setAttribute('movable', 'false');
-                break;
-            case 'float':
-                constBlock.setAttribute('type', 'python_float_const');
-                field = goog.dom.createDom('field', null, '0.0');
-                field.setAttribute('name', 'VALUE');
-                constBlock.setAttribute('deletable', 'false');
-                constBlock.setAttribute('movable', 'false');
-                break;
-            case 'str':
-                constBlock.setAttribute('type', 'python_string_const');
-                field = goog.dom.createDom('field', null, '"a string"');
-                field.setAttribute('name', 'VALUE');
-                constBlock.setAttribute('deletable', 'false');
-                constBlock.setAttribute('movable', 'false');
-                break;
-            case 'bool':
-                switch (varBool) {
-                    case 'true':
-                        constBlock.setAttribute('type', 'python_true');
-                        field = goog.dom.createDom('field', null, 'True');
-                        constBlock.setAttribute('deletable', 'false');
-                        constBlock.setAttribute('movable', 'false');
-                        break;
-                    case 'false':
-                        constBlock.setAttribute('type', 'python_false');
-                        field = goog.dom.createDom('field', null, 'False');
-                        constBlock.setAttribute('deletable', 'false');
-                        constBlock.setAttribute('movable', 'false');
-                        break;
-                }
-                break;
-
-        }
-
-        constBlock.appendChild(field);
-        return constBlock;
-    };
-
-    */
 
     block = goog.dom.createDom('block');
     block.setAttribute('id', 'setterBlock');
@@ -487,12 +455,7 @@ function setModalVar() {
     var variable = newVariableBlock();
     varValue.appendChild(variable);
 
-    /*if (!(varType == 'bool' && varBool == 'empty')) {
-        var valValue = newConstBlock();
-        varConstVal.appendChild(valValue);
-    }*/
-
-    Blockly.Xml.domToBlock(workspaceVar, variable);
+    Blockly.Xml.domToBlock(workspaceVar, block);
 
     var blocks = workspaceVar.getAllBlocks();
     blocks[0].moveBy(15, 15);

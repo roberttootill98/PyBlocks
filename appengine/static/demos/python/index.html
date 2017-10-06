@@ -54,21 +54,38 @@
             <form name="modalForm">
                 Variable name: <input id="varText" type="text" name="name" value="variableName"
                     onchange="setModalVar()"><br><br>
+                
                 <select id="dropdownVar" onchange="setModalVar()">
             <option value="nulltype">Pick a variable type...</option>
             <option value="int">Integer</option>
             <option value="float">Float</option>
             <option value="str">String</option>
             <option value="bool">Boolean</option>
-        </select>
+            <option value="turtle" id="turtleOne" disabled>Turtle</option>
+            <option value="screen" id="screenOne" disabled>Screen</option>
+            <option value="list">List of...</option>
+                </select>
 
-                <input id="radioStd" type="radio" name="type" value="std" onclick="setModalVar()"
-                    checked>Standard
-                <input id="radioList" type="radio" name="type" value="list" onclick="setModalVar()"
-                    disabled>List
-                <input id="radioTuple" type="radio" name="type" value="tuple" onclick="setModalVar()"
-                    disabled>Tuple<br><br>
-
+                <select id="dropdownVar2" onchange="setModalVar()">
+            <option value="nulltype">Pick a variable type...</option>
+            <option value="*int">Integer</option>
+            <option value="*float">Float</option>
+            <option value="*str">String</option>
+            <option value="*bool">Boolean</option>
+            <option value="*turtle" id="turtleTwo" disabled>Turtle</option>
+            <option value="*screen" id="screenTwo" disabled>Screen</option>
+            <!--<option value="list">List of...</option>-->
+                </select>
+                
+                <!--<select id="dropdownVar3" onchange="setModalVar()">
+            <option value="nulltype">Pick a variable type...</option>
+            <option value="int">Integer</option>
+            <option value="float">Float</option>
+            <option value="str">String</option>
+            <option value="bool">Boolean</option>
+                </select>-->
+            
+        </br></br>
                 <div class="left">
                     <button type="button" class="fancyButtons" onclick="spawnVar()">OK</button>
                     <button type="button" class="fancyButtons" onclick="closeModal()">Cancel</button>
@@ -98,8 +115,8 @@
                         <option value="1">Lists enabled</option>
                         <option value="2">Everything enabled</option>
                     </select> -->
-                            <!--<button type="button" class="fancyButtons" id="modalBtn">Var</button>-->
                             <button type="button" class="fancyButtons" id="run" onclick="runFull()">Run</button>
+                            <button type="button" class="fancyButtons" id="modalBtn">Var</button>
                             <button type="button" class="fancyButtons" onclick="linkBlocks()">Link</button>
                             <button type="button" class="fancyButtons" onclick="saveBlocks()">Save</button>
                             <button type="button" class="fancyButtons" onclick="initLoad(createPicker)">Load</button>

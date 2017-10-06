@@ -22,8 +22,8 @@
     margin: 15% auto;
     padding: 20px;
     border: 1px solid #888;
-    width: 500px;
-    height: 180px;
+    width: 420px;
+    height: 188px;
 }
 .close {
     color: #aaa;
@@ -337,6 +337,16 @@ table#typeTable {
     cursor: default;
 }
 
+#dropdownVar2 {
+    display: none;
+}
+
+
+/*
+#dropdownVar3 {
+    display: none;
+}
+*/
 
 /*#turtleCanvas {
   position: absolute;
@@ -356,8 +366,8 @@ table#typeTable {
 }
 
 #blocklyVarDiv {
-    height: 60px !important;
-    width: 500px !important;
+    height: 75px !important;
+    width: 420px !important;
 }
 
 #startIcon {
@@ -381,28 +391,3 @@ table#typeTable {
 .blocklyToolboxDiv {
     cursor: default;
 }
-
-.int {
-    color: #FBBC05; 
-}
-
-.float {
-    color: #4285F4;
-}
-
-.str {
-    color: #39b55b;
-}
-
-.bool {
-    color: #EA4335;
-}
-
-.range {
-    color: #FF89F7;
-}
-
-.turtle {
-    color: #00EEEE;
-}
-

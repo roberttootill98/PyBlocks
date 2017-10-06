@@ -122,10 +122,7 @@
             <block type="python_comment"></block>
         </category>
         <pattern name="variables" type="vars" x="5" y="263"></pattern>
-        <category name="Variables">
-        <category name="Program variables" custom="VARIABLE"></category>
-            <category name="New variable" custom="NEW_VARIABLE"></category>
-            <category name="New list" custom="NEW_LIST_VAR"></category>
+        <category name="Variables" custom="VARIABLE">
         </category>
 
     </xml>
@@ -267,10 +264,7 @@
             <block type="python_comment"></block>
         </category>
         <pattern name="variables" type="vars" x="5" y="263"></pattern>
-        <category name="Variables">
-        <category name="Program variables" custom="VARIABLE"></category>
-            <category name="New variable" custom="NEW_VARIABLE"></category>
-            <category name="New list" custom="NEW_LIST_VAR"></category>
+        <category name="Variables" custom="VARIABLE">
         </category>
 
     </xml>
@@ -399,10 +393,7 @@
             <block type="python_comment"></block>
         </category>
         <pattern name="variables" type="vars" x="5" y="263"></pattern>
-        <category name="Variables">
-        <category name="Program variables" custom="VARIABLE"></category>
-            <category name="New variable" custom="NEW_VARIABLE"></category>
-            <category name="New list" custom="NEW_LIST_VAR"></category>
+        <category name="Variables" custom="VARIABLE">
         </category>
         <pattern name="turtle" type="none" x="5" y="288"></pattern>
         <category name="Turtle">
@@ -567,10 +558,7 @@
             <block type="python_comment"></block>
         </category>
         <pattern name="variables" type="vars" x="5" y="263"></pattern>
-        <category name="Variables">
-        <category name="Program variables" custom="VARIABLE"></category>
-            <category name="New variable" custom="NEW_VARIABLE"></category>
-            <category name="New list" custom="NEW_LIST_VAR"></category>
+        <category name="Variables" custom="VARIABLE">
         </category>
         <pattern name="turtle" type="none" x="5" y="288"></pattern>
         <category name="Turtle">

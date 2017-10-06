@@ -140,6 +140,11 @@ Blockly.Variables.existingListFlyoutCategory = function(workspace) {
  * @return {!Array.<!Element>} Array of XML block elements.
  */
 Blockly.Variables.flyoutCategory = function(workspace, vars, listOps) {
+    var xmlList = [];
+    var button = goog.dom.createDom('button');
+    button.setAttribute('text', 'New variable');
+    xmlList.push(button);
+    
     var newVariableBlock = function(variable) {
         var block = goog.dom.createDom('block');
         block.setAttribute('type', 'variables_get');
@@ -151,7 +156,6 @@ Blockly.Variables.flyoutCategory = function(workspace, vars, listOps) {
         return block;
     };
 
-    var xmlList = [];
     for (var i = 0; i < vars.length; i++) {
         // Create assignment block with variable on lhs.
         var block = goog.dom.createDom('block');
