@@ -385,7 +385,7 @@ function setModalVar() {
     }
 
     varName = varText.value;
-    
+
     newVar = varName;
 
     newVar = newVar.replace(/^ +| +$/g, '');
@@ -395,8 +395,8 @@ function setModalVar() {
     }
 
     var variables = Blockly.Variables.allVariables(workspace, true, true);
-    varName = Blockly.Python.makeNameUnique(newVar, variables);
-    
+    varName = Blockly.PythonLang.makeNameUnique(newVar, variables);
+
     workspaceVar.clear();
 
     var newVariableBlock = function() {
@@ -560,7 +560,7 @@ function init() {
     xmlDoc = xmlHttp.responseText;
 
     blocklyDiv.insertAdjacentHTML('afterend', xmlDoc);
-    
+
     workspaceVar = Blockly.inject(blocklyVarDiv, {
         media: '../../media/',
         trashcan: false
@@ -642,7 +642,7 @@ function init() {
         var modalSpan = document.getElementsByClassName('close')[0];
 
         var interpreter = document.getElementById("codeArea");
-        
+
         setTimeout(function() {
             document.getElementById('startIcon').innerHTML = document.getElementById('startIcon').innerHTML + '<span id="startIconSpan">test</span>';
         }, 150);
