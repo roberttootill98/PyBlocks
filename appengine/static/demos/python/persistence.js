@@ -1,8 +1,8 @@
 var useProxy = false;
 var metaData = false;
 var picker = new GoogleDrivePicker({
-    apiKey: 'AIzaSyAnsT98BD1k1H5hUI5kE3VLEcqsQH4h6QM',
-    clientId: '785460867735-p0hi2qcde778o4rcatu204e8j37c3f5s.apps.googleusercontent.com'
+    apiKey: 'AIzaSyBIJVAC6TKBZmMwIFeOUjWPyIC_YfUWk-I',
+    clientId: '600830548447-tjkqh0qmskmjc8v1l3mrknn2k14ok2r4.apps.googleusercontent.com'
 });
 
 function getXMLHttpRequest() {

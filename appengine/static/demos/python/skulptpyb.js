@@ -352,6 +352,16 @@ function generateCode(event) {
 
 };
 
+function closeModal() {
+
+    modal = document.getElementById('modalBG');
+    varText = document.getElementById('varText');
+    dropdownVar = document.getElementById('dropdownVar');
+    modal.style.display = 'none';
+    varText.value = 'newVariable';
+    dropdownVar.value = 'nulltype';
+}
+
 var block;
 var constBlock;
 var varBlock;
@@ -388,12 +398,7 @@ function setModalVar() {
     } else {
         dropdownVar2.style.display = 'none';
     }
-    
-    //dropdownVar3 = document.getElementById("dropdownVar3");
 
-    radioStd = document.getElementById("radioStd");
-    radioList = document.getElementById("radioList");
-    radioTuple = document.getElementById("radioTuple");
     varText = document.getElementById("varText");
     
     if (dropdownVar.value == 'list') {
@@ -464,8 +469,8 @@ function setModalVar() {
 
 function spawnVar() {
 
-    dropdownVar = document.getElementById("dropdownVar").value;
-
+    dropdownVar = document.getElementById('dropdownVar').value;
+    varText = document.getElementById('varText');
     if (dropdownVar != 'nulltype') {
         var modal = document.getElementById('modalBG');
 
@@ -488,7 +493,9 @@ function spawnVar() {
         modal.style.display = 'none';
 
         Blockly.Xml.domToWorkspace(workspace, finalBlock);
-        console.log("trc", finalBlock);
+        
+        varText.value = 'newVariable';
+        dropdownVar.value = 'nulltype'; 
 
     } else {
         window.alert("Pick a variable type");
@@ -497,11 +504,6 @@ function spawnVar() {
 
 }
 
-function closeModal() {
-
-    var modal = document.getElementById('modalBG');
-    modal.style.display = 'none';
-}
 
 window.onbeforeunload = function() {
     return 'Are you sure?';
@@ -596,13 +598,11 @@ function init() {
 
     var modal;
     var modalBtn;
-    var modalSpan;
 
     window.onload = function() {
         var mypre = document.getElementById("codeArea");
         var modal = document.getElementById('modalBG');
         var modalBtn = document.getElementById('modalBtn');
-        var modalSpan = document.getElementsByClassName('close')[0];
 
         var interpreter = document.getElementById("codeArea");
         
@@ -623,9 +623,6 @@ function init() {
 
         }
 
-        modalSpan.onclick = function() {
-            modal.style.display = 'none';
-        }
     }
 
 

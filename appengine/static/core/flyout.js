@@ -28,7 +28,6 @@ goog.provide('Blockly.Flyout');
 
 goog.require('Blockly.Block');
 goog.require('Blockly.Comment');
-goog.require('Blockly.FlyoutButton');
 goog.require('Blockly.WorkspaceSvg');
 goog.require('goog.dom');
 goog.require('goog.events');

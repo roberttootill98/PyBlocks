@@ -33,7 +33,7 @@ Blockly.Blocks['python_int_const'] = {
     init: function() {
         var tooltip = '';
         this.appendDummyInput()
-            .appendField(new Blockly.FieldTextInput("42"), "VALUE");
+            .appendField(new Blockly.FieldTextInput("123"), "VALUE");
         this.setInputsInline(true);
         this.setTypeVecs([
             ["int"],
@@ -80,7 +80,7 @@ Blockly.Blocks['python_int_const'] = {
 Blockly.Blocks['python_float_const'] = {
     init: function() {
         this.appendDummyInput()
-            .appendField(new Blockly.FieldTextInput("3.14"), "VALUE");
+            .appendField(new Blockly.FieldTextInput("1.2"), "VALUE");
         this.setInputsInline(true);
         this.setTypeVecs([
             ["float"]
