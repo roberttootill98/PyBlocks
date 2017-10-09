@@ -63,6 +63,16 @@ var bluegreen = '#39b55b'; //"#34A853";
 var vermilion = "#EA4335";
 var pink =   "#FF89F7";
 
+
+/* Microsoft
+var orange = "#FFB901";
+var skyblue = "#01A4EF";
+var bluegreen = '#7FBA00'; //"#34A853";
+var vermilion = "#F25022";
+var pink =   "#FF89F7";
+*/
+
+
 Blockly.PythonLang.COLOUR = {};
 Blockly.PythonLang.COLOUR['nulltype'] = '#504a45';
 Blockly.PythonLang.COLOUR['notype'] = '#afafaf'; //'#afafaf'; //'#a6a6a6'; //'#706c67';
@@ -78,8 +88,8 @@ Blockly.PythonLang.RAINBOW = [red, yellow, green, cyan, blue, magenta, red];
 
 
 // Temporary colours
-Blockly.PythonLang.COLOUR['nonnegint'] = green;
-Blockly.PythonLang.COLOUR['negint'] = green;
+Blockly.PythonLang.COLOUR['nonnegint'] = orange;
+Blockly.PythonLang.COLOUR['negint'] = orange;
 
 Blockly.PythonLang.SUBTYPES = {
     'int': ['negint', 'nonnegint']
