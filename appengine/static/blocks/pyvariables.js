@@ -143,6 +143,75 @@ Blockly.Blocks['variables_set'] = {
     }
 };
 
+Blockly.Blocks['python_variable_selector'] = {
+    init: function() {
+        // has blank rainbow variable
+        //    empty text for name?
+        // else use drop down to select existing variables
+        //    arrow on right hand side of block
+        /*
+        this.appendValueInput("LH3")
+            .appendField(" - ");
+        this.appendValueInput("RHS")
+            .appendField(" - ");
+        this.appendDummyInput()
+            .appendField(new Blockly.FieldTextInput(" V "), "VALUE");
+        this.appendDummyInput()
+            .appendField(new Blockly.FieldTextInput(" V "), "VALUE");
+        */
+        var variables = Blockly.Variables.allVariables(workspace, true, true)
+
+        // necessary?
+        var varList = [];
+        for(i = 0; i < variables.length; i++) {
+            //varList.push([variables[i]["name"], variables[i]["type"]]);
+            varList.push([variables[i]["name"], "var" + i]);
+        }
+        this.appendDummyInput()
+            .appendField('Existing Variable:')
+            /* get list of exsiting vars and populate dropdown with them
+            in format ["displayNameForItem", "varNameForItem"]
+            */
+            .appendField(new Blockly.FieldDropdown(
+                //Blockly.Variables.allVariables(workspace, true, true)
+                varList
+                /*
+                [
+                    ['first item', 'ITEM1'],
+                    ['second item', 'ITEM2']
+                ]
+                */
+            ),
+            'FIELDNAME'); // name of selected item as var
+        this.setInputsInline(true);
+        /*
+        this.setTypeVecs([
+            ["int"],
+            ["nonnegint"],
+            ["negint"],
+            ["float"]
+        ]);
+        */
+        this.setOutput(true);
+
+        // add arrow on here
+
+    },
+    /*
+    onchange: function(ev) {
+        // check if arg is not empty
+        if (Blockly.Python.valueToCode(this, 'ARG', Blockly.Python.ORDER_NONE) != '') {
+            this.holesFilled = true;
+            runtooltip('print( ' + Blockly.Python.blockToCode(this)[0] + ')');
+            this.setTooltip(document.getElementById("hiddenoutput").textContent);
+        } else {
+            this.holesFilled = false;
+            this.setTooltip('Returns the difference of two integers/floating point numbers');
+        }
+    }
+    */
+};
+
 /* possibly leave till later
 Blockly.Blocks['list_variable_index_get'] = {
 

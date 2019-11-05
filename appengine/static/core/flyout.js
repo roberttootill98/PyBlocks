@@ -377,7 +377,12 @@ Blockly.Flyout.prototype.show = function(xmlList) {
 
     switch (xmlList) {
         case Blockly.Variables.CAT_EXISTING:
-            xmlList = Blockly.Variables.existingFlyoutCategory(this.workspace_.targetWorkspace);
+            xmlList = [document.getElementById("python_variable_selector")];
+            xmlList = xmlList.concat(Blockly.Variables.existingFlyoutCategory(this.workspace_.targetWorkspace));
+            //xmlList = Blockly.Variables.existingFlyoutCategory(this.workspace_.targetWorkspace);
+            //var el = document.getElementById("python_if");
+            //xmlList.push(el);
+            // push variable selector block to list of blocks
             break;
         case Blockly.Variables.CAT_NEW_BASIC:
             xmlList = Blockly.Variables.newFlyoutCategory(this.workspace_.targetWorkspace);
