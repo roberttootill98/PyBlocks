@@ -150,19 +150,21 @@ Blockly.Blocks['python_variable_selector'] = {
      *
      */
     /** log
-     * currently initing to first existing var
-     * seems ok
+     * currently initing to first existing var - seems ok
+     * get blockToCode to recognise this as normal var block
+     */
+    /** todo
+     * when a new variable is created - update all instances of dropdown to include this
      */
     /** bugs
-     *
+     * when there are no variables - not able to view item, should default to have create variable item
      */
-    init function() {
+    init: function() {
         this.appendDummyInput()
-            .appendField("var selector: ")
             /* get list of exsiting vars and populate dropdown with them
             in format ["displayNameForItem", "varNameForItem"]
             */
-            .appendField(new Blockly.FieldDropdown(getVarList()),'varName')
+            .appendField(new Blockly.FieldDropdown(getVarList(this)),'varName')
             // drop down arrow
             .appendField(Blockly.FieldDropdown.ARROW_CHAR);
 
@@ -171,18 +173,40 @@ Blockly.Blocks['python_variable_selector'] = {
     },
 
     onchange: function(ev) {
+        // on drop - update options in dropdown
+        if(this.parentBlock_ != null) {
+            console.log("update dropdown");
+            /*
+            // bit of a hack
+            // delete current dropdown - first element of array
+            this.inputList[0].fieldRow.shift();
+            // add new dropdown
+            this.inputList[0].fieldRow.unshift(new Blockly.FieldDropdown(getVarList(this)));
+            this.inputList[0].fieldRow.name = 'varName';
+            */
+        }
+
         // setTypeVecs as type of block selected/created
         this.setTypeVecs([[getVarType(this.getFieldValue('varName'))]]);
         this.reType();
+
+        // update tooltip
     }
 };
 
 // create var list according to valid blocks
-function getVarList() {
+function getVarList(block) {
     var variables = Blockly.Variables.allVariables(workspace, true, true);
     var varList = [];
     for(i = 0; i < variables.length; i++) {
-        varList.push([variables[i]["name"], variables[i]["name"]]);
+        // limit vars
+        var valid = true;
+
+        //valid &= true;
+
+        if(valid) {
+            varList.push([variables[i]["name"], variables[i]["name"]]);
+        }
     }
     return varList;
 }
