@@ -160,24 +160,32 @@ Blockly.Blocks['python_variable_selector'] = {
      * when there are no variables - not able to view item, should default to have create variable item
      */
     init: function() {
-        this.appendDummyInput()
+        this.appendDummyInput('dropDownContainer')
+            updateVarList(this);
             /* get list of exsiting vars and populate dropdown with them
             in format ["displayNameForItem", "varNameForItem"]
-            */
             .appendField(new Blockly.FieldDropdown(getVarList(this)),'varName')
             // drop down arrow
-            .appendField(Blockly.FieldDropdown.ARROW_CHAR);
+            .appendField(Blockly.FieldDropdown.ARROW_CHAR, 'arrow');
+            */
 
         this.setInputsInline(true);
         this.setOutput(true);
     },
 
     onchange: function(ev) {
+        /*
+        if() {
+            // when varName is set to new variable open model window
+        }
+        */
         // on drop - update options in dropdown
         if(this.parentBlock_ != null) {
+            updateVarList(this);
             console.log("update dropdown");
+
             /*
-            // bit of a hack
+            // bit of a hack -- doesnt even work
             // delete current dropdown - first element of array
             this.inputList[0].fieldRow.shift();
             // add new dropdown
@@ -189,6 +197,8 @@ Blockly.Blocks['python_variable_selector'] = {
         // setTypeVecs as type of block selected/created
         this.setTypeVecs([[getVarType(this.getFieldValue('varName'))]]);
         this.reType();
+
+        var code = Blockly.Python.valueToCode(this, 'varName', Blockly.Python.ORDER_NONE);
 
         // update tooltip
     }
@@ -202,7 +212,14 @@ function getVarList(block) {
         // limit vars
         var valid = true;
 
-        //valid &= true;
+        // check parent block typeVecs
+        try {
+          if(this.parentBlock_ != null) {
+              console.log("something");
+          }
+        } catch(err) {
+          console.log(err);
+        }
 
         if(valid) {
             varList.push([variables[i]["name"], variables[i]["name"]]);
@@ -218,6 +235,27 @@ function getVarType(name) {
             return variables[i]["type"];
         }
     }
+    //return ['int'];
+}
+// update varList
+function updateVarList(block) {
+    var input = block.inputList[0];
+
+    // remove current dropdown
+    try {
+      input.removeField('varName');
+      input.removeField('arrow');
+    } catch(err) {
+      console.log(err);
+    }
+
+    // add new dropdown
+    var dropDownItems = getVarList(this);
+    // add create var option
+    //dropDownItems.unshift(['New-variable', 'rainbow']);
+
+    input.appendField(new Blockly.FieldDropdown(dropDownItems), 'varName');
+    input.appendField(Blockly.FieldDropdown.ARROW_CHAR, 'arrow');
 }
 
 /* possibly leave till later
