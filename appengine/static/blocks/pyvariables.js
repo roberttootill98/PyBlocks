@@ -181,24 +181,13 @@ Blockly.Blocks['python_variable_selector'] = {
         */
         // on drop - update options in dropdown
         if(this.parentBlock_ != null) {
+            // should only do once, on drop not on change
             updateVarList(this);
-            console.log("update dropdown");
-
-            /*
-            // bit of a hack -- doesnt even work
-            // delete current dropdown - first element of array
-            this.inputList[0].fieldRow.shift();
-            // add new dropdown
-            this.inputList[0].fieldRow.unshift(new Blockly.FieldDropdown(getVarList(this)));
-            this.inputList[0].fieldRow.name = 'varName';
-            */
         }
 
         // setTypeVecs as type of block selected/created
         this.setTypeVecs([[getVarType(this.getFieldValue('varName'))]]);
         this.reType();
-
-        var code = Blockly.Python.valueToCode(this, 'varName', Blockly.Python.ORDER_NONE);
 
         // update tooltip
     }

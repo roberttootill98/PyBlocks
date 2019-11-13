@@ -159,11 +159,11 @@ Blockly.Generator.prototype.allNestedComments = function(block) {
  *               or 1 if it has.
  */
 Blockly.Generator.prototype.chkImport = function(module) {
-    
+
     if (workspace.imports.indexOf('import' + module) == -1 && startImports.indexOf(module) == -1) {
-    
+
         return 0;
-    
+
     } else {
 
         return 1;
@@ -216,7 +216,7 @@ Blockly.Generator.prototype.blockToCode = function(block) {
     } else if (workspace.running && !block.isInFlyout && block.type == 'variables_get' &&
         block.getSurroundParent().type == 'python_for') {
 
-        workspace.vars += block.getFieldValue("VAR") + '_FOR' + '\n';        
+        workspace.vars += block.getFieldValue("VAR") + '_FOR' + '\n';
 
     } else if (workspace.running && !block.isInFlyout && block.type == 'variables_get' &&
         block.getSurroundParent().type != 'variables_set' &&
@@ -290,9 +290,23 @@ Blockly.Generator.prototype.valueToCode = function(block, name, order) {
     if (isNaN(order)) {
         goog.asserts.fail('Expecting valid order from block "%s".', block.type);
     }
-    var targetBlock = block.getInputTargetBlock(name);
-    if (!targetBlock) {
-        return '';
+    var targetBlock;
+
+    // check if dropdown
+    // list of all dropdowns
+    var dropdowns = ['python_variable_selector'];
+    if(dropdowns.includes(block.type)) {
+        var dropdown = true;
+    }
+
+    if(dropdown) {
+        // target block required for type
+        targetBlock = block;
+    } else {
+        targetBlock = block.getInputTargetBlock(name);
+        if (!targetBlock) {
+            return '';
+        }
     }
     var tuple = this.blockToCode(targetBlock);
     if (tuple === '') {
