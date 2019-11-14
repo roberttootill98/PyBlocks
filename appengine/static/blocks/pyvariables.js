@@ -171,6 +171,8 @@ Blockly.Blocks['python_variable_selector'] = {
 
         this.setInputsInline(true);
         this.setOutput(true);
+
+        this.dropped = false;
     },
 
     onchange: function(ev) {
@@ -179,9 +181,16 @@ Blockly.Blocks['python_variable_selector'] = {
             // when varName is set to new variable open model window
         }
         */
+
         // on drop - update options in dropdown
+        var tempDropped = this.dropped;
         if(this.parentBlock_ != null) {
-            // should only do once, on drop not on change
+            this.dropped = true;
+        } else {
+            this.dropped = false;
+        }
+        if(tempDropped != this.dropped) {
+            // if the value of dropped has changed, update var list
             updateVarList(this);
         }
 
@@ -202,12 +211,8 @@ function getVarList(block) {
         var valid = true;
 
         // check parent block typeVecs
-        try {
-          if(this.parentBlock_ != null) {
-              console.log("something");
-          }
-        } catch(err) {
-          console.log(err);
+        if(block.parentBlock_ != null) {
+            valid &= block.parentBlock_.typeVecs[0].includes(getVarType(variables[i]["name"]));
         }
 
         if(valid) {
@@ -239,7 +244,7 @@ function updateVarList(block) {
     }
 
     // add new dropdown
-    var dropDownItems = getVarList(this);
+    var dropDownItems = getVarList(block);
     // add create var option
     //dropDownItems.unshift(['New-variable', 'rainbow']);
 
