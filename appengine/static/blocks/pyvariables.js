@@ -162,6 +162,7 @@ Blockly.Blocks['python_variable_selector'] = {
         this.setInputsInline(true);
         this.setOutput(true);
 
+        // inside another block
         this.dropped = false;
     },
 
@@ -180,15 +181,15 @@ Blockly.Blocks['python_variable_selector'] = {
             this.dropped = false;
         }
         if(tempDropped != this.dropped) {
-            var varName = this.getFieldValue('varName');
+            var varName = this.dropdown.getValue();
             // if the value of dropped has changed, update var list
             updateVarList(this);
             // maintain var selected
-            this.setFieldValue(varName, 'varName');
+            this.dropdown.setValue(varName, 'varName');
         }
 
         // setTypeVecs as type of block selected/created
-        this.setTypeVecs([[getVarType(this.getFieldValue('varName'))]]);
+        this.setTypeVecs([[getVarType(this.dropdown.getText())]]);
         this.reType();
 
         // update tooltip
@@ -211,10 +212,10 @@ function getVarList(block) {
              * also needs to check for which input is being used
              * eg. in parent block, first, second, third...
              */
-            var input = 0; // for testing, means first input for type vecs
+            var inputIndex = 0; // for testing, means first input for type vecs
             var parentTypeVecs = parent.fullTypeVecs;
             for(var j = 0; j < parentTypeVecs.length; j++) {
-                if(parentTypeVecs[j][input] == "any" || parentTypeVecs[j][input] == getVarType(variables[i]['name'])) {
+                if(["any", getVarType(variables[i]['name'])].includes(parentTypeVecs[j][inputIndex])) {
                     valid = true;
                     break;
                 }
@@ -224,7 +225,7 @@ function getVarList(block) {
         }
 
         if(valid) {
-            varList.push([variables[i]["name"], variables[i]["name"]]);
+            varList.push([variables[i]["name"], "var" + i]);
         }
     }
     return varList;
@@ -255,7 +256,9 @@ function updateVarList(block) {
     // add create var option
     //dropDownItems.unshift(['New-variable', 'rainbow']);
 
-    input.appendField(new Blockly.FieldDropdown(dropDownItems), 'varName');
+    block.dropdown = new Blockly.FieldDropdown(dropDownItems);
+
+    input.appendField(block.dropdown, 'varName');
     input.appendField(Blockly.FieldDropdown.ARROW_CHAR, 'arrow');
 }
 
