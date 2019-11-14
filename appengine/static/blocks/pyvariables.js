@@ -149,10 +149,6 @@ Blockly.Blocks['python_variable_selector'] = {
      * not for assignment
      *
      */
-    /** log
-     * currently initing to first existing var - seems ok
-     * get blockToCode to recognise this as normal var block
-     */
     /** todo
      * when a new variable is created - update all instances of dropdown to include this
      */
@@ -162,12 +158,6 @@ Blockly.Blocks['python_variable_selector'] = {
     init: function() {
         this.appendDummyInput('dropDownContainer')
             updateVarList(this);
-            /* get list of exsiting vars and populate dropdown with them
-            in format ["displayNameForItem", "varNameForItem"]
-            .appendField(new Blockly.FieldDropdown(getVarList(this)),'varName')
-            // drop down arrow
-            .appendField(Blockly.FieldDropdown.ARROW_CHAR, 'arrow');
-            */
 
         this.setInputsInline(true);
         this.setOutput(true);
@@ -190,8 +180,11 @@ Blockly.Blocks['python_variable_selector'] = {
             this.dropped = false;
         }
         if(tempDropped != this.dropped) {
+            var varName = this.getFieldValue('varName');
             // if the value of dropped has changed, update var list
             updateVarList(this);
+            // maintain var selected
+            this.setFieldValue(varName, 'varName');
         }
 
         // setTypeVecs as type of block selected/created
@@ -208,11 +201,26 @@ function getVarList(block) {
     var varList = [];
     for(i = 0; i < variables.length; i++) {
         // limit vars
-        var valid = true;
+        var valid = false;
 
         // check parent block typeVecs
-        if(block.parentBlock_ != null) {
-            valid &= block.parentBlock_.typeVecs[0].includes(getVarType(variables[i]["name"]));
+        var parent = block.parentBlock_;
+        if(parent != null) {
+            // using 0 checks only first set of type vecs
+            /**
+             * also needs to check for which input is being used
+             * eg. in parent block, first, second, third...
+             */
+            var input = 0; // for testing, means first input for type vecs
+            var parentTypeVecs = parent.fullTypeVecs;
+            for(var j = 0; j < parentTypeVecs.length; j++) {
+                if(parentTypeVecs[j][input] == "any" || parentTypeVecs[j][input] == getVarType(variables[i]['name'])) {
+                    valid = true;
+                    break;
+                }
+            }
+        } else {
+            valid = true;
         }
 
         if(valid) {
@@ -229,7 +237,6 @@ function getVarType(name) {
             return variables[i]["type"];
         }
     }
-    //return ['int'];
 }
 // update varList
 function updateVarList(block) {
