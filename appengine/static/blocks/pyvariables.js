@@ -162,16 +162,44 @@ Blockly.Blocks['python_variable_selector'] = {
         this.setInputsInline(true);
         this.setOutput(true);
 
+        this.setTypeVecs([[getVarTypeFromFields(this.dropdown.getText(), this)]]);
+
         // inside another block
         this.dropped = false;
+
+        function getVar() {
+            return {
+                name: this.dropdown.getText(),
+                type: this.typeVecs[0][0]
+            };
+        };
+        this.getVar = getVar;
     },
 
     onchange: function(ev) {
-        /*
-        if() {
-            // when varName is set to new variable open model window
+        //var tempVarList = getVarList(this);
+
+        if(this.dropdown.getValue() == "newVar") { // and in workspace
+            // when varName is set to new variable open modal dialog
+            // use alert for now
+            var varName = prompt("var name", "myVar");
+            var varType = prompt("var type", "int"); // should be dropdown
+
+            // validate name
+            //var valid = Blockly.Python.makeNameUnique(varName, )
+
+            // add field to dropdown fields
+            var fields = this.dropdown.fields;
+            var value = fields[fields.length-2]['value'];
+            fields.push({
+                "name": varName,
+                "type": varType,
+                "value": "var" + (parseInt(value.charAt(value.length-1)) + 1)
+            });
+            // set var selector to var
+            this.dropdown.setValue(varName, 'varName');
+            this.setTypeVecs([[varType]])
         }
-        */
 
         // on drop - update options in dropdown
         var tempDropped = this.dropped;
@@ -188,8 +216,25 @@ Blockly.Blocks['python_variable_selector'] = {
             this.dropdown.setValue(varName, 'varName');
         }
 
+        // react to deleted variable
+        // onchange event fires when block is still on screen
+        // -- recognise deleted block beforehand?
+        /*
+        var varList = getVarList(this);
+        for(var i = 0; i < varList.length; i++) {
+            if(tempVarList[i][0] != varList[i][0]) {
+                // if var deleted is one selected
+
+                // else
+                updateVarList(this);
+                break;
+            }
+        }
+        */
+
+        //Blockly.Variables.allVariables(workspace, true, true);
         // setTypeVecs as type of block selected/created
-        this.setTypeVecs([[getVarType(this.dropdown.getText())]]);
+        this.setTypeVecs([[getVarTypeFromFields(this.dropdown.getText(), this)]]);
         this.reType();
 
         // update tooltip
@@ -215,7 +260,7 @@ function getVarList(block) {
             var inputIndex = 0; // for testing, means first input for type vecs
             var parentTypeVecs = parent.fullTypeVecs;
             for(var j = 0; j < parentTypeVecs.length; j++) {
-                if(["any", getVarType(variables[i]['name'])].includes(parentTypeVecs[j][inputIndex])) {
+                if(["any", getVarTypeFromBlocks(variables[i]['name'])].includes(parentTypeVecs[j][inputIndex])) {
                     valid = true;
                     break;
                 }
@@ -230,12 +275,23 @@ function getVarList(block) {
     }
     return varList;
 }
-// get type of var from var list
-function getVarType(name) {
-    var variables = Blockly.Variables.allVariables(workspace, true, true);
-    for(i = 0; i < variables.length; i++) {
-        if(name == variables[i]["name"]) {
-            return variables[i]["type"];
+
+// get type of var from blocks in workspace
+function getVarTypeFromBlocks(name) {
+  var variables = Blockly.Variables.allVariables(workspace, true, true);
+  for(i = 0; i < variables.length; i++) {
+      if(name == variables[i]["name"]) {
+          return variables[i]["type"];
+      }
+  }
+}
+
+// get type of var from dropdown.fields, unaffected by blocks in workspace
+function getVarTypeFromFields(name, block) {
+    var fields = block.dropdown.fields;
+    for(i = 0; i < fields.length; i++) {
+        if(name == fields[i]["name"]) {
+            return fields[i]["type"];
         }
     }
 }
@@ -253,10 +309,22 @@ function updateVarList(block) {
 
     // add new dropdown
     var dropDownItems = getVarList(block);
-    // add create var option
-    //dropDownItems.unshift(['New-variable', 'rainbow']);
+    // add create var option at beginning of list
+    // dropDownItems.unshift(['New-variable', 'newVar']);
+    dropDownItems.push(['New-variable', 'newVar']); // add it at end for now
 
     block.dropdown = new Blockly.FieldDropdown(dropDownItems);
+
+    // update dropdown.fields
+    block.dropdown.fields = []
+    var options = block.dropdown.getOptions_();
+    for (var i = 0; i < options.length; i++) {
+        block.dropdown.fields.push({
+            "name": options[i][0],
+            "type": getVarTypeFromBlocks(options[i][0]),
+            "value": options[i][1]
+        });
+    };
 
     input.appendField(block.dropdown, 'varName');
     input.appendField(Blockly.FieldDropdown.ARROW_CHAR, 'arrow');
