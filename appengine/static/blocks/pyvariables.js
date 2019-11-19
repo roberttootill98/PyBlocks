@@ -143,6 +143,65 @@ Blockly.Blocks['variables_set'] = {
     }
 };
 
+Blockly.varsInWorkspace = null; //getTopBlocks();
+
+Blockly.Blocks['python_variable_selector_new'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField("Variable");
+
+        this.setInputsInline(true);
+        this.setOutput(true);
+
+        this.setTypeVecs([["any"]]);
+
+        //this.workspaceBlocks = workspace.targetWorkspace.topBlocks_;
+        //this.workspaceBlocks = getTopBlocks()
+        //Blockly.varsInWorkspace = getTopBlocks();
+        setVarsInWorkspace();
+    },
+
+    onchange: function(ev) {
+        console.log("hi");
+        // if in workspace then prompt modal window
+        //if(!checkBlocks(this.workspaceBlocks)) {
+        if(!checkBlocks(Blockly.varsInWorkspace)) {
+            // update block list
+            // this.workspaceBlocks = workspace.targetWorkspace.topBlocks_;
+            Blockly.varsInWorkspace.concat("");
+
+            // now in workspace
+            // open modal window
+        }
+    }
+}
+
+function setVarsInWorkspace() {
+    if(Blockly.varsInWorkspace == null) {
+        Blockly.varsInWorkspace = getTopBlocks();
+    }
+}
+// check if blocks in workspace have changed
+function checkBlocks(oldBlocks) {
+    //var currentBlocks = workspace.targetWorkspace.topBlocks_;
+    var currentBlocks = getTopBlocks()
+    if(currentBlocks.length != oldBlocks.length) {
+        return false
+    } else {
+        for(var i = 0; i < currentBlocks.length; i++) {
+            if(currentBlocks[i] != oldBlocks[i]) {
+                return false
+            }
+        }
+    }
+    return true
+}
+
+// gets topBlocks from workspace
+function getTopBlocks() {
+  return workspace.toolbox_.workspace_.topBlocks_;
+}
+
 Blockly.Blocks['python_variable_selector'] = {
     /**
      * block for create news vars and selecting existing ones
