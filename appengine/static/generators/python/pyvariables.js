@@ -44,6 +44,11 @@ Blockly.Python['python_variable_selector'] = function(block) {
     return [variable, Blockly.Python.ORDER_ATOMIC];
 }
 
+Blockly.Python['python_variable_selector_new'] = function(block) {
+    var variable = block.getFieldValue('VALUE');
+    return [variable, Blockly.Python.ORDER_ATOMIC];
+}
+
 
 // Blockly.Python['python_print2'] = function(block) {
 //   var block1 = Blockly.Python.valueToCode(block, 'ARG1', Blockly.Python.ORDER_NONE);

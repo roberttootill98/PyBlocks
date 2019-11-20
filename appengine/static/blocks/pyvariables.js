@@ -143,63 +143,72 @@ Blockly.Blocks['variables_set'] = {
     }
 };
 
-Blockly.varsInWorkspace = null; //getTopBlocks();
-
 Blockly.Blocks['python_variable_selector_new'] = {
     init: function() {
         this.appendDummyInput()
-            .appendField("Variable");
+            .appendField(new Blockly.FieldTextInput("Variable"), 'VALUE');
+
+        //this.getField('VALUE').setChangeHandler(Blockly.FieldTextInput.integerValidator);
 
         this.setInputsInline(true);
         this.setOutput(true);
 
         this.setTypeVecs([["any"]]);
 
-        //this.workspaceBlocks = workspace.targetWorkspace.topBlocks_;
-        //this.workspaceBlocks = getTopBlocks()
-        //Blockly.varsInWorkspace = getTopBlocks();
-        setVarsInWorkspace();
+        this.inWorkspace = false;
+        this.inWorkspaceTemp = false;
+
+        function getVar() {
+            return {
+                name: this.getFieldValue("VALUE"),
+                type: this.typeVecs[0][0]
+            };
+        };
+        this.getVar = getVar;
     },
 
     onchange: function(ev) {
-        console.log("hi");
         // if in workspace then prompt modal window
-        //if(!checkBlocks(this.workspaceBlocks)) {
-        if(!checkBlocks(Blockly.varsInWorkspace)) {
-            // update block list
-            // this.workspaceBlocks = workspace.targetWorkspace.topBlocks_;
-            Blockly.varsInWorkspace.concat("");
 
-            // now in workspace
+        // after firing event once then we have onchange act like a var block
+        if(this.inWorkspace) {
+            // now treat like regular variable block
+            console.log("flag set");
+
+            // tests
+            //Blockly.Python.valueToCode(this, 'VALUE', Blockly.Python.ORDER_NONE)
+            //Blockly.Variables.allVariables(workspace, true, true);
+        } else if(this.inWorkspaceTemp) {
+            // if duplicated do something different (name!="Variable")
+
             // open modal window
+            // use prompts for now
+            var varName = prompt("var name", "myVar");
+            var varType = prompt("var type", "int"); // should be dropdown
+
+            // if cancelled out, delete block
+            // otherwise set block value and type vecs
+                // create new var block and replace current block with this
+            this.setFieldValue(varName, "VALUE");
+            this.setTypeVecs([[varType]]);
+            this.reType();
+
+            this.inWorkspace = true;
+        } else if(checkBlocks()) {
+            // don't fire modal window event until dropped
+            this.inWorkspaceTemp = true;
         }
     }
 }
 
-function setVarsInWorkspace() {
-    if(Blockly.varsInWorkspace == null) {
-        Blockly.varsInWorkspace = getTopBlocks();
-    }
-}
 // check if blocks in workspace have changed
-function checkBlocks(oldBlocks) {
-    //var currentBlocks = workspace.targetWorkspace.topBlocks_;
-    var currentBlocks = getTopBlocks()
-    if(currentBlocks.length != oldBlocks.length) {
-        return false
-    } else {
-        for(var i = 0; i < currentBlocks.length; i++) {
-            if(currentBlocks[i] != oldBlocks[i]) {
-                return false
-            }
+function checkBlocks() {
+    var blocks = workspace.getAllBlocks();
+    for(var i = 0; i < blocks.length; i++) {
+        if(blocks[i].type == "python_variable_selector_new") {
+            return blocks[i];
         }
     }
-    return true
-}
-
-// gets topBlocks from workspace
-function getTopBlocks() {
-  return workspace.toolbox_.workspace_.topBlocks_;
 }
 
 Blockly.Blocks['python_variable_selector'] = {

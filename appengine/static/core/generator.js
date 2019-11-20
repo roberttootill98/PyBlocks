@@ -295,11 +295,14 @@ Blockly.Generator.prototype.valueToCode = function(block, name, order) {
     // check if dropdown
     // list of all dropdowns
     var dropdowns = ['python_variable_selector'];
+    var varSelectors = ['python_variable_selector_new'];
     if(dropdowns.includes(block.type)) {
         var dropdown = true;
+    } else if(varSelectors.includes(block.type)) {
+        var varSelector = true;
     }
 
-    if(dropdown) {
+    if(dropdown || varSelector) {
         // target block required for type
         targetBlock = block;
     } else {

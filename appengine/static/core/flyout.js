@@ -379,7 +379,8 @@ Blockly.Flyout.prototype.show = function(xmlList) {
         case Blockly.Variables.CAT_EXISTING:
             var oldVarSelector = document.getElementById("python_variable_selector");
             var newVarSelector = document.getElementById("python_variable_selector_new");
-            xmlList = [oldVarSelector, newVarSelector];
+            xmlList = [newVarSelector];
+            //xmlList = [oldVarSelector, newVarSelector];
 
             //xmlList = xmlList.concat(Blockly.Variables.existingFlyoutCategory(this.workspace_.targetWorkspace));
             //xmlList = Blockly.Variables.existingFlyoutCategory(this.workspace_.targetWorkspace);
