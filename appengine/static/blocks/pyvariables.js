@@ -49,7 +49,7 @@ Blockly.Blocks['variables_get'] = {
         this.setTypeVecs([
             ["none"]
         ]);
-                this.contextMenuMsg_ = Blockly.Msg.VARIABLES_GET_CREATE_SET;
+        this.contextMenuMsg_ = Blockly.Msg.VARIABLES_GET_CREATE_SET;
         console.log("VARS at end init", this.type, this.getFieldValue("VAR"));
     },
     /**
@@ -90,8 +90,7 @@ Blockly.Blocks['variables_get'] = {
         options.unshift(rename);
     },
     onchange: function(ev) {
-
-    this.setTooltip(this.getFieldValue("VAR"));
+        this.setTooltip(this.getFieldValue("VAR"));
     }
 
 };
@@ -156,29 +155,11 @@ Blockly.Blocks['python_variable_selector_new'] = {
         this.setTypeVecs([["any"]]);
 
         this.inWorkspace = false;
-        this.inWorkspaceTemp = false;
-
-        function getVar() {
-            return {
-                name: this.getFieldValue("VALUE"),
-                type: this.typeVecs[0][0]
-            };
-        };
-        this.getVar = getVar;
     },
 
     onchange: function(ev) {
         // if in workspace then prompt modal window
-
-        // after firing event once then we have onchange act like a var block
         if(this.inWorkspace) {
-            // now treat like regular variable block
-            console.log("flag set");
-
-            // tests
-            //Blockly.Python.valueToCode(this, 'VALUE', Blockly.Python.ORDER_NONE)
-            //Blockly.Variables.allVariables(workspace, true, true);
-        } else if(this.inWorkspaceTemp) {
             // if duplicated do something different (name!="Variable")
 
             // open modal window
@@ -189,14 +170,39 @@ Blockly.Blocks['python_variable_selector_new'] = {
             // if cancelled out, delete block
             // otherwise set block value and type vecs
                 // create new var block and replace current block with this
-            this.setFieldValue(varName, "VALUE");
-            this.setTypeVecs([[varType]]);
-            this.reType();
 
-            this.inWorkspace = true;
+            // approach by creating new variable_get block
+            // newVariableBlock func from Blockly.Variables.flyOutCategory
+            var variable = {'name': varName, 'type': varType};
+            var block = goog.dom.createDom('block');
+            block.setAttribute('type', 'variables_get');
+            var field = goog.dom.createDom('field', null, variable.name);
+            field.setAttribute('name', 'VAR');
+            block.appendChild(field);
+            var pyType = goog.dom.createDom('pytype', null, variable.type);
+            block.appendChild(pyType);
+
+            // from flyout.js - flyout.show
+            block = Blockly.Xml.domToBlock(this.workspace, block);
+
+            if(this.parentBlock_ == null) {
+                // if not in block then just place where it was before
+                // get coords of block before dispose
+                var coords = this.getRelativeToSurfaceXY()
+                var x = coords['x'];
+                var y = coords['y'];
+                // move new block to location of old block
+                block.moveBy(x, y);
+            } else {
+              // if it was in a block then replace into that block
+            }
+
+            // delete current block
+            this.dispose(false, false);
+            
         } else if(checkBlocks()) {
             // don't fire modal window event until dropped
-            this.inWorkspaceTemp = true;
+            this.inWorkspace = true;
         }
     }
 }
