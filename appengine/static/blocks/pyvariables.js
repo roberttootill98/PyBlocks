@@ -160,18 +160,19 @@ Blockly.Blocks['python_variable_selector_new'] = {
     onchange: function(ev) {
         // if in workspace then prompt modal window
         if(this.inWorkspace) {
+            var parent = this.parentBlock_;
             // if duplicated do something different (name!="Variable")
 
             // open modal window
             // use prompts for now
             var varName = prompt("var name", "myVar");
+            // limit type options in placed directly into block
             var varType = prompt("var type", "int"); // should be dropdown
 
             // if cancelled out, delete block
             // otherwise set block value and type vecs
                 // create new var block and replace current block with this
 
-            // approach by creating new variable_get block
             // newVariableBlock func from Blockly.Variables.flyOutCategory
             var variable = {'name': varName, 'type': varType};
             var block = goog.dom.createDom('block');
@@ -185,21 +186,28 @@ Blockly.Blocks['python_variable_selector_new'] = {
             // from flyout.js - flyout.show
             block = Blockly.Xml.domToBlock(this.workspace, block);
 
-            if(this.parentBlock_ == null) {
+            if(parent) {
+                 // if it was in a block then replace into that block
+                 // which input to put block in to
+                 var inputName = getParentInput(parent);
+
+                 // delete current block
+                 this.dispose(false, false, false);
+
+                 // place new block into parent in same input
+                 block.setParent(parent);
+             } else {
                 // if not in block then just place where it was before
                 // get coords of block before dispose
                 var coords = this.getRelativeToSurfaceXY()
-                var x = coords['x'];
-                var y = coords['y'];
+                var x = coords.x;
+                var y = coords.y;
                 // move new block to location of old block
                 block.moveBy(x, y);
-            } else {
-              // if it was in a block then replace into that block
-            }
 
-            // delete current block
-            this.dispose(false, false);
-            
+                // delete current block
+                this.dispose(false, false, false);
+            }
         } else if(checkBlocks()) {
             // don't fire modal window event until dropped
             this.inWorkspace = true;
@@ -213,6 +221,17 @@ function checkBlocks() {
     for(var i = 0; i < blocks.length; i++) {
         if(blocks[i].type == "python_variable_selector_new") {
             return blocks[i];
+        }
+    }
+}
+
+// get which parent input that a variable block was dropped in to
+function getParentInput(parent) {
+    for(var i = 0; i < parent.inputList.length; i++) {
+        var name = parent.inputList[i]['name'];
+        // if input value == 'Variable' then return name of this field
+        if(Blockly.Python.valueToCode(parent, name, Blockly.Python.ORDER_NONE) == "Variable") {
+            return name;
         }
     }
 }
