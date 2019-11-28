@@ -160,14 +160,55 @@ Blockly.Blocks['python_variable_selector_new'] = {
     onchange: function(ev) {
         // if in workspace then prompt modal window
         if(this.inWorkspace) {
-            var parent = this.parentBlock_;
-            // if duplicated do something different (name!="Variable")
+            var parent = this.getParent();
 
             // open modal window
-            // use prompts for now
-            var varName = prompt("var name", "myVar");
-            // limit type options in placed directly into block
-            var varType = prompt("var type", "int"); // should be dropdown
+            // create dom object
+            /*
+            var blocklyCanvas = document.querySelector(".blocklyBlockCanvas");
+            // should be svg
+
+            var container = document.createElement('g');
+            container.setAttribute("width", '400');
+            //container.width = '400';
+            container.setAttribute("height", '180');
+            /*
+            var nameInput = document.createElement('input');
+            var typeInput = document.createElement('input');
+            var create = document.createElement('button');
+            var cancel = document.createElement('button');
+
+            var p = document.createElement('p');
+            p.textContent = "hi"
+            //*/
+            /*
+            var rect = document.createElement('rect');
+            rect.setAttribute("x", '50');
+            rect.setAttribute("y", '20');
+            rect.setAttribute("rx", '20');
+            rect.setAttribute("ry", '20');
+            rect.setAttribute("width", '150');
+            rect.setAttribute("height", '150');
+            rect.setAttribute("fill", "red");
+
+            container.appendChild(rect);
+            blocklyCanvas.appendChild(container);
+            */
+
+            // prompt way
+            var option = prompt("new or existing var", "newVar");
+
+            var varName;
+            var varType;
+            if(option == "newVar") {
+                // use prompts for now
+                varName = prompt("var name", "myVar");
+                // limit type options in placed directly into block
+                varType = prompt("var type", "int"); // should be dropdown
+            } else {
+                varName = option;
+                varType = getVarTypeFromBlocks(varName);
+            }
 
             // if cancelled out, delete block
             // otherwise set block value and type vecs
@@ -189,24 +230,34 @@ Blockly.Blocks['python_variable_selector_new'] = {
             if(parent) {
                  // if it was in a block then replace into that block
                  // which input to put block in to
-                 var inputName = getParentInput(parent);
+                 var inputName, i = getParentInput(parent);
+
+                 // place new block into parent in same input
+                 var coords = this.getRelativeToSurfaceXY()
+                 var x = coords.x;
+                 var y = coords.y;
 
                  // delete current block
                  this.dispose(false, false, false);
 
-                 // place new block into parent in same input
-                 block.setParent(parent);
+                 var parentConnection = parent.inputList[i].connection;
+                 var newConnection = new Blockly.Connection(block, 2);
+
+                 block.outputConnection.targetConnection = newConnection;
+
+                 parentConnection.connect(newConnection);
              } else {
                 // if not in block then just place where it was before
                 // get coords of block before dispose
                 var coords = this.getRelativeToSurfaceXY()
                 var x = coords.x;
                 var y = coords.y;
-                // move new block to location of old block
-                block.moveBy(x, y);
 
                 // delete current block
                 this.dispose(false, false, false);
+
+                // move new block to location of old block
+                block.moveBy(x, y);
             }
         } else if(checkBlocks()) {
             // don't fire modal window event until dropped
@@ -230,8 +281,9 @@ function getParentInput(parent) {
     for(var i = 0; i < parent.inputList.length; i++) {
         var name = parent.inputList[i]['name'];
         // if input value == 'Variable' then return name of this field
-        if(Blockly.Python.valueToCode(parent, name, Blockly.Python.ORDER_NONE) == "Variable") {
-            return name;
+        if(parent.inputList[i].connection &&
+          (parent.getInputTargetBlock(name)['type'] == 'python_variable_selector_new')) {
+            return name, i;
         }
     }
 }
