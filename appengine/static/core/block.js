@@ -1542,7 +1542,7 @@ Blockly.Block.prototype.legalDrop = function(holeTypes, requiresVariable) {
             types.indexOf("*matching") != -1);
     };
 
-    if (requiresVariable && this.type != 'variables_get') {
+    if (requiresVariable && !['variables_get', 'python_variable_selector_new'].includes(this.type)) {
         return false;
     }
 
