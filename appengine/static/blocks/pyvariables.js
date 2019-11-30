@@ -152,7 +152,10 @@ Blockly.Blocks['python_variable_selector'] = {
         this.setInputsInline(true);
         this.setOutput(true);
 
-        this.setTypeVecs([["any"]]);
+        this.setTypeVecs([
+          ["any"],
+          ["*any"]
+        ]);
 
         this.inWorkspace = false;
     },
