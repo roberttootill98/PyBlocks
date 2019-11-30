@@ -134,37 +134,49 @@ Blockly.Variables.existingListFlyoutCategory = function(workspace) {
 };
 
 /**
+ * Create a variable block
+ * @param {object} variable, in format {'name': name, 'type': type}.
+ * @return {block} blockly svg block.
+ **/
+Blockly.Variables.newVariableBlock = function(variable) {
+    var block = goog.dom.createDom('block');
+    block.setAttribute('type', 'variables_get');
+    var field = goog.dom.createDom('field', null, variable.name);
+    field.setAttribute('name', 'VAR');
+    block.appendChild(field);
+    var pyType = goog.dom.createDom('pytype', null, variable.type);
+    block.appendChild(pyType);
+    return block;
+};
+
+/**
+ * Create an assignment block with variable on lhs.
+ * @param {object} variable, in format {'name': name, 'type': type}.
+ * @return {block} blockly svg block.
+ */
+Blockly.Variables.newVariablesAssignmentBlock = function(variable) {
+    var block = goog.dom.createDom('block');
+    block.setAttribute('type', 'variables_set');
+    var value = goog.dom.createDom('value', null);
+    value.setAttribute('name', 'VAR');
+    block.appendChild(value);
+    var pyType = goog.dom.createDom('pytype', null, variable.type);
+    block.appendChild(pyType);
+    var variable_block = Blockly.Variables.newVariableBlock(variable);
+    value.appendChild(variable_block);
+    block.setAttribute('gap', 8);
+    return block;
+}
+/**
  * Construct the blocks required by the flyout for the variable category.
  * @param {!Blockly.Workspace} workspace The workspace contianing variables.
  * @param {boolean} lispOps Whether to display list indexing operations.
  * @return {!Array.<!Element>} Array of XML block elements.
  */
 Blockly.Variables.flyoutCategory = function(workspace, vars, listOps) {
-    var newVariableBlock = function(variable) {
-        var block = goog.dom.createDom('block');
-        block.setAttribute('type', 'variables_get');
-        var field = goog.dom.createDom('field', null, variable.name);
-        field.setAttribute('name', 'VAR');
-        block.appendChild(field);
-        var pyType = goog.dom.createDom('pytype', null, variable.type);
-        block.appendChild(pyType);
-        return block;
-    };
-
     var xmlList = [];
     for (var i = 0; i < vars.length; i++) {
-        // Create assignment block with variable on lhs.
-        var block = goog.dom.createDom('block');
-        block.setAttribute('type', 'variables_set');
-        var value = goog.dom.createDom('value', null);
-        value.setAttribute('name', 'VAR');
-        block.appendChild(value);
-        var pyType = goog.dom.createDom('pytype', null, vars[i].type);
-        block.appendChild(pyType);
-        var variable = newVariableBlock(vars[i]);
-        value.appendChild(variable);
-        block.setAttribute('gap', 8);
-        xmlList.push(block);
+        xmlList.push(Blockly.Variables.newVariablesAssignmentBlock(vars[i]));
 
         // Add list item modification for existing list variable
         //  if (listOps) {
@@ -172,9 +184,8 @@ Blockly.Variables.flyoutCategory = function(workspace, vars, listOps) {
         //    block.setAttribute('type', 'list_variable_index_get');
         //  }
 
-
         // Create variable value block.
-        block = newVariableBlock(vars[i]);
+        var block = Blockly.Variables.newVariableBlock(vars[i]);
         xmlList.push(block);
 
         /* Add list indexing for existing list variable

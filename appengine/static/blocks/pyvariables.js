@@ -142,7 +142,7 @@ Blockly.Blocks['variables_set'] = {
     }
 };
 
-Blockly.Blocks['python_variable_selector_new'] = {
+Blockly.Blocks['python_variable_selector'] = {
     init: function() {
         this.appendDummyInput()
             .appendField(new Blockly.FieldTextInput("Variable"), 'VALUE');
@@ -214,17 +214,7 @@ Blockly.Blocks['python_variable_selector_new'] = {
             // otherwise set block value and type vecs
                 // create new var block and replace current block with this
 
-            // newVariableBlock func from Blockly.Variables.flyOutCategory
-            var variable = {'name': varName, 'type': varType};
-            var block = goog.dom.createDom('block');
-            block.setAttribute('type', 'variables_get');
-            var field = goog.dom.createDom('field', null, variable.name);
-            field.setAttribute('name', 'VAR');
-            block.appendChild(field);
-            var pyType = goog.dom.createDom('pytype', null, variable.type);
-            block.appendChild(pyType);
-
-            // from flyout.js - flyout.show
+            var block = Blockly.Variables.newVariableBlock({'name': varName, 'type': varType});
             block = Blockly.Xml.domToBlock(this.workspace, block);
 
             if(parent) {
@@ -249,7 +239,7 @@ Blockly.Blocks['python_variable_selector_new'] = {
              } else {
                 // if not in block then just place where it was before
                 // get coords of block before dispose
-                var coords = this.getRelativeToSurfaceXY()
+                var coords = this.getRelativeToSurfaceXY();
                 var x = coords.x;
                 var y = coords.y;
 
@@ -266,11 +256,70 @@ Blockly.Blocks['python_variable_selector_new'] = {
     }
 }
 
+Blockly.Blocks['python_variable_selector_assignment'] = {
+    init: function() {
+        this.appendValueInput('LHS');
+
+        this.appendValueInput('RHS')
+            .appendField(" = ");
+
+        this.setInputsInline(true);
+        this.setLhsVarOnly(true);
+
+        this.setPreviousStatement(true);
+        this.setNextStatement(true);
+
+        this.setTypeVecs([
+          ["any", "any", "none"],
+          ["*any", "*any", "none"]
+        ])
+
+        this.inWorkspace = false;
+    },
+
+    onchange: function() {
+        if(this.inWorkspace) {
+            var option = prompt("new or existing var", "newVar");
+
+            var varName;
+            var varType;
+            if(option == "newVar") {
+                // use prompts for now
+                varName = prompt("var name", "myVar");
+                // limit type options in placed directly into block
+                varType = prompt("var type", "int"); // should be dropdown
+            } else {
+                varName = option;
+                varType = getVarTypeFromBlocks(varName);
+            }
+
+            var block = Blockly.Variables.newVariablesAssignmentBlock({"name": varName, "type": varType});
+            block = Blockly.Xml.domToBlock(this.workspace, block);
+
+            // if(block.connected) {
+
+            // } else {
+            var coords = this.getRelativeToSurfaceXY();
+            var x = coords.x;
+            var y = coords.y;
+
+            this.dispose(false, false, false);
+
+            block.moveBy(x, y);
+            // }
+
+        } else if(checkBlocks()) {
+            // don't fire modal window event until dropped
+            this.inWorkspace = true;
+        }
+    }
+}
+
 // check if blocks in workspace have changed
 function checkBlocks() {
     var blocks = workspace.getAllBlocks();
     for(var i = 0; i < blocks.length; i++) {
-        if(blocks[i].type == "python_variable_selector_new") {
+        if(["python_variable_selector", "python_variable_selector_assignment"].includes(blocks[i].type)) {
             return blocks[i];
         }
     }
@@ -282,143 +331,10 @@ function getParentInput(parent) {
         var name = parent.inputList[i]['name'];
         // if input value == 'Variable' then return name of this field
         if(parent.inputList[i].connection &&
-          (parent.getInputTargetBlock(name)['type'] == 'python_variable_selector_new')) {
+          (parent.getInputTargetBlock(name)['type'] == 'python_variable_selector')) {
             return name, i;
         }
     }
-}
-
-Blockly.Blocks['python_variable_selector'] = {
-    /**
-     * block for create news vars and selecting existing ones
-     * not for assignment
-     *
-     */
-    /** todo
-     * when a new variable is created - update all instances of dropdown to include this
-     */
-    /** bugs
-     * when there are no variables - not able to view item, should default to have create variable item
-     */
-    init: function() {
-        this.appendDummyInput('dropDownContainer')
-            updateVarList(this);
-
-        this.setInputsInline(true);
-        this.setOutput(true);
-
-        this.setTypeVecs([[getVarTypeFromFields(this.dropdown.getText(), this)]]);
-
-        // inside another block
-        this.dropped = false;
-
-        function getVar() {
-            return {
-                name: this.dropdown.getText(),
-                type: this.typeVecs[0][0]
-            };
-        };
-        this.getVar = getVar;
-    },
-
-    onchange: function(ev) {
-        //var tempVarList = getVarList(this);
-
-        if(this.dropdown.getValue() == "newVar") { // and in workspace
-            // when varName is set to new variable open modal dialog
-            // use alert for now
-            var varName = prompt("var name", "myVar");
-            var varType = prompt("var type", "int"); // should be dropdown
-
-            // validate name
-            //var valid = Blockly.Python.makeNameUnique(varName, )
-
-            // add field to dropdown fields
-            var fields = this.dropdown.fields;
-            var value = fields[fields.length-2]['value'];
-            fields.push({
-                "name": varName,
-                "type": varType,
-                "value": "var" + (parseInt(value.charAt(value.length-1)) + 1)
-            });
-            // set var selector to var
-            this.dropdown.setValue(varName, 'varName');
-            this.setTypeVecs([[varType]])
-        }
-
-        // on drop - update options in dropdown
-        var tempDropped = this.dropped;
-        if(this.parentBlock_ != null) {
-            this.dropped = true;
-        } else {
-            this.dropped = false;
-        }
-        if(tempDropped != this.dropped) {
-            var varName = this.dropdown.getValue();
-            // if the value of dropped has changed, update var list
-            updateVarList(this);
-            // maintain var selected
-            this.dropdown.setValue(varName, 'varName');
-        }
-
-        // react to deleted variable
-        // onchange event fires when block is still on screen
-        // -- recognise deleted block beforehand?
-        /*
-        var varList = getVarList(this);
-        for(var i = 0; i < varList.length; i++) {
-            if(tempVarList[i][0] != varList[i][0]) {
-                // if var deleted is one selected
-
-                // else
-                updateVarList(this);
-                break;
-            }
-        }
-        */
-
-        //Blockly.Variables.allVariables(workspace, true, true);
-        // setTypeVecs as type of block selected/created
-        this.setTypeVecs([[getVarTypeFromFields(this.dropdown.getText(), this)]]);
-        this.reType();
-
-        // update tooltip
-    }
-};
-
-// create var list according to valid blocks
-function getVarList(block) {
-    var variables = Blockly.Variables.allVariables(workspace, true, true);
-    var varList = [];
-    for(i = 0; i < variables.length; i++) {
-        // limit vars
-        var valid = false;
-
-        // check parent block typeVecs
-        var parent = block.parentBlock_;
-        if(parent != null) {
-            // using 0 checks only first set of type vecs
-            /**
-             * also needs to check for which input is being used
-             * eg. in parent block, first, second, third...
-             */
-            var inputIndex = 0; // for testing, means first input for type vecs
-            var parentTypeVecs = parent.fullTypeVecs;
-            for(var j = 0; j < parentTypeVecs.length; j++) {
-                if(["any", getVarTypeFromBlocks(variables[i]['name'])].includes(parentTypeVecs[j][inputIndex])) {
-                    valid = true;
-                    break;
-                }
-            }
-        } else {
-            valid = true;
-        }
-
-        if(valid) {
-            varList.push([variables[i]["name"], "var" + i]);
-        }
-    }
-    return varList;
 }
 
 // get type of var from blocks in workspace
@@ -429,50 +345,6 @@ function getVarTypeFromBlocks(name) {
           return variables[i]["type"];
       }
   }
-}
-
-// get type of var from dropdown.fields, unaffected by blocks in workspace
-function getVarTypeFromFields(name, block) {
-    var fields = block.dropdown.fields;
-    for(i = 0; i < fields.length; i++) {
-        if(name == fields[i]["name"]) {
-            return fields[i]["type"];
-        }
-    }
-}
-// update varList
-function updateVarList(block) {
-    var input = block.inputList[0];
-
-    // remove current dropdown
-    try {
-      input.removeField('varName');
-      input.removeField('arrow');
-    } catch(err) {
-      console.log(err);
-    }
-
-    // add new dropdown
-    var dropDownItems = getVarList(block);
-    // add create var option at beginning of list
-    // dropDownItems.unshift(['New-variable', 'newVar']);
-    dropDownItems.push(['New-variable', 'newVar']); // add it at end for now
-
-    block.dropdown = new Blockly.FieldDropdown(dropDownItems);
-
-    // update dropdown.fields
-    block.dropdown.fields = []
-    var options = block.dropdown.getOptions_();
-    for (var i = 0; i < options.length; i++) {
-        block.dropdown.fields.push({
-            "name": options[i][0],
-            "type": getVarTypeFromBlocks(options[i][0]),
-            "value": options[i][1]
-        });
-    };
-
-    input.appendField(block.dropdown, 'varName');
-    input.appendField(Blockly.FieldDropdown.ARROW_CHAR, 'arrow');
 }
 
 /* possibly leave till later
