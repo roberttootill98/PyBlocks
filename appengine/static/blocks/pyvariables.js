@@ -206,6 +206,12 @@ Blockly.Blocks['python_variable_selector'] = {
                 // limit type options in placed directly into block
                 varType = prompt("var type", "int"); // should be dropdown
             } else {
+                if(parent) {
+                    var j = getParentInput(parent);
+                    while(!checkIfVariableValid(parent, j, option)) {
+                        option = prompt("not valid var, new or existing var", "newVar");
+                    }
+                }
                 varName = option;
                 varType = getVarTypeFromBlocks(varName);
             }
@@ -220,12 +226,7 @@ Blockly.Blocks['python_variable_selector'] = {
             if(parent) {
                  // if it was in a block then replace into that block
                  // which input to put block in to
-                 var inputName, i = getParentInput(parent);
-
-                 // place new block into parent in same input
-                 var coords = this.getRelativeToSurfaceXY()
-                 var x = coords.x;
-                 var y = coords.y;
+                 var i = getParentInput(parent);
 
                  // delete current block
                  this.dispose(false, false, false);
@@ -296,17 +297,29 @@ Blockly.Blocks['python_variable_selector_assignment'] = {
             var block = Blockly.Variables.newVariablesAssignmentBlock({"name": varName, "type": varType});
             block = Blockly.Xml.domToBlock(this.workspace, block);
 
-            // if(block.connected) {
+            var connection = checkForConnection(this);
+            if(connection) {
+                var connectedBlock = connection.block.targetConnection.sourceBlock_;
 
-            // } else {
-            var coords = this.getRelativeToSurfaceXY();
-            var x = coords.x;
-            var y = coords.y;
+                this.dispose(false, false, false);
 
-            this.dispose(false, false, false);
+                var newConnection = new Blockly.Connection(block, 4);
+                block.nextConnection.targetConnection = newConnection;
 
-            block.moveBy(x, y);
-            // }
+                if(connection.type == 'previous') {
+                    connectedBlock.previousConnection.connect(newConnection);
+                } else if(connection.type == 'next') {
+                    connectedBlock.nextConnection.connect(newConnection);
+                }
+            } else {
+                var coords = this.getRelativeToSurfaceXY();
+                var x = coords.x;
+                var y = coords.y;
+
+                this.dispose(false, false, false);
+
+                block.moveBy(x, y);
+            }
 
         } else if(checkBlocks()) {
             // don't fire modal window event until dropped
@@ -325,6 +338,15 @@ function checkBlocks() {
     }
 }
 
+// checks if a connection is made
+function checkForConnection(block) {
+    if(block.previousConnection.targetConnection) {
+      return {'block': block.previousConnection, 'type': 'previous'};
+    } else if (block.nextConnection.targetConnection) {
+      return {'block': block.nextConnection, 'type': 'next'};
+    }
+}
+
 // get which parent input that a variable block was dropped in to
 function getParentInput(parent) {
     for(var i = 0; i < parent.inputList.length; i++) {
@@ -332,7 +354,16 @@ function getParentInput(parent) {
         // if input value == 'Variable' then return name of this field
         if(parent.inputList[i].connection &&
           (parent.getInputTargetBlock(name)['type'] == 'python_variable_selector')) {
-            return name, i;
+            return i;
+        }
+    }
+}
+
+// checks if the selected variable is valid
+function checkIfVariableValid(parent, parentInput, variable) {
+    for(var i = 0; i < parent.typeVecs.length; i++) {
+        if(parent.typeVecs[i][parentInput] == getVarTypeFromBlocks(variable)) {
+            return true;
         }
     }
 }
