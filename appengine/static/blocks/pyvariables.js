@@ -156,74 +156,17 @@ Blockly.Blocks['python_variable_selector'] = {
           ["any"],
           ["*any"]
         ]);
-
-        this.inWorkspace = false;
     },
 
     onchange: function(ev) {
-        // if in workspace then prompt modal window
-        if(this.inWorkspace) {
+        // if we have details of variable
+        if(this.varName && this.varType) {
             var parent = this.getParent();
 
-            // open modal window
-            // create dom object
-            /*
-            var blocklyCanvas = document.querySelector(".blocklyBlockCanvas");
-            // should be svg
-
-            var container = document.createElement('g');
-            container.setAttribute("width", '400');
-            //container.width = '400';
-            container.setAttribute("height", '180');
-            /*
-            var nameInput = document.createElement('input');
-            var typeInput = document.createElement('input');
-            var create = document.createElement('button');
-            var cancel = document.createElement('button');
-
-            var p = document.createElement('p');
-            p.textContent = "hi"
-            //*/
-            /*
-            var rect = document.createElement('rect');
-            rect.setAttribute("x", '50');
-            rect.setAttribute("y", '20');
-            rect.setAttribute("rx", '20');
-            rect.setAttribute("ry", '20');
-            rect.setAttribute("width", '150');
-            rect.setAttribute("height", '150');
-            rect.setAttribute("fill", "red");
-
-            container.appendChild(rect);
-            blocklyCanvas.appendChild(container);
-            */
-
-            // prompt way
-            var option = prompt("new or existing var", "newVar");
-
-            var varName;
-            var varType;
-            if(option == "newVar") {
-                // use prompts for now
-                varName = prompt("var name", "myVar");
-                // limit type options in placed directly into block
-                varType = prompt("var type", "int"); // should be dropdown
-            } else {
-                if(parent) {
-                    var j = getParentInput(parent);
-                    while(!checkIfVariableValid(parent, j, option)) {
-                        option = prompt("not valid var, new or existing var", "newVar");
-                    }
-                }
-                varName = option;
-                varType = getVarTypeFromBlocks(varName);
-            }
-
-            // if cancelled out, delete block
-            // otherwise set block value and type vecs
-                // create new var block and replace current block with this
-
-            var block = Blockly.Variables.newVariableBlock({'name': varName, 'type': varType});
+            var block = Blockly.Variables.newVariableBlock({
+                'name': this.varName,
+                'type': this.varType
+            });
             block = Blockly.Xml.domToBlock(this.workspace, block);
 
             if(parent) {
@@ -253,7 +196,10 @@ Blockly.Blocks['python_variable_selector'] = {
                 // move new block to location of old block
                 block.moveBy(x, y);
             }
-        } else if(checkBlocks()) {
+        } else if(this.inWorkspace) {
+            // if in workspace then prompt modal window
+            Blockly.modalWindow.selectVariable();
+        } else if(Blockly.Variables.getSelectorBlock()) {
             // don't fire modal window event until dropped
             this.inWorkspace = true;
         }
@@ -282,22 +228,11 @@ Blockly.Blocks['python_variable_selector_assignment'] = {
     },
 
     onchange: function() {
-        if(this.inWorkspace) {
-            var option = prompt("new or existing var", "newVar");
-
-            var varName;
-            var varType;
-            if(option == "newVar") {
-                // use prompts for now
-                varName = prompt("var name", "myVar");
-                // limit type options in placed directly into block
-                varType = prompt("var type", "int"); // should be dropdown
-            } else {
-                varName = option;
-                varType = getVarTypeFromBlocks(varName);
-            }
-
-            var block = Blockly.Variables.newVariablesAssignmentBlock({"name": varName, "type": varType});
+        if(this.varName && this.varType) {
+            var block = Blockly.Variables.newVariablesAssignmentBlock({
+                "name": this.varName,
+                "type": this.varType,
+            });
             block = Blockly.Xml.domToBlock(this.workspace, block);
 
             var connection = checkForConnection(this);
@@ -323,8 +258,10 @@ Blockly.Blocks['python_variable_selector_assignment'] = {
 
                 block.moveBy(x, y);
             }
-
-        } else if(checkBlocks()) {
+        } else if(this.inWorkspace) {
+            // if in workspace then prompt modal window
+            Blockly.modalWindow.selectVariable();
+        } else if(Blockly.Variables.getSelectorBlock()) {
             // don't fire modal window event until dropped
             this.inWorkspace = true;
         }
@@ -332,7 +269,7 @@ Blockly.Blocks['python_variable_selector_assignment'] = {
 }
 
 // check if blocks in workspace have changed
-function checkBlocks() {
+Blockly.Variables.getSelectorBlock = function() {
     var blocks = workspace.getAllBlocks();
     for(var i = 0; i < blocks.length; i++) {
         if(["python_variable_selector", "python_variable_selector_assignment"].includes(blocks[i].type)) {

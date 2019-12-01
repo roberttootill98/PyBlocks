@@ -307,3 +307,29 @@ table#typetable {
 #blocklyDiv {
     position: absolute;
 }
+
+/* modal window stuff */
+#modalWindow {
+    position: absolute;
+    display: block;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 15em;
+    height: 10em;
+    margin: 5em;
+    padding: 1em;
+    background-color: #fff;
+}
+
+.modalButtons:hover {
+    cursor: pointer;
+}
+
+.variable {
+    padding: 1em;
+}
+.variable:hover {
+    cursor: pointer;
+}

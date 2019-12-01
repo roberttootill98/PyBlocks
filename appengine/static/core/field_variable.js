@@ -193,3 +193,139 @@ Blockly.FieldVariable.dropdownChange = function(text) {
     Blockly.Variables.renameVariable(oldVar, newVar, workspace);
     return newVar;
 };
+
+// custom variable pop up stuff
+Blockly.modalWindow = {};
+
+// for selecting #1 - an existing variable or #2 creating a new one
+Blockly.modalWindow.selectVariable = function() {
+    var container = document.createElement('div');
+    container.id = 'modalWindow';
+    // dynamically put container over block dragged in;
+    document.body.appendChild(container);
+
+    // html inside container
+    var title = document.createElement('h3');
+    container.appendChild(title);
+    title.textContent = 'Variable Selection';
+
+    // unorganised list of existing variables with new variable option at the bottom
+    var list = document.createElement('ul');
+    container.appendChild(list);
+
+    // existing variables
+    var variables = Blockly.Variables.allVariables(workspace, true, true);
+    for(i = 0; i < variables.length; i++) {
+        var item = document.createElement('li');
+        list.appendChild(item);
+        item.classList.add('variable');
+        item.classList.add(variables[i].type);
+
+        item.textContent = variables[i].name;
+        // colour according to type
+
+        item.onclick = Blockly.modalWindow.selectVariable.select;
+    }
+    // new variable
+    var newVariableItem = document.createElement('li');
+    list.appendChild(newVariableItem);
+    newVariableItem.classList.add('variable');
+
+    newVariableItem.textContent = 'New Variable';
+    // colour as rainbow
+
+    newVariableItem.onclick = Blockly.modalWindow.selectVariable.newVariable;
+
+    // buttons
+    var buttonContainer = document.createElement('div');
+    container.appendChild(buttonContainer);
+
+    var cancel = document.createElement('button');
+    buttonContainer.appendChild(cancel);
+    cancel.classList.add('modalButtons');
+    cancel.textContent = 'Cancel';
+    cancel.onclick = Blockly.modalWindow.cancelClicked;
+}
+
+// for creating a new variable
+Blockly.modalWindow.createVariable = function() {
+    var container = document.createElement('div');
+    container.id = 'modalWindow';
+    // dynamically put container over block dragged in;
+    document.body.appendChild(container);
+
+    // html inside container
+    var title = document.createElement('h3');
+    container.appendChild(title);
+    title.textContent = 'Variable Creation';
+
+    // inputs
+    var nameInput = document.createElement('input');
+    nameInput.id = 'variableName';
+    container.appendChild(nameInput);
+    var typeInput = document.createElement('input');
+    typeInput.id = 'variableType';
+    container.appendChild(typeInput);
+
+    // buttons
+    var buttonContainer = document.createElement('div');
+    container.appendChild(buttonContainer);
+
+    var create = document.createElement('button');
+    buttonContainer.appendChild(create);
+    create.classList.add('modalButtons');
+    create.textContent = 'Create';
+    create.onclick = Blockly.modalWindow.createVariable.createClicked;
+
+    var cancel = document.createElement('button');
+    buttonContainer.appendChild(cancel);
+    cancel.classList.add('modalButtons');
+    cancel.textContent = 'Cancel';
+    cancel.onclick = Blockly.modalWindow.cancelClicked;
+}
+
+Blockly.modalWindow.dispose = function() {
+    document.getElementById('modalWindow').remove();
+}
+
+Blockly.modalWindow.cancelClicked = function() {
+    Blockly.modalWindow.dispose();
+    Blockly.Variables.getSelectorBlock().dispose();
+}
+
+Blockly.modalWindow.selectVariable.select = function() {
+    // returns python type from list
+    function findType(classList) {
+        var types = ["int", "float", "str", "bool"]; // for now
+        for(i = 0; i < classList.length; i++) {
+            if(types.includes(classList[i])) {
+                return classList[i];
+            }
+        }
+    }
+    var block = Blockly.Variables.getSelectorBlock();
+
+    block.varName = this.textContent;
+    block.varType = findType(this.classList);
+
+    Blockly.modalWindow.dispose();
+
+    // fire onchange event
+}
+
+Blockly.modalWindow.selectVariable.newVariable = function() {
+    Blockly.modalWindow.dispose();
+    Blockly.modalWindow.createVariable();
+}
+
+Blockly.modalWindow.createVariable.createClicked = function() {
+    var block = Blockly.Variables.getSelectorBlock();
+
+    // validate name
+    block.varName = document.getElementById('variableName').value;
+    block.varType = document.getElementById('variableType').value;
+
+    Blockly.modalWindow.dispose();
+
+    // fire onchange event
+}
