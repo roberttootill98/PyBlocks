@@ -172,7 +172,7 @@ Blockly.Blocks['python_variable_selector'] = {
             if(parent) {
                  // if it was in a block then replace into that block
                  // which input to put block in to
-                 var i = getParentInput(parent);
+                 var i = Blockly.Variables.getParentInput(parent);
 
                  // delete current block
                  this.dispose(false, false, false);
@@ -288,7 +288,7 @@ function checkForConnection(block) {
 }
 
 // get which parent input that a variable block was dropped in to
-function getParentInput(parent) {
+Blockly.Variables.getParentInput = function(parent) {
     for(var i = 0; i < parent.inputList.length; i++) {
         var name = parent.inputList[i]['name'];
         // if input value == 'Variable' then return name of this field

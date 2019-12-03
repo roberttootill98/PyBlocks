@@ -215,7 +215,26 @@ Blockly.modalWindow.selectVariable = function() {
 
     // existing variables
     var variables = Blockly.Variables.allVariables(workspace, true, true);
+    // if parent of block, then filter types based on typeVecs
+    var block = Blockly.Variables.getSelectorBlock();
     for(i = 0; i < variables.length; i++) {
+        function checkTypeVecs() {
+            var j = Blockly.Variables.getParentInput(parent);
+            for(var k = 0; k < parent.typeVecs.length; k++) {
+                if(parent.typeVecs[k][j] == variables[i].type) {
+                    return true
+                }
+            }
+        }
+        // skip variable if not valid for block dropped in to - not relevant to assignment
+        if(block.type == "python_variable_selector") {
+          var parent = block.getParent();
+          if(parent) {
+              if(!checkTypeVecs()) {
+                  continue;
+              }
+          }
+        }
         var item = document.createElement('li');
         list.appendChild(item);
         item.classList.add('variable');
@@ -311,6 +330,7 @@ Blockly.modalWindow.selectVariable.select = function() {
     Blockly.modalWindow.dispose();
 
     // fire onchange event
+    block.onchange()
 }
 
 Blockly.modalWindow.selectVariable.newVariable = function() {
@@ -328,4 +348,5 @@ Blockly.modalWindow.createVariable.createClicked = function() {
     Blockly.modalWindow.dispose();
 
     // fire onchange event
+    block.onchange()
 }
