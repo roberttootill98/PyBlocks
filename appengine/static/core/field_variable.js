@@ -300,11 +300,22 @@ Blockly.modalWindow.createVariable = function() {
     title.textContent = 'Variable Creation';
 
     // inputs
+    var nameLabel = document.createElement('label');
+    nameLabel.class = 'label';
+    nameLabel.textContent = 'Name';
+    container.appendChild(nameLabel);
     var nameInput = document.createElement('input');
     nameInput.id = 'variableName';
     container.appendChild(nameInput);
-    var typeInput = document.createElement('input');
+
+    var typeLabel = document.createElement('label');
+    typeLabel.class = 'label';
+    typeLabel.textContent = 'Type';
+    container.appendChild(typeLabel);
+
+    var typeInput = document.createElement('select');
     typeInput.id = 'variableType';
+    setOptions(typeInput);
     container.appendChild(typeInput);
 
     // buttons
@@ -322,6 +333,38 @@ Blockly.modalWindow.createVariable = function() {
     cancel.classList.add('modalButtons');
     cancel.textContent = 'Cancel';
     cancel.onclick = Blockly.modalWindow.cancel;
+}
+
+function setOptions(select) {
+    var block = Blockly.Variables.getSelectorBlock()
+    var parent = block.getParent();
+    if(parent) {
+        // get which parent input we are in
+        var position = Blockly.Variables.getParentInput(parent);
+        // loop over parent type vecs in position
+        var options = []
+        for(var i = 0; i < parent.typeVecs.length; i++) {
+            var typeVec = parent.typeVecs[i][position];
+            if(options.indexOf(typeVec) < 0) {
+                options.push(typeVec);
+
+                var option = document.createElement('option');
+                option.value = typeVec;
+                option.textContent = typeVec;
+
+                select.add(option);
+            }
+        }
+    } else {
+        options = ['int', 'float', 'str', 'bool', 'range'];
+        for(var i = 0; i < options.length; i++) {
+            var option = document.createElement('option');
+            option.value = options[i];
+            option.textContent = options[i];
+
+            select.add(option);
+        }
+    }
 }
 
 Blockly.modalWindow.dispose = function() {
