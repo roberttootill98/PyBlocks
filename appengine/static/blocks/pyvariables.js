@@ -169,10 +169,62 @@ Blockly.Blocks['python_variable_selector'] = {
             });
             block = Blockly.Xml.domToBlock(this.workspace, block);
 
+            // reshape this into variable get block
+            // properties
+            /*
+            this.fullTypeVecs = block.fullTypeVecs;
+            this.inputList = block.inputList;
+            this.typeVecs = block.typeVecs;
+            this.type = block.type;
+
+            this.setHelpUrl(Blockly.Msg.VARIABLES_GET_HELPURL);
+            */
+
+            /*
+            this.appendDummyInput()
+                .appendField(new Blockly.Field(
+                    "initname"), 'VAR');
+            this.setOutput(true);
+            this.setTypeVecs([
+                ["none"]
+            ]);
+            */
+            /*
+            this.contextMenuMsg_ = Blockly.Msg.VARIABLES_GET_CREATE_SET;
+
+            // functions
+            this.init = block.init;
+            this.getVar = block.getVar;
+            this.renameVar = block.renameVar;
+            this.contextMenuType_ = block.contextMenuType_;
+            this.customContextMenu = block.customContextMenu;
+            this.onchange = block.onchange;
+
+            block.dispose(false, false, false);
+
+            //this.init();
+            */
+
             if(parent) {
                  // if it was in a block then replace into that block
                  // which input to put block in to
-                 var i = Blockly.Variables.getParentInput(parent);
+                 var i = Blockly.Variables.getParentInput(parent, true);
+
+                 /*
+                 var outputConnection = this.outputConnection;
+                 var parentBlock_ = this.parentBlock_;
+
+                 // delete current block
+                 //this.dispose(false, false, false);
+
+                 // add block connection
+                 block.outputConnection = outputConnection;
+                 block.parentBlock_ = parentBlock_;
+
+                 // fix parent connection
+                 var parentConnection = parent.inputList[i].connection;
+                 parentConnection.targetConnection.sourceBlock_ = block;
+                 */
 
                  // delete current block
                  this.dispose(false, false, false);
@@ -288,13 +340,28 @@ function checkForConnection(block) {
 }
 
 // get which parent input that a variable block was dropped in to
-Blockly.Variables.getParentInput = function(parent) {
+// absolute var, if true - ignores type of inputs that block cannot be dropped into
+Blockly.Variables.getParentInput = function(parent, absolute) {
+    var j = 0
     for(var i = 0; i < parent.inputList.length; i++) {
         var name = parent.inputList[i]['name'];
-        // if input value == 'Variable' then return name of this field
-        if(parent.inputList[i].connection &&
-          (parent.getInputTargetBlock(name)['type'] == 'python_variable_selector')) {
-            return i;
+
+        if(absolute) {
+            // if input value == 'Variable' then return name of this field
+            if(parent.inputList[i].connection &&
+              (parent.getInputTargetBlock(name)['type'] == 'python_variable_selector')) {
+                return i;
+            }
+        } else {
+            // only check for input types which can contain blocks
+            if(parent.inputList[i].type == 1) {
+                // if input value == 'Variable' then return name of this field
+                if(parent.inputList[i].connection &&
+                  (parent.getInputTargetBlock(name)['type'] == 'python_variable_selector')) {
+                    return j;
+                }
+                j++;
+            }
         }
     }
 }
