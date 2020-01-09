@@ -335,35 +335,53 @@ Blockly.modalWindow.createVariable = function() {
     cancel.onclick = Blockly.modalWindow.cancel;
 }
 
+Blockly.modalWindow.createVariable.primitiveVariables = ['int', 'float', 'str', 'bool', 'range'];
+Blockly.modalWindow.createVariable.complexVariables = ['list', 'dict']
+
 function setOptions(select) {
     var block = Blockly.Variables.getSelectorBlock()
     var parent = block.getParent();
+
+    var options = []
+
     if(parent) {
         // get which parent input we are in
-        var position = Blockly.Variables.getParentInput(parent);
+        var position = Blockly.Variables.getParentInput(parent, false);
+
         // loop over parent type vecs in position
-        var options = []
         for(var i = 0; i < parent.typeVecs.length; i++) {
             var typeVec = parent.typeVecs[i][position];
             if(options.indexOf(typeVec) < 0) {
                 options.push(typeVec);
-
-                var option = document.createElement('option');
-                option.value = typeVec;
-                option.textContent = typeVec;
-
-                select.add(option);
             }
         }
     } else {
-        options = ['int', 'float', 'str', 'bool', 'range'];
-        for(var i = 0; i < options.length; i++) {
-            var option = document.createElement('option');
-            option.value = options[i];
-            option.textContent = options[i];
+        options = options.concat(Blockly.modalWindow.createVariable.primitiveVariables);
+        //options = options.concat(Blockly.modalWindow.createVariable.complexVariables);
+    }
 
-            select.add(option);
+    // check if any/*any is in options
+    if(options.indexOf('any') >= 0) {
+        if(options.indexOf('*any') >= 0) {
+            options = Blockly.modalWindow.createVariable.primitiveVariables;
+            //options = options.concat(Blockly.modalWindow.createVariable.complexVariables);
+            // any and *any
+        } else {
+            // just any
+            options = Blockly.modalWindow.createVariable.primitiveVariables;
         }
+    } else if(options.indexOf('*any') >= 0) {
+        // just *any
+        //options = Blockly.modalWindow.createVariable.complexVariables;
+        console.log();
+    }
+
+    for(var i = 0; i < options.length; i++) {
+        var option = document.createElement('option');
+        option.value = options[i];
+        option.textContent = options[i];
+
+        select.add(option);
     }
 }
 
