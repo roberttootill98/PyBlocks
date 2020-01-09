@@ -197,12 +197,33 @@ Blockly.FieldVariable.dropdownChange = function(text) {
 // custom variable pop up stuff
 Blockly.modalWindow = {};
 
+Blockly.modalWindow.backdrop = {};
+
+Blockly.modalWindow.backdrop.create = function() {
+    // create backdrop
+    var backdrop = document.createElement('div');
+    backdrop.id = 'backdrop';
+    document.body.appendChild(backdrop);
+}
+
+Blockly.modalWindow.backdrop.get = function() {
+    return document.getElementById('backdrop');
+}
+
+Blockly.modalWindow.backdrop.dispose = function() {
+    Blockly.modalWindow.backdrop.get().remove();
+}
+
 // for selecting #1 - an existing variable or #2 creating a new one
 Blockly.modalWindow.selectVariable = function() {
+    // create a backdrop
+    Blockly.modalWindow.backdrop.create();
+
+    // create main dialog
     var container = document.createElement('div');
     container.id = 'modalWindow';
     // dynamically put container over block dragged in;
-    document.body.appendChild(container);
+    Blockly.modalWindow.backdrop.get().appendChild(container);
 
     // html inside container
     var title = document.createElement('h3');
@@ -263,15 +284,15 @@ Blockly.modalWindow.selectVariable = function() {
     buttonContainer.appendChild(cancel);
     cancel.classList.add('modalButtons');
     cancel.textContent = 'Cancel';
-    cancel.onclick = Blockly.modalWindow.cancelClicked;
+    cancel.onclick = Blockly.modalWindow.cancel;
 }
 
 // for creating a new variable
 Blockly.modalWindow.createVariable = function() {
     var container = document.createElement('div');
     container.id = 'modalWindow';
-    // dynamically put container over block dragged in;
-    document.body.appendChild(container);
+    // todo dynamically put container over block dragged in;
+    Blockly.modalWindow.backdrop.get().appendChild(container);
 
     // html inside container
     var title = document.createElement('h3');
@@ -294,21 +315,22 @@ Blockly.modalWindow.createVariable = function() {
     buttonContainer.appendChild(create);
     create.classList.add('modalButtons');
     create.textContent = 'Create';
-    create.onclick = Blockly.modalWindow.createVariable.createClicked;
+    create.onclick = Blockly.modalWindow.createVariable.create;
 
     var cancel = document.createElement('button');
     buttonContainer.appendChild(cancel);
     cancel.classList.add('modalButtons');
     cancel.textContent = 'Cancel';
-    cancel.onclick = Blockly.modalWindow.cancelClicked;
+    cancel.onclick = Blockly.modalWindow.cancel;
 }
 
 Blockly.modalWindow.dispose = function() {
     document.getElementById('modalWindow').remove();
 }
 
-Blockly.modalWindow.cancelClicked = function() {
+Blockly.modalWindow.cancel = function() {
     Blockly.modalWindow.dispose();
+    Blockly.modalWindow.backdrop.dispose();
     Blockly.Variables.getSelectorBlock().dispose();
 }
 
@@ -328,6 +350,7 @@ Blockly.modalWindow.selectVariable.select = function() {
     block.varType = findType(this.classList);
 
     Blockly.modalWindow.dispose();
+    Blockly.modalWindow.backdrop.dispose();
 
     // fire onchange event
     block.onchange()
@@ -338,7 +361,7 @@ Blockly.modalWindow.selectVariable.newVariable = function() {
     Blockly.modalWindow.createVariable();
 }
 
-Blockly.modalWindow.createVariable.createClicked = function() {
+Blockly.modalWindow.createVariable.create = function() {
     var block = Blockly.Variables.getSelectorBlock();
 
     // validate name
@@ -346,6 +369,7 @@ Blockly.modalWindow.createVariable.createClicked = function() {
     block.varType = document.getElementById('variableType').value;
 
     Blockly.modalWindow.dispose();
+    Blockly.modalWindow.backdrop.dispose();
 
     // fire onchange event
     block.onchange()
