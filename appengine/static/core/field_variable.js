@@ -306,6 +306,7 @@ Blockly.modalWindow.createVariable = function() {
     container.appendChild(nameLabel);
     var nameInput = document.createElement('input');
     nameInput.id = 'variableName';
+    nameInput.addEventListener('input', nameInputListener);
     container.appendChild(nameInput);
 
     var typeLabel = document.createElement('label');
@@ -317,6 +318,15 @@ Blockly.modalWindow.createVariable = function() {
     typeInput.id = 'variableType';
     setOptions(typeInput);
     container.appendChild(typeInput);
+
+    // block preview
+    /*
+    var block = Blockly.Variables.newVariableBlock({
+        "name": 'default',
+        "type": 'int',
+    });
+    block = Blockly.Xml.domToBlock(workspace, block);
+    */
 
     // buttons
     var buttonContainer = document.createElement('div');
@@ -338,13 +348,53 @@ Blockly.modalWindow.createVariable = function() {
 Blockly.modalWindow.createVariable.primitiveVariables = ['int', 'float', 'str', 'bool', 'range'];
 Blockly.modalWindow.createVariable.complexVariables = ['list', 'dict']
 
+// validation on input for name input
+function nameInputListener(ev) {
+    var name = document.getElementById('variableName').value;
+
+    // check if name is valid
+    var valid = true;
+    // check there is a name
+    if(!name) {
+        valid = false;
+    }
+    // check name isn't reserved
+    if(valid) { // save some time
+        var reservedNames = Blockly.Python.RESERVED;
+        for(var i = 0; i < reservedNames.length; i++) {
+            if(name == reservedNames[i]) {
+                valid = false;
+            }
+        }
+    }
+    // check name starts with letter or _, followed by letters, numbers and _
+    var re = new RegExp(`^([a-zA-Z]|_)([a-zA-Z]|[0-9]|_)*$`)
+    if(!re.test(name)) {
+        valid = false;
+    // check name is unique
+    } else if(name != Blockly.Python.makeNameUnique(name, Blockly.Variables.allVariables(workspace, true, true))) {
+        valid = false;
+    }
+
+    // if name is invalid make warning icon visible
+    if(valid) {
+        // make icon invisible
+        console.log("valid");
+    } else {
+        // make visible
+        console.log("invalid");
+    }
+}
+
+// set options in dropdown for creating a variable according to parent block
 function setOptions(select) {
     var block = Blockly.Variables.getSelectorBlock()
     var parent = block.getParent();
 
     var options = []
 
-    if(parent) {
+    // assignment statements aren't restricted by parent
+    if(block.type == "python_variable_selector" && parent) {
         // get which parent input we are in
         var position = Blockly.Variables.getParentInput(parent, false);
 
@@ -373,7 +423,6 @@ function setOptions(select) {
     } else if(options.indexOf('*any') >= 0) {
         // just *any
         //options = Blockly.modalWindow.createVariable.complexVariables;
-        console.log();
     }
 
     for(var i = 0; i < options.length; i++) {
