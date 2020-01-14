@@ -230,21 +230,21 @@ Blockly.Blocks['python_variable_selector_assignment'] = {
             });
             block = Blockly.Xml.domToBlock(this.workspace, block);
 
-            var connection = checkForConnection(this);
-            if(connection) {
-                var connectedBlock = connection.block.targetConnection.sourceBlock_;
+            // check if block is connected to any other blocks
+            if(this.previousConnection.targetConnection) {
+                var previousBlock = this.previousConnection.targetConnection.sourceBlock_;
 
                 this.dispose(false, false, false);
 
-                var newConnection = new Blockly.Connection(block, 4);
-                block.nextConnection.targetConnection = newConnection;
+                previousBlock.nextConnection.connect(block.previousConnection);
+            } else if(this.nextConnection.targetConnection) {
+                var nextBlock = this.nextConnection.targetConnection.sourceBlock_;
 
-                if(connection.type == 'previous') {
-                    connectedBlock.previousConnection.connect(newConnection);
-                } else if(connection.type == 'next') {
-                    connectedBlock.nextConnection.connect(newConnection);
-                }
+                this.dispose(false, false, false);
+
+                nextBlock.previousConnection.connect(block.nextConnection);
             } else {
+                // else just move to position of previous block
                 var coords = this.getRelativeToSurfaceXY();
                 var x = coords.x;
                 var y = coords.y;
@@ -270,15 +270,6 @@ Blockly.Variables.getSelectorBlock = function() {
         if(["python_variable_selector", "python_variable_selector_assignment"].includes(blocks[i].type)) {
             return blocks[i];
         }
-    }
-}
-
-// checks if a connection is made
-function checkForConnection(block) {
-    if(block.previousConnection.targetConnection) {
-      return {'block': block.previousConnection, 'type': 'previous'};
-    } else if (block.nextConnection.targetConnection) {
-      return {'block': block.nextConnection, 'type': 'next'};
     }
 }
 
