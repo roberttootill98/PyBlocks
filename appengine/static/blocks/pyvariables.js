@@ -169,72 +169,15 @@ Blockly.Blocks['python_variable_selector'] = {
             });
             block = Blockly.Xml.domToBlock(this.workspace, block);
 
-            // reshape this into variable get block
-            // properties
-            /*
-            this.fullTypeVecs = block.fullTypeVecs;
-            this.inputList = block.inputList;
-            this.typeVecs = block.typeVecs;
-            this.type = block.type;
-
-            this.setHelpUrl(Blockly.Msg.VARIABLES_GET_HELPURL);
-            */
-
-            /*
-            this.appendDummyInput()
-                .appendField(new Blockly.Field(
-                    "initname"), 'VAR');
-            this.setOutput(true);
-            this.setTypeVecs([
-                ["none"]
-            ]);
-            */
-            /*
-            this.contextMenuMsg_ = Blockly.Msg.VARIABLES_GET_CREATE_SET;
-
-            // functions
-            this.init = block.init;
-            this.getVar = block.getVar;
-            this.renameVar = block.renameVar;
-            this.contextMenuType_ = block.contextMenuType_;
-            this.customContextMenu = block.customContextMenu;
-            this.onchange = block.onchange;
-
-            block.dispose(false, false, false);
-
-            //this.init();
-            */
-
             if(parent) {
                  // if it was in a block then replace into that block
                  // which input to put block in to
                  var i = Blockly.Variables.getParentInput(parent, true);
 
-                 /*
-                 var outputConnection = this.outputConnection;
-                 var parentBlock_ = this.parentBlock_;
-
-                 // delete current block
-                 //this.dispose(false, false, false);
-
-                 // add block connection
-                 block.outputConnection = outputConnection;
-                 block.parentBlock_ = parentBlock_;
-
-                 // fix parent connection
-                 var parentConnection = parent.inputList[i].connection;
-                 parentConnection.targetConnection.sourceBlock_ = block;
-                 */
-
                  // delete current block
                  this.dispose(false, false, false);
 
-                 var parentConnection = parent.inputList[i].connection;
-                 var newConnection = new Blockly.Connection(block, 2);
-
-                 block.outputConnection.targetConnection = newConnection;
-
-                 parentConnection.connect(newConnection);
+                 parent.inputList[i].connection.connect(block.outputConnection);
              } else {
                 // if not in block then just place where it was before
                 // get coords of block before dispose
