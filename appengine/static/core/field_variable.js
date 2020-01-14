@@ -196,6 +196,7 @@ Blockly.FieldVariable.dropdownChange = function(text) {
 
 // custom variable pop up stuff
 Blockly.modalWindow = {};
+Blockly.modalWindow.visible = false;
 
 Blockly.modalWindow.backdrop = {};
 
@@ -214,8 +215,15 @@ Blockly.modalWindow.backdrop.dispose = function() {
     Blockly.modalWindow.backdrop.get().remove();
 }
 
+Blockly.modalWindow.preview = {}
+
+Blockly.modalWindow.preview.name = 'default';
+Blockly.modalWindow.preview.type = 'int';
+
 // for selecting #1 - an existing variable or #2 creating a new one
 Blockly.modalWindow.selectVariable = function() {
+    Blockly.modalWindow.visible = true;
+
     // create a backdrop
     Blockly.modalWindow.backdrop.create();
 
@@ -238,15 +246,17 @@ Blockly.modalWindow.selectVariable = function() {
     var variables = Blockly.Variables.allVariables(workspace, true, true);
     // if parent of block, then filter types based on typeVecs
     var block = Blockly.Variables.getSelectorBlock();
-    for(i = 0; i < variables.length; i++) {
-        function checkTypeVecs() {
-            var j = Blockly.Variables.getParentInput(parent);
-            for(var k = 0; k < parent.typeVecs.length; k++) {
-                if(parent.typeVecs[k][j] == variables[i].type) {
-                    return true
-                }
+
+    function checkTypeVecs() {
+        var j = Blockly.Variables.getParentInput(parent);
+        for(var k = 0; k < parent.typeVecs.length; k++) {
+            if(parent.typeVecs[k][j] == variables[i].type) {
+                return true
             }
         }
+    }
+
+    for(i = 0; i < variables.length; i++) {
         // skip variable if not valid for block dropped in to - not relevant to assignment
         if(block.type == "python_variable_selector") {
           var parent = block.getParent();
@@ -300,58 +310,104 @@ Blockly.modalWindow.createVariable = function() {
     title.textContent = 'Variable Creation';
 
     // inputs
+    var inputContainer = document.createElement('div');
+    container.appendChild(inputContainer);
+    // name input
+    var nameContainer = document.createElement('div');
+    inputContainer.appendChild(nameContainer);
     var nameLabel = document.createElement('label');
     nameLabel.class = 'label';
     nameLabel.textContent = 'Name';
-    container.appendChild(nameLabel);
+    nameContainer.appendChild(nameLabel);
     var nameInput = document.createElement('input');
     nameInput.id = 'variableName';
+    nameInput.class = 'input';
     nameInput.addEventListener('input', nameInputListener);
-    container.appendChild(nameInput);
+    nameContainer.appendChild(nameInput);
 
+    // type input
+    var typeContainer = document.createElement('div');
+    inputContainer.appendChild(typeContainer);
     var typeLabel = document.createElement('label');
     typeLabel.class = 'label';
     typeLabel.textContent = 'Type';
-    container.appendChild(typeLabel);
-
+    typeContainer.appendChild(typeLabel);
     var typeInput = document.createElement('select');
     typeInput.id = 'variableType';
-    setOptions(typeInput);
-    container.appendChild(typeInput);
+    typeInput.class = 'input';
+    setOptions(getOptions(), typeInput);
+    typeInput.addEventListener('change', typeInputListener);
+    typeContainer.appendChild(typeInput);
 
     // block preview
-    /*
+    var previewContainer = document.createElement('div');
+    previewContainer.id = 'previewContainer';
+    container.appendChild(previewContainer);
+
     var block = Blockly.Variables.newVariableBlock({
-        "name": 'default',
-        "type": 'int',
+        "name": Blockly.modalWindow.preview.name,
+        "type": Blockly.modalWindow.preview.type
     });
-    block = Blockly.Xml.domToBlock(workspace, block);
-    */
+    Blockly.modalWindow.preview.block = Blockly.Xml.domToBlock(workspace, block);
+    var previewBlock = Blockly.modalWindow.preview.block;
+    // append block to container
 
     // buttons
-    var buttonContainer = document.createElement('div');
-    container.appendChild(buttonContainer);
-
     var create = document.createElement('button');
-    buttonContainer.appendChild(create);
+    container.appendChild(create);
     create.classList.add('modalButtons');
     create.textContent = 'Create';
     create.onclick = Blockly.modalWindow.createVariable.create;
 
     var cancel = document.createElement('button');
-    buttonContainer.appendChild(cancel);
+    container.appendChild(cancel);
     cancel.classList.add('modalButtons');
     cancel.textContent = 'Cancel';
     cancel.onclick = Blockly.modalWindow.cancel;
 }
 
 Blockly.modalWindow.createVariable.primitiveVariables = ['int', 'float', 'str', 'bool', 'range'];
-Blockly.modalWindow.createVariable.complexVariables = ['list', 'dict']
+Blockly.modalWindow.createVariable.complexVariables = ['list', 'dict'];
 
 // validation on input for name input
 function nameInputListener(ev) {
-    var name = document.getElementById('variableName').value;
+    // get inputs
+    var variableName = document.getElementById('variableName').value;
+    // validate inputs
+    var valid = checkIfNameValid(variableName);
 
+    // if name is invalid make warning icon visible
+    if(valid) {
+        // make icon invisible
+
+        // update preview
+        var preview = Blockly.modalWindow.preview;
+
+        var block = Blockly.modalWindow.preview.block;
+        block.renameVar(preview.name, variableName);
+        preview.name = variableName;
+    } else {
+        // make icon visible
+        console.log("invalid");
+    }
+}
+
+function typeInputListener(ev) {
+    var variableType = document.getElementById('variableType').value;
+
+    // update preview
+    var preview = Blockly.modalWindow.preview;
+    var block = Blockly.modalWindow.preview.block;
+
+    block.setTypeVecs([
+      [variableType]
+    ]);
+    block.reType();
+
+    preview.type = variableType;
+}
+
+function checkIfNameValid(name) {
     // check if name is valid
     var valid = true;
     // check there is a name
@@ -376,18 +432,22 @@ function nameInputListener(ev) {
         valid = false;
     }
 
-    // if name is invalid make warning icon visible
-    if(valid) {
-        // make icon invisible
-        console.log("valid");
-    } else {
-        // make visible
-        console.log("invalid");
-    }
+    return valid;
 }
 
 // set options in dropdown for creating a variable according to parent block
-function setOptions(select) {
+function setOptions(options, selectElement) {
+    for(var i = 0; i < options.length; i++) {
+        var option = document.createElement('option');
+        option.value = options[i];
+        option.textContent = options[i];
+
+        selectElement.add(option);
+    }
+}
+
+// gets options for variable block to be
+function getOptions() {
     var block = Blockly.Variables.getSelectorBlock()
     var parent = block.getParent();
 
@@ -425,23 +485,29 @@ function setOptions(select) {
         //options = Blockly.modalWindow.createVariable.complexVariables;
     }
 
-    for(var i = 0; i < options.length; i++) {
-        var option = document.createElement('option');
-        option.value = options[i];
-        option.textContent = options[i];
-
-        select.add(option);
-    }
+    return options;
 }
 
 Blockly.modalWindow.dispose = function() {
     document.getElementById('modalWindow').remove();
 }
 
+Blockly.modalWindow.preview.dispose = function() {
+    if(Blockly.modalWindow.preview.block) {
+        Blockly.modalWindow.preview.block.dispose();
+        Blockly.modalWindow.preview.name = 'default';
+        Blockly.modalWindow.preview.type = 'int';
+        Blockly.modalWindow.preview.block = undefined;
+    }
+}
+
 Blockly.modalWindow.cancel = function() {
     Blockly.modalWindow.dispose();
     Blockly.modalWindow.backdrop.dispose();
+    Blockly.modalWindow.preview.dispose()
     Blockly.Variables.getSelectorBlock().dispose();
+
+    Blockly.modalWindow.visible = false;
 }
 
 Blockly.modalWindow.selectVariable.select = function() {
@@ -463,7 +529,7 @@ Blockly.modalWindow.selectVariable.select = function() {
     Blockly.modalWindow.backdrop.dispose();
 
     // fire onchange event
-    block.onchange()
+    block.onchange();
 }
 
 Blockly.modalWindow.selectVariable.newVariable = function() {
@@ -480,7 +546,10 @@ Blockly.modalWindow.createVariable.create = function() {
 
     Blockly.modalWindow.dispose();
     Blockly.modalWindow.backdrop.dispose();
+    Blockly.modalWindow.preview.dispose();
+
+    Blockly.modalWindow.visible = false;
 
     // fire onchange event
-    block.onchange()
+    block.onchange();
 }

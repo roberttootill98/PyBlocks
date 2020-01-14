@@ -320,17 +320,24 @@ table#typetable {
 }
 
 #modalWindow {
-    position: absolute;
     display: block;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    width: 15em;
-    height: 10em;
-    margin: 5em;
+    align: centre;
+    min-width: 15em;
+    width: 25%;
+    margin: auto;
+    margin-top: 5em;
     padding: 1em;
     background-color: #fff;
+    border-radius: 10px;
+}
+
+#previewContainer {
+    background-color: gray;
+    margin: 2em;
+    padding: 2em;
+    border-style: solid;
+    border-width: 5px;
+    border-color: black;
 }
 
 .modalButtons:hover {
@@ -339,7 +346,15 @@ table#typetable {
 
 .variable {
     padding: 1em;
+    list-style-type: none;
+    border-style: solid;
+    border-width: 5px;
+    border-color: black;
 }
 .variable:hover {
     cursor: pointer;
+}
+
+.label {
+    padding-right: 0;
 }

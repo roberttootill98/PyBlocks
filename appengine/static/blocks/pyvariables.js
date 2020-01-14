@@ -248,7 +248,7 @@ Blockly.Blocks['python_variable_selector'] = {
                 // move new block to location of old block
                 block.moveBy(x, y);
             }
-        } else if(this.inWorkspace) {
+        } else if(this.inWorkspace && !Blockly.modalWindow.visible) {
             // if in workspace then prompt modal window
             Blockly.modalWindow.selectVariable();
         } else if(Blockly.Variables.getSelectorBlock()) {
@@ -310,7 +310,7 @@ Blockly.Blocks['python_variable_selector_assignment'] = {
 
                 block.moveBy(x, y);
             }
-        } else if(this.inWorkspace) {
+        } else if(this.inWorkspace && !Blockly.modalWindow.visible) {
             // if in workspace then prompt modal window
             Blockly.modalWindow.selectVariable();
         } else if(Blockly.Variables.getSelectorBlock()) {
