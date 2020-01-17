@@ -250,7 +250,9 @@ Blockly.modalWindow.selectVariable = function() {
     function checkTypeVecs() {
         var j = Blockly.Variables.getParentInput(parent);
         for(var k = 0; k < parent.typeVecs.length; k++) {
-            if(parent.typeVecs[k][j] == variables[i].type) {
+            if(parent.typeVecs[k][j] == variables[i].type ||
+                parent.typeVecs[k][j] == "any" ||
+                parent.typeVecs[k][j] == "*any") {
                 return true
             }
         }
@@ -354,10 +356,12 @@ Blockly.modalWindow.createVariable = function() {
 
     // buttons
     var create = document.createElement('button');
+    create.id = 'createButton';
     container.appendChild(create);
     create.classList.add('modalButtons');
     create.textContent = 'Create';
     create.onclick = Blockly.modalWindow.createVariable.create;
+    create.disabled = true;
 
     var cancel = document.createElement('button');
     container.appendChild(cancel);
@@ -376,9 +380,13 @@ function nameInputListener(ev) {
     // validate inputs
     var valid = checkIfNameValid(variableName);
 
+    var createButton = document.getElementById('createButton');
     // if name is invalid make warning icon visible
     if(valid) {
         // make icon invisible
+
+        // enable create button
+        createButton.disabled = false;
 
         // update preview
         var preview = Blockly.modalWindow.preview;
@@ -388,7 +396,9 @@ function nameInputListener(ev) {
         preview.name = variableName;
     } else {
         // make icon visible
-        console.log("invalid");
+
+        // disable create button
+        createButton.disabled = true;
     }
 }
 
@@ -527,6 +537,8 @@ Blockly.modalWindow.selectVariable.select = function() {
 
     Blockly.modalWindow.dispose();
     Blockly.modalWindow.backdrop.dispose();
+
+    Blockly.modalWindow.visible = false;
 
     // fire onchange event
     block.onchange();
