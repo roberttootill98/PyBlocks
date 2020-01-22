@@ -315,17 +315,18 @@ Blockly.modalWindow.createVariable = function() {
 
     // inputs
     var inputContainer = document.createElement('div');
+    inputContainer.id = 'inputContainer';
     container.appendChild(inputContainer);
     // name input
     var nameContainer = document.createElement('div');
     inputContainer.appendChild(nameContainer);
     var nameLabel = document.createElement('label');
-    nameLabel.class = 'label';
+    nameLabel.classList.add('label');
     nameLabel.textContent = 'Name';
     nameContainer.appendChild(nameLabel);
     var nameInput = document.createElement('input');
     nameInput.id = 'variableName';
-    nameInput.class = 'input';
+    nameInput.classList.add('input');
     nameInput.addEventListener('input', nameInputListener);
     nameContainer.appendChild(nameInput);
 
@@ -333,12 +334,13 @@ Blockly.modalWindow.createVariable = function() {
     var typeContainer = document.createElement('div');
     inputContainer.appendChild(typeContainer);
     var typeLabel = document.createElement('label');
-    typeLabel.class = 'label';
+    typeLabel.classList.add('label');
     typeLabel.textContent = 'Type';
     typeContainer.appendChild(typeLabel);
     var typeInput = document.createElement('select');
     typeInput.id = 'variableType';
-    typeInput.class = 'input';
+    typeInput.classList.add("input");
+    typeInput.classList.add("variableTypeInput");
     setOptions(getOptions(), typeInput);
     typeInput.addEventListener('change', typeInputListener);
     typeContainer.appendChild(typeInput);
@@ -383,7 +385,7 @@ Blockly.modalWindow.createVariable = function() {
 }
 
 Blockly.modalWindow.createVariable.primitiveVariables = ['int', 'float', 'str', 'bool', 'range'];
-Blockly.modalWindow.createVariable.complexVariables = ['list', 'dict'];
+Blockly.modalWindow.createVariable.complexVariables = ['list of...', ]; // nested lists, iterables
 
 // validation on input for name input
 function nameInputListener(ev) {
@@ -425,18 +427,67 @@ function nameInputListener(ev) {
 }
 
 function typeInputListener(ev) {
-    var variableType = document.getElementById('variableType').value;
+    var variableType = ev['target'].value;
+
+    // these appear in order of indentation
+    var variableTypeInputs = document.querySelectorAll(".variableTypeInput");
+    // check there are no primitive types in nesting list
+    // eg. list of - list of - list of - int
+    var validNesting = true;
+    for(var i = 0; i < variableTypeInputs.length; i++) {
+        if(Blockly.modalWindow.createVariable.primitiveVariables.indexOf(variableTypeInputs[i].value) >= 0) {
+            validNesting = false;
+            break;
+        }
+    }
+
+    // if we have valid nesting then prompt some more ui
+    if(validNesting)  {
+        if(variableType == "list of...") {
+            var container = document.getElementById('inputContainer');
+            // create new input
+            var newVariableTypeInput = document.createElement('select');
+            newVariableTypeInput.classList.add("input");
+            newVariableTypeInput.classList.add("variableTypeInput");
+            setOptions(getOptions(), newVariableTypeInput);
+            newVariableTypeInput.addEventListener('change', typeInputListener);
+
+            container.appendChild(newVariableTypeInput);
+        }
+    // else delete blocks after invalid nested block
+    } else {
+        for(i++; i < variableTypeInputs.length; i++) {
+            variableTypeInputs[i].remove();
+        }
+    }
+
+    // construct typeVec
+    var typeVec = "";
+    for(var i = 0; i < variableTypeInputs.length; i++) {
+        // for every list add * to the beginning
+        if(variableTypeInputs[i].value == "list of...") {
+            typeVec = "*" + typeVec;
+        } else {
+            // once we reach the last element of the nesting then add the actual type
+            typeVec = typeVec + variableTypeInputs[i].value;
+        }
+        // else do stuff for other complex types
+    }
 
     // update preview
     var preview = Blockly.modalWindow.preview;
-    var block = Blockly.modalWindow.preview.block;
+    var previewBlock = preview.block;
 
-    block.setTypeVecs([
-      [variableType]
-    ]);
-    block.reType();
+    previewBlock.setTypeVecs([[typeVec]]);
+    // seems kind of hacky
+    if(Blockly.modalWindow.createVariable.primitiveVariables.indexOf(typeVec) >= 0) {
+        previewBlock.outputsAList();
+        previewBlock.reType();
+    } else {
+        previewBlock.setOutput(true);
+    }
 
-    preview.type = variableType;
+    preview.type = typeVec;
 }
 
 function checkIfNameValid(name) {
@@ -509,7 +560,7 @@ function getOptions() {
         }
     } else {
         options = options.concat(Blockly.modalWindow.createVariable.primitiveVariables);
-        //options = options.concat(Blockly.modalWindow.createVariable.complexVariables);
+        options = options.concat(Blockly.modalWindow.createVariable.complexVariables);
     }
 
     // check if any/*any is in options
@@ -555,7 +606,7 @@ Blockly.modalWindow.cancel = function() {
 Blockly.modalWindow.selectVariable.select = function() {
     // returns python type from list
     function findType(classList) {
-        var types = ["int", "float", "str", "bool"]; // for now
+        var types = ["int", "float", "str", "bool", "range"]; // for now
         for(i = 0; i < classList.length; i++) {
             if(types.includes(classList[i])) {
                 return classList[i];
