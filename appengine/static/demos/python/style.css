@@ -327,7 +327,7 @@ table#typetable {
     margin: auto;
     margin-top: 5em;
     padding: 1em;
-    background-color: #fff;
+    background-color: rgb(112, 128, 144); /* same as block palette */
     border-radius: 10px;
 }
 
@@ -340,8 +340,8 @@ table#typetable {
     border-color: black;
 }
 
-.modalButtons:hover {
-    cursor: pointer;
+.modalButtons {
+    margin: 1em;
 }
 
 .variable {

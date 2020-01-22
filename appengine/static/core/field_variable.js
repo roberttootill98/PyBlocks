@@ -294,6 +294,8 @@ Blockly.modalWindow.selectVariable = function() {
 
     var cancel = document.createElement('button');
     buttonContainer.appendChild(cancel);
+
+    cancel.classList.add('fancybuttons');
     cancel.classList.add('modalButtons');
     cancel.textContent = 'Cancel';
     cancel.onclick = Blockly.modalWindow.cancel;
@@ -358,13 +360,23 @@ Blockly.modalWindow.createVariable = function() {
     var create = document.createElement('button');
     create.id = 'createButton';
     container.appendChild(create);
+    create.classList.add('fancybuttons');
     create.classList.add('modalButtons');
     create.textContent = 'Create';
     create.onclick = Blockly.modalWindow.createVariable.create;
     create.disabled = true;
 
+    create.addEventListener('mouseover', displayReason);
+
+    var reason = document.createElement('p');
+    reason.id = 'reason';
+    create.appendChild(reason);
+    reason.style.display = 'none';
+
     var cancel = document.createElement('button');
     container.appendChild(cancel);
+
+    cancel.classList.add('fancybuttons');
     cancel.classList.add('modalButtons');
     cancel.textContent = 'Cancel';
     cancel.onclick = Blockly.modalWindow.cancel;
@@ -378,15 +390,19 @@ function nameInputListener(ev) {
     // get inputs
     var variableName = document.getElementById('variableName').value;
     // validate inputs
-    var valid = checkIfNameValid(variableName);
+    var validity = checkIfNameValid(variableName);
+    var valid = validity[0];
+    var reason = validity[1];
 
     var createButton = document.getElementById('createButton');
+    var reasonEl = document.getElementById("reason");
     // if name is invalid make warning icon visible
     if(valid) {
         // make icon invisible
 
         // enable create button
         createButton.disabled = false;
+        // remove hover text
 
         // update preview
         var preview = Blockly.modalWindow.preview;
@@ -394,11 +410,17 @@ function nameInputListener(ev) {
         var block = Blockly.modalWindow.preview.block;
         block.renameVar(preview.name, variableName);
         preview.name = variableName;
+
+        createButton.reason = '';
+        reasonEl.style.display = 'none';
+
     } else {
         // make icon visible
 
         // disable create button
         createButton.disabled = true;
+        // add hover text
+        createButton.reason = reason;
     }
 }
 
@@ -419,30 +441,40 @@ function typeInputListener(ev) {
 
 function checkIfNameValid(name) {
     // check if name is valid
-    var valid = true;
     // check there is a name
     if(!name) {
-        valid = false;
+        return [false, "There must be a name"];
     }
+
     // check name isn't reserved
-    if(valid) { // save some time
-        var reservedNames = Blockly.Python.RESERVED;
-        for(var i = 0; i < reservedNames.length; i++) {
-            if(name == reservedNames[i]) {
-                valid = false;
-            }
+    var reservedWords = Blockly.Python.RESERVED;
+    for(var i = 0; i < reservedWords.length; i++) {
+        if(name == reservedWords[i]) {
+            return [false, reservedWords[i] = " is a reserved word"];
         }
     }
+
     // check name starts with letter or _, followed by letters, numbers and _
     var re = new RegExp(`^([a-zA-Z]|_)([a-zA-Z]|[0-9]|_)*$`)
     if(!re.test(name)) {
-        valid = false;
-    // check name is unique
-    } else if(name != Blockly.Python.makeNameUnique(name, Blockly.Variables.allVariables(workspace, true, true))) {
-        valid = false;
+        return [false, "Name must follow python syntax"];
     }
 
-    return valid;
+    // check name is unique
+    if(name != Blockly.Python.makeNameUnique(name, Blockly.Variables.allVariables(workspace, true, true))) {
+        return [false, "Name is not unique"];
+    }
+
+    return [true, "Valid"];
+}
+
+// display reason why create button can't be clicked on mouseover event
+function displayReason(ev) {
+    var createButton = document.getElementById('createButton');
+    var reason = document.getElementById("reason");
+
+    reason.style.display = 'block';
+    reason.textContent = createButton.reason;
 }
 
 // set options in dropdown for creating a variable according to parent block
