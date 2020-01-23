@@ -461,6 +461,9 @@ function typeInputListener(ev) {
         }
     }
 
+    // reobtain variable inputs list as this may have changed
+    variableTypeInputs = document.querySelectorAll(".variableTypeInput");
+
     // construct typeVec
     var typeVec = "";
     for(var i = 0; i < variableTypeInputs.length; i++) {
@@ -481,7 +484,6 @@ function typeInputListener(ev) {
     previewBlock.setTypeVecs([[typeVec]]);
     // seems kind of hacky
     if(Blockly.modalWindow.createVariable.primitiveVariables.indexOf(typeVec) >= 0) {
-        previewBlock.outputsAList();
         previewBlock.reType();
     } else {
         previewBlock.setOutput(true);
