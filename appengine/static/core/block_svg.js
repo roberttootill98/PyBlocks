@@ -59,11 +59,8 @@ Blockly.BlockSvg = function() {
         },
         this.svgGroup_);
 
-    /** @type {Array<!SVGElement>} */
-    this.svgListRects = new Array(3);
-    for (var i = 0; i < 3; i++) {
-        this.svgListRects[i] = Blockly.createSvgElement('rect', {}, this.svgGroup_);
-    }
+    /** @type {<SVGElement>} */
+    this.svgListSawtooth = Blockly.createSvgElement('path', {}, this.svgGroup_);
 
     //console.log("CREATING BLOCK SVG");
 
@@ -1323,7 +1320,7 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate,
     // Sever JavaScript to DOM connections.
     this.svgGroup_ = null;
     this.svgBlockPath_ = null;
-    this.svgListRects = null;
+    this.svgListSawtooth = null;
     this.svgHolePath_ = null;
     this.svgHoleGroup = null;
     this.svgIndicatorGroup = null;
@@ -1553,9 +1550,10 @@ Blockly.BlockSvg.prototype.updateColour = function() {
                 var fillUrl = this.workspace.options[typeString + 'TypePatternLargeId'];
                 fillText = 'url(#' + fillUrl + ')';
             }
-            for (var i = 0; i < 3; i++) {
-                this.svgListRects[i].setAttribute('fill', fillText);
-            }
+
+            this.svgBlockPath_.setAttribute('fill', fillText);
+            // make sawtooth visible again
+            this.svgListSawtooth.setAttribute('fill-opacity', '1');
         } else {
             var outputTypes = this.getOutputTypesByKind().basic;
             outputTypes = Blockly.Python.mergeSubtypes(outputTypes);
@@ -1574,10 +1572,8 @@ Blockly.BlockSvg.prototype.updateColour = function() {
             }
             this.svgBlockPath_.setAttribute('fill', fillText);
 
-            // if this was previously a list block then remove list parts
-            for(var i = 0; i < 3; i++) {
-                this.svgListRects[i].setAttribute('fill', fillText);
-            }
+            // dispose of svgListSawtooth if it exists - not scalable
+            this.svgListSawtooth.setAttribute('fill-opacity', '0.0');
         }
     } else {
         this.svgBlockPath_.setAttribute('fill',
@@ -2258,15 +2254,30 @@ Blockly.BlockSvg.prototype.renderDraw_ = function(iconWidth, inputRows) {
     }
     // =================
     if (this.outputConnection && this.outputsAList()) {
-        var tempListRectWidth = 0.28 * (this.width - 1);
-        var tempListGapWidth = (this.width - 1 - tempListRectWidth * 3) / 2;
-        for (var i = 0; i < 3; i++) {
-            this.svgListRects[i].setAttribute('x', (0.5 + i * (tempListRectWidth + tempListGapWidth)).toString());
-            this.svgListRects[i].setAttribute('y', 0.5);
-            this.svgListRects[i].setAttribute('width', tempListRectWidth);
-            this.svgListRects[i].setAttribute('height', this.height - 1);
-            // this.svgListRects[i].setAttribute('transform', 'translate('+
-            //    (0.5 + i * (tempListRectWidth + tempListGapWidth)).toString() + ',0)');
+        // make sawtooth visible - iterate through all sawtooth svgs attached to block
+        // how should we handle a situation where we may output a variable amount of lists based on the input -- does this scneario exist?
+        var outputTypes = this.getOutputTypes();
+        var listAmount = 0;
+        for(var i = 0; i < outputTypes.length; i++) {
+            listAmount = outputTypes[i].split("*").length - 1;
+        }
+
+        for(var j = 0; j < listAmount; j++) {
+            var sawToothSteps = [];
+            // adjust height per sawtooth added
+            sawToothSteps.push('M', 0, this.height + j);
+            sawToothSteps.push('v',-2);
+            // try to offset width so sawtooth svgs do not unline underneath eachother
+            var numTeeth = Math.round(this.width / 12);
+            for (var i = 0; i < numTeeth; i++) {
+              sawToothSteps.push('l 6 -6');
+              sawToothSteps.push('l 6 6');
+            }
+            sawToothSteps.push('v 2');
+            sawToothSteps.push('z');
+            var sawtoothString = sawToothSteps.join(' ');
+            this.svgListSawtooth.setAttribute('d', sawtoothString);
+            this.svgListSawtooth.setAttribute('fill', 'white');
         }
     }
 };
