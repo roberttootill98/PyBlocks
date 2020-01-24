@@ -1573,6 +1573,11 @@ Blockly.BlockSvg.prototype.updateColour = function() {
                 fillText = 'url(#' + fillUrl + ')';
             }
             this.svgBlockPath_.setAttribute('fill', fillText);
+
+            // if this was previously a list block then remove list parts
+            for(var i = 0; i < 3; i++) {
+                this.svgListRects[i].setAttribute('fill', fillText);
+            }
         }
     } else {
         this.svgBlockPath_.setAttribute('fill',
