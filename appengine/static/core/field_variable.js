@@ -526,7 +526,7 @@ function displayReason(ev) {
     var createButton = document.getElementById('createButton');
     var reason = document.getElementById("reason");
 
-    reason.style.display = 'block';
+    //reason.style.display = 'block';
     reason.textContent = createButton.reason;
 }
 
@@ -560,6 +560,9 @@ function getOptions() {
                 options.push(typeVec);
             }
         }
+
+        // unpack nested types, eg. *int for list of ints
+
     } else {
         options = options.concat(Blockly.modalWindow.createVariable.primitiveVariables);
         options = options.concat(Blockly.modalWindow.createVariable.complexVariables);
@@ -637,9 +640,10 @@ Blockly.modalWindow.selectVariable.newVariable = function() {
 Blockly.modalWindow.createVariable.create = function() {
     var block = Blockly.Variables.getSelectorBlock();
 
-    // validate name
-    block.varName = document.getElementById('variableName').value;
-    block.varType = document.getElementById('variableType').value;
+    // use preview to build block
+    var preview = Blockly.modalWindow.preview;
+    block.varName = preview.name;
+    block.varType = preview.type;
 
     Blockly.modalWindow.dispose();
     Blockly.modalWindow.backdrop.dispose();
