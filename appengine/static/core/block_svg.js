@@ -1560,7 +1560,7 @@ Blockly.BlockSvg.prototype.updateColour = function() {
                 // these appear in order of indentation
                 var variableTypeInputs = document.querySelectorAll(".variableTypeInput");
                 for(var i = 0; i < variableTypeInputs.length; i++) {
-                    if(Blockly.modalWindow.createVariable.primitiveVariables.indexOf(variableTypeInputs[i].value) >= 0) {
+                    if(Blockly.modalWindow.createVariable.primitiveVariables.includes(variableTypeInputs[i].value)) {
                         break;
                     }
                 }

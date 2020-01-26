@@ -218,7 +218,7 @@ Blockly.modalWindow.backdrop.dispose = function() {
 Blockly.modalWindow.preview = {}
 
 Blockly.modalWindow.preview.name = 'default';
-Blockly.modalWindow.preview.type = 'int';
+Blockly.modalWindow.preview.type = '';
 
 // for selecting #1 - an existing variable or #2 creating a new one
 Blockly.modalWindow.selectVariable = function() {
@@ -350,9 +350,11 @@ Blockly.modalWindow.createVariable = function() {
     previewContainer.id = 'previewContainer';
     container.appendChild(previewContainer);
 
+    var previewType = document.querySelectorAll(".variableTypeInput")[0].value;
+    Blockly.modalWindow.preview.type = previewType;
     var block = Blockly.Variables.newVariableBlock({
         "name": Blockly.modalWindow.preview.name,
-        "type": Blockly.modalWindow.preview.type
+        "type": previewType
     });
     Blockly.modalWindow.preview.block = Blockly.Xml.domToBlock(workspace, block);
     var previewBlock = Blockly.modalWindow.preview.block;
@@ -435,7 +437,7 @@ function typeInputListener(ev) {
     // eg. list of - list of - list of - int
     var validNesting = true;
     for(var i = 0; i < variableTypeInputs.length; i++) {
-        if(Blockly.modalWindow.createVariable.primitiveVariables.indexOf(variableTypeInputs[i].value) >= 0) {
+        if(Blockly.modalWindow.createVariable.primitiveVariables.includes(variableTypeInputs[i].value)) {
             validNesting = false;
             break;
         }
@@ -483,7 +485,7 @@ function typeInputListener(ev) {
 
     previewBlock.setTypeVecs([[typeVec]]);
     // seems kind of hacky
-    if(Blockly.modalWindow.createVariable.primitiveVariables.indexOf(typeVec) >= 0) {
+    if(Blockly.modalWindow.createVariable.primitiveVariables.includes(typeVec)) {
         previewBlock.reType();
     } else {
         previewBlock.setOutput(true);
@@ -556,7 +558,22 @@ function getOptions() {
         // loop over parent type vecs in position
         for(var i = 0; i < parent.typeVecs.length; i++) {
             var typeVec = parent.typeVecs[i][position];
-            if(options.indexOf(typeVec) < 0) {
+
+            /*
+            // check if matching in the typeVec
+            if(typeVec == "matching") {
+                // then add everytime primitive type that we don't already have
+                var primitiveTypes = Blockly.modalWindow.createVariable.primitiveVariables;
+                for(var j = 0; j < primitiveTypes.length; j++) {
+                    if(options.includes(primitiveTypes[j])) {
+                        options.push(primitiveTypes[j]);
+                    }
+                }
+            }
+            */
+
+            // other is a primitive type
+            if(!options.includes(typeVec)) {
                 options.push(typeVec);
             }
         }
@@ -569,18 +586,19 @@ function getOptions() {
     }
 
     // check if any/*any is in options
-    if(options.indexOf('any') >= 0) {
-        if(options.indexOf('*any') >= 0) {
-            options = Blockly.modalWindow.createVariable.primitiveVariables;
-            //options = options.concat(Blockly.modalWindow.createVariable.complexVariables);
+    // check if matching/*matching is in options
+    if(options.includes('any') || options.includes('matching')) {
+        if(options.includes('*any') || options.includes('*matching')) {
             // any and *any
+            options = Blockly.modalWindow.createVariable.primitiveVariables;
+            options = options.concat(Blockly.modalWindow.createVariable.complexVariables);
         } else {
             // just any
             options = Blockly.modalWindow.createVariable.primitiveVariables;
         }
-    } else if(options.indexOf('*any') >= 0) {
+    } else if(options.includes('*any') || options.includes('*matching')) {
         // just *any
-        //options = Blockly.modalWindow.createVariable.complexVariables;
+        options = Blockly.modalWindow.createVariable.complexVariables;
     }
 
     return options;
