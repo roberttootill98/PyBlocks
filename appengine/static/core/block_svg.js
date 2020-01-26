@@ -59,8 +59,8 @@ Blockly.BlockSvg = function() {
         },
         this.svgGroup_);
 
-    /** @type {<SVGElement>} */
-    this.svgListSawtooth = Blockly.createSvgElement('path', {}, this.svgGroup_);
+    /** @type {Array<!SVGElement>} */
+    this.svgListSawtooth = [];
 
     //console.log("CREATING BLOCK SVG");
 
@@ -1552,8 +1552,25 @@ Blockly.BlockSvg.prototype.updateColour = function() {
             }
 
             this.svgBlockPath_.setAttribute('fill', fillText);
-            // make sawtooth visible again
-            this.svgListSawtooth.setAttribute('fill-opacity', '1');
+
+            // only relevant if we have modalWindow
+            if(Blockly.modalWindow.visible) {
+                // check if we need to delete any sawteeth
+                // get index of last type selector in valid string
+                // these appear in order of indentation
+                var variableTypeInputs = document.querySelectorAll(".variableTypeInput");
+                for(var i = 0; i < variableTypeInputs.length; i++) {
+                    if(Blockly.modalWindow.createVariable.primitiveVariables.indexOf(variableTypeInputs[i].value) >= 0) {
+                        break;
+                    }
+                }
+                // delete svgs
+                for(i; i < this.svgListSawtooth.length; i++) {
+                    this.svgListSawtooth[i].remove();
+                }
+                // cut elements off from array
+                this.svgListSawtooth.length = i;
+          }
         } else {
             var outputTypes = this.getOutputTypesByKind().basic;
             outputTypes = Blockly.Python.mergeSubtypes(outputTypes);
@@ -1572,8 +1589,11 @@ Blockly.BlockSvg.prototype.updateColour = function() {
             }
             this.svgBlockPath_.setAttribute('fill', fillText);
 
-            // dispose of svgListSawtooth if it exists - not scalable
-            this.svgListSawtooth.setAttribute('fill-opacity', '0.0');
+            // dispose of sawteeth if they exists
+            for(var i = 0; i < this.svgListSawtooth.length; i++) {
+                this.svgListSawtooth[i].remove();
+            }
+            this.svgListSawtooth = [];
         }
     } else {
         this.svgBlockPath_.setAttribute('fill',
@@ -2262,22 +2282,45 @@ Blockly.BlockSvg.prototype.renderDraw_ = function(iconWidth, inputRows) {
             listAmount = outputTypes[i].split("*").length - 1;
         }
 
-        for(var j = 0; j < listAmount; j++) {
+        for(var i = 0; i < listAmount; i++) {
             var sawToothSteps = [];
             // adjust height per sawtooth added
-            sawToothSteps.push('M', 0, this.height + j);
+            // 'M', x coord, y coord
+            sawToothSteps.push('M', 0, this.height + i * 4);
             sawToothSteps.push('v',-2);
             // try to offset width so sawtooth svgs do not unline underneath eachother
             var numTeeth = Math.round(this.width / 12);
-            for (var i = 0; i < numTeeth; i++) {
+            for (var j = 0; j < numTeeth; j++) {
               sawToothSteps.push('l 6 -6');
               sawToothSteps.push('l 6 6');
             }
             sawToothSteps.push('v 2');
             sawToothSteps.push('z');
             var sawtoothString = sawToothSteps.join(' ');
-            this.svgListSawtooth.setAttribute('d', sawtoothString);
-            this.svgListSawtooth.setAttribute('fill', 'white');
+
+            // if svg path doesn't exist at index, create a new one
+            var svgList = this.svgListSawtooth;
+            if(svgList[i]) {
+                var svgPath = svgList[i];
+            } else {
+                var svgPath = Blockly.createSvgElement('path', {}, this.svgGroup_);
+                svgList[i] = svgPath
+            }
+            svgPath.setAttribute('d', sawtoothString);
+
+            // alternate colour
+            var lastPath = svgList[i - 1];
+            if(lastPath) {
+                var fill = lastPath.getAttribute('fill');
+                if(fill == 'white') {
+                    svgPath.setAttribute('fill', 'grey');
+                } else if(fill == 'grey') {
+                    svgPath.setAttribute('fill', 'white');
+                }
+            } else {
+                // must be at first
+                svgPath.setAttribute('fill', 'white');
+            }
         }
     }
 };
