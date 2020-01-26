@@ -220,6 +220,9 @@ Blockly.modalWindow.preview = {}
 Blockly.modalWindow.preview.name = 'default';
 Blockly.modalWindow.preview.type = '';
 
+Blockly.modalWindow.primitiveVariables = ['int', 'float', 'str', 'bool', 'range'];
+Blockly.modalWindow.complexVariables = ['list of...', ]; // nested lists, iterables
+
 // for selecting #1 - an existing variable or #2 creating a new one
 Blockly.modalWindow.selectVariable = function() {
     Blockly.modalWindow.visible = true;
@@ -356,6 +359,10 @@ Blockly.modalWindow.createVariable = function() {
         "name": Blockly.modalWindow.preview.name,
         "type": previewType
     });
+    // if previewType is complex then prompt more ui
+    if(Blockly.modalWindow.complexVariables.includes(previewType)) {
+        addVariableTypeInput();
+    }
     Blockly.modalWindow.preview.block = Blockly.Xml.domToBlock(workspace, block);
     var previewBlock = Blockly.modalWindow.preview.block;
     // append block to container
@@ -386,8 +393,7 @@ Blockly.modalWindow.createVariable = function() {
     cancel.onclick = Blockly.modalWindow.cancel;
 }
 
-Blockly.modalWindow.createVariable.primitiveVariables = ['int', 'float', 'str', 'bool', 'range'];
-Blockly.modalWindow.createVariable.complexVariables = ['list of...', ]; // nested lists, iterables
+// NAME INPUT FUNCTIONS
 
 // validation on input for name input
 function nameInputListener(ev) {
@@ -428,72 +434,6 @@ function nameInputListener(ev) {
     }
 }
 
-function typeInputListener(ev) {
-    var variableType = ev['target'].value;
-
-    // these appear in order of indentation
-    var variableTypeInputs = document.querySelectorAll(".variableTypeInput");
-    // check there are no primitive types in nesting list
-    // eg. list of - list of - list of - int
-    var validNesting = true;
-    for(var i = 0; i < variableTypeInputs.length; i++) {
-        if(Blockly.modalWindow.createVariable.primitiveVariables.includes(variableTypeInputs[i].value)) {
-            validNesting = false;
-            break;
-        }
-    }
-
-    // if we have valid nesting then prompt some more ui
-    if(validNesting)  {
-        if(variableType == "list of...") {
-            var container = document.getElementById('inputContainer');
-            // create new input
-            var newVariableTypeInput = document.createElement('select');
-            newVariableTypeInput.classList.add("input");
-            newVariableTypeInput.classList.add("variableTypeInput");
-            setOptions(getOptions(), newVariableTypeInput);
-            newVariableTypeInput.addEventListener('change', typeInputListener);
-
-            container.appendChild(newVariableTypeInput);
-        }
-    // else delete blocks after invalid nested block
-    } else {
-        for(i++; i < variableTypeInputs.length; i++) {
-            variableTypeInputs[i].remove();
-        }
-    }
-
-    // reobtain variable inputs list as this may have changed
-    variableTypeInputs = document.querySelectorAll(".variableTypeInput");
-
-    // construct typeVec
-    var typeVec = "";
-    for(var i = 0; i < variableTypeInputs.length; i++) {
-        // for every list add * to the beginning
-        if(variableTypeInputs[i].value == "list of...") {
-            typeVec = "*" + typeVec;
-        } else {
-            // once we reach the last element of the nesting then add the actual type
-            typeVec = typeVec + variableTypeInputs[i].value;
-        }
-        // else do stuff for other complex types
-    }
-
-    // update preview
-    var preview = Blockly.modalWindow.preview;
-    var previewBlock = preview.block;
-
-    previewBlock.setTypeVecs([[typeVec]]);
-    // seems kind of hacky
-    if(Blockly.modalWindow.createVariable.primitiveVariables.includes(typeVec)) {
-        previewBlock.reType();
-    } else {
-        previewBlock.setOutput(true);
-    }
-
-    preview.type = typeVec;
-}
-
 function checkIfNameValid(name) {
     // check if name is valid
     // check there is a name
@@ -532,6 +472,80 @@ function displayReason(ev) {
     reason.textContent = createButton.reason;
 }
 
+// TYPE INPUT FUNCTIONS
+
+function typeInputListener(ev) {
+    var variableType = ev['target'].value;
+
+    // these appear in order of indentation
+    var variableTypeInputs = document.querySelectorAll(".variableTypeInput");
+    // check there are no primitive types in nesting list
+    // eg. list of - list of - list of - int
+    var validNesting = true;
+    for(var i = 0; i < variableTypeInputs.length; i++) {
+        if(Blockly.modalWindow.primitiveVariables.includes(variableTypeInputs[i].value)) {
+            validNesting = false;
+            break;
+        }
+    }
+
+    // if we have valid nesting then prompt some more ui
+    if(validNesting)  {
+        if(variableType == "list of...") {
+            addVariableTypeInput(getOptions());
+        }
+    // else delete blocks after invalid nested block
+    } else {
+        for(i++; i < variableTypeInputs.length; i++) {
+            variableTypeInputs[i].remove();
+        }
+    }
+
+    // reobtain variable inputs list as this may have changed
+    variableTypeInputs = document.querySelectorAll(".variableTypeInput");
+
+    // construct typeVec
+    var typeVec = "";
+    for(var i = 0; i < variableTypeInputs.length; i++) {
+        // for every list add * to the beginning
+        if(variableTypeInputs[i].value == "list of...") {
+            typeVec = "*" + typeVec;
+        } else {
+            // once we reach the last element of the nesting then add the actual type
+            typeVec = typeVec + variableTypeInputs[i].value;
+        }
+        // else do stuff for other complex types
+    }
+
+    // update preview
+    var preview = Blockly.modalWindow.preview;
+    var previewBlock = preview.block;
+
+    previewBlock.setTypeVecs([[typeVec]]);
+    // seems kind of hacky
+    if(Blockly.modalWindow.primitiveVariables.includes(typeVec)) {
+        previewBlock.reType();
+    } else {
+        previewBlock.setOutput(true);
+    }
+
+    preview.type = typeVec;
+}
+
+// add a new type input element to modal window
+function addVariableTypeInput(options) {
+    // get container
+    var container = document.getElementById('inputContainer');
+    // create dom
+    var newVariableTypeInput = document.createElement('select');
+    newVariableTypeInput.classList.add("input");
+    newVariableTypeInput.classList.add("variableTypeInput");
+    setOptions(options, newVariableTypeInput);
+    newVariableTypeInput.addEventListener('change', typeInputListener);
+    // append
+    container.appendChild(newVariableTypeInput);
+}
+
 // set options in dropdown for creating a variable according to parent block
 function setOptions(options, selectElement) {
     for(var i = 0; i < options.length; i++) {
@@ -563,7 +577,7 @@ function getOptions() {
             // check if matching in the typeVec
             if(typeVec == "matching") {
                 // then add everytime primitive type that we don't already have
-                var primitiveTypes = Blockly.modalWindow.createVariable.primitiveVariables;
+                var primitiveTypes = Blockly.modalWindow.primitiveVariables;
                 for(var j = 0; j < primitiveTypes.length; j++) {
                     if(options.includes(primitiveTypes[j])) {
                         options.push(primitiveTypes[j]);
@@ -581,8 +595,8 @@ function getOptions() {
         // unpack nested types, eg. *int for list of ints
 
     } else {
-        options = options.concat(Blockly.modalWindow.createVariable.primitiveVariables);
-        options = options.concat(Blockly.modalWindow.createVariable.complexVariables);
+        options = options.concat(Blockly.modalWindow.primitiveVariables);
+        options = options.concat(Blockly.modalWindow.complexVariables);
     }
 
     // check if any/*any is in options
@@ -590,15 +604,15 @@ function getOptions() {
     if(options.includes('any') || options.includes('matching')) {
         if(options.includes('*any') || options.includes('*matching')) {
             // any and *any
-            options = Blockly.modalWindow.createVariable.primitiveVariables;
-            options = options.concat(Blockly.modalWindow.createVariable.complexVariables);
+            options = Blockly.modalWindow.primitiveVariables;
+            options = options.concat(Blockly.modalWindow.complexVariables);
         } else {
             // just any
-            options = Blockly.modalWindow.createVariable.primitiveVariables;
+            options = Blockly.modalWindow.primitiveVariables;
         }
     } else if(options.includes('*any') || options.includes('*matching')) {
         // just *any
-        options = Blockly.modalWindow.createVariable.complexVariables;
+        options = Blockly.modalWindow.complexVariables;
     }
 
     return options;
