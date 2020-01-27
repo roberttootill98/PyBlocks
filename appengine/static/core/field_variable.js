@@ -359,10 +359,8 @@ Blockly.modalWindow.createVariable = function() {
         "name": Blockly.modalWindow.preview.name,
         "type": previewType
     });
-    // if previewType is complex then prompt more ui
-    if(Blockly.modalWindow.complexVariables.includes(previewType)) {
-        addVariableTypeInput();
-    }
+    fixNesting()
+
     Blockly.modalWindow.preview.block = Blockly.Xml.domToBlock(workspace, block);
     var previewBlock = Blockly.modalWindow.preview.block;
     // append block to container
@@ -474,35 +472,22 @@ function displayReason(ev) {
 
 // TYPE INPUT FUNCTIONS
 
+/*
 function typeInputListener(ev) {
-    var variableType = ev['target'].value;
+    // construct type as object
+    variableType = {};
 
-    // these appear in order of indentation
     var variableTypeInputs = document.querySelectorAll(".variableTypeInput");
-    // check there are no primitive types in nesting list
-    // eg. list of - list of - list of - int
-    var validNesting = true;
-    for(var i = 0; i < variableTypeInputs.length; i++) {
-        if(Blockly.modalWindow.primitiveVariables.includes(variableTypeInputs[i].value)) {
-            validNesting = false;
-            break;
-        }
-    }
 
-    // if we have valid nesting then prompt some more ui
-    if(validNesting)  {
-        if(variableType == "list of...") {
-            addVariableTypeInput(getOptions());
-        }
-    // else delete blocks after invalid nested block
-    } else {
-        for(i++; i < variableTypeInputs.length; i++) {
-            variableTypeInputs[i].remove();
-        }
-    }
+    // unpack variableType into typeVec
 
-    // reobtain variable inputs list as this may have changed
-    variableTypeInputs = document.querySelectorAll(".variableTypeInput");
+}
+*/
+
+function typeInputListener(ev) {
+    fixNesting();
+
+    var variableTypeInputs = document.querySelectorAll(".variableTypeInput");
 
     // construct typeVec
     var typeVec = "";
@@ -532,15 +517,63 @@ function typeInputListener(ev) {
     preview.type = typeVec;
 }
 
+function fixNesting() {
+    // get initial list of inputs
+    var variableTypeInputs = Array.from(document.querySelectorAll(".variableTypeInput"));
+
+    /* invalid nesting contains;
+          - the final set of inputs, not being primitive types
+          - set of inputs preceding final set of inputs being primitive types
+    */
+    var validNesting = false; // make sure we check at least once
+    while(!validNesting) {
+        validNesting = true; // wait until we are proven wrong
+
+        // amount of inputs to check depends on type preceding set of end inputs
+        var size = -1; // for now
+        // check final input/inputs - would need to be updated for tuple/dictionary/set
+        var finalInputs = variableTypeInputs.slice(size);
+        for(var i = 0; i < finalInputs.length; i++) {
+            if(!Blockly.modalWindow.primitiveVariables.includes(finalInputs[i].value)) {
+                validNesting = false;
+                break;
+            }
+        }
+        // check set of inputs preceding final set of inputs
+        for(var i = 0; i < variableTypeInputs.length - finalInputs.length; i++) {
+            if(Blockly.modalWindow.primitiveVariables.includes(variableTypeInputs[i].value)) {
+                validNesting = false;
+                break;
+            }
+        }
+
+        // if nesting is not valid then prompt more ui
+        if(!validNesting) {
+            switch(variableTypeInputs[i].value) {
+                case "list of...":
+                    addVariableTypeInput();
+                default:
+                    // must be primitive type followed by complex type
+                    for(i++; i < variableTypeInputs.length; i++) {
+                        variableTypeInputs[i].remove();
+                    }
+            }
+        }
+
+        // lastly reget variableTypeInputs list as we have updated the dom
+        variableTypeInputs = Array.from(document.querySelectorAll(".variableTypeInput"));
+    }
+}
+
 // add a new type input element to modal window
-function addVariableTypeInput(options) {
+function addVariableTypeInput() {
     // get container
     var container = document.getElementById('inputContainer');
     // create dom
     var newVariableTypeInput = document.createElement('select');
     newVariableTypeInput.classList.add("input");
     newVariableTypeInput.classList.add("variableTypeInput");
-    setOptions(options, newVariableTypeInput);
+    setOptions(getOptions(), newVariableTypeInput);
     newVariableTypeInput.addEventListener('change', typeInputListener);
     // append
     container.appendChild(newVariableTypeInput);
