@@ -475,9 +475,10 @@ function displayReason(ev) {
 // TYPE INPUT FUNCTIONS
 
 function typeInputListener(ev) {
-    // if we have a parent block - get typeVecList based on it
-    var typeVecObject = constructTypeVecObject(Blockly.Variables.getSelectorBlock().getParent);
-    // else generate type object for all types
+    // intialise type inputs
+    initTypeInputs();
+
+    // fix type inputs
 
     // iterate through typeVecObject and add type inputs according to marker
 
@@ -492,6 +493,35 @@ function initTypeInputs() {
   var parent = block.getParent();
 
   if(parent) {
+      var typeVecObject = constructTypeVecObject(parent);
+      var currentLevel = typeVecObject;
+      // while we don't have a primitive type in options
+      var options = getOptions(typeVecObject);
+      while(!primitiveInOptions(options)) {
+          // move on to next level
+          // move marker
+          // reget currentLevel
+          currentLevel = typeVecObject;
+
+          // get options again
+          options = getOptions(typeVecObject);
+      }
+
+      // add input elements to modal window
+      // get container
+      var container = document.getElementById('inputContainer');
+      // create dom
+      var newVariableTypeInput = document.createElement('select');
+      newVariableTypeInput.classList.add("input");
+      newVariableTypeInput.classList.add("variableTypeInput");
+
+      for(var i = 0; i < options.length; i++) {
+          newVariableTypeInput.add(options[i]);
+      }
+      newVariableTypeInput.addEventListener('change', typeInputListener);
+      // append
+      container.appendChild(newVariableTypeInput);
+      /*
       // if we have a parent block - get typeVecList based on it
       var typeVecObject = constructTypeVecObject(parent);
 
@@ -507,13 +537,45 @@ function initTypeInputs() {
           options.push(option);
       }
 
-      console.log();
       // iterate through typeVecObject and add inputs at current level
       // first add inputs until we get to current level
+      // while we don't have a primitive type in options first index
+      var firstOption = options[0];
+      while(!Blockly.modalWindow.primitiveVariables.includes(firstOption)) {
+          console.log();
+      }
       // then add inputs at current level
+      */
   } else {
       // form generic typeVecObject or just add inputs freely
   }
+}
+
+// get options at current level
+function getOptions(typeVecObject) {
+    var options = [];
+
+    var keys = Object.keys(typeVecObject);
+    // don't go full length as marker will be at end
+    for(var i = 0; i < keys.length - 1; i++) {
+        var option = document.createElement('option');
+        option.value = keys[i];
+        option.textContent = keys[i];
+
+        options.push(option);
+    }
+
+    return options;
+}
+
+// returns true if there is a primitive variable type in options list passed
+function primitiveInOptions(options) {
+    for(var i = 0; i < options.length; i++) {
+        if(Blockly.modalWindow.primitiveVariables.includes(options[i].value)) {
+            return true;
+        }
+    }
+    return false;
 }
 
 /*
@@ -920,7 +982,7 @@ function addVariableTypeInput() {
     var newVariableTypeInput = document.createElement('select');
     newVariableTypeInput.classList.add("input");
     newVariableTypeInput.classList.add("variableTypeInput");
-    setOptions(getOptions(), newVariableTypeInput);
+    setOptions(ptions(), newVariableTypeInput);
     newVariableTypeInput.addEventListener('change', typeInputListener);
     // append
     container.appendChild(newVariableTypeInput);
@@ -938,7 +1000,7 @@ function setOptions_temp(options, selectElement) {
 }
 
 // gets options for variable block to be
-function getOptions() {
+function getOptions_temp() {
     var block = Blockly.Variables.getSelectorBlock()
     var parent = block.getParent();
 
