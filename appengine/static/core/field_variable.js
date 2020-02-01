@@ -340,15 +340,19 @@ Blockly.modalWindow.createVariable = function() {
     typeLabel.classList.add('label');
     typeLabel.textContent = 'Type';
     typeContainer.appendChild(typeLabel);
+    /*
     var typeInput = document.createElement('select');
     typeInput.id = 'variableType';
     typeInput.classList.add("input");
     typeInput.classList.add("variableTypeInput");
+    */
     //setOptions(getOptions(), typeInput);
     //setOptions(typeInput);
     initTypeInputs();
+    /*
     typeInput.addEventListener('change', typeInputListener);
     typeContainer.appendChild(typeInput);
+    */
 
     // block preview
     var previewContainer = document.createElement('div');
@@ -361,10 +365,10 @@ Blockly.modalWindow.createVariable = function() {
         "name": Blockly.modalWindow.preview.name,
         "type": previewType
     });
-    //fixNesting()
 
     Blockly.modalWindow.preview.block = Blockly.Xml.domToBlock(workspace, block);
     var previewBlock = Blockly.modalWindow.preview.block;
+    updatePreviewType();
     // append block to container
 
     // buttons
@@ -475,16 +479,61 @@ function displayReason(ev) {
 // TYPE INPUT FUNCTIONS
 
 function typeInputListener(ev) {
-    // intialise type inputs
-    initTypeInputs();
+    // react to type inputs being used
+    // case 1 - primitive type is selected at last input
+    //    update preview
+    // case 2 - primitive type is selected before last input
+    //    delete inputs after input
+    //    if we have a parent
+    //        move marker to correct level
+    //    update preview
+    // case 3 - complex type is selected at last input
+    //    add a new input
+    //    if we have a parent
+    //        move marker to next level
+    //    update preview
+    // case 4 - different complex type is selected before last input (shouldn't be possible yet)
+    //    delete inputs after input
+    //    prompt new ui after input
+    //    if we have a parent
+    //        move marker to next level
+    //    update preview
 
-    // fix type inputs
+    // get block
+    var block = Blockly.Variables.getSelectorBlock();
+    // get parent
+    var parent = block.getParent();
 
-    // iterate through typeVecObject and add type inputs according to marker
+    // get type inputs
+    var typeInputs = document.querySelectorAll(".variableTypeInput");
 
-    // if only option is complex type then prompt more ui
+    // case 2
+    var case2 = false;
+    // loop through type inputs to check if we have a
+    for(var i = 0; i < typeInputs.length - 1; i++) {
+        if(Blockly.modalWindow.primitiveVariables.includes(typeInputs[i])) {
+            // we have primitive before end
+            case2 = true;
+            break;
+        }
+    }
+
+    if(case2) {
+        // delete all inputs after index i
+        for(i++; i < typeInputs.length; i++) {
+            typeInputs[i].remove();
+        }
+
+        if(parent) {
+            var typeVecObject = constructTypeVecObject(parent);
+            // move marker to typeVecObject level i;
+            // should take i amount of keys to reach from base level
+            console.log();
+        }
+    }
 
     // update preview
+    updatePreviewType();
 }
 
 // init modalWindow type inputs
@@ -494,78 +543,73 @@ function initTypeInputs() {
 
   if(parent) {
       var typeVecObject = constructTypeVecObject(parent);
+      var results = getCurrentLevel(typeVecObject, []);
+      //var currentLevel = results[0];
+      var returnKeys = results[1];
+
+      // type input for each key to get to current level
       var currentLevel = typeVecObject;
-      // while we don't have a primitive type in options
-      var options = getOptions(typeVecObject);
-      while(!primitiveInOptions(options)) {
-          // move on to next level
-          // move marker
-          // reget currentLevel
-          currentLevel = typeVecObject;
+      for(var i = 0; i < returnKeys.length + 1; i++) {
+          // add a select element with options for all keys at current level
+          createTypeInput(Object.keys(currentLevel));
 
-          // get options again
-          options = getOptions(typeVecObject);
+          // move onto next level of object
+          currentLevel = currentLevel[returnKeys[i]];
       }
-
-      // add input elements to modal window
-      // get container
-      var container = document.getElementById('inputContainer');
-      // create dom
-      var newVariableTypeInput = document.createElement('select');
-      newVariableTypeInput.classList.add("input");
-      newVariableTypeInput.classList.add("variableTypeInput");
-
-      for(var i = 0; i < options.length; i++) {
-          newVariableTypeInput.add(options[i]);
-      }
-      newVariableTypeInput.addEventListener('change', typeInputListener);
-      // append
-      container.appendChild(newVariableTypeInput);
-      /*
-      // if we have a parent block - get typeVecList based on it
-      var typeVecObject = constructTypeVecObject(parent);
-
-      var options = []
-
-      var keys = Object.keys(typeVecObject);
-      // don't go full length as marker will be at end
-      for(var i = 0; i < keys.length - 1; i++) {
-          var option = document.createElement('option');
-          option.value = keys[i];
-          option.textContent = keys[i];
-
-          options.push(option);
-      }
-
-      // iterate through typeVecObject and add inputs at current level
-      // first add inputs until we get to current level
-      // while we don't have a primitive type in options first index
-      var firstOption = options[0];
-      while(!Blockly.modalWindow.primitiveVariables.includes(firstOption)) {
-          console.log();
-      }
-      // then add inputs at current level
-      */
   } else {
       // form generic typeVecObject or just add inputs freely
   }
+
+  // update preview
 }
 
-// get options at current level
-function getOptions(typeVecObject) {
-    var options = [];
+// creates and appends a select element with options passed
+function createTypeInput(options) {
+    // add input elements to modal window
+    // get container
+    var container = document.getElementById('inputContainer');
+    // create dom
+    var newVariableTypeInput = document.createElement('select');
+    newVariableTypeInput.classList.add("input");
+    newVariableTypeInput.classList.add("variableTypeInput");
 
-    var keys = Object.keys(typeVecObject);
-    // don't go full length as marker will be at end
-    for(var i = 0; i < keys.length - 1; i++) {
+    for(var i = 0; i < options.length; i++) {
+        if(options[i] == "marker") {
+            continue;
+        }
+
         var option = document.createElement('option');
-        option.value = keys[i];
-        option.textContent = keys[i];
+        option.value = options[i];
+        option.textContent = options[i];
 
-        options.push(option);
+        newVariableTypeInput.add(option);
+    }
+    newVariableTypeInput.addEventListener('change', typeInputListener);
+    // append
+    container.appendChild(newVariableTypeInput);
+}
+
+function updatePreviewType() {
+    var typeVec = "";
+
+    // use input list
+    var typeInputs = document.querySelectorAll(".variableTypeInput");
+    for(var i = 0; i < typeInputs.length; i++) {
+        switch(typeInputs[i].value) {
+          case "list of...":
+              typeVec = typeVec + "*";
+              break;
+          default:
+              typeVec = typeVec + typeInputs[i].value;
+              break;
+        }
     }
 
-    return options;
+    var preview = Blockly.modalWindow.preview;
+    preview.type = typeVec;
+
+    preview.block.setTypeVecs([[typeVec]]);
+    preview.block.render();
 }
 
 // returns true if there is a primitive variable type in options list passed
@@ -648,7 +692,7 @@ function constructTypeVecObject(block) {
                             // add marker to new level
                             // do something
                         } else {
-                            currentLevel["list of..."] = {"items": []};
+                            currentLevel["list of..."] = {};
                             // delete marker from previous location
                             delete currentLevel['marker'];
                             // add marker to new level
@@ -675,9 +719,12 @@ function constructTypeVecObject(block) {
                         if(keys.length > 0) {
                             var precedingKey = keys[keys.length - 1];
                             if(precedingKey == "list of...") {
+                                /*
                                 if(!currentLevel['items'].includes(typeVec.slice(0, j))) {
                                     currentLevel['items'].push(typeVec.slice(0, j));
                                 }
+                                */
+                                currentLevel[typeVec.slice(0, j)] = {};
                             } else {
                                 currentLevel[typeVec.slice(0, j)] = {};
                             }
@@ -982,7 +1029,7 @@ function addVariableTypeInput() {
     var newVariableTypeInput = document.createElement('select');
     newVariableTypeInput.classList.add("input");
     newVariableTypeInput.classList.add("variableTypeInput");
-    setOptions(ptions(), newVariableTypeInput);
+    setOptions(getOptions(), newVariableTypeInput);
     newVariableTypeInput.addEventListener('change', typeInputListener);
     // append
     container.appendChild(newVariableTypeInput);
