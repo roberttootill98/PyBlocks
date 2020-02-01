@@ -223,6 +223,8 @@ Blockly.modalWindow.preview.type = '';
 Blockly.modalWindow.primitiveVariables = ['int', 'float', 'str', 'bool', 'range'];
 Blockly.modalWindow.complexVariables = ['list of...', ]; // nested lists, iterables
 
+Blockly.modalWindow.typeVecObject = {};
+
 // for selecting #1 - an existing variable or #2 creating a new one
 Blockly.modalWindow.selectVariable = function() {
     Blockly.modalWindow.visible = true;
@@ -507,28 +509,57 @@ function typeInputListener(ev) {
     // get type inputs
     var typeInputs = document.querySelectorAll(".variableTypeInput");
 
+    var typeVecObject = Blockly.modalWindow.typeVecObject;
+
     // case 2
-    var case2 = false;
+    var primitiveBeforeLast = false;
     // loop through type inputs to check if we have a
     for(var i = 0; i < typeInputs.length - 1; i++) {
         if(Blockly.modalWindow.primitiveVariables.includes(typeInputs[i])) {
             // we have primitive before end
-            case2 = true;
+            primitiveBeforeLast = true;
             break;
         }
     }
 
-    if(case2) {
+    // case 3
+    var lastInput = typeInputs[typeInputs.length - 1];
+
+    if(primitiveBeforeLast) {
         // delete all inputs after index i
         for(i++; i < typeInputs.length; i++) {
             typeInputs[i].remove();
         }
 
         if(parent) {
-            var typeVecObject = constructTypeVecObject(parent);
+            console.log();
             // move marker to typeVecObject level i;
             // should take i amount of keys to reach from base level
-            console.log();
+        }
+    } else if(!Blockly.modalWindow.primitiveVariables.includes(lastInput)) {
+        // case 3
+        // prompt some more ui
+        switch(lastInput.value) {
+           case "list of...":
+              if(parent) {
+                  var results = getCurrentLevel(typeVecObject, []);
+                  // should be last level
+                  var currentLevel = results[0];
+                  var keys = results[1];
+
+                  // get new level
+                  var newLevel = currentLevel["list of..."];
+
+                  // move marker to next level
+                  delete currentLevel['marker'];
+                  newLevel['marker'] = true;
+
+                  // add a new input element
+                  createTypeInput(Object.keys(newLevel));
+              }
+              break;
+           default:
+              console.log();
         }
     }
 
@@ -538,29 +569,28 @@ function typeInputListener(ev) {
 
 // init modalWindow type inputs
 function initTypeInputs() {
-  var block = Blockly.Variables.getSelectorBlock();
-  var parent = block.getParent();
+    var block = Blockly.Variables.getSelectorBlock();
+    var parent = block.getParent();
 
-  if(parent) {
-      var typeVecObject = constructTypeVecObject(parent);
-      var results = getCurrentLevel(typeVecObject, []);
-      //var currentLevel = results[0];
-      var returnKeys = results[1];
+    if(parent) {
+        var typeVecObject = constructTypeVecObject(parent);
+        var returnKeys = getCurrentLevel(typeVecObject, [])[1];
 
-      // type input for each key to get to current level
-      var currentLevel = typeVecObject;
-      for(var i = 0; i < returnKeys.length + 1; i++) {
-          // add a select element with options for all keys at current level
-          createTypeInput(Object.keys(currentLevel));
+        // type input for each key to get to current level
+        var currentLevel = typeVecObject;
+        for(var i = 0; i < returnKeys.length + 1; i++) {
+            // add a select element with options for all keys at current level
+            createTypeInput(Object.keys(currentLevel));
 
-          // move onto next level of object
-          currentLevel = currentLevel[returnKeys[i]];
-      }
-  } else {
-      // form generic typeVecObject or just add inputs freely
-  }
+            // move onto next level of object
+            currentLevel = currentLevel[returnKeys[i]];
+        }
+    } else {
+        var typeVecObject = {};
+        // form generic typeVecObject or just add inputs freely
+    }
 
-  // update preview
+    Blockly.modalWindow.typeVecObject = typeVecObject;
 }
 
 // creates and appends a select element with options passed
@@ -612,47 +642,6 @@ function updatePreviewType() {
     preview.block.render();
 }
 
-// returns true if there is a primitive variable type in options list passed
-function primitiveInOptions(options) {
-    for(var i = 0; i < options.length; i++) {
-        if(Blockly.modalWindow.primitiveVariables.includes(options[i].value)) {
-            return true;
-        }
-    }
-    return false;
-}
-
-/*
-function typeInputListener(ev) {
-    // construct variable type as object
-    variableTypeObj = {};
-
-    // pack input boxes into object
-    var variableTypeInputs = document.querySelectorAll(".variableTypeInput");
-
-    // check nesting is valid
-
-    // if nesting is valid
-    // work backwards
-    //for(var i = variableTypeInputs; i > 0; i--) {
-    // work forwards
-    for(var i = 0; i < variableTypeInputs; i--) {
-        var variableTypeInput = variableTypeInputs[i].value;
-
-        switch(variableTypeInput) {
-            case "list of...":
-                variableType[variableTypeInput];
-            default:
-                console.log();
-        }
-        variableTypeObj[variableTypeInput] =  ;
-    }
-
-    // unpack variableType into typeVec
-
-}
-*/
-
 function constructTypeVecObject(block) {
     var parentInput = Blockly.Variables.getParentInput(block, false);
 
@@ -670,7 +659,6 @@ function constructTypeVecObject(block) {
             var results = getCurrentLevel(typeVecObject, []);
             var currentLevel = results[0];
             var keys = results[1];
-            //keys.shift();
 
             switch(typeVec.slice(0, j)) {
                 case "*":
@@ -712,29 +700,27 @@ function constructTypeVecObject(block) {
                     // update typeVec string
                     typeVec = typeVec.slice(j, typeVec.length);
                     break;
+                case "any":
+                    // add all primitive types
+                    for(var k = 0; k < Blockly.modalWindow.primitiveVariables.length; k++) {
+                        currentLevel[Blockly.modalWindow.primitiveVariables[k]] = {};
+                        typeVec = typeVec.slice(j, typeVec.length);
+                    }
+                    break;
+                case "matching":
+                    // add all primitive types
+                    for(var k = 0; k < Blockly.modalWindow.primitiveVariables.length; k++) {
+                        currentLevel[Blockly.modalWindow.primitiveVariables[k]] = {};
+                        typeVec = typeVec.slice(j, typeVec.length);
+                    }
+                    break;
                 default:
                     // might be primitive type
                     if(Blockly.modalWindow.primitiveVariables.includes(typeVec.slice(0, j))) {
-                        // for down key chain and then place primitive type
-                        if(keys.length > 0) {
-                            var precedingKey = keys[keys.length - 1];
-                            if(precedingKey == "list of...") {
-                                /*
-                                if(!currentLevel['items'].includes(typeVec.slice(0, j))) {
-                                    currentLevel['items'].push(typeVec.slice(0, j));
-                                }
-                                */
-                                currentLevel[typeVec.slice(0, j)] = {};
-                            } else {
-                                currentLevel[typeVec.slice(0, j)] = {};
-                            }
-                        } else {
-                            currentLevel[typeVec.slice(0, j)] = {};
-                        }
+                        currentLevel[typeVec.slice(0, j)] = {};
 
                         // update typeVec string
                         typeVec = typeVec.slice(j, typeVec.length);
-                        break;
                     }
             }
         }
@@ -828,283 +814,6 @@ function addMarkerAtLowestLevel(typeVecObject) {
             return addMarkerAtLowestLevel(typeVecObject[key]);
         }
     }
-}
-
-// deconstructs parent typeVec that block was placed in to
-function constructTypeVec_temp(block) {
-    var parentInput = Blockly.Variables.getParentInput(block, false);
-
-    var typeVecList = []
-
-    var typeVecs = block.typeVecs;
-    // get rid of duplicate entries
-    // format typeVecs
-    //    any -> all primitive
-    //    matching -> all primitive
-
-    // loop over each parent typeVec
-    for(var i = 0; i < typeVecs.length; i++) {
-        // only check input that our block is in
-        var typeVec = typeVecs[i][parentInput];
-
-        var typeVecObject = {};
-        var nextKey = {};
-
-        while(typeVec) {
-            // traverse string until we have something we can deal with
-            for(var j = typeVec.length - 1; j > -1; j--) {
-                switch(typeVec.slice(j)) {
-                    case "*":
-                        // add to typeVec object
-
-                        // list of...
-                        typeVecObject["list of..."] = nextKey;
-
-                        // update vars
-                        typeVec = typeVec.slice(0, j);
-                        nextKey = typeVecObject;
-                        typeVecObject = {};
-                    case "any":
-                        console.log();
-                    /*
-                    case "int":
-                        var data = typeVec.slice(j);
-                        typeVecObject[data] = nextKey;
-
-                        // update vars
-                        typeVec = typeVec.slice(0, j);
-                        nextKey = typeVecObject;
-                        typeVecObject = {};
-                    */
-                    default:
-                        var primitiveTypes = Blockly.modalWindow.primitiveVariables;
-                        for(var k = 0; k < primitiveTypes.length; k++) {
-                            if(primitiveTypes[k] == typeVec.slice(j)) {
-                                // primitive
-
-                                // add to typeVec object
-                                var data = typeVec.slice(j);
-                                typeVecObject[data] = nextKey;
-
-                                // update vars
-                                typeVec = typeVec.slice(0, j);
-                                nextKey = typeVecObject;
-                                typeVecObject = {};
-                                //break;
-                            }
-                        }
-                }
-            }
-
-            // we are finished with this typeVec
-            typeVecList.push(nextKey);
-        }
-    }
-    typeVecObject = {};
-
-    // convert list into single object
-    // iterate
-    /*
-    for(var i = 0; i < typeVecList.length; i++) {
-        var key = Object.keys(typeVecList)[0];
-
-        switch() {
-            case "":
-                console.log();
-            default:
-                console.log();
-        }
-    }
-    */
-    // add marker at lowest possible level
-    //return typeVecList;
-}
-
-function setOptions(selectElement) {
-    var typeVecObject = constructTypeVecObject(Blockly.Variables.getSelectorBlock().getParent());
-
-    /*
-    for(var i = 0; i < typeVecList.length; i++) {
-        var typeVecObject = typeVecList[i];
-        var value = Object.keys(typeVecObject)[0];
-
-        var option = document.createElement('option');
-        option.value = value;
-        option.textContent = value;
-
-        selectElement.add(option);
-    }
-    */
-}
-
-function typeInputListener_temp(ev) {
-    fixNesting();
-
-    var variableTypeInputs = document.querySelectorAll(".variableTypeInput");
-
-    // construct typeVec
-    var typeVec = "";
-    for(var i = 0; i < variableTypeInputs.length; i++) {
-        // for every list add * to the beginning
-        if(variableTypeInputs[i].value == "list of...") {
-            typeVec = "*" + typeVec;
-        } else {
-            // once we reach the last element of the nesting then add the actual type
-            typeVec = typeVec + variableTypeInputs[i].value;
-        }
-        // else do stuff for other complex types
-    }
-
-    // update preview
-    var preview = Blockly.modalWindow.preview;
-    var previewBlock = preview.block;
-
-    previewBlock.setTypeVecs([[typeVec]]);
-    // seems kind of hacky
-    if(Blockly.modalWindow.primitiveVariables.includes(typeVec)) {
-        previewBlock.reType();
-    } else {
-        previewBlock.setOutput(true);
-    }
-
-    preview.type = typeVec;
-}
-
-function fixNesting() {
-    // get initial list of inputs
-    var variableTypeInputs = Array.from(document.querySelectorAll(".variableTypeInput"));
-
-    /* invalid nesting contains;
-          - the final set of inputs, not being primitive types
-          - set of inputs preceding final set of inputs being primitive types
-    */
-    var validNesting = false; // make sure we check at least once
-    //var typeVec = deconstructTypeVec(Blockly.Variables.getSelectorBlock().getParent());
-    while(!validNesting) {
-    //while(!validNesting && typeVec != "") {
-        validNesting = true; // wait until we are proven wrong
-
-        // amount of inputs to check depends on type preceding set of end inputs
-        var size = -1; // for now
-        // check final input/inputs - would need to be updated for tuple/dictionary/set
-        var finalInputs = variableTypeInputs.slice(size);
-        for(var i = 0; i < finalInputs.length; i++) {
-            if(!Blockly.modalWindow.primitiveVariables.includes(finalInputs[i].value)) {
-                validNesting = false;
-                break;
-            }
-        }
-        // check set of inputs preceding final set of inputs
-        for(var i = 0; i < variableTypeInputs.length - finalInputs.length; i++) {
-            if(Blockly.modalWindow.primitiveVariables.includes(variableTypeInputs[i].value)) {
-                validNesting = false;
-                break;
-            }
-        }
-
-        // if nesting is not valid then prompt more ui
-        if(!validNesting) {
-            // on every iteration we must remove an element from the string for each input we add
-            switch(variableTypeInputs[i].value) {
-                case "list of...":
-                    addVariableTypeInput();
-                default:
-                    // must be primitive type followed by complex type
-                    for(i++; i < variableTypeInputs.length; i++) {
-                        variableTypeInputs[i].remove();
-                    }
-            }
-        }
-
-        // lastly reget variableTypeInputs list as we have updated the dom
-        variableTypeInputs = Array.from(document.querySelectorAll(".variableTypeInput"));
-    }
-}
-
-// add a new type input element to modal window
-function addVariableTypeInput() {
-    // get container
-    var container = document.getElementById('inputContainer');
-    // create dom
-    var newVariableTypeInput = document.createElement('select');
-    newVariableTypeInput.classList.add("input");
-    newVariableTypeInput.classList.add("variableTypeInput");
-    setOptions(getOptions(), newVariableTypeInput);
-    newVariableTypeInput.addEventListener('change', typeInputListener);
-    // append
-    container.appendChild(newVariableTypeInput);
-}
-
-// set options in dropdown for creating a variable according to parent block
-function setOptions_temp(options, selectElement) {
-    for(var i = 0; i < options.length; i++) {
-        var option = document.createElement('option');
-        option.value = options[i];
-        option.textContent = options[i];
-
-        selectElement.add(option);
-    }
-}
-
-// gets options for variable block to be
-function getOptions_temp() {
-    var block = Blockly.Variables.getSelectorBlock()
-    var parent = block.getParent();
-
-    var options = []
-
-    // assignment statements aren't restricted by parent
-    if(block.type == "python_variable_selector" && parent) {
-        // get which parent input we are in
-        var position = Blockly.Variables.getParentInput(parent, false);
-
-        // loop over parent type vecs in position
-        for(var i = 0; i < parent.typeVecs.length; i++) {
-            var typeVec = parent.typeVecs[i][position];
-
-            /*
-            // check if matching in the typeVec
-            if(typeVec == "matching") {
-                // then add everytime primitive type that we don't already have
-                var primitiveTypes = Blockly.modalWindow.primitiveVariables;
-                for(var j = 0; j < primitiveTypes.length; j++) {
-                    if(options.includes(primitiveTypes[j])) {
-                        options.push(primitiveTypes[j]);
-                    }
-                }
-            }
-            */
-
-            // other is a primitive type
-            if(!options.includes(typeVec)) {
-                options.push(typeVec);
-            }
-        }
-
-        // unpack nested types, eg. *int for list of ints
-
-    } else {
-        options = options.concat(Blockly.modalWindow.primitiveVariables);
-        options = options.concat(Blockly.modalWindow.complexVariables);
-    }
-
-    // check if any/*any is in options
-    // check if matching/*matching is in options
-    if(options.includes('any') || options.includes('matching')) {
-        if(options.includes('*any') || options.includes('*matching')) {
-            // any and *any
-            options = Blockly.modalWindow.primitiveVariables;
-            options = options.concat(Blockly.modalWindow.complexVariables);
-        } else {
-            // just any
-            options = Blockly.modalWindow.primitiveVariables;
-        }
-    } else if(options.includes('*any') || options.includes('*matching')) {
-        // just *any
-        options = Blockly.modalWindow.complexVariables;
-    }
-
-    return options;
 }
 
 Blockly.modalWindow.dispose = function() {
