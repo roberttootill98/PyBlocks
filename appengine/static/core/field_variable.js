@@ -222,6 +222,7 @@ Blockly.modalWindow.preview.type = '';
 
 Blockly.modalWindow.primitiveVariables = ['int', 'float', 'str', 'bool', 'range'];
 Blockly.modalWindow.complexVariables = ['list of...', ]; // nested lists, iterables
+Blockly.modalWindow.allTypes = Blockly.modalWindow.primitiveVariables.concat(Blockly.modalWindow.complexVariables);
 
 Blockly.modalWindow.typeVecObject = {};
 
@@ -515,7 +516,7 @@ function typeInputListener(ev) {
     var primitiveBeforeLast = false;
     // loop through type inputs to check if we have a
     for(var i = 0; i < typeInputs.length - 1; i++) {
-        if(Blockly.modalWindow.primitiveVariables.includes(typeInputs[i])) {
+        if(Blockly.modalWindow.primitiveVariables.includes(typeInputs[i].value)) {
             // we have primitive before end
             primitiveBeforeLast = true;
             break;
@@ -527,14 +528,27 @@ function typeInputListener(ev) {
 
     if(primitiveBeforeLast) {
         // delete all inputs after index i
+        var indexOfLastInput = i;
         for(i++; i < typeInputs.length; i++) {
             typeInputs[i].remove();
         }
 
         if(parent) {
-            console.log();
             // move marker to typeVecObject level i;
             // should take i amount of keys to reach from base level
+            var results = getCurrentLevel(typeVecObject, []);
+            var currentLevel = results[0];
+            var keys = results[1];
+
+            // delete marker
+            delete currentLevel['marker'];
+
+            var level = typeVecObject;
+            for(var j = 0; j < indexOfLastInput; j++) {
+                level = level[keys[j]];
+            }
+
+            level['marker'] = true;
         }
     } else if(!Blockly.modalWindow.primitiveVariables.includes(lastInput)) {
         // case 3
@@ -542,10 +556,8 @@ function typeInputListener(ev) {
         switch(lastInput.value) {
            case "list of...":
               if(parent) {
-                  var results = getCurrentLevel(typeVecObject, []);
                   // should be last level
-                  var currentLevel = results[0];
-                  var keys = results[1];
+                  var currentLevel = getCurrentLevel(typeVecObject, [])[0];
 
                   // get new level
                   var newLevel = currentLevel["list of..."];
@@ -556,6 +568,9 @@ function typeInputListener(ev) {
 
                   // add a new input element
                   createTypeInput(Object.keys(newLevel));
+              } else {
+                  // add another input with all options
+                  createTypeInput(Blockly.modalWindow.allTypes);
               }
               break;
            default:
@@ -587,7 +602,8 @@ function initTypeInputs() {
         }
     } else {
         var typeVecObject = {};
-        // form generic typeVecObject or just add inputs freely
+
+        createTypeInput(Blockly.modalWindow.allTypes);
     }
 
     Blockly.modalWindow.typeVecObject = typeVecObject;
