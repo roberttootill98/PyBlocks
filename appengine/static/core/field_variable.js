@@ -419,14 +419,35 @@ Blockly.modalWindow.createVariable = function(x, y) {
 }
 
 function dragEndModalWindow(ev) {
-    var x = ev.screenX;
-    var y = ev.screenY;
-
+    var x = ev.x;
+    var y = ev.y;
     var el = ev.toElement;
     var height = el.clientHeight;
     var width = el.clientWidth;
-    el.style.top = (y - height/2) + 'px';
-    el.style.left = x + 'px';
+
+    var left = x - 45;
+    var top = y - 40;
+
+    // check if position will result in window going off screen and adjust
+    var edgeOffset = 25;
+    // off top left
+    if(left <= 0) {
+        left = edgeOffset;
+    }
+    if(top <= 0) {
+        top = edgeOffset;
+    }
+    // off bottom right
+    if(left + width >= document.body.clientWidth) {
+        left = document.body.clientWidth - width - edgeOffset;
+    }
+    if(top + height >= document.body.clientHeight) {
+        top = document.body.clientHeight - height - edgeOffset;
+    }
+
+    // adjust style
+    el.style.top = top + 'px';
+    el.style.left = left + 'px';
 }
 
 // NAME INPUT FUNCTIONS
