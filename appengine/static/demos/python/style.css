@@ -320,12 +320,11 @@ table#typetable {
 }
 
 #modalWindow {
+    position: absolute;
     display: block;
     align: centre;
     min-width: 15em;
     width: 25%;
-    margin: auto;
-    margin-top: 5em;
     padding: 1em;
     background-color: rgb(112, 128, 144); /* same as block palette */
     border-radius: 10px;

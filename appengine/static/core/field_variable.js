@@ -236,7 +236,14 @@ Blockly.modalWindow.selectVariable = function() {
     // create main dialog
     var container = document.createElement('div');
     container.id = 'modalWindow';
-    // dynamically put container over block dragged in;
+    // drag event listeners - allow window to be moved
+    container.draggable = true;
+    container.addEventListener('dragend', dragEndModalWindow);
+
+    // start window in middle of page
+    container.style.left = '50%';
+    container.style.top = '5em';
+
     Blockly.modalWindow.backdrop.get().appendChild(container);
 
     // html inside container
@@ -308,10 +315,17 @@ Blockly.modalWindow.selectVariable = function() {
 }
 
 // for creating a new variable
-Blockly.modalWindow.createVariable = function() {
+Blockly.modalWindow.createVariable = function(x, y) {
     var container = document.createElement('div');
     container.id = 'modalWindow';
-    // todo dynamically put container over block dragged in;
+    // drag event listeners - allow window to be moved
+    container.draggable = true;
+    container.addEventListener('dragend', dragEndModalWindow);
+
+    // set position as same as last
+    container.style.left = x;
+    container.style.top = y;
+
     Blockly.modalWindow.backdrop.get().appendChild(container);
 
     // html inside container
@@ -343,19 +357,8 @@ Blockly.modalWindow.createVariable = function() {
     typeLabel.classList.add('label');
     typeLabel.textContent = 'Type';
     typeContainer.appendChild(typeLabel);
-    /*
-    var typeInput = document.createElement('select');
-    typeInput.id = 'variableType';
-    typeInput.classList.add("input");
-    typeInput.classList.add("variableTypeInput");
-    */
-    //setOptions(getOptions(), typeInput);
-    //setOptions(typeInput);
+
     initTypeInputs();
-    /*
-    typeInput.addEventListener('change', typeInputListener);
-    typeContainer.appendChild(typeInput);
-    */
 
     // block preview
     var previewContainer = document.createElement('div');
@@ -373,6 +376,21 @@ Blockly.modalWindow.createVariable = function() {
     var previewBlock = Blockly.modalWindow.preview.block;
     updatePreviewType();
     // append block to container
+    // maybe we have to create a workspace to put the block in?
+    // create a blockly block canvas
+    var myCanvas = Blockly.createSvgElement('g', {'class': 'blocklyBlockCanvas'}, this.svgGroup_, this);
+
+    // apply translation
+    var x = 200;
+    var y = 100;
+    var scale = 1;
+    var translation = 'translate(' + x + ',' + y + ') ' + 'scale(' + scale + ')';
+    myCanvas.setAttribute('transform', translation);
+
+    /*
+    Blockly.Workspace();
+    Blockly.Workspace.prototype.addTopBlock(previewBlock);
+    */
 
     // buttons
     var create = document.createElement('button');
@@ -398,6 +416,17 @@ Blockly.modalWindow.createVariable = function() {
     cancel.classList.add('modalButtons');
     cancel.textContent = 'Cancel';
     cancel.onclick = Blockly.modalWindow.cancel;
+}
+
+function dragEndModalWindow(ev) {
+    var x = ev.screenX;
+    var y = ev.screenY;
+
+    var el = ev.toElement;
+    var height = el.clientHeight;
+    var width = el.clientWidth;
+    el.style.top = (y - height/2) + 'px';
+    el.style.left = x + 'px';
 }
 
 // NAME INPUT FUNCTIONS
@@ -491,7 +520,7 @@ function typeInputListener(ev) {
     //        move marker to correct level
     //    update preview
     // case 3 - complex type is selected at last input
-    //    add a new input
+    //    prompt new ui after last input
     //    if we have a parent
     //        move marker to next level
     //    update preview
@@ -579,6 +608,7 @@ function typeInputListener(ev) {
     }
 
     // update preview
+    // all cases
     updatePreviewType();
 }
 
@@ -636,6 +666,7 @@ function createTypeInput(options) {
 }
 
 function updatePreviewType() {
+    // get typeVec
     var typeVec = "";
 
     // use input list
@@ -879,8 +910,9 @@ Blockly.modalWindow.selectVariable.select = function() {
 }
 
 Blockly.modalWindow.selectVariable.newVariable = function() {
+    var modalWindow = document.getElementById('modalWindow');
     Blockly.modalWindow.dispose();
-    Blockly.modalWindow.createVariable();
+    Blockly.modalWindow.createVariable(modalWindow.style.left, modalWindow.style.top);
 }
 
 Blockly.modalWindow.createVariable.create = function() {
