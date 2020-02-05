@@ -1431,7 +1431,14 @@ Blockly.Block.prototype.getInputTypesByKind = function(index) {
         var type = typeVecs[i].slice(index)[0];
         var kind = 'basic';
         if (type[0] == "*") {
-            type = type.slice(1);
+            // don't slice at first index, slice at first index which isn't *
+            // bad scalability
+            for(var j = 0; j < type.length; j++) {
+                if(type[j] != "*") {
+                    type = type.slice(j);
+                    break;
+                }
+            }
             kind = 'list';
         }
         if (paramTypes[kind].indexOf(type) == -1) {

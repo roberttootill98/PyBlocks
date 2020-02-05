@@ -2539,6 +2539,51 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, holeSteps,
 
                         // draw list type indicator
                         if (params.list) {
+                            /* sawtooth stuff
+                            // all inputs only take maximum of one nested list for now
+                            var listAmount = 1;
+                            for(var i = 0; i < listAmount; i++) {
+                                var sawToothSteps = [];
+                                // adjust height per sawtooth added
+                                // 'M', x coord, y coord
+                                sawToothSteps.push('M', 0, input.renderHeight + i * 4);
+                                sawToothSteps.push('v',-2);
+                                // try to offset width so sawtooth svgs do not unline underneath eachother
+                                var numTeeth = Math.round(input.renderWidth / 12);
+                                for (var j = 0; j < numTeeth; j++) {
+                                  sawToothSteps.push('l 6 -6');
+                                  sawToothSteps.push('l 6 6');
+                                }
+                                sawToothSteps.push('v 2');
+                                sawToothSteps.push('z');
+                                var sawtoothString = sawToothSteps.join(' ');
+
+                                // if svg path doesn't exist at index, create a new one
+                                var svgList = this.svgListSawtooth;
+                                if(svgList[i]) {
+                                    var svgPath = svgList[i];
+                                } else {
+                                    var svgPath = Blockly.createSvgElement('path', {}, this.svgGroup_);
+                                    svgList[i] = svgPath
+                                }
+                                svgPath.setAttribute('d', sawtoothString);
+
+                                // alternate colour
+                                var lastPath = svgList[i - 1];
+                                if(lastPath) {
+                                    var fill = lastPath.getAttribute('fill');
+                                    if(fill == 'white') {
+                                        svgPath.setAttribute('fill', 'grey');
+                                    } else if(fill == 'grey') {
+                                        svgPath.setAttribute('fill', 'white');
+                                    }
+                                } else {
+                                    // must be at first
+                                    svgPath.setAttribute('fill', 'white');
+                                }
+                            }
+                            */
+
                             var background = createBasicIndicator(indicatorX, indicatorY);
                             //background.setAttribute('fill', 'white');
                             indicatorPair.list = [background];
