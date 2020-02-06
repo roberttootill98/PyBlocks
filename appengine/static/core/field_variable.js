@@ -370,9 +370,17 @@ Blockly.modalWindow.createVariable = function(x, y) {
     initTypeInputs();
 
     // block preview
+
+    // create new workspace on modal window
     var previewContainer = document.createElement('div');
     previewContainer.id = 'previewContainer';
     container.appendChild(previewContainer);
+
+    //var blocklyVarDiv = document.getElementById('blocklyVarDiv');
+    var previewWorkspace = Blockly.inject(previewContainer, {
+        media: '../../media/',
+        trashcan: false
+    });
 
     var previewType = document.querySelectorAll(".variableTypeInput")[0].value;
     Blockly.modalWindow.preview.type = previewType;
@@ -380,37 +388,16 @@ Blockly.modalWindow.createVariable = function(x, y) {
         "name": Blockly.modalWindow.preview.name,
         "type": previewType
     });
-    //var previewWorkspace = createPreviewWorkspace(previewBlock);
-    //Blockly.modalWindow.preview.block = Blockly.Xml.domToBlock(previewWorkspace, block);
-    Blockly.modalWindow.preview.block = Blockly.Xml.domToBlock(workspace, block);
+    Blockly.modalWindow.preview.block = Blockly.Xml.domToBlock(previewWorkspace, block);
     var previewBlock = Blockly.modalWindow.preview.block;
+    // move previewBlock to centre of workspace
+    moveBlockToCenter(previewBlock, previewWorkspace);
+    // make previewBlock non interactable
+    previewBlock.movable_ = false;
+    previewBlock.editable_ = false;
+    previewBlock.deletable_ = false;
+    previewBlock.contextMenu = false;
     updatePreviewType();
-    // append block to container
-    // maybe we have to create a workspace to put the block in?
-    // create a blockly block canvas
-    //createPreviewWorkspace(previewBlock);
-
-    // <svg width="500" height="300" style="border:1px red solid">
-    /*
-    var myCanvas = Blockly.createSvgElement('g', {'class': 'blocklyBlockCanvas'});
-    // append canvas to container
-    previewContainer.innerHTML = '<svg width="500" height="300" style="border:1px red solid">';
-    //previewContainer.appendChild(myCanvas);
-    //previewContainer.appendChild(previewBlock);
-    //myCanvas.appendChild(previewBlock);
-
-    // apply translation
-    var x = 200;
-    var y = 100;
-    var scale = 1;
-    var translation = 'translate(' + x + ',' + y + ') ' + 'scale(' + scale + ')';
-    myCanvas.setAttribute('transform', translation);
-    */
-
-    /*
-    Blockly.Workspace();
-    Blockly.Workspace.prototype.addTopBlock(previewBlock);
-    */
 
     // buttons
     var create = document.createElement('button');
@@ -438,17 +425,10 @@ Blockly.modalWindow.createVariable = function(x, y) {
     cancel.onclick = Blockly.modalWindow.cancel;
 }
 
-// creates a canvas to hold the preview block
-function createPreviewWorkspace(previewBlock) {
-    // create workspace
-    //var previewWorkspace = Blockly.WorkspaceSvg.prototype.createDom();
-    Blockly.Workspace();
-    var previewWorkspace;
-
-    // append workspace to modal window
-    console.log();
-
-    return previewWorkspace;
+function moveBlockToCenter(block, blockWorkspace) {
+    var moveX = blockWorkspace.getWidth() / 2 - block.width / 2;
+    var moveY = 0;
+    block.moveBy(moveX, moveY);
 }
 
 function dragEndModalWindow(ev) {
