@@ -381,6 +381,7 @@ Blockly.modalWindow.createVariable = function(x, y) {
         media: '../../media/',
         trashcan: false
     });
+    Blockly.modalWindow.preview.workspace = previewWorkspace;
 
     var previewType = document.querySelectorAll(".variableTypeInput")[0].value;
     Blockly.modalWindow.preview.type = previewType;
@@ -426,9 +427,19 @@ Blockly.modalWindow.createVariable = function(x, y) {
 }
 
 function moveBlockToCenter(block, blockWorkspace) {
+    // put in top left
+    var returnX = -block.xy_.x;
+    var returnY = -block.xy_.y;
+    block.moveBy(returnX, returnY);
+
+    // move from top left
     var moveX = blockWorkspace.getWidth() / 2 - block.width / 2;
     var moveY = 0;
     block.moveBy(moveX, moveY);
+
+    // update xy_
+    block.xy_.x = moveX;
+    block.xy_.y = moveY;
 }
 
 function dragEndModalWindow(ev) {
@@ -495,6 +506,7 @@ function nameInputListener(ev) {
         createButton.reason = '';
         reasonEl.style.display = 'none';
 
+        moveBlockToCenter(Blockly.modalWindow.preview.block, Blockly.modalWindow.preview.workspace);
     } else {
         // make icon visible
 
