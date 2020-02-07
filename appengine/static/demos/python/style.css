@@ -353,3 +353,7 @@ table#typetable {
 #variableName {
     margin-left: 1em;
 }
+
+.variableTypeInput {
+    padding: 0.5em;
+}

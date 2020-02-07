@@ -249,65 +249,89 @@ Blockly.modalWindow.selectVariable = function() {
     // html inside container
     var title = document.createElement('h3');
     container.appendChild(title);
-    title.textContent = 'Variable Selection';
+    title.textContent = 'Select a Variable';
 
-    // unorganised list of existing variables with new variable option at the bottom
-    var list = document.createElement('ul');
-    container.appendChild(list);
+    // create workspace to place blocks
+    var workspaceContainer = document.createElement('div');
+    container.appendChild(workspaceContainer);
+    var selectionWorkspace = Blockly.inject(workspaceContainer, {
+        media: '../../media/',
+        trashcan: false
+    });
 
-    // existing variables
+    // get blocks for workspace
     var variables = Blockly.Variables.allVariables(workspace, true, true);
-    // if parent of block, then filter types based on typeVecs
     var block = Blockly.Variables.getSelectorBlock();
+    var parent = block.getParent();
+    var blocks = [];
+    if(parent) {
+        // if we have a parent, limit blocks
 
-    function checkTypeVecs() {
-        var j = Blockly.Variables.getParentInput(parent);
-        for(var k = 0; k < parent.typeVecs.length; k++) {
-            if(parent.typeVecs[k][j] == variables[i].type ||
-                parent.typeVecs[k][j] == "any" ||
-                parent.typeVecs[k][j] == "*any") {
-                return true
+        // get typeVecs
+        var typeVecs = parent.typeVecs;
+
+        // get parent input
+        var parentInput = Blockly.Variables.getParentInput(parent, false);
+
+        // check if typeVecs contains a typeVec which is unrestricted
+
+        // iterate over variables and remove variables that are not in typeVecs
+        for(var i = 0; i < variables.length; i++) {
+            // iterate over typeVecs at parentInput and check if we have a match
+            for(var j = 0; j < typeVecs.length; j++) {
+                // if we have a match then break out
+                if(variables[i].type == typeVecs[j][parentInput]) {
+                    var block = Blockly.Variables.newVariableBlock({
+                        "name": variables[i].name,
+                        "type": variables[i].type
+                    });
+                    makeBlockNonInteractable(block);
+                    // add on click event to block
+                    blocks.push(Blockly.Xml.domToBlock(selectionWorkspace, block));
+                    break;
+                }
             }
         }
-    }
+    } else {
+        // else all variables
+        for(var i = 0; i < variables.length; i++) {
+            var block = Blockly.Variables.newVariableBlock({
+                "name": variables[i].name,
+                "type": variables[i].type
+            });
+            blocks.push(Blockly.Xml.domToBlock(selectionWorkspace, block));
 
-    for(i = 0; i < variables.length; i++) {
-        // skip variable if not valid for block dropped in to - not relevant to assignment
-        if(block.type == "python_variable_selector") {
-          var parent = block.getParent();
-          if(parent) {
-              if(!checkTypeVecs()) {
-                  continue;
-              }
-          }
+            makeBlockNonInteractable(blocks[i]);
+            // add on click event to block
+            blocks[i].onclick = Blockly.modalWindow.selectVariable.select;
         }
-        var item = document.createElement('li');
-        list.appendChild(item);
-        item.classList.add('variable');
-        item.classList.add(variables[i].type);
-
-        item.textContent = variables[i].name;
-        // colour according to type
-
-        item.onclick = Blockly.modalWindow.selectVariable.select;
     }
-    // new variable
-    var newVariableItem = document.createElement('li');
-    list.appendChild(newVariableItem);
-    newVariableItem.classList.add('variable');
 
-    newVariableItem.textContent = 'New Variable';
-    // colour as rainbow
+    // organise blocks in workspace
+    var y = 10; // increased per loop
+    for(var i = 0; i < blocks.length; i++) {
+        var x = selectionWorkspace.getWidth() / 2 - blocks[i].width / 2;
 
-    newVariableItem.onclick = Blockly.modalWindow.selectVariable.newVariable;
+        blocks[i].moveBy(x, y);
+
+        y = y + blocks[i].height + 20; // height of block + margin
+    }
 
     // buttons
     var buttonContainer = document.createElement('div');
     container.appendChild(buttonContainer);
 
+    // create new button
+    var create = document.createElement('button');
+    buttonContainer.appendChild(create);
+    create.classList.add('fancybuttons');
+    create.classList.add('modalButtons');
+    create.textContent = 'Create a New Variable';
+    create.onclick = Blockly.modalWindow.selectVariable.newVariable;
+
+    // cancel button
     var cancel = document.createElement('button');
     buttonContainer.appendChild(cancel);
-
     cancel.classList.add('fancybuttons');
     cancel.classList.add('modalButtons');
     cancel.textContent = 'Cancel';
@@ -331,7 +355,7 @@ Blockly.modalWindow.createVariable = function(x, y) {
     // html inside container
     var title = document.createElement('h3');
     container.appendChild(title);
-    title.textContent = 'Variable Creation';
+    title.textContent = 'Create a Variable';
 
     // inputs
     var inputContainer = document.createElement('div');
@@ -342,7 +366,7 @@ Blockly.modalWindow.createVariable = function(x, y) {
     inputContainer.appendChild(nameContainer);
     var nameLabel = document.createElement('label');
     nameLabel.classList.add('label');
-    nameLabel.textContent = 'Name';
+    nameLabel.textContent = 'Name:';
     nameContainer.appendChild(nameLabel);
     var nameInput = document.createElement('input');
     nameInput.id = 'variableName';
@@ -361,10 +385,11 @@ Blockly.modalWindow.createVariable = function(x, y) {
 
     // type input
     var typeContainer = document.createElement('div');
+    typeContainer.id = 'typeInputContainer';
     inputContainer.appendChild(typeContainer);
     var typeLabel = document.createElement('label');
     typeLabel.classList.add('label');
-    typeLabel.textContent = 'Type';
+    typeLabel.textContent = 'Type:';
     typeContainer.appendChild(typeLabel);
 
     initTypeInputs();
@@ -376,7 +401,6 @@ Blockly.modalWindow.createVariable = function(x, y) {
     previewContainer.id = 'previewContainer';
     container.appendChild(previewContainer);
 
-    //var blocklyVarDiv = document.getElementById('blocklyVarDiv');
     var previewWorkspace = Blockly.inject(previewContainer, {
         media: '../../media/',
         trashcan: false
@@ -393,11 +417,7 @@ Blockly.modalWindow.createVariable = function(x, y) {
     var previewBlock = Blockly.modalWindow.preview.block;
     // move previewBlock to centre of workspace
     moveBlockToCenter(previewBlock, previewWorkspace);
-    // make previewBlock non interactable
-    previewBlock.movable_ = false;
-    previewBlock.editable_ = false;
-    previewBlock.deletable_ = false;
-    previewBlock.contextMenu = false;
+    makeBlockNonInteractable(previewBlock);
     updatePreviewType();
 
     // buttons
@@ -442,6 +462,13 @@ function moveBlockToCenter(block, blockWorkspace) {
     block.xy_.y = moveY;
 }
 
+function makeBlockNonInteractable(block) {
+    // make previewBlock non interactable
+    block.movable_ = false;
+    block.editable_ = false;
+    block.deletable_ = false;
+    block.contextMenu = false;
+}
 function dragEndModalWindow(ev) {
     var x = ev.x;
     var y = ev.y;
@@ -690,7 +717,7 @@ function initTypeInputs() {
 function createTypeInput(options) {
     // add input elements to modal window
     // get container
-    var container = document.getElementById('inputContainer');
+    var container = document.getElementById('typeInputContainer');
     // create dom
     var newVariableTypeInput = document.createElement('select');
     newVariableTypeInput.classList.add("input");
