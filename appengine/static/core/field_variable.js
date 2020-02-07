@@ -307,6 +307,17 @@ Blockly.modalWindow.selectVariable = function() {
         }
     }
 
+    // set a size for the container
+    /*
+    previewContainer.style.left = '1px';
+    previewContainer.style.top = '3px';
+    */
+    workspaceContainer.style.width = '14em';
+    // scale height to amount of blocks
+    workspaceContainer.style.height = '15em';
+    // then do a resize
+    Blockly.svgResize(selectionWorkspace);
+
     // organise blocks in workspace
     var y = 10; // increased per loop
     for(var i = 0; i < blocks.length; i++) {
@@ -405,6 +416,16 @@ Blockly.modalWindow.createVariable = function(x, y) {
         media: '../../media/',
         trashcan: false
     });
+    // set a size for the container
+    /*
+    previewContainer.style.left = '1px';
+    previewContainer.style.top = '3px';
+    */
+    previewContainer.style.width = '14em';
+    previewContainer.style.height = '75px'; //'5em';
+    // then do a resize
+    Blockly.svgResize(previewWorkspace);
+
     Blockly.modalWindow.preview.workspace = previewWorkspace;
 
     var previewType = document.querySelectorAll(".variableTypeInput")[0].value;
@@ -454,7 +475,7 @@ function moveBlockToCenter(block, blockWorkspace) {
 
     // move from top left
     var moveX = blockWorkspace.getWidth() / 2 - block.width / 2;
-    var moveY = 0;
+    var moveY = 25;
     block.moveBy(moveX, moveY);
 
     // update xy_
