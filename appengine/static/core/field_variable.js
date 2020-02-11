@@ -357,10 +357,22 @@ Blockly.modalWindow.createVariable = function(x, y) {
     container.draggable = true;
     container.addEventListener('dragend', dragEndModalWindow);
 
-    // set position as same as last
-    container.style.left = x;
-    container.style.top = y;
+    // set position of modal window
+    if(x && y) {
+        // set position as same as last
+        container.style.left = x;
+        container.style.top = y;
+    } else {
+        // start window in middle of page
+        container.style.left = '50%';
+        container.style.top = '5em';
+    }
 
+    // create backdrop if we don't have one
+    if(!Blockly.modalWindow.backdrop.get()) {
+        // create a backdrop
+        Blockly.modalWindow.backdrop.create();
+    }
     Blockly.modalWindow.backdrop.get().appendChild(container);
 
     // html inside container
@@ -416,6 +428,13 @@ Blockly.modalWindow.createVariable = function(x, y) {
         media: '../../media/',
         trashcan: false
     });
+
+    // make workspace blend into modal window
+    // set fill
+    //previewWorkspace.svgBackground_.style.fill = container.style.background-color;
+    previewWorkspace.svgBackground_.style.fill = '#708090';
+    // remove border
+
     // set a size for the container
     /*
     previewContainer.style.left = '1px';
@@ -430,10 +449,21 @@ Blockly.modalWindow.createVariable = function(x, y) {
 
     var previewType = document.querySelectorAll(".variableTypeInput")[0].value;
     Blockly.modalWindow.preview.type = previewType;
-    var block = Blockly.Variables.newVariableBlock({
-        "name": Blockly.modalWindow.preview.name,
-        "type": previewType
-    });
+
+    // if block is assignment or not
+    var blockType = Blockly.Variables.getSelectorBlock().type;
+    if(blockType == 'python_variable_selector') {
+        var block = Blockly.Variables.newVariableBlock({
+            "name": Blockly.modalWindow.preview.name,
+            "type": previewType
+        });
+    } else if(blockType == 'python_variable_selector_assignment') {
+      var block = Blockly.Variables.newVariablesAssignmentBlock({
+          "name": Blockly.modalWindow.preview.name,
+          "type": previewType
+      });
+    }
+
     Blockly.modalWindow.preview.block = Blockly.Xml.domToBlock(previewWorkspace, block);
     var previewBlock = Blockly.modalWindow.preview.block;
     // move previewBlock to centre of workspace

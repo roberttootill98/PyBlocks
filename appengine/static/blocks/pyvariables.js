@@ -193,7 +193,13 @@ Blockly.Blocks['python_variable_selector'] = {
             }
         } else if(this.inWorkspace && !Blockly.modalWindow.visible) {
             // if in workspace then prompt modal window
-            Blockly.modalWindow.selectVariable();
+            if(Blockly.Variables.allVariables(workspace, true, true).length > 0) {
+              // if we have variables prompt select window
+              Blockly.modalWindow.selectVariable();
+            } else {
+              // if we don't then prompt create window
+              Blockly.modalWindow.createVariable();
+            }
         } else if(Blockly.Variables.getSelectorBlock()) {
             // don't fire modal window event until dropped
             this.inWorkspace = true;
@@ -255,7 +261,13 @@ Blockly.Blocks['python_variable_selector_assignment'] = {
             }
         } else if(this.inWorkspace && !Blockly.modalWindow.visible) {
             // if in workspace then prompt modal window
-            Blockly.modalWindow.selectVariable();
+            if(Blockly.Variables.allVariables(workspace, true, true).length > 0) {
+              // if we have variables prompt select window
+              Blockly.modalWindow.selectVariable();
+            } else {
+              // if we don't then prompt create window
+              Blockly.modalWindow.createVariable();
+            }
         } else if(Blockly.Variables.getSelectorBlock()) {
             // don't fire modal window event until dropped
             this.inWorkspace = true;
