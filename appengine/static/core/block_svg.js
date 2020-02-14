@@ -2235,6 +2235,18 @@ Blockly.BlockSvg.prototype.renderDraw_ = function(iconWidth, inputRows) {
     this.renderDrawBottom_(steps, holeSteps, connectionsXY, cursorY);
     this.renderDrawLeft_(steps, holeSteps, connectionsXY, cursorY);
 
+    if(this.outputsAList()) {
+        var outputTypes = this.getOutputTypes();
+        var listAmount = 0;
+        for(var i = 0; i < outputTypes.length; i++) {
+            listAmount = outputTypes[i].split("*").length - 1;
+        }
+
+        // increase block height per sawtooth to be added
+        var seperationDistance = 6;
+        steps[4] = steps[4] + seperationDistance * listAmount;
+    }
+
     var pathString = steps.join(' '); // + '\n' + inlineSteps.join(' ');
     this.svgBlockPath_.setAttribute('d', pathString);
     this.svgPathDark_.setAttribute('d', pathString);
@@ -2276,17 +2288,13 @@ Blockly.BlockSvg.prototype.renderDraw_ = function(iconWidth, inputRows) {
     if (this.outputConnection && this.outputsAList()) {
         // make sawtooth visible - iterate through all sawtooth svgs attached to block
         // how should we handle a situation where we may output a variable amount of lists based on the input -- does this scneario exist?
-        var outputTypes = this.getOutputTypes();
-        var listAmount = 0;
-        for(var i = 0; i < outputTypes.length; i++) {
-            listAmount = outputTypes[i].split("*").length - 1;
-        }
 
         for(var i = 0; i < listAmount; i++) {
             var sawToothSteps = [];
             // adjust height per sawtooth added
             // 'M', x coord, y coord
-            sawToothSteps.push('M', 0, this.height + i * 4);
+            //sawToothSteps.push('M', 0, this.height + i * 4);
+            sawToothSteps.push('M', 0, this.height + (i + 1) * seperationDistance);
             sawToothSteps.push('v',-2);
             // try to offset width so sawtooth svgs do not unline underneath eachother
             var numTeeth = Math.round(this.width / 12);
@@ -2562,7 +2570,7 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, holeSteps,
                             sawTooth.setAttribute('d', sawtoothString);
                             sawTooth.setAttribute('fill', 'white');
                             indicatorPair.list.push(sawTooth);
-                            
+
                             if (slotNumber === 0 && this.lhsVarOnly) {
                                 var varInd = Blockly.BlockSvg.addIndicatorLabel(indicatorX, indicatorY, "var");
                                 indicatorPair.varInd.push(varInd);
