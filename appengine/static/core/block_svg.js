@@ -2244,7 +2244,8 @@ Blockly.BlockSvg.prototype.renderDraw_ = function(iconWidth, inputRows) {
 
         // increase block height per sawtooth to be added
         var seperationDistance = 6;
-        steps[4] = steps[4] + seperationDistance * listAmount;
+        var index = steps.indexOf('v') + 1;
+        steps[index] = steps[index] + seperationDistance * listAmount;
     }
 
     var pathString = steps.join(' '); // + '\n' + inlineSteps.join(' ');
