@@ -351,6 +351,8 @@ Blockly.modalWindow.selectVariable = function() {
 
 // for creating a new variable
 Blockly.modalWindow.createVariable = function(x, y) {
+    Blockly.modalWindow.visible = true;
+    
     var container = document.createElement('div');
     container.id = 'modalWindow';
     // drag event listeners - allow window to be moved
@@ -649,7 +651,7 @@ function typeInputListener(ev) {
     //    if we have a parent
     //        move marker to next level
     //    update preview
-    // case 4 - different complex type is selected before last input (shouldn't be possible yet)
+    // case 4 - different complex type is selected before last input
     //    delete inputs after input
     //    prompt new ui after input
     //    if we have a parent
@@ -709,7 +711,7 @@ function typeInputListener(ev) {
         // prompt some more ui
         switch(lastInput.value) {
            case "list of...":
-              if(parent) {
+              if(parent && !unrestrictedTypeVec(parent)) {
                   // should be last level
                   var currentLevel = getCurrentLevel(typeVecObject, [])[0];
 
@@ -737,12 +739,24 @@ function typeInputListener(ev) {
     updatePreviewType();
 }
 
+// checks if we have 'unrestricted' in typeVec
+function unrestrictedTypeVec(block) {
+    var typeVecs = block.typeVecs;
+    var parentInput = Blockly.Variables.getParentInput(block);
+    for(var i = 0; i < typeVecs.length; i++) {
+        if(typeVecs[i][parentInput] == 'unrestricted') {
+            return true;
+        }
+    }
+    return false
+}
+
 // init modalWindow type inputs
 function initTypeInputs() {
     var block = Blockly.Variables.getSelectorBlock();
     var parent = block.getParent();
 
-    if(parent) {
+    if(parent && !unrestrictedTypeVec(parent)) {
         var typeVecObject = constructTypeVecObject(parent);
         var returnKeys = getCurrentLevel(typeVecObject, [])[1];
 
