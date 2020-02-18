@@ -303,18 +303,22 @@ Blockly.modalWindow.selectVariable = function() {
 
             makeBlockNonInteractable(blocks[i]);
             // add on click event to block
-            blocks[i].onclick = Blockly.modalWindow.selectVariable.select;
+            var svg = blocks[i].svgGroup_;
+            svg.setAttribute('onclick', 'Blockly.modalWindow.selectVariable.select');
+            console.log();
         }
     }
 
     // set a size for the container
+    blendWorkspace(selectionWorkspace);
     /*
     previewContainer.style.left = '1px';
     previewContainer.style.top = '3px';
     */
     workspaceContainer.style.width = '14em';
     // scale height to amount of blocks
-    workspaceContainer.style.height = '15em';
+    // should account for differently sized blocks, eg. nested lists
+    workspaceContainer.style.height = blocks.length * 2.75 + 'em';
     // then do a resize
     Blockly.svgResize(selectionWorkspace);
 
@@ -352,7 +356,7 @@ Blockly.modalWindow.selectVariable = function() {
 // for creating a new variable
 Blockly.modalWindow.createVariable = function(x, y) {
     Blockly.modalWindow.visible = true;
-    
+
     var container = document.createElement('div');
     container.id = 'modalWindow';
     // drag event listeners - allow window to be moved
@@ -431,11 +435,7 @@ Blockly.modalWindow.createVariable = function(x, y) {
         trashcan: false
     });
 
-    // make workspace blend into modal window
-    // set fill
-    //previewWorkspace.svgBackground_.style.fill = container.style.background-color;
-    previewWorkspace.svgBackground_.style.fill = '#708090';
-    // remove border
+    blendWorkspace(previewWorkspace);
 
     // set a size for the container
     /*
@@ -497,6 +497,14 @@ Blockly.modalWindow.createVariable = function(x, y) {
     cancel.classList.add('modalButtons');
     cancel.textContent = 'Cancel';
     cancel.onclick = Blockly.modalWindow.cancel;
+}
+
+function blendWorkspace(blockWorkspace) {
+    // make workspace blend into modal window
+    // set fill
+    //blockWorkspace.svgBackground_.style.fill = container.style.background-color;
+    blockWorkspace.svgBackground_.style.fill = '#708090';
+    // remove border
 }
 
 function moveBlockToCenter(block, blockWorkspace) {
@@ -737,6 +745,30 @@ function typeInputListener(ev) {
     // update preview
     // all cases
     updatePreviewType();
+    // update workspace
+    resizePreviewWorkspace();
+}
+
+// resizes preview workspace according to type of preview block
+function resizePreviewWorkspace() {
+    // infer width and height from type of preview block
+    var previewBlock = Blockly.modalWindow.preview.block;
+    var previewType = Blockly.modalWindow.preview.type;
+
+    var width = 14; // constant
+    // scale workspace height to block height
+    // 6 = seperation distance for sawteeth
+    var height = 75 + previewBlock.svgListSawtooth.length * 6;
+
+    resizeWorkspace(Blockly.modalWindow.preview.workspace, document.getElementById('previewContainer'), width, height);
+}
+
+function resizeWorkspace(blockWorkspace, container, width, height) {
+    // set a size for the container
+    container.style.width = width + 'em';
+    container.style.height = height + 'px';
+    // then do a resize
+    Blockly.svgResize(blockWorkspace);
 }
 
 // checks if we have 'unrestricted' in typeVec

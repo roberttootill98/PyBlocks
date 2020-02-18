@@ -1565,8 +1565,8 @@ Blockly.BlockSvg.prototype.updateColour = function() {
                     }
                 }
                 // delete svgs
-                for(i; i < this.svgListSawtooth.length; i++) {
-                    this.svgListSawtooth[i].remove();
+                for(var j = i; j < this.svgListSawtooth.length; j++) {
+                    this.svgListSawtooth[j].remove();
                 }
                 // cut elements off from array
                 this.svgListSawtooth.length = i;
