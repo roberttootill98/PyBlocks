@@ -485,11 +485,6 @@ Blockly.modalWindow.createVariable = function(x, y) {
 
     create.addEventListener('mouseover', displayReason);
 
-    var reason = document.createElement('p');
-    reason.id = 'reason';
-    create.appendChild(reason);
-    reason.style.display = 'none';
-
     var cancel = document.createElement('button');
     container.appendChild(cancel);
 
@@ -497,6 +492,12 @@ Blockly.modalWindow.createVariable = function(x, y) {
     cancel.classList.add('modalButtons');
     cancel.textContent = 'Cancel';
     cancel.onclick = Blockly.modalWindow.cancel;
+
+    var reason = document.createElement('p');
+    reason.id = 'reason';
+    reason.classList.add('helpText');
+    container.appendChild(reason);
+    reason.style.display = 'none';
 }
 
 function blendWorkspace(blockWorkspace) {
@@ -572,17 +573,17 @@ function nameInputListener(ev) {
     // validate inputs
     var validity = checkIfNameValid(variableName);
     var valid = validity[0];
-    var reason = validity[1];
+    var reasonText = validity[1];
 
+    var container = document.getElementById('modalWindow');
     var createButton = document.getElementById('createButton');
-    var reasonEl = document.getElementById("reason");
+    var reason = document.getElementById('reason');
     // if name is invalid make warning icon visible
     if(valid) {
-        // make icon invisible
-
-        // enable create button
         createButton.disabled = false;
-        // remove hover text
+        createButton.classList.remove("disabled");
+
+        reason.style.display = 'none';
 
         // update preview
         var preview = Blockly.modalWindow.preview;
@@ -591,17 +592,13 @@ function nameInputListener(ev) {
         block.renameVar(preview.name, variableName);
         preview.name = variableName;
 
-        createButton.reason = '';
-        reasonEl.style.display = 'none';
-
         moveBlockToCenter(Blockly.modalWindow.preview.block, Blockly.modalWindow.preview.workspace);
     } else {
-        // make icon visible
-
-        // disable create button
         createButton.disabled = true;
-        // add hover text
-        createButton.reason = reason;
+        createButton.classList.add("disabled");
+
+        reason.textContent = reasonText;
+        reason.style.display = '';
     }
 }
 
