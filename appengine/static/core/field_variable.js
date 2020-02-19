@@ -251,6 +251,48 @@ Blockly.modalWindow.selectVariable = function() {
     container.appendChild(title);
     title.textContent = 'Select a Variable';
 
+    // use list elements to do block selection
+    // do dom
+    var list = document.createElement('ui');
+    container.appendChild(list);
+
+    // get vars
+    var variables = Blockly.Variables.allVariables(workspace, true, true);
+    var block = Blockly.Variables.getSelectorBlock();
+    var parent = block.getParent();
+    var blocks = [];
+    if(parent && !unrestrictedTypeVec(block)) {
+        // get typeVecs
+        var typeVecs = parent.typeVecs;
+
+        // get parent input
+        var parentInput = Blockly.Variables.getParentInput(parent, false);
+        // limit to parent typeVecs
+        // iterate over variables and remove variables that are not in typeVecs
+        for(var i = 0; i < variables.length; i++) {
+            // iterate over typeVecs at parentInput and check if we have a match
+            for(var j = 0; j < typeVecs.length; j++) {
+                if(typeVecs[j][parentInput] == variables[i].type && !blocks.includes(variables[i])) {
+                    // if we have a match then break out
+                    blocks.push(variables[i]);
+                }
+            }
+        }
+    } else {
+        blocks = variables;
+    }
+
+    for(var i = 0; i < blocks.length; i++) {
+        var li = document.createElement('li');
+        li.classList.add('variable');
+        li.classList.add(blocks[i].type);
+        li.textContent = blocks[i].name;
+
+        li.onclick = Blockly.modalWindow.selectVariable.select;
+        list.appendChild(li);
+    }
+
+    /*
     // create workspace to place blocks
     var workspaceContainer = document.createElement('div');
     container.appendChild(workspaceContainer);
@@ -311,10 +353,6 @@ Blockly.modalWindow.selectVariable = function() {
 
     // set a size for the container
     blendWorkspace(selectionWorkspace);
-    /*
-    previewContainer.style.left = '1px';
-    previewContainer.style.top = '3px';
-    */
     workspaceContainer.style.width = '14em';
     // scale height to amount of blocks
     // should account for differently sized blocks, eg. nested lists
@@ -331,6 +369,7 @@ Blockly.modalWindow.selectVariable = function() {
 
         y = y + blocks[i].height + 20; // height of block + margin
     }
+    */
 
     // buttons
     var buttonContainer = document.createElement('div');
@@ -688,7 +727,7 @@ function typeInputListener(ev) {
 
             level['marker'] = true;
         }
-    } else if(!Blockly.modalWindow.primitiveVariables.includes(lastInput)) {
+    } else if(!Blockly.modalWindow.primitiveVariables.includes(lastInput.value)) {
         // case 3
         // prompt some more ui
         switch(lastInput.value) {
@@ -831,9 +870,9 @@ function updatePreviewType() {
     preview.type = typeVec;
 
     // set typeVecs differently depending on block type
-    if(preview.block.type == 'variable_get') {
+    if(preview.block.type == 'variables_get') {
         preview.block.setTypeVecs([[typeVec]]);
-    } else if(preview.block.type == 'variable_set') {
+    } else if(preview.block.type == 'variables_set') {
         preview.block.setTypeVecs([[typeVec, typeVec, 'none']]);
     }
     preview.block.render();
