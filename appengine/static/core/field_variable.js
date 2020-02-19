@@ -650,7 +650,7 @@ function checkIfNameValid(name) {
 
     // check name is unique
     if(name != Blockly.Python.makeNameUnique(name, Blockly.Variables.allVariables(workspace, true, true))) {
-        return [false, "Name is not unique"];
+        return [false, "'" + name + "' is already in use"];
     }
 
     return [true, "Valid"];
