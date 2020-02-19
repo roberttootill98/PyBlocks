@@ -402,15 +402,6 @@ Blockly.modalWindow.createVariable = function(x, y) {
     nameInput.classList.add('input');
     nameInput.addEventListener('input', nameInputListener);
     nameContainer.appendChild(nameInput)
-    // warning icon
-    /*
-    var warningIcon = document.createElement('div');
-    warningIcon.innerHTML = '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="xMidYMid meet" viewBox="0 0 640 640" width="640" height="640"><defs><path d="M122.5 139.39L145 188.78L100 188.78L55 188.78L77.5 139.39L100 90L122.5 139.39Z" id="cdLst5NLL"></path></defs><g><g><g><use xlink:href="#cdLst5NLL" opacity="1" fill="#f5f5b7" fill-opacity="1"></use></g></g></g></svg>';
-    warningIcon.id = 'warningIcon';
-    warningIcon.addEventListener('onmouseover', displayReason);
-    // default style to make invisible
-    nameContainer.appendChild(warningIcon);
-    */
 
     // type input
     var typeContainer = document.createElement('div');
@@ -438,10 +429,6 @@ Blockly.modalWindow.createVariable = function(x, y) {
     blendWorkspace(previewWorkspace);
 
     // set a size for the container
-    /*
-    previewContainer.style.left = '1px';
-    previewContainer.style.top = '3px';
-    */
     previewContainer.style.width = '14em';
     previewContainer.style.height = '75px'; //'5em';
     // then do a resize
@@ -482,8 +469,6 @@ Blockly.modalWindow.createVariable = function(x, y) {
     create.textContent = 'Create';
     create.onclick = Blockly.modalWindow.createVariable.create;
     create.disabled = true;
-
-    create.addEventListener('mouseover', displayReason);
 
     var cancel = document.createElement('button');
     container.appendChild(cancel);
@@ -589,6 +574,7 @@ function nameInputListener(ev) {
         var preview = Blockly.modalWindow.preview;
 
         var block = Blockly.modalWindow.preview.block;
+        // do something different here for assignment statement
         block.renameVar(preview.name, variableName);
         preview.name = variableName;
 
@@ -629,15 +615,6 @@ function checkIfNameValid(name) {
     }
 
     return [true, "Valid"];
-}
-
-// display reason why create button can't be clicked on mouseover event
-function displayReason(ev) {
-    var createButton = document.getElementById('createButton');
-    var reason = document.getElementById("reason");
-
-    //reason.style.display = 'block';
-    reason.textContent = createButton.reason;
 }
 
 // TYPE INPUT FUNCTIONS
@@ -853,7 +830,12 @@ function updatePreviewType() {
     var preview = Blockly.modalWindow.preview;
     preview.type = typeVec;
 
-    preview.block.setTypeVecs([[typeVec]]);
+    // set typeVecs differently depending on block type
+    if(preview.block.type == 'variable_get') {
+        preview.block.setTypeVecs([[typeVec]]);
+    } else if(preview.block.type == 'variable_set') {
+        preview.block.setTypeVecs([[typeVec, typeVec, 'none']]);
+    }
     preview.block.render();
 }
 
