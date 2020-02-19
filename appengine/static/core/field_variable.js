@@ -251,6 +251,7 @@ Blockly.modalWindow.selectVariable = function() {
     container.appendChild(title);
     title.textContent = 'Select a Variable';
 
+    /*
     // use list elements to do block selection
     // do dom
     var list = document.createElement('ui');
@@ -291,8 +292,8 @@ Blockly.modalWindow.selectVariable = function() {
         li.onclick = Blockly.modalWindow.selectVariable.select;
         list.appendChild(li);
     }
+    */
 
-    /*
     // create workspace to place blocks
     var workspaceContainer = document.createElement('div');
     container.appendChild(workspaceContainer);
@@ -369,7 +370,6 @@ Blockly.modalWindow.selectVariable = function() {
 
         y = y + blocks[i].height + 20; // height of block + margin
     }
-    */
 
     // buttons
     var buttonContainer = document.createElement('div');
@@ -638,7 +638,7 @@ function checkIfNameValid(name) {
     var reservedWords = Blockly.Python.RESERVED;
     for(var i = 0; i < reservedWords.length; i++) {
         if(name == reservedWords[i]) {
-            return [false, reservedWords[i] = " is a reserved word"];
+            return [false, name + " is a reserved word"];
         }
     }
 
