@@ -263,6 +263,7 @@ Blockly.Blocks['python_variable_selector_assignment'] = {
             // if in workspace then prompt modal window
             if(Blockly.Variables.allVariables(workspace, true, true).length > 0) {
               // if we have variables prompt select window
+              // should only prompt if we have variables that are valid
               Blockly.modalWindow.selectVariable();
             } else {
               // if we don't then prompt create window
