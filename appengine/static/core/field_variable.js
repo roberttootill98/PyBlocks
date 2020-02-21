@@ -1027,21 +1027,12 @@ Blockly.modalWindow.cancel = function() {
 }
 
 Blockly.modalWindow.selectVariable.select = function() {
-    // returns python type from list
-    function findType(classList) {
-        var types = ["int", "float", "str", "bool", "range"]; // for now
-        for(i = 0; i < classList.length; i++) {
-            if(types.includes(classList[i])) {
-                return classList[i];
-            }
-        }
-    }
     var block = Blockly.Variables.getSelectorBlock();
 
     // get block from container structure
     var parent = this.parentElement;
     block.varName = parent.id;
-    block.varType = findType(parent.classList);
+    block.varType = parent.classList[0];
 
     Blockly.modalWindow.dispose();
     Blockly.modalWindow.backdrop.dispose();

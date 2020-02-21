@@ -193,12 +193,22 @@ Blockly.Blocks['python_variable_selector'] = {
             }
         } else if(this.inWorkspace && !Blockly.modalWindow.visible) {
             // if in workspace then prompt modal window
-            if(Blockly.Variables.allVariables(workspace, true, true).length > 0) {
-              // if we have variables prompt select window
-              Blockly.modalWindow.selectVariable();
+            var variables = Blockly.Variables.allVariables(workspace, true, true);
+            var parent = this.getParent();
+            if(variables.length > 0) {
+                if(parent) {
+                    if(validVariable(parent)) {
+                        // if we have at least one variable that in is parnetTypeVec then prompt select window
+                        Blockly.modalWindow.selectVariable();
+                    } else {
+                        Blockly.modalWindow.createVariable();
+                    }
+                } else {
+                    Blockly.modalWindow.selectVariable();
+                }
             } else {
-              // if we don't then prompt create window
-              Blockly.modalWindow.createVariable();
+                // if we don't then prompt create window
+                Blockly.modalWindow.createVariable();
             }
         } else if(Blockly.Variables.getSelectorBlock()) {
             // don't fire modal window event until dropped
@@ -262,12 +272,12 @@ Blockly.Blocks['python_variable_selector_assignment'] = {
         } else if(this.inWorkspace && !Blockly.modalWindow.visible) {
             // if in workspace then prompt modal window
             if(Blockly.Variables.allVariables(workspace, true, true).length > 0) {
-              // if we have variables prompt select window
-              // should only prompt if we have variables that are valid
-              Blockly.modalWindow.selectVariable();
+                // if we have variables prompt select window
+                // should only prompt if we have variables that are valid
+                Blockly.modalWindow.selectVariable();
             } else {
-              // if we don't then prompt create window
-              Blockly.modalWindow.createVariable();
+                // if we don't then prompt create window
+                Blockly.modalWindow.createVariable();
             }
         } else if(Blockly.Variables.getSelectorBlock()) {
             // don't fire modal window event until dropped
@@ -313,23 +323,19 @@ Blockly.Variables.getParentInput = function(parent, absolute) {
     }
 }
 
-// checks if the selected variable is valid
-function checkIfVariableValid(parent, parentInput, variable) {
-    for(var i = 0; i < parent.typeVecs.length; i++) {
-        if(parent.typeVecs[i][parentInput] == getVarTypeFromBlocks(variable)) {
-            return true;
+// check if any of the current variables are suitable in parent typeVecs
+function validVariable(parent) {
+    var index = Blockly.Variables.getParentInput(parent);
+    var typeVecs = parent.typeVecs;
+    var variables = Blockly.Variables.allVariables(workspace, true, true);
+
+    for(var i = 0; i < variables.length; i++) {
+        for(var j = 0; j < typeVecs.length; j++) {
+            if(typeVecs[j][index] == variables[i].type) {
+                return true;
+            }
         }
     }
-}
-
-// get type of var from blocks in workspace
-function getVarTypeFromBlocks(name) {
-  var variables = Blockly.Variables.allVariables(workspace, true, true);
-  for(i = 0; i < variables.length; i++) {
-      if(name == variables[i]["name"]) {
-          return variables[i]["type"];
-      }
-  }
 }
 
 /* possibly leave till later
