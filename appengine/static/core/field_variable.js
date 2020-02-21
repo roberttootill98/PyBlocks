@@ -825,7 +825,10 @@ function updatePreviewType() {
     if(preview.block.type == 'variables_get') {
         preview.block.setTypeVecs([[typeVec]]);
     } else if(preview.block.type == 'variables_set') {
+        // update main block
         preview.block.setTypeVecs([[typeVec, typeVec, 'none']]);
+        // update var input
+        //input.setTypeVecs([[typeVec]]);
     }
     preview.block.render();
 }
