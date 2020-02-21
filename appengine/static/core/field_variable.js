@@ -828,7 +828,9 @@ function updatePreviewType() {
         // update main block
         preview.block.setTypeVecs([[typeVec, typeVec, 'none']]);
         // update var input
-        //input.setTypeVecs([[typeVec]]);
+        var inputBlock = preview.block.inputList[0].connection.targetConnection.sourceBlock_;
+        inputBlock.setTypeVecs([[typeVec]]);
+        inputBlock.render();
     }
     preview.block.render();
 }
