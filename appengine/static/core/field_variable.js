@@ -251,62 +251,49 @@ Blockly.modalWindow.selectVariable = function() {
     container.appendChild(title);
     title.textContent = 'Select a Variable';
 
-    /*
-    // use list elements to do block selection
-    // do dom
-    var list = document.createElement('ui');
-    container.appendChild(list);
-
-    // get vars
-    var variables = Blockly.Variables.allVariables(workspace, true, true);
-    var block = Blockly.Variables.getSelectorBlock();
-    var parent = block.getParent();
-    var blocks = [];
-    if(parent && !unrestrictedTypeVec(block)) {
-        // get typeVecs
-        var typeVecs = parent.typeVecs;
-
-        // get parent input
-        var parentInput = Blockly.Variables.getParentInput(parent, false);
-        // limit to parent typeVecs
-        // iterate over variables and remove variables that are not in typeVecs
-        for(var i = 0; i < variables.length; i++) {
-            // iterate over typeVecs at parentInput and check if we have a match
-            for(var j = 0; j < typeVecs.length; j++) {
-                if(typeVecs[j][parentInput] == variables[i].type && !blocks.includes(variables[i])) {
-                    // if we have a match then break out
-                    blocks.push(variables[i]);
-                }
-            }
-        }
-    } else {
-        blocks = variables;
-    }
-
-    for(var i = 0; i < blocks.length; i++) {
-        var li = document.createElement('li');
-        li.classList.add('variable');
-        li.classList.add(blocks[i].type);
-        li.textContent = blocks[i].name;
-
-        li.onclick = Blockly.modalWindow.selectVariable.select;
-        list.appendChild(li);
-    }
-    */
-
-    // create workspace to place blocks
-    var workspaceContainer = document.createElement('div');
-    container.appendChild(workspaceContainer);
-    var selectionWorkspace = Blockly.inject(workspaceContainer, {
-        media: '../../media/',
-        trashcan: false
-    });
-
     // get blocks for workspace
     var variables = Blockly.Variables.allVariables(workspace, true, true);
     var block = Blockly.Variables.getSelectorBlock();
     var parent = block.getParent();
     var blocks = [];
+
+    function addOption() {
+        // create container for button and workspace
+        var itemContainer = document.createElement('div');
+        itemContainer.id = variables[i].name;
+        itemContainer.classList.add(variables[i].type);
+        container.appendChild(itemContainer);
+
+        // attach button
+        var selectButton = document.createElement('div');
+        itemContainer.appendChild(selectButton);
+        selectButton.classList.add('fancybuttons');
+        selectButton.classList.add(variables[i].type);
+        selectButton.textContent = 'Select:';
+        selectButton.onclick = Blockly.modalWindow.selectVariable.select;
+
+        // attach workspace
+        var workspaceContainer = document.createElement('div');
+        workspaceContainer.classList.add('workspaceContainer');
+        itemContainer.appendChild(workspaceContainer);
+        var selectionWorkspace = Blockly.inject(workspaceContainer, {
+            media: '../../media/',
+            trashcan: false
+        });
+        // add workspace object to container
+        resizeWorkspace(selectionWorkspace, workspaceContainer, 14, 75);
+        blendWorkspace(selectionWorkspace);
+
+        // put block into workspace
+        var block = Blockly.Variables.newVariableBlock({
+            "name": variables[i].name,
+            "type": variables[i].type
+        });
+        block = Blockly.Xml.domToBlock(selectionWorkspace, block);
+        moveBlockToCenter(block, selectionWorkspace)
+        makeBlockNonInteractable(block);
+    }
+
     if(parent) {
         // if we have a parent, limit blocks
 
@@ -324,13 +311,7 @@ Blockly.modalWindow.selectVariable = function() {
             for(var j = 0; j < typeVecs.length; j++) {
                 // if we have a match then break out
                 if(variables[i].type == typeVecs[j][parentInput]) {
-                    var block = Blockly.Variables.newVariableBlock({
-                        "name": variables[i].name,
-                        "type": variables[i].type
-                    });
-                    makeBlockNonInteractable(block);
-                    // add on click event to block
-                    blocks.push(Blockly.Xml.domToBlock(selectionWorkspace, block));
+                    addOption();
                     break;
                 }
             }
@@ -338,37 +319,8 @@ Blockly.modalWindow.selectVariable = function() {
     } else {
         // else all variables
         for(var i = 0; i < variables.length; i++) {
-            var block = Blockly.Variables.newVariableBlock({
-                "name": variables[i].name,
-                "type": variables[i].type
-            });
-            blocks.push(Blockly.Xml.domToBlock(selectionWorkspace, block));
-
-            makeBlockNonInteractable(blocks[i]);
-            // add on click event to block
-            var svg = blocks[i].svgGroup_;
-            svg.setAttribute('onclick', 'Blockly.modalWindow.selectVariable.select');
-            console.log();
+            addOption()
         }
-    }
-
-    // set a size for the container
-    blendWorkspace(selectionWorkspace);
-    workspaceContainer.style.width = '14em';
-    // scale height to amount of blocks
-    // should account for differently sized blocks, eg. nested lists
-    workspaceContainer.style.height = blocks.length * 2.75 + 'em';
-    // then do a resize
-    Blockly.svgResize(selectionWorkspace);
-
-    // organise blocks in workspace
-    var y = 10; // increased per loop
-    for(var i = 0; i < blocks.length; i++) {
-        var x = selectionWorkspace.getWidth() / 2 - blocks[i].width / 2;
-
-        blocks[i].moveBy(x, y);
-
-        y = y + blocks[i].height + 20; // height of block + margin
     }
 
     // buttons
@@ -1086,8 +1038,10 @@ Blockly.modalWindow.selectVariable.select = function() {
     }
     var block = Blockly.Variables.getSelectorBlock();
 
-    block.varName = this.textContent;
-    block.varType = findType(this.classList);
+    // get block from container structure
+    var parent = this.parentElement;
+    block.varName = parent.id;
+    block.varType = findType(parent.classList);
 
     Blockly.modalWindow.dispose();
     Blockly.modalWindow.backdrop.dispose();
