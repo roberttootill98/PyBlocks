@@ -1893,6 +1893,15 @@ Blockly.BlockSvg.prototype.removeDragging = function() {
 };
 
 Blockly.BlockSvg.prototype.render = function(opt_bubble) {
+    if(this.outputsAList()) {
+        var outputTypes = this.getOutputTypes();
+        var listAmount = 0;
+        for(var i = 0; i < outputTypes.length; i++) {
+            listAmount = outputTypes[i].split("*").length - 1;
+        }
+        this.listAmount = listAmount;
+    }
+
     this.renderNoColour(opt_bubble);
     this.updateColour();
 };
@@ -2026,7 +2035,9 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
             console.log("2 expression row thickness",inputRows[0].height );
         }*/
         // Compute minimum input size.
+        // add to render height per optional item, eg sawtooth
         input.renderHeight = Blockly.BlockSvg.MIN_BLOCK_Y;
+        // input.renderHeight = input.renderHeight + 6 * this.svgListSawtooth.length;
         // The width is currently only needed for inline value inputs.
         if (isInline && input.type == Blockly.INPUT_VALUE) {
             slotNumber++;
@@ -2235,17 +2246,12 @@ Blockly.BlockSvg.prototype.renderDraw_ = function(iconWidth, inputRows) {
     this.renderDrawBottom_(steps, holeSteps, connectionsXY, cursorY);
     this.renderDrawLeft_(steps, holeSteps, connectionsXY, cursorY);
 
+    // if we are outputting a list then increase block size per sawtooth
     if(this.outputsAList()) {
-        var outputTypes = this.getOutputTypes();
-        var listAmount = 0;
-        for(var i = 0; i < outputTypes.length; i++) {
-            listAmount = outputTypes[i].split("*").length - 1;
-        }
-
         // increase block height per sawtooth to be added
         var seperationDistance = 6;
         var index = steps.indexOf('v') + 1;
-        steps[index] = steps[index] + seperationDistance * listAmount;
+        steps[index] = steps[index] + seperationDistance * this.listAmount;
     }
 
     var pathString = steps.join(' '); // + '\n' + inlineSteps.join(' ');
@@ -2287,10 +2293,9 @@ Blockly.BlockSvg.prototype.renderDraw_ = function(iconWidth, inputRows) {
     }
     // =================
     if (this.outputConnection && this.outputsAList()) {
-        // make sawtooth visible - iterate through all sawtooth svgs attached to block
-        // how should we handle a situation where we may output a variable amount of lists based on the input -- does this scneario exist?
-
-        for(var i = 0; i < listAmount; i++) {
+        // add sawtooth svgs
+        // if there is a variable amount, then don't add one at all
+        for(var i = 0; i < this.listAmount; i++) {
             var sawToothSteps = [];
             // adjust height per sawtooth added
             // 'M', x coord, y coord
