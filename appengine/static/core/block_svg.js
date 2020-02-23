@@ -61,6 +61,9 @@ Blockly.BlockSvg = function() {
 
     /** @type {Array<!SVGElement>} */
     this.svgListSawtooth = [];
+    // svgListSawtooth stuff
+    this.listAmount = 0;
+    this.seperationDistance = 6;
 
     //console.log("CREATING BLOCK SVG");
 
@@ -2037,7 +2040,6 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
         // Compute minimum input size.
         // add to render height per optional item, eg sawtooth
         input.renderHeight = Blockly.BlockSvg.MIN_BLOCK_Y;
-        // input.renderHeight = input.renderHeight + 6 * this.svgListSawtooth.length;
         // The width is currently only needed for inline value inputs.
         if (isInline && input.type == Blockly.INPUT_VALUE) {
             slotNumber++;
@@ -2124,10 +2126,24 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
 
     }
 
+    // before we hack heights, adjust heights to account for extra svg elements
+    // eg. sawteeth on inputs
+    // adjust for highest amount of inputs
+    // iterate through inputs and check for max amount of sawteeth
+    for(var i = 0, row; row = inputRows[i]; i++) {
+        var connection = row[0].connection;
+        if(connection) {
+           var targetConnection = connection.targetConnection;
+           if(targetConnection) {
+               row.height = row.height + 6 * targetConnection.sourceBlock_.listAmount;
+           }
+        }
+    }
+
+
     // HACK to adjust height of rows in statement blocks
     // Another HACK to cater for start block row height
     if (!this.outputConnection) {
-
         if (this.type == "python_start") {
             for (var i = 0, row; row = inputRows[i]; i++) {
                 if (i == 0) {
@@ -2137,9 +2153,8 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
                 }
             }
         }
+
         for (var i = 0, row; row = inputRows[i]; i++) {
-
-
             if (i % 2 == 0 || this.type == "python_comment") {
                 // row with inputs
                 if (inputRows[i].height < Blockly.BlockSvg.MIN_STMT_BLOCK_Y) {
@@ -2249,9 +2264,8 @@ Blockly.BlockSvg.prototype.renderDraw_ = function(iconWidth, inputRows) {
     // if we are outputting a list then increase block size per sawtooth
     if(this.outputsAList()) {
         // increase block height per sawtooth to be added
-        var seperationDistance = 6;
         var index = steps.indexOf('v') + 1;
-        steps[index] = steps[index] + seperationDistance * this.listAmount;
+        steps[index] = steps[index] + this.seperationDistance * this.listAmount;
     }
 
     var pathString = steps.join(' '); // + '\n' + inlineSteps.join(' ');
@@ -2300,7 +2314,7 @@ Blockly.BlockSvg.prototype.renderDraw_ = function(iconWidth, inputRows) {
             // adjust height per sawtooth added
             // 'M', x coord, y coord
             //sawToothSteps.push('M', 0, this.height + i * 4);
-            sawToothSteps.push('M', 0, this.height + (i + 1) * seperationDistance);
+            sawToothSteps.push('M', 0, this.height + (i + 1) * this.seperationDistance);
             sawToothSteps.push('v',-2);
             // try to offset width so sawtooth svgs do not unline underneath eachother
             var numTeeth = Math.round(this.width / 12);
@@ -2564,7 +2578,9 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, holeSteps,
 
                             var sawTooth = Blockly.createSvgElement('path', {}, this.svgGroup_);
                             var sawToothSteps = [];
-                            sawToothSteps.push('M', indicatorX, indicatorY + Blockly.BlockSvg.INDICATOR_HEIGHT);
+                            // account for list amount here
+                            sawToothSteps.push('M', indicatorX, indicatorY +
+                              Blockly.BlockSvg.INDICATOR_HEIGHT + 6 * this.listAmount);
                             sawToothSteps.push('v',-2);
                             for (var i = 0; i < 3; i++) {
                               sawToothSteps.push('l 6 -6');
