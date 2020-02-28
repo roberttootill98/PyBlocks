@@ -251,6 +251,10 @@ Blockly.modalWindow.selectVariable = function() {
     container.appendChild(title);
     title.textContent = 'Select a Variable';
 
+    // table approach
+    var table = document.createElement('table');
+    container.appendChild(table);
+
     // get blocks for workspace
     var variables = Blockly.Variables.allVariables(workspace, true, true);
     var block = Blockly.Variables.getSelectorBlock();
@@ -259,23 +263,35 @@ Blockly.modalWindow.selectVariable = function() {
 
     function addOption() {
         // create container for button and workspace
+        /*
         var itemContainer = document.createElement('div');
         itemContainer.id = variables[i].name;
         itemContainer.classList.add(variables[i].type);
         container.appendChild(itemContainer);
+        */
+        // create row for these items
+        var row = document.createElement('tr');
+        table.appendChild(row);
+        row.id = variables[i].name + '/' + variables[i].type;
 
         // attach button
-        var selectButton = document.createElement('div');
-        itemContainer.appendChild(selectButton);
+        var selectTD = document.createElement('td');
+        row.appendChild(selectTD);
+        var selectButton = document.createElement('button');
+        selectTD.appendChild(selectButton);
+        //itemContainer.appendChild(selectButton);
         selectButton.classList.add('fancybuttons');
-        selectButton.classList.add(variables[i].type);
+        selectButton.classList.add('selectButton');
         selectButton.textContent = 'Select:';
         selectButton.onclick = Blockly.modalWindow.selectVariable.select;
 
         // attach workspace
+        var workspaceTD = document.createElement('td');
+        row.appendChild(workspaceTD);
         var workspaceContainer = document.createElement('div');
         workspaceContainer.classList.add('workspaceContainer');
-        itemContainer.appendChild(workspaceContainer);
+        workspaceTD.appendChild(workspaceContainer);
+        //itemContainer.appendChild(workspaceContainer);
         var selectionWorkspace = Blockly.inject(workspaceContainer, {
             media: '../../media/',
             trashcan: false
@@ -324,20 +340,30 @@ Blockly.modalWindow.selectVariable = function() {
     }
 
     // buttons
+    /*
     var buttonContainer = document.createElement('div');
     container.appendChild(buttonContainer);
+    */
+    var buttonRow = document.createElement('tr');
+    table.appendChild(buttonRow);
 
     // create new button
+    var createTD = document.createElement('td');
+    buttonRow.appendChild(createTD);
     var create = document.createElement('button');
-    buttonContainer.appendChild(create);
+    //buttonContainer.appendChild(create);
+    createTD.appendChild(create);
     create.classList.add('fancybuttons');
     create.classList.add('modalButtons');
     create.textContent = 'Create a New Variable';
     create.onclick = Blockly.modalWindow.selectVariable.newVariable;
 
     // cancel button
+    var cancelTD = document.createElement('td');
+    buttonRow.appendChild(cancelTD);
     var cancel = document.createElement('button');
-    buttonContainer.appendChild(cancel);
+    //buttonContainer.appendChild(cancel);
+    cancelTD.appendChild(cancel);
     cancel.classList.add('fancybuttons');
     cancel.classList.add('modalButtons');
     cancel.textContent = 'Cancel';
@@ -406,7 +432,6 @@ Blockly.modalWindow.createVariable = function(x, y) {
     initTypeInputs();
 
     // block preview
-
     // create new workspace on modal window
     var previewContainer = document.createElement('div');
     previewContainer.id = 'previewContainer';
@@ -452,9 +477,13 @@ Blockly.modalWindow.createVariable = function(x, y) {
     updatePreviewType();
 
     // buttons
+    var buttonContainer = document.createElement('div');
+    buttonContainer.id = 'buttonContainer';
+    container.appendChild(buttonContainer);
+
     var create = document.createElement('button');
     create.id = 'createButton';
-    container.appendChild(create);
+    buttonContainer.appendChild(create);
     create.classList.add('fancybuttons');
     create.classList.add('modalButtons');
     create.textContent = 'Create';
@@ -462,8 +491,7 @@ Blockly.modalWindow.createVariable = function(x, y) {
     create.disabled = true;
 
     var cancel = document.createElement('button');
-    container.appendChild(cancel);
-
+    buttonContainer.appendChild(cancel);
     cancel.classList.add('fancybuttons');
     cancel.classList.add('modalButtons');
     cancel.textContent = 'Cancel';
@@ -1035,9 +1063,9 @@ Blockly.modalWindow.selectVariable.select = function() {
     var block = Blockly.Variables.getSelectorBlock();
 
     // get block from container structure
-    var parent = this.parentElement;
-    block.varName = parent.id;
-    block.varType = parent.classList[0];
+    var id = this.parentElement.parentElement.id.split('/');
+    block.varName = id[0];
+    block.varType = id[1];
 
     Blockly.modalWindow.dispose();
     Blockly.modalWindow.backdrop.dispose();
