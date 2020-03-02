@@ -1549,6 +1549,10 @@ Blockly.Block.prototype.legalDrop = function(holeTypes, requiresVariable) {
             types.indexOf("*matching") != -1);
     };
 
+    var includesAnything = function(types) {
+      return (types.indexOf("anything") != -1);
+    }
+
     if (requiresVariable && !['variables_get', 'python_variable_selector'].includes(this.type)) {
         return false;
     }
@@ -1557,6 +1561,9 @@ Blockly.Block.prototype.legalDrop = function(holeTypes, requiresVariable) {
         return true;
     }
     if (includesGreyList(holeTypes) && this.outputsAList()) {
+        return true;
+    }
+    if (includesAnything(holeTypes)) {
         return true;
     }
     var outputTypes = this.getOutputTypes();

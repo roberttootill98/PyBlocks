@@ -58,9 +58,13 @@ Blockly.Blocks['python_print'] = {
         this.appendDummyInput("CLOSE")
             .appendField(")");
         this.setInputsInline(true);
-        this.setTypeVecs([
+        /*this.setTypeVecs([
             ["any", "none"],
             ["*any", "none"]
+        ]);
+        */
+        this.setTypeVecs([
+            ["anything", "none"]
         ]);
         this.setPreviousStatement(true);
         this.setNextStatement(true);
