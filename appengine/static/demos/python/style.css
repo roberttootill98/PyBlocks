@@ -323,37 +323,47 @@ table#typetable {
     position: absolute;
     display: block;
     align: centre;
-    min-width: 15em;
-    width: 25%;
+    min-width: 20em;
+    width: 35%;
     padding: 1em;
     background-color: rgb(112, 128, 144); /* same as block palette */
     border-radius: 10px;
+}
+
+.label {
+    min-width: 4em;
+    margin: auto;
+    padding: 0;
+    display: inline-block;
+}
+
+#variableName {
+    max-width: 7em;
+}
+
+.variableTypeInput {
+    margin-top: 0.5em;
+    padding: 0.5em;
+}
+
+#buttonContainer {
+    margin: auto;
+    max-width: 12em;
 }
 
 .modalButtons {
     margin: 1em;
 }
 
-.variable {
-    margin: 0.5em;
-    padding: 0.5em;
-    list-style-type: none;
-    border-style: solid;
-    border-width: 0.05em;
-    border-color: black;
-}
-.variable:hover {
-    cursor: pointer;
+.selectButton {
+    margin: 0;
+    padding: 7px;
 }
 
-.label {
-    padding-right: 0;
+#previewContainer {
+    margin: auto;
 }
 
-#variableName {
-    margin-left: 1em;
-}
-
-.variableTypeInput {
-    padding: 0.5em;
+#typeInputContainer {
+    display: inline-block;
 }

@@ -340,30 +340,35 @@ Blockly.modalWindow.selectVariable = function() {
     }
 
     // buttons
-    /*
     var buttonContainer = document.createElement('div');
     container.appendChild(buttonContainer);
-    */
+    buttonContainer.id = 'buttonContainer';
+    /*
     var buttonRow = document.createElement('tr');
     table.appendChild(buttonRow);
+    */
 
     // create new button
+    /*
     var createTD = document.createElement('td');
     buttonRow.appendChild(createTD);
+    */
     var create = document.createElement('button');
-    //buttonContainer.appendChild(create);
-    createTD.appendChild(create);
+    buttonContainer.appendChild(create);
+    //createTD.appendChild(create);
     create.classList.add('fancybuttons');
     create.classList.add('modalButtons');
-    create.textContent = 'Create a New Variable';
+    create.textContent = 'Create new';
     create.onclick = Blockly.modalWindow.selectVariable.newVariable;
 
     // cancel button
+    /*
     var cancelTD = document.createElement('td');
     buttonRow.appendChild(cancelTD);
+    */
     var cancel = document.createElement('button');
-    //buttonContainer.appendChild(cancel);
-    cancelTD.appendChild(cancel);
+    buttonContainer.appendChild(cancel);
+    //cancelTD.appendChild(cancel);
     cancel.classList.add('fancybuttons');
     cancel.classList.add('modalButtons');
     cancel.textContent = 'Cancel';
@@ -422,12 +427,17 @@ Blockly.modalWindow.createVariable = function(x, y) {
 
     // type input
     var typeContainer = document.createElement('div');
-    typeContainer.id = 'typeInputContainer';
     inputContainer.appendChild(typeContainer);
+    typeContainer.id = 'typeContainer';
+    // label
     var typeLabel = document.createElement('label');
     typeLabel.classList.add('label');
     typeLabel.textContent = 'Type:';
     typeContainer.appendChild(typeLabel);
+    // inputs
+    var typeInputContainer = document.createElement('span');
+    typeContainer.appendChild(typeInputContainer);
+    typeInputContainer.id = 'typeInputContainer';
 
     initTypeInputs();
 
