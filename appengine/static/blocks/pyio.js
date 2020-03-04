@@ -64,7 +64,7 @@ Blockly.Blocks['python_print'] = {
         ]);
         */
         this.setTypeVecs([
-            ["anything", "none"]
+            ["any", "none"]
         ]);
         this.setPreviousStatement(true);
         this.setNextStatement(true);

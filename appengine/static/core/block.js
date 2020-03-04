@@ -1549,8 +1549,8 @@ Blockly.Block.prototype.legalDrop = function(holeTypes, requiresVariable) {
             types.indexOf("*matching") != -1);
     };
 
-    var includesAnything = function(types) {
-      return (types.indexOf("anything") != -1);
+    var includesAny = function(types) {
+      return (types.indexOf("any") != -1);
     }
 
     if (requiresVariable && !['variables_get', 'python_variable_selector'].includes(this.type)) {
@@ -1563,7 +1563,7 @@ Blockly.Block.prototype.legalDrop = function(holeTypes, requiresVariable) {
     if (includesGreyList(holeTypes) && this.outputsAList()) {
         return true;
     }
-    if (includesAnything(holeTypes)) {
+    if (includesAny(holeTypes)) {
         return true;
     }
     var outputTypes = this.getOutputTypes();
@@ -1572,6 +1572,9 @@ Blockly.Block.prototype.legalDrop = function(holeTypes, requiresVariable) {
         return true;
     }
     if (includesGreyList(outputTypes) && includesListType(holeTypes)) {
+        return true;
+    }
+    if (includesAny(outputTypes)) {
         return true;
     }
     for (var i = 0; i < outputTypes.length; i++) {
@@ -1695,7 +1698,7 @@ Blockly.Block.prototype.unify = function(other, selfPos, otherPos) {
             console.log("UNIFY considering otherType at position",
                 otherPos, ": ", otherType);
             if (thisType == otherType ||
-                (otherType == "any" && thisType[0] != "*") ||
+                (otherType == "any") ||
                 (otherType == "matching" && thisType[0] != "*") ||
                 (otherType == "*any" && thisType[0] == "*") ||
                 (otherType == "*matching" && thisType[0] == "*")) {
@@ -1715,7 +1718,7 @@ Blockly.Block.prototype.unify = function(other, selfPos, otherPos) {
                     console.log("UNIFY matching 3 - renamed: ", renamedList);
                     newTypeVecs.push(renamedList);
                 }
-            } else if ((thisType == "any" && otherType[0] != "*") ||
+            } else if ((thisType == "any") ||
                 (thisType == "*any" && otherType[0] == "*")) {
                 if (!typesInclude(newTypeVecs, thisTypeVec)) {
                     console.log("UNIFY matching 4 - keeping: ", thisTypeVec);

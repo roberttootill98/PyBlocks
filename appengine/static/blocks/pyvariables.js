@@ -153,8 +153,7 @@ Blockly.Blocks['python_variable_selector'] = {
         this.setOutput(true);
 
         this.setTypeVecs([
-          ["any"],
-          ["*any"]
+          ["any"]
         ]);
     },
 
@@ -231,8 +230,7 @@ Blockly.Blocks['python_variable_selector_assignment'] = {
         this.setNextStatement(true);
 
         this.setTypeVecs([
-          ["any", "any", "none"],
-          ["*any", "*any", "none"]
+          ["any", "any", "none"]
         ])
 
         this.inWorkspace = false;
