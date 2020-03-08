@@ -64,7 +64,7 @@ Blockly.BlockSvg = function() {
     // svgListSawtooth stuff
     this.listAmount = 0;
     this.seperationDistance = 6;
-    this.whiteSeperationDistance = 4;
+    this.whiteSeperationDistance = 3;
     this.greySeperationDistance = 6;
 
     //console.log("CREATING BLOCK SVG");
@@ -1571,7 +1571,12 @@ Blockly.BlockSvg.prototype.updateColour = function() {
                 }
                 // delete svgs
                 for(var j = i; j < this.svgListSawtooth.length; j++) {
-                    this.svgListSawtooth[j].remove();
+                    if(j == 0) {
+                        this.svgListSawtooth[j].remove();
+                    } else {
+                        this.svgListSawtooth[j][0].remove();
+                        this.svgListSawtooth[j][1].remove();
+                    }
                 }
                 // cut elements off from array
                 this.svgListSawtooth.length = i;
@@ -2267,8 +2272,8 @@ Blockly.BlockSvg.prototype.renderDraw_ = function(iconWidth, inputRows) {
     if(this.outputsAList()) {
         // increase block height per sawtooth to be added
         var initialDistance = this.seperationDistance - this.whiteSeperationDistance;
-        var whiteSawtoothHeight = Math.ceil(this.listAmount / 2) * this.whiteSeperationDistance;
-        var greySawtoothHeight = Math.floor(this.listAmount / 2) * this.greySeperationDistance;
+        var whiteSawtoothHeight = this.listAmount * this.whiteSeperationDistance;
+        var greySawtoothHeight = (this.listAmount - 1) * this.greySeperationDistance;
 
         var index = steps.indexOf('v') + 1;
         steps[index] = steps[index] + initialDistance + whiteSawtoothHeight + greySawtoothHeight;
@@ -2316,57 +2321,62 @@ Blockly.BlockSvg.prototype.renderDraw_ = function(iconWidth, inputRows) {
         // add sawtooth svgs
         // if there is a variable amount, then don't add one at all
 
-        // alternates between grey and white, starts white
-        var colour = 'white';
-        // seperation distance varies between colours
-        var seperationDistance = this.whiteSeperationDistance;
         // starting height
-        var drawHeight = this.height + this.seperationDistance - seperationDistance;
+        var drawHeight = this.height + this.seperationDistance - this.whiteSeperationDistance;
 
-        for(var i = 0; i < this.listAmount; i++) {
-            var sawToothSteps = [];
-            // adjust height per sawtooth added
-            // 'M', x coord, y coord
-            drawHeight = drawHeight + seperationDistance;
-            sawToothSteps.push('M', 0, drawHeight);
-            sawToothSteps.push('v', -2);
+        // add a first sawtooth with no border
+        var svgList = this.svgListSawtooth;
+        var svgPath;
+        if(!svgList[0]) {
+            svgPath = Blockly.createSvgElement('path', {}, this.svgGroup_);
+            svgList[0] = svgPath;
+        }
+        drawHeight = drawSawtooth(this, svgPath[0], this.whiteSeperationDistance, 'white', drawHeight);
 
-            var numTeeth = Math.round(this.width / 12);
-            var toothWidth = this.width / (numTeeth * 2);
-
-            for(var j = 0; j < numTeeth; j++) {
-              sawToothSteps.push(`l ${toothWidth} -${toothWidth}`);
-              sawToothSteps.push(`l ${toothWidth} ${toothWidth}`);
-            }
-
-            sawToothSteps.push('v 2');
-            sawToothSteps.push('z');
-
-            var sawtoothString = sawToothSteps.join(' ');
-
+        // for subsequent sawteeth add an addtional border sawtooth
+        for(var i = 1; i < this.listAmount; i++) {
             // if svg path doesn't exist at index, create a new one
-            var svgList = this.svgListSawtooth;
-            if(svgList[i]) {
-                var svgPath = svgList[i];
-            } else {
-                var svgPath = Blockly.createSvgElement('path', {}, this.svgGroup_);
-                svgList[i] = svgPath;
+            if(!svgList[i]) {
+                var whiteSvgPath = Blockly.createSvgElement('path', {}, this.svgGroup_);
+                var greySvgPath = Blockly.createSvgElement('path', {}, this.svgGroup_);
+                svgList[i] = [whiteSvgPath, greySvgPath];
             }
-            svgPath.setAttribute('d', sawtoothString);
 
-            svgPath.setAttribute('fill', colour);
-
-            // change colour for the next iteration
-            if(colour == 'white') {
-              colour = 'grey';
-              seperationDistance = this.greySeperationDistance;
-            } else if(colour == 'grey') {
-              colour = 'white';
-              seperationDistance = this.whiteSeperationDistance;
-            }
+            // draw grey sawtooth
+            drawHeight = drawSawtooth(this, svgList[i][0], this.greySeperationDistance, 'grey', drawHeight);
+            // draw white sawtooth
+            drawHeight = drawSawtooth(this, svgList[i][1], this.whiteSeperationDistance, 'white', drawHeight);
         }
     }
-};
+}
+
+function drawSawtooth(block, svgPath, seperationDistance, colour, drawHeight) {
+    var sawToothSteps = [];
+    // adjust height per sawtooth added
+    // 'M', x coord, y coord
+    drawHeight = drawHeight + seperationDistance;
+    sawToothSteps.push('M', 0, drawHeight);
+    sawToothSteps.push('v', -2);
+
+    var numTeeth = Math.round(block.width / 12);
+    var toothWidth = block.width / (numTeeth * 2);
+
+    for(var i = 0; i < numTeeth; i++) {
+      sawToothSteps.push(`l ${toothWidth} -${toothWidth}`);
+      sawToothSteps.push(`l ${toothWidth} ${toothWidth}`);
+    }
+
+    sawToothSteps.push('v 2');
+    sawToothSteps.push('z');
+
+    var sawtoothString = sawToothSteps.join(' ');
+
+    svgPath.setAttribute('d', sawtoothString);
+
+    svgPath.setAttribute('fill', colour);
+
+    return drawHeight;
+}
 
 /**
  * Render the top edge of the block.
