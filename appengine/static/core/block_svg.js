@@ -2133,21 +2133,6 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
 
     }
 
-    // before we hack heights, adjust heights to account for extra svg elements
-    // eg. sawteeth on inputs
-    // adjust for highest amount of inputs
-    // iterate through inputs and check for max amount of sawteeth
-    for(var i = 0, row; row = inputRows[i]; i++) {
-        var connection = row[0].connection;
-        if(connection) {
-           var targetConnection = connection.targetConnection;
-           if(targetConnection) {
-               row.height = row.height + 6 * targetConnection.sourceBlock_.listAmount;
-           }
-        }
-    }
-
-
     // HACK to adjust height of rows in statement blocks
     // Another HACK to cater for start block row height
     if (!this.outputConnection) {
