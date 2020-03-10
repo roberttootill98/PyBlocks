@@ -2045,7 +2045,12 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
             console.log("2 expression row thickness",inputRows[0].height );
         }*/
         // Compute minimum input size.
-        input.renderHeight = Blockly.BlockSvg.MIN_BLOCK_Y;
+        input.unextendedHeight = Blockly.BlockSvg.MIN_BLOCK_Y;
+        // initial height is not extended - therefore the same
+        input.height = input.unextendedHeight;
+        // kept around for debug
+        //input.renderHeight = input.unextendedHeight;
+        //input.renderHeight = Blockly.BlockSvg.MIN_BLOCK_Y;
         // The width is currently only needed for inline value inputs.
         if (isInline && input.type == Blockly.INPUT_VALUE) {
             slotNumber++;
@@ -2077,13 +2082,11 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
                   }
                   input.listAmount = index++;
 
-                  input.unextendedHeight = input.renderHeight;
-
                   // adjust height
                   var gap = this.seperationDistance - this.whiteSeperationDistance;
                   var whiteSawtoothHeight = input.listAmount * this.whiteSeperationDistance;
                   var greySawtoothHeight = (input.listAmount - 1) * this.greySeperationDistance;
-                  input.height = input.renderHeight + gap + whiteSawtoothHeight + greySawtoothHeight;
+                  input.height = input.unextendedHeight + gap + whiteSawtoothHeight + greySawtoothHeight;
                 }
             }
         }
@@ -2092,7 +2095,8 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
         if (input.connection && input.connection.targetConnection) {
             var linkedBlock = input.connection.targetBlock();
             var bBox = linkedBlock.getHeightWidth();
-            input.renderHeight = Math.max(input.renderHeight, bBox.height);
+            //input.renderHeight = Math.max(input.renderHeight, bBox.height);
+            input.unextendedHeight = Math.max(input.unextendedHeight, bBox.height);
             input.renderWidth = bBox.width;
         }
         // Blocks have a one pixel shadow that should sometimes overhang.
@@ -2105,7 +2109,8 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
       input.renderHeight--;
   }*/
         //console.log(row.height, input.renderHeight);
-        row.height = Math.max(row.height, input.renderHeight);
+        //row.height = Math.max(row.height, input.renderHeight);
+        row.height = Math.max(row.height, input.unextendedHeight);
         //console.log(row.height);
         input.fieldWidth = 0;
         if (inputRows.length == 1) {
@@ -2543,12 +2548,26 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, holeSteps,
                         holeSteps.push('m', 0, Blockly.BlockSvg.STMT_ARGS_PADDING_TOP);
                     }
 
-                    holeSteps.push('v', input.renderHeight); //  + 1);
+                    if(input.listAmount > 0) {
+                        // if there is a reason to extend then extend
+                        holeSteps.push('v', input.height); //  + 1);
+                    } else {
+                        // else use normal height
+                        holeSteps.push('v', input.unextendedHeight); //  + 1);
+                    }
+                    //holeSteps.push('v', input.renderHeight); //  + 1);
                     holeSteps.push('h', /*Blockly.BlockSvg.TAB_WIDTH*/ -0 -
                         input.renderWidth);
 
                     // HACK
-                    holeSteps.push('v', -input.renderHeight); // - 1);
+                    if(input.listAmount > 0) {
+                        // if there is a reason to extend then extend
+                        holeSteps.push('v', -input.height); //  + 1);
+                    } else {
+                        // else use normal height
+                        holeSteps.push('v', -input.unextendedHeight); //  + 1);
+                    }
+                    //holeSteps.push('v', -input.renderHeight); // - 1);
                     holeSteps.push('z');
                     // ENDHACK
 
@@ -2566,7 +2585,8 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, holeSteps,
                             indicatorX -=
                                 (input.renderWidth + Blockly.BlockSvg.INDICATOR_WIDTH) / 2;
                         }
-                        var indicatorY = cursorY + input.renderHeight -
+                        //var indicatorY = cursorY + input.renderHeight -
+                        var indicatorY = cursorY + input.unextendedHeight -
                             Blockly.BlockSvg.INDICATOR_HEIGHT -
                             Blockly.BlockSvg.INDICATOR_GAP_Y;
                         if (!this.outputConnection) {
@@ -2649,7 +2669,6 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, holeSteps,
                             var width = background.getAttribute('width');
 
                             // draw first
-                            // minus border width
                             var drawHeight = input.unextendedHeight;
 
                             if(!svgList[1]) {
