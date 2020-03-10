@@ -2045,7 +2045,6 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
             console.log("2 expression row thickness",inputRows[0].height );
         }*/
         // Compute minimum input size.
-        // add to render height per optional item, eg sawtooth
         input.renderHeight = Blockly.BlockSvg.MIN_BLOCK_Y;
         // The width is currently only needed for inline value inputs.
         if (isInline && input.type == Blockly.INPUT_VALUE) {
@@ -2062,6 +2061,33 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
         } else {
             input.renderWidth = 0;
         }
+
+        // add to render height per optional item, eg. sawtooth
+        // check if we output a list
+        if(this.typeVecs.length > 0 && slotNumber >= 0) {
+            // check if any of the typeVecs have a list type
+            for(var j = 0; j < this.typeVecs.length; j++) {
+                var inputType = this.typeVecs[j][slotNumber];
+
+                if(inputType[0] == "*") {
+                  // add listAmount item
+                  var index = 0;
+                  while(inputType[index] == "*") {
+                    index++;
+                  }
+                  input.listAmount = index++;
+
+                  input.unextendedHeight = input.renderHeight;
+
+                  // adjust height
+                  var gap = this.seperationDistance - this.whiteSeperationDistance;
+                  var whiteSawtoothHeight = input.listAmount * this.whiteSeperationDistance;
+                  var greySawtoothHeight = (input.listAmount - 1) * this.greySeperationDistance;
+                  input.height = input.renderHeight + gap + whiteSawtoothHeight + greySawtoothHeight;
+                }
+            }
+        }
+
         // Adjust input size if there is a connection.
         if (input.connection && input.connection.targetConnection) {
             var linkedBlock = input.connection.targetBlock();
@@ -2309,19 +2335,17 @@ Blockly.BlockSvg.prototype.renderDraw_ = function(iconWidth, inputRows) {
     // =================
     if (this.outputConnection && this.outputsAList()) {
         // add sawtooth svgs
-        // if there is a variable amount, then don't add one at all
+        // add a first sawtooth with no border, continues to bottom of block
 
         // starting height
         var drawHeight = this.unextendedHeight + this.seperationDistance - this.whiteSeperationDistance;
 
-        // add a first sawtooth with no border, continues to bottom of block
         var svgList = this.svgListSawtooth;
-        var svgPath;
         if(!svgList[0]) {
-            svgPath = Blockly.createSvgElement('path', {}, this.svgGroup_);
+            var svgPath = Blockly.createSvgElement('path', {}, this.svgGroup_);
             svgList[0] = svgPath;
         }
-        drawHeight = drawSawtooth(this, svgList[0], this.whiteSeperationDistance, 'white', drawHeight, true);
+        drawHeight = drawSawtooth(this, svgList[0], this.width, 0, drawHeight, this.whiteSeperationDistance, 'white', true);
 
         // for subsequent sawteeth add an addtional border sawtooth
         for(var i = 1; i < this.listAmount; i++) {
@@ -2333,25 +2357,25 @@ Blockly.BlockSvg.prototype.renderDraw_ = function(iconWidth, inputRows) {
             }
 
             // draw grey sawtooth
-            drawHeight = drawSawtooth(this, svgList[i][0], this.greySeperationDistance, 'grey', drawHeight, false);
+            drawHeight = drawSawtooth(this, svgList[i][0], this.width, 0, drawHeight, this.greySeperationDistance, 'grey', false);
             // draw white sawtooth
-            drawHeight = drawSawtooth(this, svgList[i][1], this.whiteSeperationDistance, 'white', drawHeight, false);
+            drawHeight = drawSawtooth(this, svgList[i][1], this.width, 0, drawHeight, this.whiteSeperationDistance, 'white', false);
         }
     }
 }
 
-function drawSawtooth(block, svgPath, seperationDistance, colour, drawHeight, first) {
+function drawSawtooth(block, svgPath, width, x, y, seperationDistance, colour, first) {
     var sawToothSteps = [];
     // adjust height per sawtooth added
     // 'M', x coord, y coord
-    drawHeight = drawHeight + seperationDistance;
+    y = y + seperationDistance;
     // start position
     if(first) {
         // draw from bottom of block
-        sawToothSteps.push('M', 0, block.height);
+        sawToothSteps.push('M', x, block.height);
     } else {
-        // draw from drawHeight
-        sawToothSteps.push('M', 0, drawHeight);
+        // draw from y
+        sawToothSteps.push('M', x, y);
     }
 
     if(first) {
@@ -2361,8 +2385,8 @@ function drawSawtooth(block, svgPath, seperationDistance, colour, drawHeight, fi
         sawToothSteps.push('v', -2);
     }
 
-    var numTeeth = Math.round(block.width / 12);
-    var toothWidth = block.width / (numTeeth * 2);
+    var numTeeth = Math.round(width / 12);
+    var toothWidth = width / (numTeeth * 2);
 
     for(var i = 0; i < numTeeth; i++) {
       sawToothSteps.push(`l ${toothWidth} -${toothWidth}`);
@@ -2383,7 +2407,7 @@ function drawSawtooth(block, svgPath, seperationDistance, colour, drawHeight, fi
 
     svgPath.setAttribute('fill', colour);
 
-    return drawHeight;
+    return y;
 }
 
 /**
@@ -2557,7 +2581,7 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, holeSteps,
                         };
                         // Draw basic type indicator
 
-                        var createBasicIndicator = function(x, y) {
+                        var createBasicIndicator = function(x, y, block, input) {
                             var indicator = Blockly.createSvgElement('rect', {});
                             indicator.setAttribute('transform',
                                 'translate(' + indicatorX + ',' + indicatorY + ')');
@@ -2565,8 +2589,16 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, holeSteps,
                             indicator.setAttribute('y', 0);
                             indicator.setAttribute('width',
                                 Blockly.BlockSvg.INDICATOR_WIDTH);
-                            indicator.setAttribute('height',
-                                Blockly.BlockSvg.INDICATOR_HEIGHT);
+
+                            // add to height per list amount
+                            if(input) {
+                                // take away border width
+                                var height = input.height - 6;
+                            } else {
+                                var height = Blockly.BlockSvg.INDICATOR_HEIGHT;
+                            }
+                            indicator.setAttribute('height', height);
+
                             return indicator;
                         };
 
@@ -2600,7 +2632,7 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, holeSteps,
 
                         // draw list type indicator
                         if (params.list) {
-                            var background = createBasicIndicator(indicatorX, indicatorY);
+                            var background = createBasicIndicator(indicatorX, input.height, this, input);
                             //background.setAttribute('fill', 'white');
                             indicatorPair.list = [background];
                             //var group = Blockly.createSvgElement('g',{});
@@ -2609,28 +2641,42 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, holeSteps,
                             var tempListGapWidth = (Blockly.BlockSvg.INDICATOR_WIDTH -
                                 tempListRectWidth * 3) / 2;
 
-                            var sawTooth = Blockly.createSvgElement('path', {}, this.svgGroup_);
-                            var sawToothSteps = [];
                             // account for list amount here
-                            sawToothSteps.push('M', indicatorX, indicatorY +
-                              Blockly.BlockSvg.INDICATOR_HEIGHT + 6 * this.listAmount);
-                            sawToothSteps.push('v',-2);
-                            for (var i = 0; i < 3; i++) {
-                              sawToothSteps.push('l 6 -6');
-                              sawToothSteps.push('l 6 6');
+                            var svgList = indicatorPair.list;
+
+                            var listAmount = input.listAmount;
+
+                            var width = background.getAttribute('width');
+
+                            // draw first
+                            // minus border width
+                            var drawHeight = input.unextendedHeight;
+
+                            if(!svgList[1]) {
+                                var svgPath = Blockly.createSvgElement('path', {}, this.svgGroup_);
+                                svgList[1] = svgPath;
                             }
-                            sawToothSteps.push('v 2');
-                            sawToothSteps.push('z');
-                            var sawtoothString = sawToothSteps.join(' ');
-                            sawTooth.setAttribute('d', sawtoothString);
-                            sawTooth.setAttribute('fill', 'white');
-                            indicatorPair.list.push(sawTooth);
+                            drawHeight = drawSawtooth(input, svgList[1], width, indicatorX, drawHeight, this.whiteSeperationDistance, 'white', true);
+                            drawHeight = drawHeight + this.whiteSeperationDistance;
+
+                            for(var i = 2; i < listAmount * 2 - 1; i = i + 2) {
+                                if(!svgList[i]) {
+                                    var whiteSvgPath = Blockly.createSvgElement('path', {}, this.svgGroup_);
+                                    svgList[i] = whiteSvgPath;
+                                    var greySvgPath = Blockly.createSvgElement('path', {}, this.svgGroup_);
+                                    svgList[i + 1] = greySvgPath;
+                                }
+
+                                // draw grey sawtooth
+                                drawHeight = drawSawtooth(input, svgList[i], width, indicatorX, drawHeight, this.greySeperationDistance, 'grey', false);
+                                // draw white sawtooth
+                                drawHeight = drawSawtooth(input, svgList[i + 1], width, indicatorX, drawHeight, this.whiteSeperationDistance, 'white', false);
+                            }
 
                             if (slotNumber === 0 && this.lhsVarOnly) {
                                 var varInd = Blockly.BlockSvg.addIndicatorLabel(indicatorX, indicatorY, "var");
                                 indicatorPair.varInd.push(varInd);
                             }
-                            //indicatorPair.list = ;
                         }
                         //this.indicators.push(indicatorPair);
                         this.indicators[slotNumber] = indicatorPair;
