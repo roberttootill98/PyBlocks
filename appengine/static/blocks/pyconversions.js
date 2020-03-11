@@ -111,8 +111,7 @@ Blockly.Blocks['python_bool'] = {
             .appendField(")");
         this.setInputsInline(true);
         this.setTypeVecs([
-            ["any", "bool"],
-            ["*any", "bool"]
+            ["any", "bool"]
         ]);
         this.setOutput(true);
     },

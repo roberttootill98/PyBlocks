@@ -32,9 +32,11 @@ var EQUALITY_TYPE_VECS = [
     ["matching", "matching", "bool"],
     ["int", "float", "bool"],
     ["float", "int", "bool"],
+    /*
     ["*matching", "*matching", "bool"],
     ["*int", "*float", "bool"],
     ["*float", "*int", "bool"],
+    */
 ];
 
 var ORDERING_TYPE_VECS = [
@@ -43,11 +45,13 @@ var ORDERING_TYPE_VECS = [
     ["float", "float", "bool"],
     ["int", "float", "bool"],
     ["float", "int", "bool"],
+    /*
     ["*str", "*str", "bool"],
     ["*int", "*int", "bool"],
     ["*float", "*float", "bool"],
     ["*int", "*float", "bool"],
     ["*float", "*int", "bool"],
+    */
 ];
 
 Blockly.Blocks['python_equals'] = {
