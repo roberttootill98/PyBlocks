@@ -726,7 +726,8 @@ function typeInputListener(ev) {
         // prompt some more ui
         switch(lastInput.value) {
            case "list of...":
-              if(parent && !unrestrictedTypeVec(parent)) {
+              if(parent && !unrestrictedTypeVec(parent) &&
+                  block.type == 'python_variable_selector') {
                   // should be last level
                   var currentLevel = getCurrentLevel(typeVecObject, [])[0];
 
@@ -796,7 +797,8 @@ function initTypeInputs() {
     var block = Blockly.Variables.getSelectorBlock();
     var parent = block.getParent();
 
-    if(parent && !unrestrictedTypeVec(parent)) {
+    if(parent && !unrestrictedTypeVec(parent) &&
+        block.type == 'python_variable_selector') {
         var typeVecObject = constructTypeVecObject(parent);
         var returnKeys = getCurrentLevel(typeVecObject, [])[1];
 
