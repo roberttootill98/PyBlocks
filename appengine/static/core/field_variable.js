@@ -452,15 +452,8 @@ Blockly.modalWindow.createVariable = function(x, y) {
         trashcan: false
     });
 
-    blendWorkspace(previewWorkspace);
-
-    // set a size for the container
-    previewContainer.style.width = '14em';
-    previewContainer.style.height = '75px'; //'5em';
-    // then do a resize
-    Blockly.svgResize(previewWorkspace);
-
     Blockly.modalWindow.preview.workspace = previewWorkspace;
+    Blockly.modalWindow.preview.workspace.padding = 20;
 
     var previewType = document.querySelectorAll(".variableTypeInput")[0].value;
     Blockly.modalWindow.preview.type = previewType;
@@ -481,6 +474,11 @@ Blockly.modalWindow.createVariable = function(x, y) {
 
     Blockly.modalWindow.preview.block = Blockly.Xml.domToBlock(previewWorkspace, block);
     var previewBlock = Blockly.modalWindow.preview.block;
+
+    // update workspace
+    blendWorkspace(previewWorkspace);
+    resizePreviewWorkspace();
+
     // move previewBlock to centre of workspace
     moveBlockToCenter(previewBlock, previewWorkspace);
     makeBlockNonInteractable(previewBlock);
@@ -514,37 +512,6 @@ Blockly.modalWindow.createVariable = function(x, y) {
     reason.style.display = 'none';
 }
 
-function blendWorkspace(blockWorkspace) {
-    // make workspace blend into modal window
-    // set fill
-    //blockWorkspace.svgBackground_.style.fill = container.style.background-color;
-    blockWorkspace.svgBackground_.style.fill = '#708090';
-    // remove border
-}
-
-function moveBlockToCenter(block, blockWorkspace) {
-    // put in top left
-    var returnX = -block.xy_.x;
-    var returnY = -block.xy_.y;
-    block.moveBy(returnX, returnY);
-
-    // move from top left
-    var moveX = blockWorkspace.getWidth() / 2 - block.width / 2;
-    var moveY = 25;
-    block.moveBy(moveX, moveY);
-
-    // update xy_
-    block.xy_.x = moveX;
-    block.xy_.y = moveY;
-}
-
-function makeBlockNonInteractable(block) {
-    // make previewBlock non interactable
-    block.movable_ = false;
-    block.editable_ = false;
-    block.deletable_ = false;
-    block.contextMenu = false;
-}
 function dragEndModalWindow(ev) {
     var x = ev.x;
     var y = ev.y;
@@ -576,6 +543,67 @@ function dragEndModalWindow(ev) {
     // adjust style
     el.style.top = top + 'px';
     el.style.left = left + 'px';
+}
+
+function blendWorkspace(blockWorkspace) {
+    // make workspace blend into modal window
+    // set fill
+    //blockWorkspace.svgBackground_.style.fill = container.style.background-color;
+    blockWorkspace.svgBackground_.style.fill = '#708090';
+    // remove border
+}
+
+// resizes preview workspace according to type of preview block
+function resizePreviewWorkspace() {
+    // infer width and height from type of preview block
+    var previewBlock = Blockly.modalWindow.preview.block;
+    var previewType = Blockly.modalWindow.preview.type;
+
+    //var width = 14; // constant
+    // scale workspace height to block height
+    // 6 = seperation distance for sawteeth
+    //var height = 75 + previewBlock.svgListSawtooth.length * 6;
+    var blockWorkspace = Blockly.modalWindow.preview.workspace;
+
+    var padding = blockWorkspace.padding;
+    var width = Math.round(previewBlock.width) + padding;
+    var height = previewBlock.height + padding;
+
+    resizeWorkspace(blockWorkspace, document.getElementById('previewContainer'), width, height);
+}
+
+function resizeWorkspace(blockWorkspace, container, width, height) {
+    // set a size for the container
+    //container.style.width = width + 'em';
+    container.style.width = width + 'px';
+    container.style.height = height + 'px';
+    // then do a resize
+    Blockly.svgResize(blockWorkspace);
+}
+
+function moveBlockToCenter(block, blockWorkspace) {
+    // put in top left
+    var returnX = -block.xy_.x;
+    var returnY = -block.xy_.y;
+    block.moveBy(returnX, returnY);
+
+    // move from top left
+    var workspaceMetrics = blockWorkspace.getMetrics();
+    var moveX = workspaceMetrics.viewWidth / 2 - Math.round(block.width) / 2;
+    var moveY = workspaceMetrics.viewHeight / 2 - block.height / 2;
+    block.moveBy(moveX, moveY);
+
+    // update xy_
+    block.xy_.x = moveX;
+    block.xy_.y = moveY;
+}
+
+function makeBlockNonInteractable(block) {
+    // make previewBlock non interactable
+    block.movable_ = false;
+    block.editable_ = false;
+    block.deletable_ = false;
+    block.contextMenu = false;
 }
 
 // NAME INPUT FUNCTIONS
@@ -611,6 +639,7 @@ function nameInputListener(ev) {
 
         preview.name = variableName;
 
+        resizePreviewWorkspace();
         moveBlockToCenter(Blockly.modalWindow.preview.block, Blockly.modalWindow.preview.workspace);
     } else {
         createButton.disabled = true;
@@ -755,28 +784,7 @@ function typeInputListener(ev) {
     updatePreviewType();
     // update workspace
     resizePreviewWorkspace();
-}
-
-// resizes preview workspace according to type of preview block
-function resizePreviewWorkspace() {
-    // infer width and height from type of preview block
-    var previewBlock = Blockly.modalWindow.preview.block;
-    var previewType = Blockly.modalWindow.preview.type;
-
-    var width = 14; // constant
-    // scale workspace height to block height
-    // 6 = seperation distance for sawteeth
-    var height = 75 + previewBlock.svgListSawtooth.length * 6;
-
-    resizeWorkspace(Blockly.modalWindow.preview.workspace, document.getElementById('previewContainer'), width, height);
-}
-
-function resizeWorkspace(blockWorkspace, container, width, height) {
-    // set a size for the container
-    container.style.width = width + 'em';
-    container.style.height = height + 'px';
-    // then do a resize
-    Blockly.svgResize(blockWorkspace);
+    moveBlockToCenter(Blockly.modalWindow.preview.block, Blockly.modalWindow.preview.workspace);
 }
 
 // checks if we have 'unrestricted' in typeVec
