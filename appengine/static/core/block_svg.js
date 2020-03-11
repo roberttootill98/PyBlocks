@@ -2388,15 +2388,12 @@ function drawSawtooth(parentBlock, block, svgPath, width, x, y, seperationDistan
     // start position
     if(first) {
         // draw from bottom of block
-
         var height = block.height;
 
-        // HACK
         // if block is input and parent block is statement block
-        if(parentBlock != block && parentBlock.nextConnection != null) {
+        if(parentBlock != block && !parentBlock.outputConnection) {
             // add extra to height to account for top of statement block
-            //height = height + parentBlock + 3;
-            height = height + 3;
+            height = height + Blockly.BlockSvg.STMT_ARGS_PADDING_TOP;
         }
 
         sawToothSteps.push('M', x, height);
