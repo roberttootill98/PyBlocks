@@ -1550,7 +1550,8 @@ Blockly.Block.prototype.legalDrop = function(holeTypes, requiresVariable) {
     };
 
     var includesAny = function(types) {
-      return (types.indexOf("any") != -1);
+      return (types.indexOf("any") != -1 ||
+          types.indexOf("matching") != -1);
     }
 
     if (requiresVariable && !['variables_get', 'python_variable_selector'].includes(this.type)) {
@@ -1697,6 +1698,7 @@ Blockly.Block.prototype.unify = function(other, selfPos, otherPos) {
             var otherType = otherTypeVec.slice(otherPos)[0];
             console.log("UNIFY considering otherType at position",
                 otherPos, ": ", otherType);
+
             if (thisType == otherType ||
                 (otherType == "any") ||
                 (otherType == "matching" && thisType[0] != "*") ||
@@ -1706,18 +1708,21 @@ Blockly.Block.prototype.unify = function(other, selfPos, otherPos) {
                     console.log("UNIFY matching 1 - keeping: ", thisTypeVec);
                     newTypeVecs.push(thisTypeVec);
                 }
-            } else if (thisType == "matching" && otherType[0] != "*") {
+            //} else if (thisType == "matching" && otherType[0] != "*") {
+            } else if (thisType == "matching") {
                 var renamed = subsMatched(thisTypeVec, otherType);
                 if (!typesInclude(newTypeVecs, renamed)) {
                     console.log("UNIFY matching 2 - renamed: ", renamed);
                     newTypeVecs.push(renamed);
                 }
+            /*
             } else if (thisType == "*matching" && otherType[0] == "*") {
                 var renamedList = subsMatched(thisTypeVec, otherType.slice(1));
                 if (!typesInclude(newTypeVecs, renamedList)) {
                     console.log("UNIFY matching 3 - renamed: ", renamedList);
                     newTypeVecs.push(renamedList);
                 }
+            */
             } else if ((thisType == "any") ||
                 (thisType == "*any" && otherType[0] == "*")) {
                 if (!typesInclude(newTypeVecs, thisTypeVec)) {

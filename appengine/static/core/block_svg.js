@@ -1558,29 +1558,32 @@ Blockly.BlockSvg.prototype.updateColour = function() {
 
             this.svgBlockPath_.setAttribute('fill', fillText);
 
-            // only relevant if we have modalWindow
+            var i = this.svgListSawtooth.length;
             if(Blockly.modalWindow.visible) {
                 // check if we need to delete any sawteeth
                 // get index of last type selector in valid string
                 // these appear in order of indentation
                 var variableTypeInputs = document.querySelectorAll(".variableTypeInput");
-                for(var i = 0; i < variableTypeInputs.length; i++) {
+                for(i = 0; i < variableTypeInputs.length; i++) {
                     if(Blockly.modalWindow.primitiveVariables.includes(variableTypeInputs[i].value)) {
                         break;
                     }
                 }
-                // delete svgs
-                for(var j = i; j < this.svgListSawtooth.length; j++) {
-                    if(j == 0) {
-                        this.svgListSawtooth[j].remove();
-                    } else {
-                        this.svgListSawtooth[j][0].remove();
-                        this.svgListSawtooth[j][1].remove();
-                    }
+            } else {
+                i = this.listAmount;
+            }
+
+            // delete svgs
+            for(var j = i; j < this.svgListSawtooth.length; j++) {
+                if(j == 0) {
+                    this.svgListSawtooth[j].remove();
+                } else {
+                    this.svgListSawtooth[j][0].remove();
+                    this.svgListSawtooth[j][1].remove();
                 }
-                // cut elements off from array
-                this.svgListSawtooth.length = i;
-          }
+            }
+            // cut elements off from array
+            this.svgListSawtooth.length = i;
         } else {
             var outputTypes = this.getOutputTypesByKind().basic;
             outputTypes = Blockly.Python.mergeSubtypes(outputTypes);
@@ -1903,15 +1906,6 @@ Blockly.BlockSvg.prototype.removeDragging = function() {
 };
 
 Blockly.BlockSvg.prototype.render = function(opt_bubble) {
-    if(this.outputsAList()) {
-        var outputTypes = this.getOutputTypes();
-        var listAmount = 0;
-        for(var i = 0; i < outputTypes.length; i++) {
-            listAmount = outputTypes[i].split("*").length - 1;
-        }
-        this.listAmount = listAmount;
-    }
-
     this.renderNoColour(opt_bubble);
     this.updateColour();
 };
@@ -1923,6 +1917,15 @@ Blockly.BlockSvg.prototype.render = function(opt_bubble) {
  *   If true, also render block's parent, grandparent, etc.  Defaults to true.
  */
 Blockly.BlockSvg.prototype.renderNoColour = function(opt_bubble) {
+    if(this.outputsAList()) {
+        var outputTypes = this.getOutputTypes();
+        var listAmount = 0;
+        for(var i = 0; i < outputTypes.length; i++) {
+            listAmount = outputTypes[i].split("*").length - 1;
+        }
+        this.listAmount = listAmount;
+    }
+
     console.log("RENTEST - Entering renderNoColour on ", this.type);
     Blockly.Field.startCache();
     this.rendered = true;
