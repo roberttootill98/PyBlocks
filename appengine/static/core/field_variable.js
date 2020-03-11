@@ -603,8 +603,12 @@ function nameInputListener(ev) {
         var preview = Blockly.modalWindow.preview;
 
         var block = Blockly.modalWindow.preview.block;
-        // do something different here for assignment statement
+        if(block.type == 'variables_set') {
+            block = block.inputList[0].connection.targetConnection.sourceBlock_;
+        }
+
         block.renameVar(preview.name, variableName);
+
         preview.name = variableName;
 
         moveBlockToCenter(Blockly.modalWindow.preview.block, Blockly.modalWindow.preview.workspace);
@@ -700,7 +704,7 @@ function typeInputListener(ev) {
             typeInputs[i].remove();
         }
 
-        if(parent) {
+        if(parent && !unrestrictedTypeVec(block)) {
             // move marker to typeVecObject level i;
             // should take i amount of keys to reach from base level
             var results = getCurrentLevel(typeVecObject, []);
@@ -779,7 +783,8 @@ function unrestrictedTypeVec(block) {
     var typeVecs = block.typeVecs;
     var parentInput = Blockly.Variables.getParentInput(block);
     for(var i = 0; i < typeVecs.length; i++) {
-        if(typeVecs[i][parentInput] == 'unrestricted') {
+        var typeVec = typeVecs[i][parentInput];
+        if(typeVec == 'any' || typeVec == 'matching') {
             return true;
         }
     }
