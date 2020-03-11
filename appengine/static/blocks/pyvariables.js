@@ -196,7 +196,7 @@ Blockly.Blocks['python_variable_selector'] = {
             var parent = this.getParent();
             if(variables.length > 0) {
                 if(parent) {
-                    if(validVariable(parent)) {
+                    if(validVariable(parent) || Blockly.Variables.unrestrictedTypeVec(parent)) {
                         // if we have at least one variable that in is parnetTypeVec then prompt select window
                         Blockly.modalWindow.selectVariable();
                     } else {
@@ -254,9 +254,11 @@ Blockly.Blocks['python_variable_selector_assignment'] = {
             } else if(this.nextConnection.targetConnection) {
                 var nextBlock = this.nextConnection.targetConnection.sourceBlock_;
 
+                this.nextConnection.disconnect();
+
                 this.dispose(false, false, false);
 
-                nextBlock.previousConnection.connect(block.nextConnection);
+                block.nextConnection.connect(nextBlock.previousConnection);
             } else {
                 // else just move to position of previous block
                 var coords = this.getRelativeToSurfaceXY();
@@ -334,6 +336,19 @@ function validVariable(parent) {
             }
         }
     }
+}
+
+// checks if we have 'unrestricted' in typeVec
+Blockly.Variables.unrestrictedTypeVec = function(block) {
+    var typeVecs = block.typeVecs;
+    var parentInput = Blockly.Variables.getParentInput(block);
+    for(var i = 0; i < typeVecs.length; i++) {
+        var typeVec = typeVecs[i][parentInput];
+        if(typeVec == 'any' || typeVec == 'matching') {
+            return true;
+        }
+    }
+    return false
 }
 
 /* possibly leave till later

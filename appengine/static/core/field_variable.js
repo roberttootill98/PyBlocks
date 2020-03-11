@@ -313,7 +313,7 @@ Blockly.modalWindow.selectVariable = function() {
         makeBlockNonInteractable(block);
     }
 
-    if(parent) {
+    if(parent && !Blockly.Variables.unrestrictedTypeVec(parent)) {
         // if we have a parent, limit blocks
 
         // get typeVecs
@@ -737,7 +737,7 @@ function typeInputListener(ev) {
             typeInputs[i].remove();
         }
 
-        if(parent && !unrestrictedTypeVec(block)) {
+        if(parent && !Blockly.Variables.unrestrictedTypeVec(block)) {
             // move marker to typeVecObject level i;
             // should take i amount of keys to reach from base level
             var results = getCurrentLevel(typeVecObject, []);
@@ -759,7 +759,7 @@ function typeInputListener(ev) {
         // prompt some more ui
         switch(lastInput.value) {
            case "list of...":
-              if(parent && !unrestrictedTypeVec(parent) &&
+              if(parent && !Blockly.Variables.unrestrictedTypeVec(parent) &&
                   block.type == 'python_variable_selector') {
                   // should be last level
                   var currentLevel = getCurrentLevel(typeVecObject, [])[0];
@@ -791,25 +791,12 @@ function typeInputListener(ev) {
     moveBlockToCenter(Blockly.modalWindow.preview.block, Blockly.modalWindow.preview.workspace);
 }
 
-// checks if we have 'unrestricted' in typeVec
-function unrestrictedTypeVec(block) {
-    var typeVecs = block.typeVecs;
-    var parentInput = Blockly.Variables.getParentInput(block);
-    for(var i = 0; i < typeVecs.length; i++) {
-        var typeVec = typeVecs[i][parentInput];
-        if(typeVec == 'any' || typeVec == 'matching') {
-            return true;
-        }
-    }
-    return false
-}
-
 // init modalWindow type inputs
 function initTypeInputs() {
     var block = Blockly.Variables.getSelectorBlock();
     var parent = block.getParent();
 
-    if(parent && !unrestrictedTypeVec(parent) &&
+    if(parent && !Blockly.Variables.unrestrictedTypeVec(parent) &&
         block.type == 'python_variable_selector') {
         var typeVecObject = constructTypeVecObject(parent);
         var returnKeys = getCurrentLevel(typeVecObject, [])[1];
