@@ -296,9 +296,6 @@ Blockly.modalWindow.selectVariable = function() {
             media: '../../media/',
             trashcan: false
         });
-        // add workspace object to container
-        resizeWorkspace(selectionWorkspace, workspaceContainer, 14, 75);
-        blendWorkspace(selectionWorkspace);
 
         // put block into workspace
         var block = Blockly.Variables.newVariableBlock({
@@ -306,6 +303,12 @@ Blockly.modalWindow.selectVariable = function() {
             "type": variables[i].type
         });
         block = Blockly.Xml.domToBlock(selectionWorkspace, block);
+
+        // update workspace
+        selectionWorkspace.padding = 20;
+        resizeWorkspaceAroundBlock(selectionWorkspace, workspaceContainer, block);
+        blendWorkspace(selectionWorkspace);
+
         moveBlockToCenter(block, selectionWorkspace)
         makeBlockNonInteractable(block);
     }
@@ -555,21 +558,22 @@ function blendWorkspace(blockWorkspace) {
 
 // resizes preview workspace according to type of preview block
 function resizePreviewWorkspace() {
-    // infer width and height from type of preview block
     var previewBlock = Blockly.modalWindow.preview.block;
-    var previewType = Blockly.modalWindow.preview.type;
-
-    //var width = 14; // constant
-    // scale workspace height to block height
-    // 6 = seperation distance for sawteeth
-    //var height = 75 + previewBlock.svgListSawtooth.length * 6;
     var blockWorkspace = Blockly.modalWindow.preview.workspace;
+    var container = document.getElementById('previewContainer');
+    resizeWorkspaceAroundBlock(blockWorkspace, container, previewBlock);
+}
 
+/*
+* resizes a given workspace around a given block
+*/
+function resizeWorkspaceAroundBlock(blockWorkspace, workspaceContainer, block) {
+    // infer width and height from block
     var padding = blockWorkspace.padding;
-    var width = Math.round(previewBlock.width) + padding;
-    var height = previewBlock.height + padding;
+    var width = Math.round(block.width) + padding;
+    var height = block.height + padding;
 
-    resizeWorkspace(blockWorkspace, document.getElementById('previewContainer'), width, height);
+    resizeWorkspace(blockWorkspace, workspaceContainer, width, height);
 }
 
 function resizeWorkspace(blockWorkspace, container, width, height) {
