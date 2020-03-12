@@ -2104,8 +2104,7 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
         if (input.connection && input.connection.targetConnection) {
             var linkedBlock = input.connection.targetBlock();
             var bBox = linkedBlock.getHeightWidth();
-            //input.renderHeight = Math.max(input.renderHeight, bBox.height);
-            input.unextendedHeight = Math.max(input.unextendedHeight, bBox.height);
+            input.height = Math.max(input.height, bBox.height);
             input.renderWidth = bBox.width;
         }
         // Blocks have a one pixel shadow that should sometimes overhang.
@@ -2118,8 +2117,24 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
       input.renderHeight--;
   }*/
         //console.log(row.height, input.renderHeight);
-        //row.height = Math.max(row.height, input.renderHeight);
+
         row.height = Math.max(row.height, input.height);
+
+        if(this.outputsAList) {
+            // increase block height per sawtooth to be added
+            var initialDistance = this.seperationDistance - this.whiteSeperationDistance;
+            var whiteSawtoothHeight = this.listAmount * this.whiteSeperationDistance;
+            var greySawtoothHeight = (this.listAmount - 1) * this.greySeperationDistance;
+
+            //var index = steps.indexOf('v') + 1;
+            var newBlockHeight = row.height + initialDistance + whiteSawtoothHeight + greySawtoothHeight;
+
+            // update block properties
+            this.unextendedHeight = row.height;
+            this.height = newBlockHeight;
+            row.height = newBlockHeight;
+        }
+
         //console.log(row.height);
         input.fieldWidth = 0;
         if (inputRows.length == 1) {
@@ -2162,8 +2177,10 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
         if (row.type == Blockly.BlockSvg.INLINE) {
             for (var z = 0, input; input = row[z]; z++) {
                 if (input.type == Blockly.INPUT_VALUE) {
-                    row.height += //Blockly.BlockSvg.INLINE_PADDING_TOP +
-                        Blockly.BlockSvg.INLINE_PADDING_BOTTOM;
+                    row.height += Blockly.BlockSvg.INLINE_PADDING_BOTTOM;
+                    if(input.listAmount > 1) {
+                        row.height += this.seperationDistance;
+                    }
                     // console.log("thicker");
                     row.thicker = true;
                     break;
@@ -2282,7 +2299,6 @@ Blockly.BlockSvg.prototype.renderDraw_ = function(iconWidth, inputRows) {
     var holeSteps = [];
     this.indicators = {};
 
-
     // DUMMY VAR - DELETE
     var indicatorSteps = null;
 
@@ -2292,24 +2308,6 @@ Blockly.BlockSvg.prototype.renderDraw_ = function(iconWidth, inputRows) {
         indicatorSteps, connectionsXY, inputRows, iconWidth);
     this.renderDrawBottom_(steps, holeSteps, connectionsXY, cursorY);
     this.renderDrawLeft_(steps, holeSteps, connectionsXY, cursorY);
-
-    // if we are outputting a list then increase block size per sawtooth
-    if(this.outputsAList()) {
-        // increase block height per sawtooth to be added
-        var initialDistance = this.seperationDistance - this.whiteSeperationDistance;
-        var whiteSawtoothHeight = this.listAmount * this.whiteSeperationDistance;
-        var greySawtoothHeight = (this.listAmount - 1) * this.greySeperationDistance;
-
-        var index = steps.indexOf('v') + 1;
-        var newBlockHeight = steps[index] + initialDistance + whiteSawtoothHeight + greySawtoothHeight;
-        steps[index] = newBlockHeight;
-
-        // update block properties
-        this.unextendedHeight = this.height;
-        this.height = newBlockHeight;
-
-        this.sawtoothHeight = this.height;
-    }
 
     var pathString = steps.join(' '); // + '\n' + inlineSteps.join(' ');
     this.svgBlockPath_.setAttribute('d', pathString);
@@ -2689,7 +2687,7 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, holeSteps,
                             var width = background.getAttribute('width');
 
                             // draw first
-                            var drawHeight = input.unextendedHeight + this.seperationDistance - this.whiteSeperationDistance;
+                            var drawHeight = input.unextendedHeight + this.seperationDistance;
 
                             if(!svgList[1]) {
                                 var svgPath = Blockly.createSvgElement('path', {}, this.svgGroup_);
