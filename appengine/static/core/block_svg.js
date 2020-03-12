@@ -2120,13 +2120,12 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
 
         row.height = Math.max(row.height, input.height);
 
-        if(this.outputsAList) {
+        if(this.outputsAList()) {
             // increase block height per sawtooth to be added
             var initialDistance = this.seperationDistance - this.whiteSeperationDistance;
             var whiteSawtoothHeight = this.listAmount * this.whiteSeperationDistance;
             var greySawtoothHeight = (this.listAmount - 1) * this.greySeperationDistance;
 
-            //var index = steps.indexOf('v') + 1;
             var newBlockHeight = row.height + initialDistance + whiteSawtoothHeight + greySawtoothHeight;
 
             // update block properties
