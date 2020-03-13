@@ -313,8 +313,10 @@ Blockly.Variables.getParentInput = function(parent, absolute) {
             // only check for input types which can contain blocks
             if(parent.inputList[i].type == 1) {
                 // if input value == 'Variable' then return name of this field
+                var targetBlock = parent.getInputTargetBlock(name);
                 if(parent.inputList[i].connection &&
-                  (parent.getInputTargetBlock(name)['type'] == 'python_variable_selector')) {
+                    targetBlock != null &&
+                    targetBlock['type'] == 'python_variable_selector') {
                     return j;
                 }
                 j++;

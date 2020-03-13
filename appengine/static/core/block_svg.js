@@ -65,7 +65,7 @@ Blockly.BlockSvg = function() {
     this.listAmount = 0;
     this.seperationDistance = 6;
     this.whiteSeperationDistance = 3;
-    this.greySeperationDistance = 4;
+    this.greySeperationDistance = 6;
 
     //console.log("CREATING BLOCK SVG");
 
