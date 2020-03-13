@@ -65,7 +65,7 @@ Blockly.BlockSvg = function() {
     this.listAmount = 0;
     this.seperationDistance = 6;
     this.whiteSeperationDistance = 3;
-    this.greySeperationDistance = 6;
+    this.greySeperationDistance = 4;
 
     //console.log("CREATING BLOCK SVG");
 
@@ -1604,6 +1604,7 @@ Blockly.BlockSvg.prototype.updateColour = function() {
 
             // dispose of sawteeth if they exists
             for(var i = 0; i < this.svgListSawtooth.length; i++) {
+                // handle this differently if there is an unfilled input
                 this.svgListSawtooth[i].remove();
             }
             this.svgListSawtooth = [];
@@ -2022,6 +2023,7 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
             continue;
         }
         var row;
+        // only on first
         if (!isInline || !lastType ||
             lastType == Blockly.NEXT_STATEMENT ||
             input.type == Blockly.NEXT_STATEMENT) {
@@ -2071,8 +2073,7 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
             input.renderWidth = 0;
         }
 
-        // add to render height per optional item, eg. sawtooth
-        // check if we output a list
+        // check if we output a list on inputs
         if(this.typeVecs.length > 0 && slotNumber >= 0) {
             // check if any of the typeVecs have a list type
             for(var j = 0; j < this.typeVecs.length; j++) {
@@ -2120,20 +2121,6 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
 
         row.height = Math.max(row.height, input.height);
 
-        if(this.outputsAList()) {
-            // increase block height per sawtooth to be added
-            var initialDistance = this.seperationDistance - this.whiteSeperationDistance;
-            var whiteSawtoothHeight = this.listAmount * this.whiteSeperationDistance;
-            var greySawtoothHeight = (this.listAmount - 1) * this.greySeperationDistance;
-
-            var newBlockHeight = row.height + initialDistance + whiteSawtoothHeight + greySawtoothHeight;
-
-            // update block properties
-            this.unextendedHeight = row.height;
-            this.height = newBlockHeight;
-            row.height = newBlockHeight;
-        }
-
         //console.log(row.height);
         input.fieldWidth = 0;
         if (inputRows.length == 1) {
@@ -2168,6 +2155,24 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
                 fieldValueWidth = Math.max(fieldValueWidth, input.fieldWidth);
             }
         }
+    }
+
+    // increase block height per sawtooth on output of block
+    if(this.outputsAList()) {
+        var initialDistance = this.seperationDistance - this.whiteSeperationDistance;
+        var whiteSawtoothHeight = this.listAmount * this.whiteSeperationDistance;
+        var greySawtoothHeight = (this.listAmount - 1) * this.greySeperationDistance;
+
+        var newBlockHeight = row.height + initialDistance + whiteSawtoothHeight + greySawtoothHeight;
+
+        // update block properties
+        // HACK
+        this.unextendedHeight = row.height;
+        if(!['variables_get', 'python_list_empty'].includes(this.type)) {
+            this.unextendedHeight += this.seperationDistance;
+        }
+        this.height = newBlockHeight;
+        row.height = newBlockHeight;
     }
 
     // Make inline rows a bit thicker in order to enclose the values.
