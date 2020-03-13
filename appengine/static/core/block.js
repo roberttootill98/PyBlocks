@@ -1715,14 +1715,16 @@ Blockly.Block.prototype.unify = function(other, selfPos, otherPos) {
                     console.log("UNIFY matching 2 - renamed: ", renamed);
                     newTypeVecs.push(renamed);
                 }
-            /*
-            } else if (thisType == "*matching" && otherType[0] == "*") {
+            // check if thisType starts with * and ends with matching
+            // and otherType starts with *
+            } else if(thisType[0] == "*" &&
+                      thisType.slice(thisType.length - 8) &&
+                      otherType[0] == "*") {
                 var renamedList = subsMatched(thisTypeVec, otherType.slice(1));
                 if (!typesInclude(newTypeVecs, renamedList)) {
                     console.log("UNIFY matching 3 - renamed: ", renamedList);
                     newTypeVecs.push(renamedList);
                 }
-            */
             } else if ((thisType == "any") ||
                 (thisType == "*any" && otherType[0] == "*")) {
                 if (!typesInclude(newTypeVecs, thisTypeVec)) {

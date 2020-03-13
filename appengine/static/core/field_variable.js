@@ -892,63 +892,41 @@ function constructTypeVecObject(block) {
         var typeVec = typeVecs[i][parentInput];
 
         // iterate over string
+        var sliceStart = 0;
         for(var j = 1; j < typeVec.length + 1; j++) {
             var results = getCurrentLevel(typeVecObject, []);
             var currentLevel = results[0];
             var keys = results[1];
 
-            switch(typeVec.slice(0, j)) {
+            switch(typeVec.slice(sliceStart, j)) {
                 case "*":
                     // list of
 
                     // check if we don't have list of already in typeVecObject at current level
                     if(!Object.keys(currentLevel).includes("list of...")) {
                         // then add a list as a key
-                        // use keys to place new key at right place
-                        //var item = typeVecObject;
-
-                        if(keys.length > 0) {
-                            // eg. list of tuple or list of list of
-
-                            // use key to place object
-                            item[keys[keys.length - 1]] = "something";
-                            // delete marker from previous location
-                            delete currentLevel['marker'];
-                            // add marker to new level
-                            // do something
-                        } else {
-                            currentLevel["list of..."] = {};
-                            // delete marker from previous location
-                            delete currentLevel['marker'];
-                            // add marker to new level
-                            currentLevel["list of..."]["marker"] = true;
-                        }
-                        // move marker to this level
-                    } else {
-                        // still move marker to next level
-                        // delete marker from previous location
-                        delete currentLevel['marker'];
-                        // add marker to new level
-                        currentLevel["list of..."]["marker"] = true;
+                        currentLevel["list of..."] = {};
                     }
+                    // delete marker from previous location
+                    delete currentLevel['marker'];
+                    // add marker to new level
+                    currentLevel["list of..."]["marker"] = true;
 
-                    // since this isn't a primitive type then move marker to next level
-
-                    // update typeVec string
-                    typeVec = typeVec.slice(j, typeVec.length);
+                    // update typeVec string slice position
+                    sliceStart = j;
                     break;
                 case "any":
                     // add all primitive types
                     for(var k = 0; k < Blockly.modalWindow.primitiveVariables.length; k++) {
                         currentLevel[Blockly.modalWindow.primitiveVariables[k]] = {};
-                        typeVec = typeVec.slice(j, typeVec.length);
+                        sliceStart = j;
                     }
                     break;
                 case "matching":
                     // add all primitive types
                     for(var k = 0; k < Blockly.modalWindow.primitiveVariables.length; k++) {
                         currentLevel[Blockly.modalWindow.primitiveVariables[k]] = {};
-                        typeVec = typeVec.slice(j, typeVec.length);
+                        sliceStart = j;
                     }
                     break;
                 default:
@@ -957,7 +935,7 @@ function constructTypeVecObject(block) {
                         currentLevel[typeVec.slice(0, j)] = {};
 
                         // update typeVec string
-                        typeVec = typeVec.slice(j, typeVec.length);
+                        sliceStart = j;
                     }
             }
         }
