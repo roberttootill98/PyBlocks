@@ -1551,8 +1551,35 @@ Blockly.Block.prototype.legalDrop = function(holeTypes, requiresVariable) {
 
     var includesAny = function(types) {
       return (types.indexOf("any") != -1 ||
-          types.indexOf("matching") != -1);
-    }
+      types.indexOf("matching") != -1);
+    };
+
+    var includesSameLengthList = function(outputTypes, holeTypes) {
+        for (var i = 0; i < outputTypes.length; i++) {
+            var outputType = outputTypes[i];
+            for (var j = 0; j < holeTypes.length; j++) {
+                var holeType = holeTypes[j];
+
+                // output type attributes
+                var outputTypeList = outputType.split("*");
+                var outputTypeBasic = outputTypeList[outputTypeList.length - 1];
+                var outputTypeListAmount = outputTypeList.length - 1;
+                // hole type attributes
+                var holeTypeList = holeType.split("*");
+                var holeTypeBasic = holeTypeList[holeTypeList.length - 1];
+                var holeTypeListAmount = holeTypeList.length - 1;
+
+                // check list amount matches
+                if(outputTypeListAmount == holeTypeListAmount) {
+                    // check if inner type matches
+                    if(outputTypeBasic == holeTypeBasic ||
+                      includesAny([outputTypeBasic, holeTypeBasic])) {
+                        return true;
+                    }
+                }
+            }
+        }
+    };
 
     if (requiresVariable && !['variables_get', 'python_variable_selector'].includes(this.type)) {
         return false;
@@ -1572,7 +1599,8 @@ Blockly.Block.prototype.legalDrop = function(holeTypes, requiresVariable) {
     if (includesGreyBasic(outputTypes) && includesBasicType(holeTypes)) {
         return true;
     }
-    if (includesGreyList(outputTypes) && includesListType(holeTypes)) {
+    // check if listAmount matches
+    if(includesSameLengthList(outputTypes, holeTypes)) {
         return true;
     }
     if (includesAny(outputTypes)) {
