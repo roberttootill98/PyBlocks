@@ -313,14 +313,14 @@ Blockly.modalWindow.selectVariable = function() {
         makeBlockNonInteractable(block);
     }
 
-    if(parent && !Blockly.Variables.unrestrictedTypeVec(parent)) {
+    if(parent && !Blockly.Variables.unrestrictedTypeVec(block, parent)) {
         // if we have a parent, limit blocks
 
         // get typeVecs
         var typeVecs = parent.typeVecs;
 
         // get parent input
-        var parentInput = Blockly.Variables.getParentInput(parent, false);
+        var parentInput = block.outputConnection.targetConnection.inputNumber_;
 
         // check if typeVecs contains a typeVec which is unrestricted
 
@@ -737,7 +737,7 @@ function typeInputListener(ev) {
             typeInputs[i].remove();
         }
 
-        if(parent && !Blockly.Variables.unrestrictedTypeVec(block)) {
+        if(parent && !Blockly.Variables.unrestrictedTypeVec(block, parent)) {
             // move marker to typeVecObject level i;
             // should take i amount of keys to reach from base level
             var results = getCurrentLevel(typeVecObject, []);
@@ -759,7 +759,7 @@ function typeInputListener(ev) {
         // prompt some more ui
         switch(lastInput.value) {
            case "list of...":
-              if(parent && !Blockly.Variables.unrestrictedTypeVec(parent) &&
+              if(parent && !Blockly.Variables.unrestrictedTypeVec(block, parent) &&
                   block.type == 'python_variable_selector') {
                   // should be last level
                   var currentLevel = getCurrentLevel(typeVecObject, [])[0];
@@ -796,9 +796,9 @@ function initTypeInputs() {
     var block = Blockly.Variables.getSelectorBlock();
     var parent = block.getParent();
 
-    if(parent && !Blockly.Variables.unrestrictedTypeVec(parent) &&
+    if(parent && !Blockly.Variables.unrestrictedTypeVec(block, parent) &&
         block.type == 'python_variable_selector') {
-        var typeVecObject = constructTypeVecObject(parent);
+        var typeVecObject = constructTypeVecObject(block);
         var returnKeys = getCurrentLevel(typeVecObject, [])[1];
 
         // type input for each key to get to current level
@@ -880,12 +880,12 @@ function updatePreviewType() {
 }
 
 function constructTypeVecObject(block) {
-    var parentInput = Blockly.Variables.getParentInput(block, false);
+    var parentInput = block.outputConnection.targetConnection.inputNumber_;
 
     // create object with marker at lowest level
     var typeVecObject = {"marker": true};
 
-    var typeVecs = block.typeVecs;
+    var typeVecs = block.getParent().typeVecs;
 
     // iterate over each parent typeVec
     for(var i = 0; i < typeVecs.length; i++) {

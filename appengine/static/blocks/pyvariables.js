@@ -171,11 +171,33 @@ Blockly.Blocks['python_variable_selector'] = {
             if(parent) {
                  // if it was in a block then replace into that block
                  // which input to put block in to
-                 var i = Blockly.Variables.getParentInput(parent, true);
+                 var index = this.outputConnection.targetConnection.inputNumber_;
 
                  // delete current block
                  this.dispose(false, false, false);
 
+                 var inputList = parent.inputList;
+                 /*
+                 for(var i = 0; i < index + 1; i++) {
+                    if(inputList[i].type == ) {
+
+                    }
+                 }
+                 */
+                 var i = 0;
+                 // tracks how many valid inputs we have gone over
+                 var j = 0;
+                 while(i < inputList.length) {
+                    if(inputList[i].type == 1) {
+                        // we have found an input
+                        if(j == index) {
+                            break;
+                        } else {
+                            j++;
+                        }
+                    }
+                    i++;
+                 }
                  parent.inputList[i].connection.connect(block.outputConnection);
              } else {
                 // if not in block then just place where it was before
@@ -196,7 +218,7 @@ Blockly.Blocks['python_variable_selector'] = {
             var parent = this.getParent();
             if(variables.length > 0) {
                 if(parent) {
-                    if(validVariable(parent) || Blockly.Variables.unrestrictedTypeVec(parent)) {
+                    if(validVariable(this, parent) || Blockly.Variables.unrestrictedTypeVec(this, parent)) {
                         // if we have at least one variable that in is parnetTypeVec then prompt select window
                         Blockly.modalWindow.selectVariable();
                     } else {
@@ -296,44 +318,15 @@ Blockly.Variables.getSelectorBlock = function() {
     }
 }
 
-// get which parent input that a variable block was dropped in to
-// absolute var, if true - ignores type of inputs that block cannot be dropped into
-Blockly.Variables.getParentInput = function(parent, absolute) {
-    var j = 0
-    for(var i = 0; i < parent.inputList.length; i++) {
-        var name = parent.inputList[i]['name'];
-
-        if(absolute) {
-            // if input value == 'Variable' then return name of this field
-            if(parent.inputList[i].connection &&
-              (parent.getInputTargetBlock(name)['type'] == 'python_variable_selector')) {
-                return i;
-            }
-        } else {
-            // only check for input types which can contain blocks
-            if(parent.inputList[i].type == 1) {
-                // if input value == 'Variable' then return name of this field
-                var targetBlock = parent.getInputTargetBlock(name);
-                if(parent.inputList[i].connection &&
-                    targetBlock != null &&
-                    targetBlock['type'] == 'python_variable_selector') {
-                    return j;
-                }
-                j++;
-            }
-        }
-    }
-}
-
 // check if any of the current variables are suitable in parent typeVecs
-function validVariable(parent) {
-    var index = Blockly.Variables.getParentInput(parent);
+function validVariable(block, parent) {
+    var parentInput = block.outputConnection.targetConnection.inputNumber_;
     var typeVecs = parent.typeVecs;
     var variables = Blockly.Variables.allVariables(workspace, true, true);
 
     for(var i = 0; i < variables.length; i++) {
         for(var j = 0; j < typeVecs.length; j++) {
-            if(typeVecs[j][index] == variables[i].type) {
+            if(typeVecs[j][parentInput] == variables[i].type) {
                 return true;
             }
         }
@@ -341,9 +334,9 @@ function validVariable(parent) {
 }
 
 // checks if we have 'unrestricted' in typeVec
-Blockly.Variables.unrestrictedTypeVec = function(block) {
-    var typeVecs = block.typeVecs;
-    var parentInput = Blockly.Variables.getParentInput(block);
+Blockly.Variables.unrestrictedTypeVec = function(block, parent) {
+    var typeVecs = parent.typeVecs;
+    var parentInput = block.outputConnection.targetConnection.inputNumber_;
     for(var i = 0; i < typeVecs.length; i++) {
         var typeVec = typeVecs[i][parentInput];
         if(typeVec == 'any' || typeVec == 'matching') {
