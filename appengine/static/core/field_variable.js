@@ -931,8 +931,8 @@ function constructTypeVecObject(block) {
                     break;
                 default:
                     // might be primitive type
-                    if(Blockly.modalWindow.primitiveVariables.includes(typeVec.slice(0, j))) {
-                        currentLevel[typeVec.slice(0, j)] = {};
+                    if(Blockly.modalWindow.primitiveVariables.includes(typeVec.slice(sliceStart, j))) {
+                        currentLevel[typeVec.slice(sliceStart, j)] = {};
 
                         // update typeVec string
                         sliceStart = j;
