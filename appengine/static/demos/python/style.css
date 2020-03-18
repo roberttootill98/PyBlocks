@@ -348,7 +348,7 @@ table#typetable {
 
 #buttonContainer {
     margin: auto;
-    max-width: 12em;
+    margin-left: 4em;
 }
 
 .modalButtons {
@@ -361,7 +361,8 @@ table#typetable {
 }
 
 #previewContainer {
-    margin: auto;
+    margin-top: 1em;
+    margin-left: 4em;
 }
 
 #typeInputContainer {

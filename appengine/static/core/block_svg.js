@@ -1559,7 +1559,7 @@ Blockly.BlockSvg.prototype.updateColour = function() {
             this.svgBlockPath_.setAttribute('fill', fillText);
 
             var i = this.svgListSawtooth.length;
-            if(Blockly.modalWindow.visible) {
+            if(Blockly.modalWindow.visible && Blockly.modalWindow.type == 'create') {
                 // check if we need to delete any sawteeth
                 // get index of last type selector in valid string
                 // these appear in order of indentation

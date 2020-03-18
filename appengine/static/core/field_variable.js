@@ -228,6 +228,7 @@ Blockly.modalWindow.typeVecObject = {};
 
 // for selecting #1 - an existing variable or #2 creating a new one
 Blockly.modalWindow.selectVariable = function() {
+    Blockly.modalWindow.type = 'select';
     Blockly.modalWindow.visible = true;
 
     // create a backdrop
@@ -249,7 +250,7 @@ Blockly.modalWindow.selectVariable = function() {
     // html inside container
     var title = document.createElement('h3');
     container.appendChild(title);
-    title.textContent = 'Select a Variable';
+    title.textContent = 'Select or Create a Variable';
 
     // table approach
     var table = document.createElement('table');
@@ -262,13 +263,6 @@ Blockly.modalWindow.selectVariable = function() {
     var blocks = [];
 
     function addOption() {
-        // create container for button and workspace
-        /*
-        var itemContainer = document.createElement('div');
-        itemContainer.id = variables[i].name;
-        itemContainer.classList.add(variables[i].type);
-        container.appendChild(itemContainer);
-        */
         // create row for these items
         var row = document.createElement('tr');
         table.appendChild(row);
@@ -279,7 +273,6 @@ Blockly.modalWindow.selectVariable = function() {
         row.appendChild(selectTD);
         var selectButton = document.createElement('button');
         selectTD.appendChild(selectButton);
-        //itemContainer.appendChild(selectButton);
         selectButton.classList.add('fancybuttons');
         selectButton.classList.add('selectButton');
         selectButton.textContent = 'Select:';
@@ -291,7 +284,6 @@ Blockly.modalWindow.selectVariable = function() {
         var workspaceContainer = document.createElement('div');
         workspaceContainer.classList.add('workspaceContainer');
         workspaceTD.appendChild(workspaceContainer);
-        //itemContainer.appendChild(workspaceContainer);
         var selectionWorkspace = Blockly.inject(workspaceContainer, {
             media: '../../media/',
             trashcan: false
@@ -380,6 +372,7 @@ Blockly.modalWindow.selectVariable = function() {
 
 // for creating a new variable
 Blockly.modalWindow.createVariable = function(x, y) {
+    Blockly.modalWindow.type = 'create';
     Blockly.modalWindow.visible = true;
 
     var container = document.createElement('div');
@@ -1050,6 +1043,7 @@ Blockly.modalWindow.cancel = function() {
     Blockly.modalWindow.preview.dispose()
     Blockly.Variables.getSelectorBlock().dispose();
 
+    Blockly.modalWindow.type = null;
     Blockly.modalWindow.visible = false;
 }
 
@@ -1064,6 +1058,7 @@ Blockly.modalWindow.selectVariable.select = function() {
     Blockly.modalWindow.dispose();
     Blockly.modalWindow.backdrop.dispose();
 
+    Blockly.modalWindow.type = null;
     Blockly.modalWindow.visible = false;
 
     // fire onchange event
@@ -1088,6 +1083,7 @@ Blockly.modalWindow.createVariable.create = function() {
     Blockly.modalWindow.backdrop.dispose();
     Blockly.modalWindow.preview.dispose();
 
+    Blockly.modalWindow.type = null;
     Blockly.modalWindow.visible = false;
 
     // fire onchange event

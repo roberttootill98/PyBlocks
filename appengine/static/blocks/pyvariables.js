@@ -177,13 +177,7 @@ Blockly.Blocks['python_variable_selector'] = {
                  this.dispose(false, false, false);
 
                  var inputList = parent.inputList;
-                 /*
-                 for(var i = 0; i < index + 1; i++) {
-                    if(inputList[i].type == ) {
-
-                    }
-                 }
-                 */
+                 
                  var i = 0;
                  // tracks how many valid inputs we have gone over
                  var j = 0;
