@@ -1925,6 +1925,8 @@ Blockly.BlockSvg.prototype.renderNoColour = function(opt_bubble) {
             listAmount = outputTypes[i].split("*").length - 1;
         }
         this.listAmount = listAmount;
+    } else {
+        this.listAmount = 0;
     }
 
     console.log("RENTEST - Entering renderNoColour on ", this.type);
@@ -2096,9 +2098,13 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
                     input.height = input.unextendedHeight + gap + whiteSawtoothHeight + greySawtoothHeight;
 
                     // height that sawtooth is drawn to
-                    input.sawtoothHeight =  input.height - input.borderWidth;
+                    input.sawtoothHeight = input.height - input.borderWidth;
+                } else {
+                    input.listAmount = 0;
                 }
             }
+        } else {
+            input.listAmount = 0;
         }
 
         // Adjust input size if there is a connection.
@@ -2571,10 +2577,15 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, holeSteps,
 
                     if(input.listAmount > 0) {
                         // if there is a reason to extend then extend
-                        holeSteps.push('v', input.height + input.borderWidth); //  + 1);
+                        // if the input is unfilled then add input.borderWidth
+                        if(input.connection.targetConnection) {
+                            holeSteps.push('v', input.height);
+                        } else {
+                            holeSteps.push('v', input.height + input.borderWidth);
+                        }
                     } else {
                         // else use normal height
-                        holeSteps.push('v', input.unextendedHeight); //  + 1);
+                        holeSteps.push('v', input.unextendedHeight);
                     }
                     //holeSteps.push('v', input.renderHeight); //  + 1);
                     holeSteps.push('h', /*Blockly.BlockSvg.TAB_WIDTH*/ -0 -
@@ -2583,10 +2594,15 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, holeSteps,
                     // HACK
                     if(input.listAmount > 0) {
                         // if there is a reason to extend then extend
-                        holeSteps.push('v', -(input.height + input.borderWidth)); //  + 1);
+                        // if the input is unfilled then add input.borderWidth
+                        if(input.connection.targetConnection) {
+                            holeSteps.push('v', -(input.height));
+                        } else {
+                            holeSteps.push('v', -(input.height + input.borderWidth));
+                        }
                     } else {
                         // else use normal height
-                        holeSteps.push('v', -input.unextendedHeight); //  + 1);
+                        holeSteps.push('v', -input.unextendedHeight);
                     }
                     //holeSteps.push('v', -input.renderHeight); // - 1);
                     holeSteps.push('z');

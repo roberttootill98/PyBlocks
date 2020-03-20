@@ -177,7 +177,7 @@ Blockly.Blocks['python_variable_selector'] = {
                  this.dispose(false, false, false);
 
                  var inputList = parent.inputList;
-                 
+
                  var i = 0;
                  // tracks how many valid inputs we have gone over
                  var j = 0;
@@ -210,6 +210,30 @@ Blockly.Blocks['python_variable_selector'] = {
             // if in workspace then prompt modal window
             var variables = Blockly.Variables.allVariables(workspace, true, true);
             var parent = this.getParent();
+
+            if(parent) {
+                // recolor block according to parent typeVecs
+                var typeVecs = parent.typeVecs;
+                var parentInput = this.outputConnection.targetConnection.inputNumber_;
+                var types = [];
+                for(var i = 0; i < typeVecs.length; i++) {
+                    var typeVec = typeVecs[i][parentInput];
+
+                    var found = false;
+                    for(var j = 0; j < types.length; j++) {
+                        if(types[j] == typeVec) {
+                            found = true;
+                        }
+                    }
+
+                    if(!found) {
+                        types.push([typeVec]);
+                    }
+                }
+                this.setTypeVecs(types);
+                this.reType();
+            }
+
             if(variables.length > 0) {
                 if(parent) {
                     if(validVariable(this, parent) || Blockly.Variables.unrestrictedTypeVec(this, parent)) {
