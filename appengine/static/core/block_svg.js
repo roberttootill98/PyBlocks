@@ -622,6 +622,19 @@ Blockly.Block.prototype.reType = function(opt_render) {
     topLevel.restoreFullTypes();
     topLevel.unifyUp();
     topLevel.unifyDown();
+
+    // shouldnt go here?
+    for(var i = 0; i < this.inputList.length; i++) {
+        var input = this.inputList[i];
+
+        // if input is filled
+        if(input.connection && input.connection.targetConnection) {
+            var inputBlock = input.connection.targetConnection.sourceBlock_;
+            // redraw input block
+            inputBlock.render();
+        }
+    }
+
     if (opt_render) {
         this.renderNoColour();
     }
@@ -1911,6 +1924,10 @@ Blockly.BlockSvg.prototype.render = function(opt_bubble) {
     this.updateColour();
 };
 
+function getListAmount(outputTypes) {
+    return outputTypes[outputTypes.length - 1].split("*").length - 1;
+}
+
 /**
  * Render the block.
  * Lays out and reflows a block based on its contents and settings.
@@ -1919,12 +1936,7 @@ Blockly.BlockSvg.prototype.render = function(opt_bubble) {
  */
 Blockly.BlockSvg.prototype.renderNoColour = function(opt_bubble) {
     if(this.outputsAList()) {
-        var outputTypes = this.getOutputTypes();
-        var listAmount = 0;
-        for(var i = 0; i < outputTypes.length; i++) {
-            listAmount = outputTypes[i].split("*").length - 1;
-        }
-        this.listAmount = listAmount;
+        this.listAmount = getListAmount(this.getOutputTypes());
     } else {
         this.listAmount = 0;
     }
@@ -2188,7 +2200,8 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
             for (var z = 0, input; input = row[z]; z++) {
                 if (input.type == Blockly.INPUT_VALUE) {
                     row.height += Blockly.BlockSvg.INLINE_PADDING_BOTTOM;
-                    if(input.listAmount > 1) {
+
+                    if(input.listAmount > 1 && !this.outputConnection) {
                         row.height += this.seperationDistance;
                     }
                     // console.log("thicker");

@@ -1599,6 +1599,9 @@ Blockly.Block.prototype.legalDrop = function(holeTypes, requiresVariable) {
     if (includesGreyBasic(outputTypes) && includesBasicType(holeTypes)) {
         return true;
     }
+    if(includesGreyList(outputTypes)) {
+        return true;
+    }
     // check if listAmount matches
     if(includesSameLengthList(outputTypes, holeTypes)) {
         return true;

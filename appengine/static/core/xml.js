@@ -478,7 +478,6 @@ Blockly.Xml.domToBlockHeadless_ =
                         ]);
                         block.fullTypeVecs = [
                             ["matching", "matching", "none"],
-                            ["*matching", "*matching", "none"]
                         ];
                         block.setLhsVarOnly(true);
                         console.log("NEW BLOCK", block);
