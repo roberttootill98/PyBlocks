@@ -103,6 +103,7 @@ Blockly.Blocks['variables_set'] = {
     init: function() {
         this.declaredVar = '';
         this.permitSetter = true;
+        /*
         this.jsonInit({
             "message0": "%1 = %2",
             "args0": [{
@@ -124,6 +125,26 @@ Blockly.Blocks['variables_set'] = {
             "tooltip": Blockly.Msg.VARIABLES_SET_TOOLTIP,
             "helpUrl": Blockly.Msg.VARIABLES_SET_HELPURL
         });
+        */
+        this.appendValueInput('VAR');
+
+        this.appendValueInput('VALUE')
+            .appendField(" = ");
+
+        this.setInputsInline(true);
+        this.setLhsVarOnly(true);
+
+        this.setPreviousStatement(true);
+        this.setNextStatement(true);
+
+        this.setTypeVecs([
+          ["matching", "matching", "none"]
+        ])
+
+        this.setTooltip(Blockly.Msg.VARIABLES_SET_TOOLTIP);
+        this.setHelpUrl(Blockly.Msg.VARIABLES_SET_HELPURL);
+
+        this.inWorkspace = false;
         //this.contextMenuMsg_ = Blockly.Msg.VARIABLES_SET_CREATE_GET;
     },
     onchange: function(ev) {
@@ -145,7 +166,7 @@ Blockly.Blocks['variables_set'] = {
 Blockly.Blocks['python_variable_selector'] = {
     init: function() {
         this.appendDummyInput()
-            .appendField(new Blockly.FieldTextInput("Variable"), 'VALUE');
+            .appendField(new Blockly.FieldTextInput("variable"), 'VALUE');
 
         //this.getField('VALUE').setChangeHandler(Blockly.FieldTextInput.integerValidator);
 
@@ -231,7 +252,7 @@ Blockly.Blocks['python_variable_selector'] = {
                     }
                 }
                 this.setTypeVecs(types);
-                this.reType();
+                this.render();
             }
 
             if(variables.length > 0) {
@@ -270,10 +291,24 @@ Blockly.Blocks['python_variable_selector_assignment'] = {
         this.setNextStatement(true);
 
         this.setTypeVecs([
-          ["any", "any", "none"]
+          ["matching", "matching", "none"]
         ])
 
         this.inWorkspace = false;
+
+        //if(!this.blockInserted) {
+        // add variable block in to first input
+        // create block
+        var variableBlock = Blockly.Variables.newVariableBlock({
+            'name': 'variable',
+            'type': 'any'
+        });
+        variableBlock = Blockly.Xml.domToBlock(this.workspace, variableBlock);
+        // connect to assignment
+        this.inputList[0].connection.connect(variableBlock.outputConnection);
+
+        this.blockInserted = true;
+        //}
     },
 
     onchange: function() {
@@ -351,14 +386,19 @@ function validVariable(block, parent) {
     }
 }
 
-// checks if we have 'unrestricted' in typeVec
+// checks if we have an unrestricted type in typeVec
 Blockly.Variables.unrestrictedTypeVec = function(block, parent) {
     var typeVecs = parent.typeVecs;
     var parentInput = block.outputConnection.targetConnection.inputNumber_;
     for(var i = 0; i < typeVecs.length; i++) {
         var typeVec = typeVecs[i][parentInput];
-        if(typeVec == 'any' || typeVec == 'matching') {
-            return true;
+        var typeVecLength = typeVec.length;
+        if(typeVecLength >= 8 && typeVec.slice(typeVecLength - 8, typeVecLength) == "matching") {
+          // ends with matching
+          return true;
+        } else if(typeVecLength >= 3 && typeVec.slice(typeVecLength - 3, typeVecLength) == "any") {
+          // ends with any
+          return true;
         }
     }
     return false
