@@ -271,6 +271,7 @@ Blockly.modalWindow.selectVariable = function() {
         // attach button
         var selectTD = document.createElement('td');
         row.appendChild(selectTD);
+        selectTD.classList.add('selectTD');
         var selectButton = document.createElement('button');
         selectTD.appendChild(selectButton);
         selectButton.classList.add('fancybuttons');
@@ -338,32 +339,18 @@ Blockly.modalWindow.selectVariable = function() {
     var buttonContainer = document.createElement('div');
     container.appendChild(buttonContainer);
     buttonContainer.id = 'buttonContainer';
-    /*
-    var buttonRow = document.createElement('tr');
-    table.appendChild(buttonRow);
-    */
 
     // create new button
-    /*
-    var createTD = document.createElement('td');
-    buttonRow.appendChild(createTD);
-    */
     var create = document.createElement('button');
     buttonContainer.appendChild(create);
-    //createTD.appendChild(create);
     create.classList.add('fancybuttons');
     create.classList.add('modalButtons');
     create.textContent = 'Create new';
     create.onclick = Blockly.modalWindow.selectVariable.newVariable;
 
     // cancel button
-    /*
-    var cancelTD = document.createElement('td');
-    buttonRow.appendChild(cancelTD);
-    */
     var cancel = document.createElement('button');
     buttonContainer.appendChild(cancel);
-    //cancelTD.appendChild(cancel);
     cancel.classList.add('fancybuttons');
     cancel.classList.add('modalButtons');
     cancel.textContent = 'Cancel';
