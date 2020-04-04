@@ -1678,96 +1678,54 @@ Blockly.Block.prototype.unifyDown = function() {
 Blockly.Block.prototype.unify = function(other, selfPos, otherPos) {
     // return a type-vec like typeVec but with all occurences of
     // "matched" ( *matched") replaced by newType (*newType)
-    var subsMatched = function(typeVec, newType, that, other) {
+    // accounts for any amount of lists
+    var subsMatched = function(typeVec, newType, refIndex) {
         console.log("RENAME: ", JSON.stringify(typeVec), " with ", newType);
-        //  if (newType = "any") {
-        //    return typeVec;
-        //  }
 
-        // find relationship between typeVecs with matching in them
-        // ["matching", "*matching"] -> [base, "*"]
-        // ["*matching", "matching"] -> ["*", base]
-        // ["matching", "*matching", "none"] -> ["base", "*", "none"]
-        // ["matching", "*matching", "int"] -> ["base", "*", "int"]
-        /*if(that.previousTypeVecs) {
-            typeVec = that.previousTypeVecs[0];
+        // build new typeVec
+        var newTypeVec = Array(typeVec.length);
+        // typeVec at refIndex - set other types according to this
+        if(refIndex == -1) {
+            // therefore output
+            var refIndex_type = typeVec[typeVec.length - 1];
+        } else {
+            var refIndex_type = typeVec[refIndex];
         }
-        */
+        var refIndex_listAmount = refIndex_type.split("*").length - 1;
 
-        /*
-        var relationship = Array(typeVec.length);
-        // fill out relationship
-        for(var i = 0; i < relationship.length; i++) {
-            var typeLength = typeVec[i].length;
+        for(var i = 0; i < typeVec.length; i++) {
+            if(typeVec[i].slice(typeVec[i].length - 8) == "matching") {
+                // type ends with "matching"
 
-            if(typeLength >= 8 && typeVec[i].slice(typeLength - 8, typeLength) == "matching") {
-                // if current type contains matching
-                var listAmount = typeVec[i].split("*").length - 1;
-                var newTypeListAmount = newType[i].split("*").length - 1;
+                // take into account context of matching using refIndex
+                var typeVec_listAmount = typeVec[i].split("*").length - 1;
 
-                if(listAmount == newTypeListAmount) {
-                    relationship[i] = newType;
-                } else if(listAmount > 0) {
-                    relationship[i] = "*".repeat(listAmount);
-                    relationship[i] = relationship[i] + newType;
-                } else {
-                    relationship[i] = newType;
+                if(typeVec[i] == refIndex_type) {
+                    // at reference point
+                    newTypeVec[i] = newType;
+                } else if(typeVec_listAmount == refIndex_listAmount) {
+                    // listAmounts are the same
+                    // therefore should be the same type
+                    newTypeVec[i] = newType;
+                } else if(typeVec_listAmount > refIndex_listAmount) {
+                    // greater listAmount at current point then reference point
+                    // therefore add amount more of lists to type
+                    var diff = typeVec_listAmount - refIndex_listAmount;
+                    newTypeVec[i] = "*".repeat(diff) + newType;
+                } else if(typeVec_listAmount < refIndex_listAmount) {
+                    // lesser listAmount at current point then reference point
+                    // therefore subtract amount more of lists from type
+                    var diff = refIndex_listAmount - typeVec_listAmount;
+                    newTypeVec[i] = newType.slice(diff);
                 }
             } else {
-                // not a matching type, just re add type
-                relationship[i] = typeVec[i];
+                // type does not end with "matching"
+                newTypeVec[i] = thisTypeVec[i];
             }
         }
-        return relationship;
-        */
 
-        /*
-        var newTypeVec = Array(typeVec.length);
-        for (var i = 0; i < typeVec.length; i++) {
-            var typeVecLength = typeVec[i].length;
-
-            if(typeVec[i] == "matching") {
-                newTypeVec[i] = newType;
-            } else if(typeVecLength > 8 && typeVec[i].slice(typeVecLength - 8, typeVecLength) == "matching") {
-                // if string ends with matching and has any amount of * at the beginning
-                // get amount of * at typeVec position - 1
-                var typeVecListAmount = typeVec[i].split("*").length - 1;
-                var newTypeListAmount = newType.split("*").length - 1;
-
-                if(typeVecListAmount == newTypeListAmount) {
-                    // there are the same amount of lists in both
-                    // do nothing
-                } else {
-                    if(typeVecListAmount < newTypeListAmount) {
-                        // grow newType listAmount to match typeVec listAmout
-                        for(var j = typeVecListAmount; j < typeVecListAmount; j++) {
-                            newType = "*" + newType;
-                        }
-                    } else if(typeVecListAmount > newTypeListAmount) {
-                        // else do something else
-                    }
-                }
-
-                newTypeVec[i] = newType;
-            } else {
-                newTypeVec[i] = typeVec[i];
-            }
-        }
         console.log("RENAME: ", JSON.stringify(newTypeVec));
-        return newTypeVec;
-        */
 
-        var newTypeVec = Array(typeVec.length);
-        for (var i = 0; i < typeVec.length; i++) {
-            if (typeVec[i] == "matching") {
-                newTypeVec[i] = newType; // == "any" ? "matching" : newType;
-            } else if (typeVec[i] == "*matching") {
-                newTypeVec[i] = "*" + newType; // == "*any" ? "*matching" : "*" + newType;
-            } else {
-                newTypeVec[i] = typeVec[i];
-            }
-        }
-        console.log("RENAME: ", JSON.stringify(newTypeVec));
         return newTypeVec;
     };
     // does typeVecs include typeVec?
@@ -1797,6 +1755,8 @@ Blockly.Block.prototype.unify = function(other, selfPos, otherPos) {
     };
 
     console.log("UNIFY typeVecs at start: ", this.typeVecs);
+    // compare each typeVec at selfPos in typeVecs to each otherTypeVec at otherPos in otherTypeVecs
+    // if they are compatible then maybe transform and push to newTypeVecs
     var newTypeVecs = [];
     for (var i = 0; i < this.typeVecs.length; i++) {
         var thisTypeVec = this.typeVecs[i];
@@ -1810,42 +1770,28 @@ Blockly.Block.prototype.unify = function(other, selfPos, otherPos) {
             console.log("UNIFY considering otherType at position",
                 otherPos, ": ", otherType);
 
-            if (thisType == otherType ||
+            if(thisType == otherType ||
                 (otherType == "any") ||
                 (otherType == "matching" && thisType[0] != "*") ||
                 (otherType == "*any" && thisType[0] == "*") ||
                 (otherType == "*matching" && thisType[0] == "*")) {
+                // otherType is this type
+                // otherType is any, *any, matching or *matching
                 if (!typesInclude(newTypeVecs, thisTypeVec)) {
                     console.log("UNIFY matching 1 - keeping: ", thisTypeVec);
                     newTypeVecs.push(thisTypeVec);
                 }
-            //} else if (thisType == "matching" && otherType[0] != "*") {
-            } else if (thisType == "matching") {
-            	var renamed = subsMatched(thisTypeVec, otherType);
-                //var renamed = subsMatched(thisTypeVec, otherType, this, other);
-                //var renamed = subsMatched(this.fullTypeVecs, otherType);
-                if (!typesInclude(newTypeVecs, renamed)) {
-                    console.log("UNIFY matching 2 - renamed: ", renamed);
-                    newTypeVecs.push(renamed);
+            } else if(thisType.slice(thisType.length - 8) == "matching") {
+                // typeVec ends with matching
+                var newTypeVec = subsMatched(thisTypeVec, otherType, selfPos);
+                if (!typesInclude(newTypeVecs, newTypeVec)) {
+                    console.log("UNIFY matching 2 - renamed: ", newTypeVec);
+                    newTypeVecs.push(newTypeVec);
                 }
-            // check if thisType starts with * and ends with matching
-            // and otherType starts with *
-            } else if(thisType[0] == "*" &&
-                      //thisType.slice(thisType.length - 8) == "matching" &&
-                      thisType.slice(thisType.length - 8) && 
-                      otherType[0] == "*") {
-                var renamedList = subsMatched(thisTypeVec, otherType.slice(1));
-                //var renamedList = subsMatched(thisTypeVec, otherType.slice(1), this, other);
-                //var renamedList = subsMatched(thisTypeVec, otherType, this, other);
-                //var renamedList = subsMatched(this.fullTypeVecs, otherType);
-                if (!typesInclude(newTypeVecs, renamedList)) {
-                    console.log("UNIFY matching 3 - renamed: ", renamedList);
-                    newTypeVecs.push(renamedList);
-                }
-            } else if ((thisType == "any") ||
-                (thisType == "*any" && otherType[0] == "*")) {
+            } else if(thisType.slice(thisType.length - 3) == "any") {
+                // typeVec ends with any
                 if (!typesInclude(newTypeVecs, thisTypeVec)) {
-                    console.log("UNIFY matching 4 - keeping: ", thisTypeVec);
+                    console.log("UNIFY matching 3 - keeping: ", thisTypeVec);
                     newTypeVecs.push(thisTypeVec);
                 }
             }
