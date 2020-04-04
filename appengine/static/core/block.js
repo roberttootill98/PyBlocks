@@ -1781,7 +1781,8 @@ Blockly.Block.prototype.unify = function(other, selfPos, otherPos) {
                     console.log("UNIFY matching 1 - keeping: ", thisTypeVec);
                     newTypeVecs.push(thisTypeVec);
                 }
-            } else if(thisType.slice(thisType.length - 8) == "matching") {
+            } else if(thisType.slice(thisType.length - 8) == "matching" ||
+                      otherType.slice(otherType.length - 8) == "matching") {
                 // typeVec ends with matching
                 var newTypeVec = subsMatched(thisTypeVec, otherType, selfPos);
                 if (!typesInclude(newTypeVecs, newTypeVec)) {
