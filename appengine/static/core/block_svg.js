@@ -2111,6 +2111,7 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
 
                     // height that sawtooth is drawn to
                     input.sawtoothHeight = input.height - input.borderWidth;
+                    break;
                 } else {
                     input.listAmount = 0;
                 }
