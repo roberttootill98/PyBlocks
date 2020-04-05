@@ -460,12 +460,12 @@ Blockly.modalWindow.createVariable = function(x, y) {
 
     // update workspace
     blendWorkspace(previewWorkspace);
-    resizePreviewWorkspace();
+    updatePreviewType();
 
     // move previewBlock to centre of workspace
+    resizePreviewWorkspace();
     moveBlockToCenter(previewBlock, previewWorkspace);
     makeBlockNonInteractable(previewBlock);
-    updatePreviewType();
 
     // buttons
     var buttonContainer = document.createElement('div');
