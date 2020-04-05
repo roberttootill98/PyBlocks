@@ -511,7 +511,6 @@ Blockly.Block.prototype.setParent = function(newParent) {
     }
 
     this.render();
-    //this.render();
 };
 
 /**
@@ -1605,7 +1604,7 @@ Blockly.Block.prototype.legalDrop = function(holeTypes, requiresVariable) {
     if (includesGreyBasic(outputTypes) && includesBasicType(holeTypes)) {
         return true;
     }
-    if(includesGreyList(outputTypes)) {
+    if(includesGreyList(outputTypes) && includesListType(holeTypes)) {
         return true;
     }
     // check if listAmount matches
