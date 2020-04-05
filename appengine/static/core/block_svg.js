@@ -1617,8 +1617,12 @@ Blockly.BlockSvg.prototype.updateColour = function() {
 
             // dispose of sawteeth if they exists
             for(var i = 0; i < this.svgListSawtooth.length; i++) {
-                // handle this differently if there is an unfilled input
-                this.svgListSawtooth[i].remove();
+                if(i == 0) {
+                    this.svgListSawtooth[i].remove();
+                } else {
+                    this.svgListSawtooth[i][0].remove();
+                    this.svgListSawtooth[i][1].remove();
+                }
             }
             this.svgListSawtooth = [];
         }
