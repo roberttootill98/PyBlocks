@@ -393,12 +393,8 @@ Blockly.Variables.unrestrictedTypeVec = function(block, parent) {
     for(var i = 0; i < typeVecs.length; i++) {
         var typeVec = typeVecs[i][parentInput];
         var typeVecLength = typeVec.length;
-        if(typeVecLength >= 8 && typeVec.slice(typeVecLength - 8, typeVecLength) == "matching") {
-          // ends with matching
-          return true;
-        } else if(typeVecLength >= 3 && typeVec.slice(typeVecLength - 3, typeVecLength) == "any") {
-          // ends with any
-          return true;
+        if(typeVec == "any" || typeVec == "matching") {
+          	return true;
         }
     }
     return false
