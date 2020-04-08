@@ -724,15 +724,17 @@ function typeInputListener(ev) {
             var currentLevel = results[0];
             var keys = results[1];
 
-            // delete marker
-            delete currentLevel['marker'];
+            if(!Object.keys(currentLevel).includes('unrestricted')) {
+              // delete marker
+              delete currentLevel['marker'];
 
-            var level = typeVecObject;
-            for(var j = 0; j < indexOfLastInput; j++) {
-                level = level[keys[j]];
+              var level = typeVecObject;
+              for(var j = 0; j < indexOfLastInput; j++) {
+                  level = level[keys[j]];
+              }
+
+              level['marker'] = true;
             }
-
-            level['marker'] = true;
         }
     } else if(!Blockly.modalWindow.primitiveVariables.includes(lastInput.value)) {
         // case 3
@@ -745,6 +747,9 @@ function typeInputListener(ev) {
                   var currentLevel = getCurrentLevel(typeVecObject, [])[0];
 
                   if(Object.keys(currentLevel).includes('unrestricted')) {
+                      // if current level is unrestricted then don't move marker
+                      createTypeInput(Blockly.modalWindow.primitiveVariables.concat(Blockly.modalWindow.complexVariables));
+                  } else if(Object.keys(currentLevel['list of...']).includes('unrestricted')) {
                       // if current level is unrestricted then don't move marker
                       createTypeInput(Blockly.modalWindow.primitiveVariables.concat(Blockly.modalWindow.complexVariables));
                   } else {
