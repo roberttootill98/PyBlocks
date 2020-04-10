@@ -377,12 +377,14 @@ Blockly.Flyout.prototype.show = function(xmlList) {
 
     switch (xmlList) {
         case Blockly.Variables.CAT_EXISTING:
-            var variable = goog.dom.createDom('block');
-            variable.setAttribute('type', 'python_variable_selector');
-            var assignment = goog.dom.createDom('block');
-            assignment.setAttribute('type', 'python_variable_selector_assignment');
+            var variableBlock = goog.dom.createDom('block');
+            variableBlock.setAttribute('type', 'python_variable_selector');
+            var assignmentBlock_selector = goog.dom.createDom('block');
+            assignmentBlock_selector.setAttribute('type', 'python_variable_selector_assignment');
+            var assignmentBlock_blank = goog.dom.createDom('block');
+            assignmentBlock_blank.setAttribute('type', 'variables_set');
 
-            xmlList = [variable, assignment];
+            xmlList = [variableBlock, assignmentBlock_selector, assignmentBlock_blank];
             break;
         case Blockly.Variables.CAT_NEW_BASIC:
             xmlList = Blockly.Variables.newFlyoutCategory(this.workspace_.targetWorkspace);
