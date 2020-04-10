@@ -1698,6 +1698,7 @@ Blockly.Block.prototype.unify = function(other, selfPos, otherPos) {
 
                 // take into account context of matching using refIndex
                 var typeVec_listAmount = typeVec[i].split("*").length - 1;
+                var diff = Math.abs(typeVec_listAmount - refIndex_listAmount);
 
                 if(typeVec[i] == refIndex_type) {
                     // at reference point
@@ -1709,13 +1710,16 @@ Blockly.Block.prototype.unify = function(other, selfPos, otherPos) {
                 } else if(typeVec_listAmount > refIndex_listAmount) {
                     // greater listAmount at current point then reference point
                     // therefore add amount more of lists to type
-                    var diff = typeVec_listAmount - refIndex_listAmount;
                     newTypeVec[i] = "*".repeat(diff) + newType;
-                } else if(typeVec_listAmount < refIndex_listAmount) {
+                } else if(typeVec_listAmount < refIndex_listAmount &&
+                          newType.startsWith("*".repeat(diff))) {
                     // lesser listAmount at current point then reference point
                     // therefore subtract amount more of lists from type
-                    var diff = refIndex_listAmount - typeVec_listAmount;
+                    // but only there is a greater than or equal amount of lists
+                    // on newType than amount to substract
                     newTypeVec[i] = newType.slice(diff);
+                } else {
+                    return false;
                 }
             } else {
                 // type does not end with "matching"
@@ -1784,7 +1788,7 @@ Blockly.Block.prototype.unify = function(other, selfPos, otherPos) {
                       otherType.slice(otherType.length - 8) == "matching") {
                 // typeVec ends with matching
                 var newTypeVec = subsMatched(thisTypeVec, otherType, selfPos);
-                if (!typesInclude(newTypeVecs, newTypeVec)) {
+                if (newTypeVec && !typesInclude(newTypeVecs, newTypeVec)) {
                     console.log("UNIFY matching 2 - renamed: ", newTypeVec);
                     newTypeVecs.push(newTypeVec);
                 }
