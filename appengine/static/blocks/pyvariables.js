@@ -295,23 +295,18 @@ Blockly.Blocks['python_variable_selector_assignment'] = {
         ])
 
         this.inWorkspace = false;
-
-        //if(!this.blockInserted) {
-        // add variable block in to first input
-        // create block
-        var variableBlock = Blockly.Variables.newVariableBlock({
-            'name': 'variable',
-            'type': 'any'
-        });
-        variableBlock = Blockly.Xml.domToBlock(this.workspace, variableBlock);
-        // connect to assignment
-        this.inputList[0].connection.connect(variableBlock.outputConnection);
-
-        this.blockInserted = true;
-        //}
     },
 
     onchange: function() {
+        if(!this.inputList[0].connection.targetConnection) {
+            var variableBlock = Blockly.Variables.newVariableBlock({
+              'name': 'variable',
+              'type': 'any'
+            });
+            variableBlock = Blockly.Xml.domToBlock(this.workspace, variableBlock);
+            this.inputList[0].connection.connect(variableBlock.outputConnection);
+        }
+
         if(this.varName && this.varType) {
             var block = Blockly.Variables.newVariablesAssignmentBlock({
                 "name": this.varName,

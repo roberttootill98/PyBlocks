@@ -64,6 +64,13 @@ Blockly.Variables.allVariables = function(root, basic, list) {
     // Iterate through every block and add each variable to the hash.
     for (var x = 0; x < blocks.length; x++) {
         if (blocks[x].getVar) {
+        	// don't add var if parent is assignment statement var selector
+            var parent = blocks[x].getParent();
+            if(parent) {
+                if(parent.type == 'python_variable_selector_assignment') {
+                    continue;
+                }
+            }
             var variable = blocks[x].getVar();
             console.log("VARLISTXXX found", variable);
             if (variable.type[0] == '*') {
