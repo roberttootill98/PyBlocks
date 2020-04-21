@@ -220,13 +220,15 @@ Blockly.modalWindow.preview = {}
 Blockly.modalWindow.preview.name = 'default';
 Blockly.modalWindow.preview.type = '';
 
-Blockly.modalWindow.primitiveVariables = ['int', 'float', 'str', 'bool', 'range'];
-Blockly.modalWindow.complexVariables = ['list of...', ]; // nested lists, iterables
-Blockly.modalWindow.allTypes = Blockly.modalWindow.primitiveVariables.concat(Blockly.modalWindow.complexVariables);
+Blockly.modalWindow.builtInTypes = ['int', 'float', 'str', 'bool', 'range'];
+Blockly.modalWindow.complexTypes = ['list of...', ];
+Blockly.modalWindow.allTypes = Blockly.modalWindow.builtInTypes.concat(Blockly.modalWindow.complexTypes);
 
 Blockly.modalWindow.typeVecObject = {};
 
-// for selecting #1 - an existing variable or #2 creating a new one
+/*
+ * for selecting an existing variable
+ */
 Blockly.modalWindow.selectVariable = function() {
     Blockly.modalWindow.type = 'select';
     Blockly.modalWindow.visible = true;
@@ -700,7 +702,7 @@ function typeInputListener(ev) {
     var primitiveBeforeLast = false;
     // loop through type inputs to check if we have a
     for(var i = 0; i < typeInputs.length - 1; i++) {
-        if(Blockly.modalWindow.primitiveVariables.includes(typeInputs[i].value)) {
+        if(Blockly.modalWindow.builtInTypes.includes(typeInputs[i].value)) {
             // we have primitive before end
             primitiveBeforeLast = true;
             break;
@@ -736,7 +738,7 @@ function typeInputListener(ev) {
               level['marker'] = true;
             }
         }
-    } else if(!Blockly.modalWindow.primitiveVariables.includes(lastInput.value)) {
+    } else if(!Blockly.modalWindow.builtInTypes.includes(lastInput.value)) {
         // case 3
         // prompt some more ui
         switch(lastInput.value) {
@@ -748,10 +750,10 @@ function typeInputListener(ev) {
 
                   if(Object.keys(currentLevel).includes('unrestricted')) {
                       // if current level is unrestricted then don't move marker
-                      createTypeInput(Blockly.modalWindow.primitiveVariables.concat(Blockly.modalWindow.complexVariables));
+                      createTypeInput(Blockly.modalWindow.builtInTypes.concat(Blockly.modalWindow.complexTypes));
                   } else if(Object.keys(currentLevel['list of...']).includes('unrestricted')) {
                       // if current level is unrestricted then don't move marker
-                      createTypeInput(Blockly.modalWindow.primitiveVariables.concat(Blockly.modalWindow.complexVariables));
+                      createTypeInput(Blockly.modalWindow.builtInTypes.concat(Blockly.modalWindow.complexTypes));
                   } else {
                       // else move marker to newLevel
                       // get new level
@@ -798,7 +800,7 @@ function initTypeInputs() {
             // add a select element with options for all keys at current level
             if(Object.keys(currentLevel).includes('unrestricted')) {
                 // add all types as options if unrestricted
-                createTypeInput(Blockly.modalWindow.primitiveVariables.concat(Blockly.modalWindow.complexVariables));
+                createTypeInput(Blockly.modalWindow.builtInTypes.concat(Blockly.modalWindow.complexTypes));
             } else {
                 // else just add types from typeVecObject
                 createTypeInput(Object.keys(currentLevel));
@@ -922,7 +924,7 @@ function constructTypeVecObject(block) {
                     break;
                 default:
                     // might be primitive type
-                    if(Blockly.modalWindow.primitiveVariables.includes(typeVec.slice(sliceStart, j))) {
+                    if(Blockly.modalWindow.builtInTypes.includes(typeVec.slice(sliceStart, j))) {
                         currentLevel[typeVec.slice(sliceStart, j)] = {};
 
                         // update typeVec string
@@ -959,7 +961,7 @@ function getCurrentLevel(typeVecObject, returnKeys) {
     for(var i = 0; i < iterateKeys.length; i++) {
         var key = iterateKeys[i];
 
-        if(Blockly.modalWindow.primitiveVariables.includes(key)) {
+        if(Blockly.modalWindow.builtInTypes.includes(key)) {
             // if key is primitive then we ignore it
             continue;
         } else if(key == "marker") {
@@ -995,7 +997,7 @@ function addMarkerAtLowestLevel(typeVecObject) {
     for(var i = 0; i < keys.length; i++) {
         var key = keys[i];
 
-        if(Blockly.modalWindow.primitiveVariables.includes(key) ||
+        if(Blockly.modalWindow.builtInTypes.includes(key) ||
           key == 'unrestricted') {
             typeVecObject["marker"] = true;
             return;
@@ -1006,7 +1008,7 @@ function addMarkerAtLowestLevel(typeVecObject) {
             if(Array.isArray) {
                 // is a list
                 for(var j = 0; j < items.length; j++) {
-                    if(Blockly.modalWindow.primitiveVariables.includes(items[j]) ||
+                    if(Blockly.modalWindow.builtInTypes.includes(items[j]) ||
                         items[j] == 'unrestricted') {
                         // we've found a primitive type or unrestricted
                         // so add marker and return
