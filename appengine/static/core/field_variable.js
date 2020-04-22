@@ -827,6 +827,7 @@ function createTypeInput(options) {
     var newVariableTypeInput = document.createElement('select');
     newVariableTypeInput.classList.add("input");
     newVariableTypeInput.classList.add("variableTypeInput");
+    newVariableTypeInput.style.textTransform = 'capitalize'
 
     for(var i = 0; i < options.length; i++) {
         if(options[i] == "marker") {
