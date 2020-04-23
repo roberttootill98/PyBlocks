@@ -750,10 +750,10 @@ function typeInputListener(ev) {
 
                   if(Object.keys(currentLevel).includes('unrestricted')) {
                       // if current level is unrestricted then don't move marker
-                      createTypeInput(Blockly.modalWindow.builtInTypes.concat(Blockly.modalWindow.complexTypes));
+                      createTypeInput(Blockly.modalWindow.allTypes);
                   } else if(Object.keys(currentLevel['list of...']).includes('unrestricted')) {
-                      // if current level is unrestricted then don't move marker
-                      createTypeInput(Blockly.modalWindow.builtInTypes.concat(Blockly.modalWindow.complexTypes));
+                      // if new level is unrestricted then don't move marker
+                      createTypeInput(Blockly.modalWindow.allTypes);
                   } else {
                       // else move marker to newLevel
                       // get new level
