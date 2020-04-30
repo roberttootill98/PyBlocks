@@ -428,9 +428,29 @@ Blockly.modalWindow.createVariable = function(x, y) {
 
     // block preview
     // create new workspace on modal window
+    // create table
+    var table = document.createElement('table');
+    container.appendChild(table);
+    // row
+    var row = document.createElement('tr');
+    table.appendChild(row);
+    // label
+    // td
+    var labelTD = document.createElement('td');
+    labelTD.id = 'labelTD';
+    row.appendChild(labelTD);
+    // contents
+    var label = document.createElement('p');
+    labelTD.appendChild(label);
+    label.textContent = 'Preview:';
+    // workspace
+    // td
+    var workspaceTD = document.createElement('td');
+    row.appendChild(workspaceTD);
+    // contents
     var previewContainer = document.createElement('div');
     previewContainer.id = 'previewContainer';
-    container.appendChild(previewContainer);
+    workspaceTD.appendChild(previewContainer);
 
     var previewWorkspace = Blockly.inject(previewContainer, {
         media: '../../media/',

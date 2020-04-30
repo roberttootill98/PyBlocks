@@ -323,7 +323,7 @@ table#typetable {
     position: absolute;
     display: block;
     align: centre;
-    min-width: 20em;
+    /*min-width: 20em;*/
     width: 35%;
     padding: 1em;
     background-color: rgb(112, 128, 144); /* same as block palette */
@@ -331,7 +331,7 @@ table#typetable {
 }
 
 .label {
-    min-width: 4em;
+    min-width: 5em;
     margin: auto;
     padding: 0;
     display: inline-block;
@@ -351,6 +351,10 @@ table#typetable {
     margin-left: 4em;
 }
 
+#labelTD {
+  max-width: 1.75em;
+}
+
 .modalButtons {
     margin: 1em;
 }
@@ -360,9 +364,12 @@ table#typetable {
     padding: 7px;
 }
 
+.selectTD {
+    margin-right: 0;
+}
+
 #previewContainer {
     margin-top: 1em;
-    margin-left: 4em;
 }
 
 #typeInputContainer {
