@@ -308,7 +308,8 @@ Blockly.modalWindow.selectVariable = function() {
         makeBlockNonInteractable(block);
     }
 
-    if(parent && !Blockly.Variables.unrestrictedTypeVec(block, parent)) {
+    if(block.type != 'python_variable_selector_assignment' &&
+      parent && !Blockly.Variables.unrestrictedTypeVec(block, parent)) {
         // if we have a parent, limit blocks
 
         // get typeVecs
