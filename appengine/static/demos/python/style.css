@@ -323,15 +323,14 @@ table#typetable {
     position: absolute;
     display: block;
     align: centre;
-    /*min-width: 20em;*/
-    width: 35%;
+    width: 20em;
     padding: 1em;
     background-color: rgb(112, 128, 144); /* same as block palette */
     border-radius: 10px;
 }
 
 .label {
-    min-width: 5em;
+    min-width: 4em;
     margin: auto;
     padding: 0;
     display: inline-block;
@@ -348,11 +347,12 @@ table#typetable {
 
 #buttonContainer {
     margin: auto;
-    margin-left: 4em;
+    margin-left: 3em;
 }
 
 #labelTD {
-  max-width: 1.75em;
+  /*max-width: 1.75em;*/
+  /*max-width: 0.5em;*/
 }
 
 .modalButtons {
@@ -370,6 +370,8 @@ table#typetable {
 
 #previewContainer {
     margin-top: 1em;
+    /*max-width: 12.5em;*/
+    margin-left: 4em;
 }
 
 #typeInputContainer {

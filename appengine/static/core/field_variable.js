@@ -437,21 +437,21 @@ Blockly.modalWindow.createVariable = function(x, y) {
     table.appendChild(row);
     // label
     // td
-    var labelTD = document.createElement('td');
-    labelTD.id = 'labelTD';
-    row.appendChild(labelTD);
-    // contents
-    var label = document.createElement('p');
-    labelTD.appendChild(label);
-    label.textContent = 'Preview:';
-    // workspace
-    // td
-    var workspaceTD = document.createElement('td');
-    row.appendChild(workspaceTD);
+    // var labelTD = document.createElement('td');
+    // labelTD.id = 'labelTD';
+    // row.appendChild(labelTD);
+    // // contents
+    // var label = document.createElement('p');
+    // labelTD.appendChild(label);
+    // label.textContent = 'Preview:';
+    // // workspace
+    // // td
+    // var workspaceTD = document.createElement('td');
+    // row.appendChild(workspaceTD);
     // contents
     var previewContainer = document.createElement('div');
     previewContainer.id = 'previewContainer';
-    workspaceTD.appendChild(previewContainer);
+    container.appendChild(previewContainer);
 
     var previewWorkspace = Blockly.inject(previewContainer, {
         media: '../../media/',
