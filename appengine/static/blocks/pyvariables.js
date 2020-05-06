@@ -356,7 +356,10 @@ Blockly.Blocks['python_variable_selector_assignment'] = {
     }
 }
 
-// check if blocks in workspace have changed
+/**
+ * Check if blocks in workspace have changed
+ * @return {block} returns a block if one is found
+ */
 Blockly.Variables.getSelectorBlock = function() {
     var blocks = workspace.getAllBlocks();
     for(var i = 0; i < blocks.length; i++) {
@@ -366,7 +369,12 @@ Blockly.Variables.getSelectorBlock = function() {
     }
 }
 
-// check if any of the current variables are suitable in parent typeVecs
+/**
+ * Check if any of the current variables are suitable in parent typeVecs
+ * @param {block} block, that is checked for validity
+ * @param {parent} block, the parent of block
+ * @return {Boolean} true if there is a valid variable
+ */
 function validVariable(block, parent) {
     var parentInput = block.outputConnection.targetConnection.inputNumber_;
     var typeVecs = parent.typeVecs;
@@ -381,7 +389,12 @@ function validVariable(block, parent) {
     }
 }
 
-// checks if we have an unrestricted type in typeVec
+/**
+ * Checks if we have an unrestricted type in typeVec
+ * @param {block} block, that is checked for unrestriced type
+ * @param {parent} block, the parent of block
+ * @return {Boolean} if an unrestricted type has been found
+ */
 Blockly.Variables.unrestrictedTypeVec = function(block, parent) {
     var typeVecs = parent.typeVecs;
     var parentInput = block.outputConnection.targetConnection.inputNumber_;
