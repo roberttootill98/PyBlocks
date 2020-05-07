@@ -323,31 +323,31 @@ table#typetable {
     position: absolute;
     display: block;
     align: centre;
-    width: 20em;
-    padding: 1em;
+    width: 320px;
+    padding: 16px;
     background-color: rgb(112, 128, 144); /* same as block palette */
     border-radius: 10px;
 }
 
 .label {
-    min-width: 4em;
+    min-width: 64px;
     margin: auto;
     padding: 0;
     display: inline-block;
 }
 
 #variableName {
-    max-width: 7em;
+    max-width: 112px;
 }
 
 .variableTypeInput {
-    margin-top: 0.5em;
-    padding: 0.5em;
+    margin-top: 8px;
+    padding: 8px;
 }
 
 #buttonContainer {
     margin: auto;
-    margin-left: 3em;
+    margin-left: 48px;
 }
 
 #labelTD {
@@ -356,7 +356,7 @@ table#typetable {
 }
 
 .modalButtons {
-    margin: 1em;
+    margin: 16px;
 }
 
 .selectButton {
@@ -369,9 +369,9 @@ table#typetable {
 }
 
 #previewContainer {
-    margin-top: 1em;
+    margin-top: 16px;
     /*max-width: 12.5em;*/
-    margin-left: 4em;
+    margin-left: 64px;
 }
 
 #typeInputContainer {
